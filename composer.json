@@ -1,0 +1,27 @@
+{
+    "name": "manticoresoftware/manticoresearch-php",
+    "description": "PHP Client for Manticore Search",
+    "type": "library",
+    "require": {
+        "php": "^7.0",
+        "ext-json": "^1.4",
+        "psr/log": "^1.1"
+    },
+    "suggest": {
+        "ext-curl": "*"
+    },
+    "autoload": {
+      "psr-4": {
+          "Manticoresearch\\" : "src/Manticoresearch/"
+      }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "authors": [
+        {
+            "name": "Adrian Nuta",
+            "email": "adriannuta@gmail.com"
+        }
+    ]
+}
