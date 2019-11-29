@@ -12,12 +12,12 @@ class Request
     protected $_query;
     protected $_content_type;
 
-    public function __construct($body=[],$query=[],$content_type = 'application/json')
+    public function __construct($params=[])
     {
 
-        $this->setBody($body);
-        $this->setQuery($query);
-        $this->setContentType($content_type);
+        $this->setBody($params['body'] ?? []);
+        $this->setQuery($params['query'] ?? []);
+        $this->setContentType($params['content_type'] ?? 'application/json');
     }
 
     /**

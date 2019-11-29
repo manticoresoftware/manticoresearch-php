@@ -10,6 +10,9 @@
     "suggest": {
         "ext-curl": "*"
     },
+    "require-dev": {
+        "phpunit/phpunit" : "*"
+    },
     "autoload": {
       "psr-4": {
           "Manticoresearch\\" : "src/Manticoresearch/"

@@ -2,6 +2,8 @@
 
 namespace Manticoresearch\Endpoints\Pq;
 
+use Manticoresearch\Exceptions\RuntimeException;
+
 class Doc extends \Manticoresearch\Request
 {
     protected $_index;
@@ -16,7 +18,7 @@ class Doc extends \Manticoresearch\Request
                 return "/json/pq/".$this->_index."/doc";
             }
         }
-        //@todo throw error, index is mandatory
+        throw new RuntimeException('Index name is missing.');
     }
     /**
      * @return mixed

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Manticoresearch;
 
 use Manticoresearch\Connection\Strategy\Random;
+use Manticoresearch\Connection\Strategy\RoundRobin;
 use Manticoresearch\Endpoints\AbstractEndpoint;
 
 use Manticoresearch\Endpoints\Pq;
@@ -25,7 +26,7 @@ class Client
 
     public $transport;
     protected $_config = [];
-    private $_connectionStrategy = Random::class;
+    private $_connectionStrategy = RoundRobin::class;
     protected $_connectionPool;
 
     protected $_logger;
@@ -61,7 +62,11 @@ class Client
 
         $this->_connectionPool = new Connection\ConnectionPool($connections, $strategy);
     }
-
+    public function setHosts($hosts)
+    {
+        $this->_config['connections'] = $hosts;
+        $this->_initConnections();
+    }
     public function setConfig(array $config)
     {
         $this->_config = array_merge($this->_config, $config);
@@ -79,6 +84,14 @@ class Client
         return new self($config);
     }
 
+    public function getConnections()
+    {
+        return $this->_connectionPool->getConnections();
+    }
+    public function getConnectionPool()
+    {
+        return $this->_connectionPool;
+    }
     /**
      * Endpoint: search
      * @param array $params
@@ -86,10 +99,8 @@ class Client
     public function search(array $params = [])
     {
 
-        $body = $params['body'];
-        $endpoint = new Endpoints\Search();
-        $endpoint->setQuery($params['query']);
-        $endpoint->setBody($body);
+
+        $endpoint = new Endpoints\Search($params);
         $response = $this->request($endpoint);
 
         return $response->getResponse();
@@ -101,10 +112,8 @@ class Client
      */
     public function insert(array $params = [])
     {
-        $body = $params['body'];
-        $endpoint = new Endpoints\Insert();
-        $endpoint->setQuery($params['query']);
-        $endpoint->setBody($body);
+
+        $endpoint = new Endpoints\Insert($params);
         $response = $this->request($endpoint);
 
         return $response->getResponse();
@@ -116,10 +125,8 @@ class Client
      */
     public function replace(array $params = [])
     {
-        $body = $params['body'];
-        $endpoint = new Endpoints\Replace();
-        $endpoint->setQuery($params['query']);
-        $endpoint->setBody($body);
+
+        $endpoint = new Endpoints\Replace($params);
         $response = $this->request($endpoint);
 
         return $response->getResponse();
@@ -131,10 +138,8 @@ class Client
      */
     public function update(array $params = [])
     {
-        $body = $params['body'];
-        $endpoint = new Endpoints\Update();
-        $endpoint->setQuery($params['query']);
-        $endpoint->setBody($body);
+
+        $endpoint = new Endpoints\Update($params);
         $response = $this->request($endpoint);
 
         return $response->getResponse();
@@ -146,7 +151,9 @@ class Client
      */
     public function sql(array $params = [])
     {
-
+        $endpoint = new Endpoints\Sql($params);
+        $response = $this->request($endpoint);
+        return $response->getResponse();
     }
 
     /**
@@ -156,10 +163,8 @@ class Client
      */
     public function delete(array $params = [])
     {
-        $body = $params['body'];
-        $endpoint = new Endpoints\Delete();
-        $endpoint->setQuery($params['query']);
-        $endpoint->setBody($body);
+
+        $endpoint = new Endpoints\Delete($params);
         $response = $this->request($endpoint);
 
         return $response->getResponse();
@@ -182,10 +187,7 @@ class Client
      */
     public function bulk(array $params = [])
     {
-        $body = $params['body'];
-        $endpoint = new Endpoints\Bulk();
-        $endpoint->setQuery($params['query']);
-        $endpoint->setBody($body);
+        $endpoint = new Endpoints\Bulk($params);
         $response = $this->request($endpoint);
 
         return $response->getResponse();
@@ -195,7 +197,7 @@ class Client
      * @return callable|array
      */
 
-    public  function request(Request $request)
+    public function request(Request $request)
     {
 
         $connection = $this->_connectionPool->getConnection();

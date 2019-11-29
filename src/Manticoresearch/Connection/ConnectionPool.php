@@ -47,4 +47,21 @@ class ConnectionPool
         return false;
     }
 
+    /**
+     * @return SelectorInterface
+     */
+    public function getStrategy(): SelectorInterface
+    {
+        return $this->_strategy;
+    }
+
+    /**
+     * @param SelectorInterface $strategy
+     */
+    public function setStrategy(SelectorInterface $strategy)
+    {
+        $this->_strategy = $strategy;
+    }
+
+
 }

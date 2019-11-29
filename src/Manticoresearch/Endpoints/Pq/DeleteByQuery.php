@@ -4,6 +4,7 @@
 namespace Manticoresearch\Endpoints\Pq;
 
 
+use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Request;
 
 class DeleteByQuery extends Request
@@ -16,7 +17,7 @@ class DeleteByQuery extends Request
             return "/json/pq/".$this->_index."/_search";
 
         }
-        //@todo throw error, index is mandatory
+        throw new RuntimeException('Index name is missing.');
     }
     /**
      * @return mixed

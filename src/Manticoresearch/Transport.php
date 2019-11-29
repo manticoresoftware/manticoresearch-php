@@ -37,7 +37,7 @@ class Transport
         }
         return $transport;
     }
-    protected function setupURI(string $uri, array $query=[]) :string
+    protected function setupURI(string $uri, $query=[]) :string
     {
         if(!empty($query)) {
             foreach($query as $k=>$v) {

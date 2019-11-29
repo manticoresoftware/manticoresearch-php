@@ -18,21 +18,21 @@ class Http extends \Manticoresearch\Transport
             $connection = $this->getConnection();
             //@todo add persistent
             //@todo add custom headers
-            $conn = $this->_getCurlConnection();
-            $url = $connection->getScheme().'://'.$connection->getHost().':'.$connection->getPort();
+            $conn = $this->_getCurlConnection($connection->getConfig('persistent'));
+            $url = $this->_scheme.'://'.$connection->getHost().':'.$connection->getPort();
             $endpoint = $request->getPath();
             $url .= $endpoint;
             $url = $this->setupURI($url,$request->getQuery());
 
             curl_setopt($conn, CURLOPT_URL, $url);
+            curl_setopt($conn, CURLOPT_TIMEOUT, $connection->getTimeout());
             curl_setopt($conn, CURLOPT_ENCODING, '');
+            curl_setopt($conn, CURLOPT_FORBID_REUSE, 0);
             $data = $request->getBody();
             $method = $request->getMethod();
-            $headers = [];
+            $headers = $connection->getHeaders();
             array_push($headers, sprintf('Content-Type: %s', $request->getContentType()));
             if(!empty($data)) {
-                $method = 'POST';
-
                 if (is_array($data)) {
                     $content = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
                 } else {
@@ -44,6 +44,24 @@ class Http extends \Manticoresearch\Transport
             }
             curl_setopt($conn, CURLOPT_CUSTOMREQUEST, $method);
             curl_setopt($conn, CURLOPT_HTTPHEADER, $headers);
+            
+            if($connection->getConnectTimeout()>0) {
+                curl_setopt($conn, CURLOPT_CONNECTTIMEOUT, $connection->getConnectTimeout());
+            }
+            
+            if(false !== $connection->getConfig('username') && false !== $connection->getConfig('password')) {
+                curl_setopt($conn, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+                curl_setopt($conn, CURLOPT_USERPWD, "$connection->getConfig('username'):$connection->getConfig('password')");
+            }
+            if(false!==$connection->getConfig('proxy')) {
+                curl_setopt($conn, CURLOPT_PROXY, $connection->getConfig('proxy'));
+            }
+            if(!empty($connection->getConfig('curl'))) {
+                foreach($connection->getConfig('curl') as $k=>$v) {
+                    curl_setopt($conn, $k, $v);
+                }
+
+            }
             $start = microtime(true);
             ob_start();
             curl_exec($conn);

@@ -97,3 +97,12 @@ $params = [
 ];
 $response = $client->pq()->search($params);
 print_r($response);
+
+$params = [
+    'body' => [
+        'query' => "SELECT * FROM movies where MATCH('@movie_title star trek')"
+    ]
+];
+
+$response = $client->sql($params);
+var_dump($response);
