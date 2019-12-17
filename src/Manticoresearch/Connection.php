@@ -8,19 +8,31 @@ class Connection
 {
     protected $config;
     protected $_alive;
-
+/*
+ * $params['transport']  = transport class name
+ * $params['host']       = hostname
+ * $params['port']       = port number
+ * $params['timeout']    = connection timeout
+ * $params['connect_timeout'] = connection connect timeout
+ * $params['proxy']       = proxy host:port string
+ * $params['username']  = username for http auth
+ * $params['password']  = password for http auth
+ * $params['headers']   = array of custom headers
+ * $params['curl']      = array of pairs of curl option=>value
+ * $params['persistent'] = bool if connection is persistent
+ */
     public function __construct(array $params)
     {
         $this->config = array(
             'transport' => 'Http',
             'host' => '127.0.0.1',
+            'scheme' => 'http',
             'port' => '9308',
             'timeout' => 300,
             'connect_timeout' => 0,
-            'proxy' => false,
-            'compression' => false,
-            'username' => false,
-            'password' => false,
+            'proxy' => null,
+            'username' => null,
+            'password' => null,
             'headers' => [],
             'curl' => [],
             'persistent' => false

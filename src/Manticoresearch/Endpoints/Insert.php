@@ -12,6 +12,7 @@ class Insert extends Request
     {
         return '/json/insert';
     }
+
     public function getMethod()
     {
         return 'POST';

@@ -5,12 +5,11 @@ $config = array(
     'connections' => [
         [
             'host' => '127.0.0.1',
-            'port' => '6381'
-        ],
-        [
-            'host' => '127.0.0.1',
-            'port' => '6380'
-        ],
+            'port' => '6380',
+            'transport' => 'PhpHttp',
+            'requestFactory' => 'GuzzleHttp\Psr7\Request'
+        ]
+
 
     ],
     'connectionStrategy' => 'Random'
@@ -27,8 +26,8 @@ $params = [
     ]
 ];
 
-//$response = $client->search($params);
-//print_r($response);
+$response = $client->search($params);
+print_r($response);
 
 $doc = [
     'body' => [

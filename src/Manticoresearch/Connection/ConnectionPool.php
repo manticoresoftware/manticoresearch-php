@@ -1,4 +1,5 @@
 <?php
+
 namespace Manticoresearch\Connection;
 
 use Manticoresearch\Connection;
@@ -30,17 +31,18 @@ class ConnectionPool
     {
         $this->_connections = $connections;
     }
-    public function getConnection():Connection
+
+    public function getConnection(): Connection
     {
 
-        $connection =  $this->_strategy->getConnection($this->_connections);
+        $connection = $this->_strategy->getConnection($this->_connections);
         return $connection;
     }
-    public function hasConnections():bool
+
+    public function hasConnections(): bool
     {
-        foreach($this->_connections as $connection)
-        {
-            if($connection->isAlive()) {
+        foreach ($this->_connections as $connection) {
+            if ($connection->isAlive()) {
                 return true;
             }
         }

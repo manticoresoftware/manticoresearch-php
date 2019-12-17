@@ -11,14 +11,21 @@ class Search extends Request
 {
 
     protected $_index;
+
+    public function getMethod()
+    {
+        return 'POST';
+    }
+
     public function getPath()
     {
-        if(isset($this->_index)) {
-                return "/json/pq/".$this->_index."/_search";
+        if (isset($this->_index)) {
+            return "/json/pq/" . $this->_index . "/_search";
 
         }
         throw new RuntimeException('Index name is missing.');
     }
+
     /**
      * @return mixed
      */

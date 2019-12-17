@@ -6,7 +6,7 @@ use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Request;
 use Manticoresearch\Response;
 
-class Http extends \Manticoresearch\Transport
+class Http extends \Manticoresearch\Transport implements TransportInterface
 {
 
         protected  $_scheme = 'http';
@@ -49,11 +49,11 @@ class Http extends \Manticoresearch\Transport
                 curl_setopt($conn, CURLOPT_CONNECTTIMEOUT, $connection->getConnectTimeout());
             }
             
-            if(false !== $connection->getConfig('username') && false !== $connection->getConfig('password')) {
+            if(!is_null($connection->getConfig('username')) &&  !is_null($connection->getConfig('password'))) {
                 curl_setopt($conn, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
                 curl_setopt($conn, CURLOPT_USERPWD, "$connection->getConfig('username'):$connection->getConfig('password')");
             }
-            if(false!==$connection->getConfig('proxy')) {
+            if(!is_null($connection->getConfig('proxy'))) {
                 curl_setopt($conn, CURLOPT_PROXY, $connection->getConfig('proxy'));
             }
             if(!empty($connection->getConfig('curl'))) {

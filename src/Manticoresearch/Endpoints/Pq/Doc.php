@@ -9,17 +9,23 @@ class Doc extends \Manticoresearch\Request
     protected $_index;
     protected $_id;
 
+    public function getMethod()
+    {
+        return 'POST';
+    }
+
     public function getPath()
     {
-        if(isset($this->_index)) {
-            if(isset($this->_id)) {
-                return "/json/pq/".$this->_index."/doc/".$this->_id;
-            }else{
-                return "/json/pq/".$this->_index."/doc";
+        if (isset($this->_index)) {
+            if (isset($this->_id)) {
+                return "/json/pq/" . $this->_index . "/doc/" . $this->_id;
+            } else {
+                return "/json/pq/" . $this->_index . "/doc";
             }
         }
         throw new RuntimeException('Index name is missing.');
     }
+
     /**
      * @return mixed
      */

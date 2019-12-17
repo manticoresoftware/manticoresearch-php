@@ -10,6 +10,7 @@ class Delete extends Request
     {
         return '/json/delete';
     }
+
     public function getMethod()
     {
         return 'POST';

@@ -12,6 +12,7 @@ class Replace extends Request
     {
         return '/json/replace';
     }
+
     public function getMethod()
     {
         return 'POST';

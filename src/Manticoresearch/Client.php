@@ -6,10 +6,13 @@ namespace Manticoresearch;
 
 use Manticoresearch\Connection\Strategy\Random;
 use Manticoresearch\Connection\Strategy\RoundRobin;
+use Manticoresearch\Connection\Strategy\SelectorInterface;
+use Manticoresearch\Connection\Strategy\StaticRoundRobin;
 use Manticoresearch\Endpoints\AbstractEndpoint;
 
 use Manticoresearch\Endpoints\Pq;
 use Manticoresearch\Exceptions\ConnectionException;
+use Manticoresearch\Exceptions\RuntimeException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -26,11 +29,15 @@ class Client
 
     public $transport;
     protected $_config = [];
-    private $_connectionStrategy = RoundRobin::class;
+    private $_connectionStrategy = StaticRoundRobin::class;
     protected $_connectionPool;
 
     protected $_logger;
-
+/*
+ * $config can be a connection array or
+ * $config['connections] = array of connections
+ * $config['connectionStrategy'] = class name of pool strategy
+ */
     public function __construct($config = [], LoggerInterface $logger = null)
     {
         $this->setConfig($config);
@@ -53,9 +60,19 @@ class Client
             $connections[] = Connection::create($this->_config);
         }
         if (isset($this->_config['connectionStrategy'])) {
-
-            $strategyName = '\\Manticoresearch\\Connection\\Strategy\\' . $this->_config['connectionStrategy'];
-            $strategy = new $strategyName();
+            if(is_string($this->_config['connectionStrategy'])) {
+                $strategyName = '\\Manticoresearch\\Connection\\Strategy\\' . $this->_config['connectionStrategy'];
+                if (class_exists($strategyName)) {
+                    $strategy = new $strategyName();
+                }elseif(class_exists($this->_config['connectionStrategy'])) {
+                    $strategyName = $this->_config['connectionStrategy'];
+                    $strategy = new $strategyName();
+                }
+            }elseif($this->_config['connectionStrategy'] instanceof SelectorInterface) {
+                $strategy = $this->_config['connectionStrategy'];
+            }else{
+                throw new RuntimeException('Cannot create a strategy based on provided settings!');
+            }
         } else {
             $strategy = new $this->_connectionStrategy;
         }

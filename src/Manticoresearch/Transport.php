@@ -7,9 +7,10 @@ namespace Manticoresearch;
 class Transport
 {
     protected $_connection;
+
     public function __construct(Connection $connection = null)
     {
-        if($connection) {
+        if ($connection) {
             $this->_connection = $connection;
         }
     }
@@ -24,28 +25,30 @@ class Transport
         $this->_connection = $connection;
         return $this;
     }
-    public static function create($transport, Connection $connection, array $params=[])
+
+    public static function create($transport, Connection $connection, array $params = [])
     {
         $className = "Manticoresearch\\Transport\\$transport";
-        if(class_exists($className)) {
-            $transport = new $className();
+        if (class_exists($className)) {
+            $transport = new $className($connection);
         }
-        if($transport instanceof self) {
+        if ($transport instanceof self) {
             $transport->setConnection($connection);
-        }else{
+        } else {
             throw new \Exception('Bad transport');
         }
         return $transport;
     }
-    protected function setupURI(string $uri, $query=[]) :string
+
+    protected function setupURI(string $uri, $query = []): string
     {
-        if(!empty($query)) {
-            foreach($query as $k=>$v) {
-                if(is_bool($query)) {
+        if (!empty($query)) {
+            foreach ($query as $k => $v) {
+                if (is_bool($query)) {
                     $query[$k] = $v ? 'true' : 'false';
                 }
             }
-            $uri = $uri .'?'  . http_build_query($query);
+            $uri = $uri . '?' . http_build_query($query);
         }
         return $uri;
     }
