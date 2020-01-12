@@ -25,13 +25,31 @@ use Psr\Log\NullLogger;
  */
 class Client
 {
+    /**
+     *
+     */
     const VERSION = '1.0.0';
 
+    /**
+     * @var
+     */
     public $transport;
+    /**
+     * @var array
+     */
     protected $_config = [];
+    /**
+     * @var string
+     */
     private $_connectionStrategy = StaticRoundRobin::class;
+    /**
+     * @var
+     */
     protected $_connectionPool;
 
+    /**
+     * @var LoggerInterface|NullLogger
+     */
     protected $_logger;
 /*
  * $config can be a connection array or
@@ -51,7 +69,12 @@ class Client
         $connections = [];
         if (isset($this->_config['connections'])) {
             foreach ($this->_config['connections'] as $connection) {
-                $connections[] = Connection::create($connection);
+                if(is_array( $connection)) {
+                    $connections[] = Connection::create($connection);
+                }else {
+                    $connections[] = $connection;
+                }
+
             }
 
         }
@@ -79,32 +102,56 @@ class Client
 
         $this->_connectionPool = new Connection\ConnectionPool($connections, $strategy);
     }
+
+    /**
+     * @param $hosts
+     */
     public function setHosts($hosts)
     {
         $this->_config['connections'] = $hosts;
         $this->_initConnections();
     }
+
+    /**
+     * @param array $config
+     * @return $this
+     */
     public function setConfig(array $config)
     {
         $this->_config = array_merge($this->_config, $config);
         return $this;
     }
 
+    /**
+     * @param $config
+     * @return Client
+     */
     public static function create($config): Client
     {
         return self::createFromArray($config);
     }
 
+    /**
+     * @param $config
+     * @return Client
+     */
     public static function createFromArray($config)
     {
 
         return new self($config);
     }
 
+    /**
+     * @return mixed
+     */
     public function getConnections()
     {
         return $this->_connectionPool->getConnections();
     }
+
+    /**
+     * @return mixed
+     */
     public function getConnectionPool()
     {
         return $this->_connectionPool;

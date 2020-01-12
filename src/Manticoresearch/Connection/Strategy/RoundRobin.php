@@ -4,10 +4,21 @@
 namespace Manticoresearch\Connection\Strategy;
 
 
+/**
+ * Class RoundRobin
+ * @package Manticoresearch\Connection\Strategy
+ */
 class RoundRobin implements SelectorInterface
 {
+    /**
+     * @var int
+     */
     private $current = 0;
 
+    /**
+     * @param array $connections
+     * @return mixed
+     */
     public function getConnection(array $connections)
     {
 

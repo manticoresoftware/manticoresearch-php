@@ -4,12 +4,31 @@
 namespace Manticoresearch;
 
 
+/**
+ * Class Request
+ * @package Manticoresearch
+ */
 class Request
 {
+    /**
+     * @var
+     */
     protected $_path;
+    /**
+     * @var
+     */
     protected $_method;
+    /**
+     * @var
+     */
     protected $_body;
+    /**
+     * @var
+     */
     protected $_query;
+    /**
+     * @var
+     */
     protected $_content_type;
 
     public function __construct($params=[])

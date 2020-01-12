@@ -5,9 +5,19 @@ namespace Manticoresearch\Connection;
 use Manticoresearch\Connection;
 use Manticoresearch\Connection\Strategy\SelectorInterface;
 
+/**
+ * Class ConnectionPool
+ * @package Manticoresearch\Connection
+ */
 class ConnectionPool
 {
+    /**
+     * @var array
+     */
     protected $_connections;
+    /**
+     * @var SelectorInterface
+     */
     protected $_strategy;
 
     public function __construct(array $connections, SelectorInterface $strategy)

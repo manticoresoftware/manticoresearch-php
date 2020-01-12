@@ -4,10 +4,21 @@
 namespace Manticoresearch\Connection\Strategy;
 
 
+/**
+ * Class StaticRoundRobin
+ * @package Manticoresearch\Connection\Strategy
+ */
 class StaticRoundRobin implements SelectorInterface
 {
+    /**
+     * @var int
+     */
     private $current = 0;
 
+    /**
+     * @param array $connections
+     * @return mixed
+     */
     public function getConnection(array $connections)
     {
         if ($connections[$this->current]->isAlive()) {
@@ -17,8 +28,9 @@ class StaticRoundRobin implements SelectorInterface
         $alives = array_filter($connections, function ($connection) {
             return $connection->isAlive() ?? false;
         });
-        $connection = $alives[$this->current % count($connections)];
         $this->current += 1;
+        $connection = $alives[$this->current % count($connections)];
+
         return $connection;
     }
 }

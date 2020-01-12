@@ -4,16 +4,32 @@ namespace Manticoresearch\Endpoints\Pq;
 
 use Manticoresearch\Exceptions\RuntimeException;
 
+/**
+ * Class Doc
+ * @package Manticoresearch\Endpoints\Pq
+ */
 class Doc extends \Manticoresearch\Request
 {
+    /**
+     * @var
+     */
     protected $_index;
+    /**
+     * @var
+     */
     protected $_id;
 
+    /**
+     * @return mixed|string
+     */
     public function getMethod()
     {
         return 'POST';
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getPath()
     {
         if (isset($this->_index)) {

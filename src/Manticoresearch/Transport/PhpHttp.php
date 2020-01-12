@@ -14,9 +14,17 @@ use Manticoresearch\Transport;
 use Http\Discovery\HttpClientDiscovery;
 
 
+/**
+ * Class PhpHttp
+ * @package Manticoresearch\Transport
+ */
 class PhpHttp extends Transport implements TransportInterface
 {
 
+    /**
+     * PhpHttp constructor.
+     * @param Connection|null $connection
+     */
     public function __construct(Connection $connection = null)
     {
         $this->client = HttpClientDiscovery::find();
@@ -24,7 +32,13 @@ class PhpHttp extends Transport implements TransportInterface
         parent::__construct($connection);
     }
 
-    public function execute(Request $request,$params=[])
+    /**
+     * @param Request $request
+     * @param array $params
+     * @return Response
+     * @throws \Http\Client\Exception
+     */
+    public function execute(Request $request, $params=[])
     {
         $connection = $this->getConnection();
 

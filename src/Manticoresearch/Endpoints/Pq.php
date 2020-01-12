@@ -7,15 +7,30 @@ namespace Manticoresearch\Endpoints;
 use Manticoresearch\Endpoints\Pq\DeleteByQuery;
 use Manticoresearch\Endpoints\Pq\Doc;
 
+/**
+ * Class Pq
+ * @package Manticoresearch\Endpoints
+ */
 class Pq
 {
+    /**
+     * @var
+     */
     protected $_client;
 
+    /**
+     * Pq constructor.
+     * @param $client
+     */
     public function __construct($client)
     {
         $this->_client = $client;
     }
 
+    /**
+     * @param $params
+     * @return mixed
+     */
     public function doc($params)
     {
         $index = $params['index'] ?? null;
@@ -31,6 +46,10 @@ class Pq
         return $response->getResponse();
     }
 
+    /**
+     * @param $params
+     * @return mixed
+     */
     public function search($params)
     {
         $index = $params['index'] ?? null;
@@ -43,6 +62,10 @@ class Pq
         return $response->getResponse();
     }
 
+    /**
+     * @param array $params
+     * @return mixed
+     */
     public function deleteByQuery($params = [])
     {
         $index = $params['index'] ?? null;

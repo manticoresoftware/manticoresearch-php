@@ -6,14 +6,29 @@ use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Request;
 use Manticoresearch\Response;
 
+/**
+ * Class Http
+ * @package Manticoresearch\Transport
+ */
 class Http extends \Manticoresearch\Transport implements TransportInterface
 {
 
-        protected  $_scheme = 'http';
+    /**
+     * @var string
+     */
+    protected  $_scheme = 'http';
 
-        protected static $_curl;
+    /**
+     * @var
+     */
+    protected static $_curl;
 
-        public function execute(Request $request,$params=[])
+    /**
+     * @param Request $request
+     * @param array $params
+     * @return Response
+     */
+    public function execute(Request $request, $params=[])
         {
             $connection = $this->getConnection();
             //@todo add persistent
@@ -51,7 +66,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
             
             if(!is_null($connection->getConfig('username')) &&  !is_null($connection->getConfig('password'))) {
                 curl_setopt($conn, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-                curl_setopt($conn, CURLOPT_USERPWD, "$connection->getConfig('username'):$connection->getConfig('password')");
+                curl_setopt($conn, CURLOPT_USERPWD, $connection->getConfig('username').":".$connection->getConfig('password'));
             }
             if(!is_null($connection->getConfig('proxy'))) {
                 curl_setopt($conn, CURLOPT_PROXY, $connection->getConfig('proxy'));
@@ -81,8 +96,12 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
             }
             return $response;
         }
-        
-        protected function _getCurlConnection(bool $persistent=true)
+
+    /**
+     * @param bool $persistent
+     * @return false|resource
+     */
+    protected function _getCurlConnection(bool $persistent=true)
         {
             if(!$persistent || !self::$_curl) {
                 self::$_curl = curl_init();
