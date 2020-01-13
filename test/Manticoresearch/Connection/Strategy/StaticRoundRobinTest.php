@@ -59,7 +59,7 @@ class StaticRoundRobinTest extends TestCase
         ];
 
         $client->search($params);
-        $this->assertSame('6380', $client->getConnectionPool()->getConnection()->getPort());
+        $this->assertSame(9308, $client->getConnectionPool()->getConnection()->getPort());
     }
     public function testSequence()
     {
