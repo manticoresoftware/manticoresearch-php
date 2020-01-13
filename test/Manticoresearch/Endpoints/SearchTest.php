@@ -31,7 +31,7 @@ class SearchTest  extends \PHPUnit\Framework\TestCase
 
                 'query' => [
                     'match_phrase' => [
-                        'movie_title' => 'star trek nemesis',
+                        'title' => 'find me',
                     ]
                 ]
             ]

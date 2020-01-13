@@ -49,10 +49,10 @@ class StaticRoundRobinTest extends TestCase
         ]);
         $params = [
             'body' => [
-                'index' => 'movies',
+                'index' => 'testrt',
                 'query' => [
                     'match_phrase' => [
-                        'movie_title' => 'star trek nemesis',
+                        'title' => 'find me',
                     ]
                 ]
             ]
