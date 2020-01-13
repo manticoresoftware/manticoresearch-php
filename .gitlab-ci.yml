@@ -5,7 +5,9 @@ cache:
     - vendor/
 
 before_script:
-  - docker-php-ext-install json
+  - apt-get update -yqq
+  - apt-get install git unzip -yqq
+  - docker-php-ext-install json zip
   - curl -sS https://getcomposer.org/installer | php
   - php composer.phar install
 
