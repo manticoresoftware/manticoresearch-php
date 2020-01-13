@@ -8,7 +8,7 @@ class SearchTest  extends \PHPUnit\Framework\TestCase
 {
     public function testEmptyBody()
     {
-        $params = ['host' => '127.0.0.1', 'port' => 9308];
+        $params = ['host' => 'manticore', 'port' => 9308];
         $client = new Client($params);
         $this->expectException(\Manticoresearch\Exceptions\ResponseException::class);
         $client->search(['body'=>'']);
@@ -16,14 +16,14 @@ class SearchTest  extends \PHPUnit\Framework\TestCase
 
     public function testNoArrayParams()
     {
-        $params = ['host' => '127.0.0.1', 'port' => 9308];
+        $params = ['host' => 'manticore', 'port' => 9308];
         $client = new Client($params);
         $this->expectException(TypeError::class);
         $client->search('this is not a json');
     }
     public function testMissingIndex()
     {
-        $params = ['host' => '127.0.0.1', 'port' => 9308];
+        $params = ['host' => 'manticore', 'port' => 9308];
         $client = new Client($params);
         $this->expectException(\Manticoresearch\Exceptions\ResponseException::class);
         $response =$client->search( [
