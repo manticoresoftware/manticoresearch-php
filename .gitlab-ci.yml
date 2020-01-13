@@ -1,0 +1,17 @@
+image: php:7.2-cli-stretch
+
+cache:
+  paths:
+    - vendor/
+
+before_script:
+  - docker-php-ext-install php-json php-curl
+  - curl -sS https://getcomposer.org/installer | php
+  - php composer.phar install
+
+services:
+  - manticoresearch/manticore
+
+test:manticore:
+  script:
+    - vendor/bin/phpunit test/
