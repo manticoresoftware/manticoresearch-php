@@ -12,22 +12,22 @@ class StaticRoundRobinTest extends TestCase
 
         $client->setHosts([
             [
-                'host' => '127.0.0.1',
-                'port' => '6380'
+                'host' => 'manticoresearch-manticore',
+                'port' => 9308
             ],
             [
-                'host' => '127.0.0.1',
-                'port' => '6381'
+                'host' => 'manticoresearch-manticore',
+                'port' => 9308
             ],
 
         ]);
 
         $connection = $client->getConnectionPool()->getConnection();
-        $this->assertSame('127.0.0.1', $connection->getHost());
-        $this->assertSame('6380', $connection->getPort());
+        $this->assertSame('manticoresearch-manticore', $connection->getHost());
+        $this->assertSame(9308, $connection->getPort());
 
         $connection = $client->getConnectionPool()->getConnection();
-        $this->assertSame('127.0.0.1', $connection->getHost());
+        $this->assertSame('manticoresearch-manticore', $connection->getHost());
 
     }
 
@@ -38,12 +38,12 @@ class StaticRoundRobinTest extends TestCase
 
         $client->setHosts([
             [
-                'host' => '127.0.0.1',
-                'port' => '6381'
+                'host' => 'manticoresearch-manticore',
+                'port' => 9309
             ],
             [
-                'host' => '127.0.0.1',
-                'port' => '6380'
+                'host' => 'manticoresearch-manticore',
+                'port' => 9308
             ],
 
         ]);
