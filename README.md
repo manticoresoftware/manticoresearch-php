@@ -16,20 +16,15 @@ Compatibility
 -------------
 This  client works only with Manticore Search 2.5.1 and above.
 
-For pre-release testing:
+Install:
 -----------------------
 
 Create a compose.json file and add 
 ```
 {
 "require" : {
-"manticoresoftware/manticoresearch-php":"dev-master"}
-,"repositories":[
-    {
-        "type": "vcs",
-        "url": "git@gitlab.com:manticoresearch/manticoresearch-php.git"
-    }
-]
+   "manticoresoftware/manticoresearch-php":"dev-master"
+   }
 }
 
 ``` 

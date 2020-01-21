@@ -15,8 +15,9 @@
         "ext-curl": "*"
     },
     "require-dev": {
-        "phpunit/phpunit" : "*",
-        "mockery/mockery": "*"
+        "apigen/apigen": "^4.1",
+        "mockery/mockery": "*",
+        "phpunit/phpunit": "*"
     },
     "autoload": {
       "psr-4": {
