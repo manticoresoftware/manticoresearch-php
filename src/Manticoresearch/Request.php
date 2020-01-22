@@ -11,23 +11,23 @@ namespace Manticoresearch;
 class Request
 {
     /**
-     * @var
+     * @var string
      */
     protected $_path;
     /**
-     * @var
+     * @var string
      */
     protected $_method;
     /**
-     * @var
+     * @var string
      */
     protected $_body;
     /**
-     * @var
+     * @var string
      */
     protected $_query;
     /**
-     * @var
+     * @var string
      */
     protected $_content_type;
 

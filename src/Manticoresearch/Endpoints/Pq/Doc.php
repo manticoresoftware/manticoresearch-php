@@ -11,11 +11,11 @@ use Manticoresearch\Exceptions\RuntimeException;
 class Doc extends \Manticoresearch\Request
 {
     /**
-     * @var
+     * @var string
      */
     protected $_index;
     /**
-     * @var
+     * @var integer
      */
     protected $_id;
 

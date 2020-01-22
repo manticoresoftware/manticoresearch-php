@@ -12,7 +12,7 @@ class Response
 {
     /**
     * execution time to get the response
-     * @var
+     * @var integer|float
      */
     protected $_time;
     /**

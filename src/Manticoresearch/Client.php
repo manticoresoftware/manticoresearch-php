@@ -31,10 +31,6 @@ class Client
     const VERSION = '1.0.0';
 
     /**
-     * @var
-     */
-    public $transport;
-    /**
      * @var array
      */
     protected $_config = [];
@@ -43,7 +39,7 @@ class Client
      */
     private $_connectionStrategy = StaticRoundRobin::class;
     /**
-     * @var
+     * @var array
      */
     protected $_connectionPool;
 

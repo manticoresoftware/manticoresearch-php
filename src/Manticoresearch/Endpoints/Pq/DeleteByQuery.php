@@ -15,7 +15,7 @@ class DeleteByQuery extends Request
 {
 
     /**
-     * @var
+     * @var string
      */
     protected $_index;
 

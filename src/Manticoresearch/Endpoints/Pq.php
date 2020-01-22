@@ -4,6 +4,7 @@
 namespace Manticoresearch\Endpoints;
 
 
+use Manticoresearch\Client;
 use Manticoresearch\Endpoints\Pq\DeleteByQuery;
 use Manticoresearch\Endpoints\Pq\Doc;
 
@@ -14,7 +15,7 @@ use Manticoresearch\Endpoints\Pq\Doc;
 class Pq
 {
     /**
-     * @var
+     * @var Client
      */
     protected $_client;
 

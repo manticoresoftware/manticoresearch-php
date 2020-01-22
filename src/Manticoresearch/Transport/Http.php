@@ -19,7 +19,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
     protected  $_scheme = 'http';
 
     /**
-     * @var
+     * @var object
      */
     protected static $_curl;
 
