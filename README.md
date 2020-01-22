@@ -1,7 +1,7 @@
 manticoresearch-php
 ===================
 
-Official client for Manticore Search using the HTTP JSON protocol. 
+Official client for Manticore Search using the HTTP JSON protocol.
 
 
 Features
@@ -14,34 +14,42 @@ Features
 
 Compatibility
 -------------
-This  client works only with Manticore Search 2.5.1 and above.
+This client works only with Manticore Search 2.5.1 and above.
 
-Install:
------------------------
+Install
+--------
 
-Create a compose.json file and add 
+Use composer to add manticoresearch to your project:
+
+```bash
+composer require manticoresoftware/manticoresearch-php:dev-master
 ```
+
+You can also directly add this line in the `require` block of `composer.json`:
+
+```json
 {
 "require" : {
    "manticoresoftware/manticoresearch-php":"dev-master"
    }
 }
 
-``` 
+```
 
-then `composer update`
+and then use `composer install`.
 
 Usage
 ----
 
-Add 
-```
-require_once __DIR__ . '/vendor/autoload.php';
+Add
 
+```php
+require_once __DIR__ . '/vendor/autoload.php';
 ```
 
 Then
-```
+
+```php
 $config = ['host'=>'127.0.0.1','port'=>9308];
 $client = new \Manticoresearch\Client($config);
 
@@ -57,5 +65,4 @@ $params = [
 ];
 
 $response = $client->search($params);
-
 ```
