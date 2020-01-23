@@ -76,6 +76,8 @@ $response = $client->search($params);
 Documentation
 -------------
 
-Early documentation available in the [Wiki](https://github.com/manticoresoftware/manticoresearch-php/wiki).
+Manual: https://manticoresoftware.github.io/manticoresearch-php/
 
-Reference available at https://manticoresoftware.github.io/manticoresearch-php/.
+Complete API: https://manticoresoftware.github.io/manticoresearch-php/api
+
+Manticore Search documentation: https://docs.manticoresearch.com/latest/html/
