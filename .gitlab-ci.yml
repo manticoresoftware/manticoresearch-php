@@ -29,6 +29,8 @@ apidoc_gen:
   script:
     - mkdir gh-pages
     - git clone --branch=gh-pages $CI_REPOSITORY_URL gh-pages
+    - git config --global user.email "$GITLAB_USER_EMAIL"
+    - git config --global user.name "$GITLAB_USER_NAME"
     - php composer.phar require apigen/apigen:dev-master  roave/better-reflection:dev-master#ce9d784
     - vendor/bin/apigen generate src --destination gh-pages
     - cd gh-pages && git add . &&  git commit -m"update apidocs" && git push
