@@ -29,7 +29,7 @@ apidoc_gen:
   script:
     - mkdir gh-pages
     - git clone --branch=gh-pages $CI_REPOSITORY_URL gh-pages
-    - php require apigen/apigen:dev-master
+    - php composer.phar require apigen/apigen:dev-master
     - vendor/bin/apigen generate src -d gh-pages
     - cd gh-pages && git add . &&  git commit -m"update apidocs" && git push
   only:
