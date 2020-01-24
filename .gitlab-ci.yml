@@ -1,3 +1,6 @@
+stages:
+  - test
+  - publish
 image: php:7.2-cli-stretch
 
 cache:
@@ -14,6 +17,20 @@ before_script:
 services:
   - manticoresearch/manticore
 
-test:manticore:
+unit_testing:
+  stage: test
   script:
     - vendor/bin/phpunit test/
+  only:
+    - master
+
+apidoc_gen:
+  stage: publish
+  script:
+    - mkdir gh-pages
+    - git clone --branch=gh-pages $CI_REPOSITORY_URL gh-pages
+    - php require apigen/apigen:dev-master
+    - vendor/bin/apigen generate src -d gh-pages
+    - cd gh-pages && git add . &&  git commit -m"update apidocs" && git push
+  only:
+    - master
