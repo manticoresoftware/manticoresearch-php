@@ -15,7 +15,6 @@
         "ext-curl": "*"
     },
     "require-dev": {
-        "apigen/apigen": "^4.1",
         "mockery/mockery": "*",
         "phpunit/phpunit": "*"
     },
