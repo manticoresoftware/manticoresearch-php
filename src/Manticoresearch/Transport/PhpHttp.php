@@ -7,11 +7,13 @@ namespace Manticoresearch\Transport;
 use Http\Discovery\MessageFactoryDiscovery;
 
 use Manticoresearch\Connection;
+use Manticoresearch\Exceptions\ConnectionException;
 use Manticoresearch\Request;
 use Manticoresearch\Response;
 use Manticoresearch\Transport;
 
 use Http\Discovery\HttpClientDiscovery;
+use Psr\Log\LoggerInterface;
 
 
 /**
@@ -25,11 +27,11 @@ class PhpHttp extends Transport implements TransportInterface
      * PhpHttp constructor.
      * @param Connection|null $connection
      */
-    public function __construct(Connection $connection = null)
+    public function __construct(Connection $connection = null,LoggerInterface $logger)
     {
         $this->client = HttpClientDiscovery::find();
         $this->messageFactory = MessageFactoryDiscovery::find();
-        parent::__construct($connection);
+        parent::__construct($connection,$logger);
     }
 
     /**
@@ -61,9 +63,30 @@ class PhpHttp extends Transport implements TransportInterface
         } else {
             $content = '';
         }
+        $start = microtime(true);
         $message = $this->messageFactory->createRequest($method, $url, $headers, $content);
-        $responsePSR = $this->client->sendRequest($message);
-        $response = new Response($responsePSR->getBody(), $responsePSR->getStatusCode());
+        try {
+            $responsePSR = $this->client->sendRequest($message);
+        }catch (\Exception $e) {
+            throw new ConnectionException($e->getMessage(),$request);
+        }
+        $end = microtime(true);
+        $status = $responsePSR->getStatusCode();
+        $response = new Response($responsePSR->getBody(), $status);
+        $time = $end-$start;
+        $response->setTime($time);
+        $this->_logger->debug('Request body:',[
+            'connection' => $connection->getConfig(),
+            'payload'=> $request->getBody()
+        ]);
+        $this->_logger->info('Request:',[
+                 'url' => $url,
+                'status' => $status,
+                'time' => $time
+            ]
+        );
+        $this->_logger->debug('Response body:',$response->getResponse());
+
         return $response;
     }
 }

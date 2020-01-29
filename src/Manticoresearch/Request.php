@@ -118,5 +118,17 @@ class Request
     {
         $this->_query = $query;
     }
-
+    /*
+     * #return string
+     */
+    public function toArray()
+    {
+        return [
+            'path' => $this->getPath(),
+            'method' => $this->getMethod(),
+            'content_type' => $this->getContentType(),
+            'query' => $this->getQuery(),
+            'body' => $this->getBody()
+        ];
+    }
 }

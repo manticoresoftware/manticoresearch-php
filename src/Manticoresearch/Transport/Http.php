@@ -59,11 +59,11 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
             }
             curl_setopt($conn, CURLOPT_CUSTOMREQUEST, $method);
             curl_setopt($conn, CURLOPT_HTTPHEADER, $headers);
-            
+
             if($connection->getConnectTimeout()>0) {
                 curl_setopt($conn, CURLOPT_CONNECTTIMEOUT, $connection->getConnectTimeout());
             }
-            
+
             if(!is_null($connection->getConfig('username')) &&  !is_null($connection->getConfig('password'))) {
                 curl_setopt($conn, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
                 curl_setopt($conn, CURLOPT_USERPWD, $connection->getConfig('username').":".$connection->getConfig('password'));
@@ -83,8 +83,15 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
             $responseString = \ob_get_clean();
             $end = microtime(true);
             $errorno = curl_errno($conn);
-              $response = new Response($responseString,curl_getinfo($conn,CURLINFO_HTTP_CODE));
-            $response->setTime($end-$start);
+            $status = curl_getinfo($conn,CURLINFO_HTTP_CODE);
+            $response = new Response($responseString,$status);
+            $time = $end-$start;
+            $response->setTime($time);
+            $response->setTransportInfo([
+                'url' => $url,
+                'headers' => $headers,
+                'body' => $request->getBody()
+            ]);
             //hard error
             if($errorno>0) {
                 $error = curl_error($conn);
@@ -94,6 +101,19 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
             if($response->hasError()) {
                 throw new ResponseException($request, $response);
             }
+
+            $this->_logger->debug('Request body:',[
+                'connection' => $connection->getConfig(),
+                'payload'=> $request->getBody()
+            ]);
+            $this->_logger->info('Request:',[
+                    'url' => $url,
+                    'status' => $status,
+                    'time' => $time
+                ]
+            );
+            $this->_logger->debug('Response body:',$response->getResponse());
+
             return $response;
         }
 

@@ -15,11 +15,19 @@ class Response
      * @var integer|float
      */
     protected $_time;
+
     /**
      * raw response as string
      * @var string
      */
     protected $_string;
+
+    /**
+     * information about request
+     * @var array
+     */
+    protected $_transportInfo;
+
 
     /**
      * response as array
@@ -98,5 +106,25 @@ class Response
     public function getTime()
     {
         return $this->_time;
+    }
+
+    /**
+     *  set request info
+     * @param array
+     * @return $this
+     */
+    public function setTransportInfo($info)
+    {
+        $this->_transportInfo = $info;
+        return $this;
+    }
+
+    /**
+     * get request info
+     * @return array
+     */
+    public function getTransportInfo()
+    {
+        return $this->_transportInfo;
     }
 }

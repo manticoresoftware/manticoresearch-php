@@ -4,6 +4,8 @@
 namespace Manticoresearch;
 
 
+use Psr\Log\LoggerInterface;
+
 /**
  * Class Connection
  * @package Manticoresearch
@@ -164,12 +166,13 @@ class Connection
     }
 
     /**
+     * @param LoggerInterface
      * @return mixed
      * @throws \Exception
      */
-    public function getTransportHandler()
+    public function getTransportHandler(LoggerInterface $logger)
     {
-        return Transport::create($this->getTransport(), $this);
+        return Transport::create($this->getTransport(), $this,$logger);
     }
 
     /**
@@ -185,11 +188,14 @@ class Connection
     }
 
     /**
-     * @param $key
+     * @param string|null
      * @return mixed|null
      */
-    public function getConfig($key)
+    public function getConfig($key =  null)
     {
+        if($key == null) {
+            return $this->config;
+        }
         if (isset($this->config[$key])) {
             return $this->config[$key];
         } else {

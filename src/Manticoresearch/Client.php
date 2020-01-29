@@ -162,7 +162,6 @@ class Client
 
         $endpoint = new Endpoints\Search($params);
         $response = $this->request($endpoint);
-
         return $response->getResponse();
     }
 
@@ -253,6 +252,7 @@ class Client
         return $response->getResponse();
     }
 
+
     /*
      * @return callable|array
      */
@@ -263,23 +263,22 @@ class Client
         $connection = $this->_connectionPool->getConnection();
 
         try {
-            $response = $connection->getTransportHandler()->execute($request);
+            $response = $connection->getTransportHandler($this->_logger)->execute($request);
         } catch (ConnectionException $e) {
             //@todo implement retry
-            $this->_logger->error('Manticore Search Request failed', [
+            $this->_logger->error('Manticore Search Request failed:', [
                 'exception' => $e,
-                'request' => $e->getRequest()
+                'request' => $e->getRequest()->toArray()
             ]);
 
             $connection->mark(false);
             if (!$this->_connectionPool->hasConnections()) {
-                throw $e;
+                    throw $e;
             }
             return $this->request($request);
 
         }
 
-        //@todo implement logger debug message
         return $response;
     }
 
