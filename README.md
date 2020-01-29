@@ -76,8 +76,13 @@ $response = $client->search($params);
 Documentation
 -------------
 
-Manual: https://manticoresoftware.github.io/manticoresearch-php/
+For manual see  [docs](docs) folder.
 
-Complete API: https://manticoresoftware.github.io/manticoresearch-php/api
+For complete API reference of the client check https://manticoresoftware.github.io/manticoresearch-php/api
 
-Manticore Search documentation: https://docs.manticoresearch.com/latest/html/
+Manticore Search server documentation: https://docs.manticoresearch.com/latest/html/
+
+
+License
+-------
+Manticore Search PHP Client is an open-source software licensed under the [Apache v2.0 license](LICENSE.txt)

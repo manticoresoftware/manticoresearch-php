@@ -6,13 +6,19 @@
         "php": "^7.0",
         "ext-json": "^1.4",
         "guzzlehttp/psr7": "^1.6",
+        "monolog/monolog": "^2.0",
         "php-http/curl-client": "^1.7",
-        "php-http/httplug": "^1.1",
+        "php-http/httplug": "1.1",
         "php-http/message": "^1.7",
         "psr/log": "^1.1"
     },
     "suggest": {
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "guzzlehttp/psr7": "^1.6",
+        "php-http/curl-client": "^1.7",
+        "php-http/httplug": "^1.1",
+        "php-http/message": "^1.7",
+        "monolog/monolog":"*"
     },
     "require-dev": {
         "mockery/mockery": "*",
