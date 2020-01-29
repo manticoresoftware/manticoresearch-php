@@ -95,7 +95,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
             //hard error
             if($errorno>0) {
                 $error = curl_error($conn);
-                throw new ConnectionException($error);
+                throw new ConnectionException($error,$request);
             }
             //soft error
             if($response->hasError()) {
