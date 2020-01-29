@@ -1,19 +1,6 @@
----
-layout: default
-title: Usage
-nav_order: 3
-has_children: true
----
+# Running Queries
 
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
-
----
-
-A quick example:
+A quick example of performing a simple search:
 
 ```
 require_once __DIR__ . '/vendor/autoload.php';
@@ -35,111 +22,11 @@ $response = $client->search($params);
 
 ```
 
-### Client configuration
-
-
-The client accepts a configuration as an array. Without any configuration provided, it tries to connect using HTTP `127.0.0.1` on port `9306`.
-
-#### config paramaters
-
-
-*  host  -  IP or DNS of server (part of a connection)
-*  port -   HTTP API port (part of a connection)
-*  connections - list of connections
-*  connectionStrategy - name of connection pool strategy, default is `RoundRobin`
-*  transport -  transport class name, default `Http` (part of a connection)
-
-If there is a single connection used, it can be defined directly in the configuration array.
-If multiple connections can used, they will be defined in `connections` array. 
-
-#### Transport
-
-Implemented transports:
-
-* Http -  uses CURL extension
-* Https  -  uses CURL extension, for https hosts
-* PhpHttp - adapter for HTTPlug 1.0. A client and a message factory must be present in the environment.
-
-Http/Https adapters options:
-
-*  timeout -  connection timeout
-*  connection_timeout - connection connect timeout
-*  proxy  -  proxy definition as  host:port
-*  username - username for HTTP Auth
-*  password - password for HTTP Auth
-*  headers - array of custom headers
-*  curl - array of CURL settings as option=>value 
-*  persistent -  define whenever connection is persistent or not, boolean value
-
-Example:
-```
-        $params = ['connections'=>
-            [
-                [
-                    'host' => '123.0.0.1',
-                    'port' => '1234',
-                    'timeout' => 5,
-                    'connection_timeout' => 1,
-                    'proxy' => '127.0.0.255',
-                    'username' => 'test',
-                    'password' => 'secret',
-                    'headers' => [
-                        'X-Forwarded-Host' => 'mydev.domain.com'
-                    ],
-                    'curl' => [
-                        CURLOPT_FAILONERROR => true
-                    ],
-                    'persistent' => true
-                ],
-                [
-                    'host' => '123.0.0.2',
-                    'port' => '1235',
-                    'timeout' => 5,
-                    'transport' => 'Https',
-                    'curl' =>[
-                        CURLOPT_CAPATH => 'path/to/my/ca/folder',
-                        CURLOPT_SSL_VERIFYPEER => true
-                    ],
-                    'connection_timeout' => 1,
-                    'persistent' => true
-                ],
-
-            ]
-        ];
-        $client =  new Client($params);
-```
-
-#### Connection pool strategies
-
-
-* Random - each query performed will use randomly one of the defined connections
-* RoundRobin -  each query performed picks an alive connection in round robin fashion  
-* StaticRoundRobin - connection are picked in round robin, but a connection is reused as long as it's alive. For example on first query connection 1 will be picked. If the connection works, query 2 will also use it and so on until the connection ends with hard error. In this case next queries will try to use the next connection from the pool (default)
-
-On all strategies if a connection returns a hard error it will not be used in future attempts.
-
-Custom strategy can be provided to the `connectionStrategy`. They must implement `Manticoresearch\Connection\Strategy\SelectorInterface`
-
-```
-$params = [
-    'host' => '127.0.0.1',
-    'post' => 9308,
-    'connectionStrategy' => MyCustomStrategy::class
-]
-```
-or 
-```
-$params = [
-    'host' => '127.0.0.1',
-    'post' => 9308,
-    'connectionStrategy' => new MyCustomStrategy()
-]
-```
 
 ### Queries
 
 All queries reflect the HTTP API making very easy to write them using the client.
-Each method represents an API endpoint and accept an array with the following elements
+Each method represents an API endpoint and accept an array with the following elements:
 
 * body -  the API endpoint POST payload
 * index  - index name 
@@ -150,8 +37,15 @@ Depending on the request, some of the parameters are mandatory.
 
 On the body payload there is no check regarding the validity made before sending the request.
 
-#### Search
+### Responses 
 
+Responses are returned as arrays reflection of the response object received from the API endpoint. 
+There is no other change or parsing performed.
+
+#### Search
+For complete reference of payload and response see Manticore's [Search API](https://docs.manticoresearch.com/latest/html/http_reference/json_search.html)
+
+A simple search example:
 ```
 $params = [
     'body' => [
@@ -167,7 +61,11 @@ $params = [
 $response = $client->search($params);
 ```
 
+
 #### Insert
+
+For complete reference of payload and response see Manticore's [Insert API](https://docs.manticoresearch.com/latest/html/http_reference/json_insert.html)
+
 ```
 $doc = [
     'body' => [
@@ -192,7 +90,94 @@ $doc = [
 $response = $client->insert($doc);
 ```
 
+#### Replace
+
+For complete reference of payload and response see Manticore's [Replace API](https://docs.manticoresearch.com/latest/html/http_reference/json_replace.html)
+
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'id' => 3,
+        'doc' => [
+            'gid' => 10,
+            'content' => 'updated content here',
+        ]
+    ]
+];
+
+$response = $client->replace($doc);
+```
+
+#### Update
+
+For complete reference of payload and response see Manticore's [Update API](https://docs.manticoresearch.com/latest/html/http_reference/json_update.html)
+
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'id' => 3,
+        'doc' => [
+            'gid' => 20,
+        ]
+    ]
+];
+
+$response = $client->update($doc);
+```
+
+#### Delete
+
+For complete reference of payload and response see Manticore's [Delete API](https://docs.manticoresearch.com/latest/html/http_reference/json_delete.html)
+
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'id' => 3
+    ]
+];
+
+$response = $client->delete($doc);
+```
+
+#### Bulk
+
+For complete reference of payload and response see Manticore's [Bulk API](https://docs.manticoresearch.com/latest/html/http_reference/json_bulk.html)
+
+Bulk allows to send in one request several operations of data manipulation (inserts,replaces, updates or deletes).
+
+```
+$doc = [
+    'body' => [
+        'insert' => [
+            'index' => 'testrt',
+            'id' => 34,
+            'doc' => [
+                'gid' => 1,
+                'title' => 'a new added document',
+            ]
+        ],
+        'update' => [
+            'index' => 'testrt',
+            'id' => 56,
+            'doc' => [
+                'gid' => 4,
+            ]
+        ],
+        'delete' => [
+            'index' => 'testrt',
+            'id' => 100
+        ]
+    ]
+];
+
+$response = $client->bulk($doc);
+```
+
 #### SQL
+For complete reference of payload and response see Manticore's [SQL API](https://docs.manticoresearch.com/latest/html/http_reference/sql.html).
 
 ```
 $params = [
@@ -206,14 +191,19 @@ $response = $client->sql($params);
 
 #### Percolate operations
 
+For complete reference of payloads and responses see Manticore's [PQ API](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html)
+
+Operations with the percolate indexes have their own namespace. The following methods are available:
+
 ##### Inserting stored query
 
-`index` is required
+For [storing](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html#store-query) queries the `index` parameter is mandatory. 
 
-Simple insertion:
+Simple insertion with auto generated id:
+
 ```
 $params = [
-    'index' => 'pq',
+    'index' => 'test_pq',
     'body' => [
         'query' => ['match'=>['subject'=>'test']],
         'tags' => ['test1','test2']
@@ -221,10 +211,12 @@ $params = [
 ];
 $response = $client->pq()->doc($params);
 ```
+
 Inserting with id specified and refresh command:
+
 ```
 $params = [
-    'index' => 'pq',
+    'index' => 'test_pq',
     'id' =>101,
     'query' => ['refresh' =>1],
     'body' => [
@@ -237,7 +229,7 @@ $response = $client->pq()->doc($params);
 
 ##### Percolate search
 
-`index` is required
+For [searching](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html#search-matching-document) the `index` parameter is mandatory.
 
 ```
 $params = [
@@ -257,4 +249,29 @@ $params = [
 $response = $client->pq()->search($params);
 ```
 
+##### List stored queries
 
+For [listing](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html#list-stored-queries) stored queries the `index` parameter is mandatory.
+
+```
+$params = [
+    'index' => 'test_pq',
+    'body' => [
+    ]
+];
+$response = $client->pq()->search($params);
+```
+
+##### Delete stored queries
+
+For [deleting](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html#delete-stored-queries) stored queries the `index` parameter is mandatory.
+
+```
+$params = [
+    'index' => 'test_pq',
+    'body' => [
+        'id' => [5,6]
+    ]
+];
+$response = $client->pq()->deleteByQuery($params);
+```
