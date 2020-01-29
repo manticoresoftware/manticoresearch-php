@@ -120,7 +120,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#___construct">#</a>
-            <code><a href="source-class-Manticoresearch.Transport.html#22-27">__construct</a>( <span> <a href="class-Manticoresearch.Connection.html">Manticoresearch\Connection</a> <span class="property-name">$connection</span> = <span class="php-keyword1">NULL</span></span> )</code>
+            <code><a href="source-class-Manticoresearch.Transport.html#30-36">__construct</a>( <span> <a href="class-Manticoresearch.Connection.html">Manticoresearch\Connection</a> <span class="property-name">$connection</span> = <span class="php-keyword1">NULL</span></span>, <span> Psr\Log\LoggerInterface <span class="property-name">$logger</span> </span> )</code>
 
             <div class="description">
                 Transport constructor.
@@ -152,7 +152,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_getConnection">#</a>
-            <code><a href="source-class-Manticoresearch.Transport.html#32-35">getConnection</a>( )</code>
+            <code><a href="source-class-Manticoresearch.Transport.html#41-44">getConnection</a>( )</code>
 
             <div class="description">
                 
@@ -184,7 +184,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_setConnection">#</a>
-            <code><a href="source-class-Manticoresearch.Transport.html#41-45">setConnection</a>( <span> <a href="class-Manticoresearch.Connection.html">Manticoresearch\Connection</a> <span class="property-name">$connection</span> </span> )</code>
+            <code><a href="source-class-Manticoresearch.Transport.html#50-54">setConnection</a>( <span> <a href="class-Manticoresearch.Connection.html">Manticoresearch\Connection</a> <span class="property-name">$connection</span> </span> )</code>
 
             <div class="description">
                 
@@ -216,7 +216,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_create">#</a>
-            <code><a href="source-class-Manticoresearch.Transport.html#54-66">create</a>( <span> <span class="property-name">$transport</span> </span>, <span> <a href="class-Manticoresearch.Connection.html">Manticoresearch\Connection</a> <span class="property-name">$connection</span> </span>, <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
+            <code><a href="source-class-Manticoresearch.Transport.html#64-76">create</a>( <span> <span class="property-name">$transport</span> </span>, <span> <a href="class-Manticoresearch.Connection.html">Manticoresearch\Connection</a> <span class="property-name">$connection</span> </span>, <span> Psr\Log\LoggerInterface <span class="property-name">$logger</span> </span> )</code>
 
             <div class="description">
                 
@@ -248,7 +248,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_setupURI">#</a>
-            <code><a href="source-class-Manticoresearch.Transport.html#73-84">setupURI</a>( <span> string <span class="property-name">$uri</span> </span>, <span> array <span class="property-name">$query</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
+            <code><a href="source-class-Manticoresearch.Transport.html#83-94">setupURI</a>( <span> string <span class="property-name">$uri</span> </span>, <span> array <span class="property-name">$query</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
 
             <div class="description">
                 
@@ -283,7 +283,7 @@
 
     <td class="name">
         <code>
-            <a href="source-class-Manticoresearch.Transport.html#16" class="property-name">$_connection</a>
+            <a href="source-class-Manticoresearch.Transport.html#19" class="property-name">$_connection</a>
         </code>
         <div class="description">
             
@@ -294,6 +294,32 @@
     <td class="value">
         <div>
             <a href="#$_connection" class="anchor pull-right">#</a>
+            <code><span class="php-keyword1">NULL</span></code>
+        </div>
+    </td>
+</tr>
+<tr id="$_logger">
+    <td class="attributes">
+        <code class="keyword">
+            protected 
+
+            Psr\Log\LoggerInterface
+        </code>
+    </td>
+
+    <td class="name">
+        <code>
+            <a href="source-class-Manticoresearch.Transport.html#24" class="property-name">$_logger</a>
+        </code>
+        <div class="description">
+            
+
+                <br>
+        </div>
+    </td>
+    <td class="value">
+        <div>
+            <a href="#$_logger" class="anchor pull-right">#</a>
             <code><span class="php-keyword1">NULL</span></code>
         </div>
     </td>
