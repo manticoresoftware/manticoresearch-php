@@ -1,0 +1,20 @@
+language: php
+
+php:
+  - '7.2'
+
+services:
+  -  docker
+
+before_install:
+  - docker pull manticoresearch/manticore
+  - docker network create manticore
+  - docker run --rm --publish 9308:9308 --network manticore --name=manticoresearch-manticore --detach manticoresearch/manticore
+env:
+  global:
+    - MS_HOST=127.0.0.1
+install:
+  - composer install --prefer-dist
+
+script:
+  - vendor/bin/phpunit test/

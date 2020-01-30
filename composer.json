@@ -3,7 +3,6 @@
     "description": "PHP Client for Manticore Search",
     "keywords": ["search","client","manticoresearch"],
     "license": "Apache-2.0",
-    "authors" : [{"name": "Adrian Nuta"}],
     "type": "library",
     "require": {
         "php": "^7.0",
