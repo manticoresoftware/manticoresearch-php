@@ -34,6 +34,7 @@ apidoc_gen:
     - git config --global user.name "$GITLAB_USER_NAME"
     - php composer.phar require apigen/apigen:dev-master  roave/better-reflection:dev-master#ce9d784
     - vendor/bin/apigen generate src --destination gh-pages
-    - cd gh-pages && git add . &&  git commit -m"update apidocs" && git push
+    - cd gh-pages && git add .
+    - git diff-index --quiet HEAD || git commit -m"update apidocs" && git push
   only:
     - master
