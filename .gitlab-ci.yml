@@ -18,6 +18,8 @@ services:
   - manticoresearch/manticore
 
 unit_testing:
+  variables:
+    MS_HOST: "manticoresearch-manticore"
   stage: test
   script:
     - vendor/bin/phpunit test/
