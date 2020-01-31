@@ -4,8 +4,8 @@
 ### Client configuration
 
 
-The Client() class accepts a configuration as an array. 
-Without any configuration provided, it tries to connect using HTTP `127.0.0.1` on port `9306`.
+The [Client()](https://manticoresoftware.github.io/manticoresearch-php/class-Manticoresearch.Client.html) class accepts a configuration as an array. 
+Without any configuration provided, it tries to connect using HTTP `127.0.0.1` on port `9308`.
 
 
 #### config paramaters
@@ -14,20 +14,25 @@ Without any configuration provided, it tries to connect using HTTP `127.0.0.1` o
 *  host -  IP or DNS of server (part of a connection)
 *  port -   HTTP API port (part of a connection)
 *  connections - list of connections
-*  connectionStrategy - name of connection pool strategy, default is `RoundRobin`
+*  connectionStrategy - name of connection pool strategy, default is `StaticRoundRobin`
 *  transport -  transport class name, default `Http` (part of a connection)
 
-If there is a single connection used, it can be defined directly in the configuration array.
+If there is a single connection used, it can be defined directly in the configuration array like:
 
-If multiple connections can used, they must be defined in `connections` array. 
+```php
+   $config = ['host'=>'127.0.0.1','port'=>9308];
+   $client = new \Manticoresearch\Client($config);
+```
+
+If multiple connections can used, they must be defined in `connections` array (see below). 
 
 #### Transport
 
 Implemented transports:
 
-* Http -  uses CURL extension
-* Https  -  uses CURL extension, for https hosts
-* PhpHttp - adapter for HTTPlug 1.0. A client and a message factory must be present in the environment.
+* [Http](https://manticoresoftware.github.io/manticoresearch-php/class-Manticoresearch.Transport.Http.html) -  uses CURL extension
+* [Https](https://manticoresoftware.github.io/manticoresearch-php/class-Manticoresearch.Transport.Https.html)  -  uses CURL extension, for https hosts
+* [PhpHttp](https://manticoresoftware.github.io/manticoresearch-php/class-Manticoresearch.Transport.PhpHttp.html) - adapter for HTTPlug 1.0. A client and a message factory must be present in the environment.
 
 Http/Https adapters options:
 
@@ -38,7 +43,7 @@ Http/Https adapters options:
 *  password - password for HTTP Auth
 *  headers - array of custom headers
 *  curl - array of CURL settings as option=>value 
-*  persistent -  define whenever connection is persistent or not, boolean value
+*  persistent -  define whenever connection is persistent or not
 
 Example:
 ```
@@ -81,13 +86,13 @@ Example:
 #### Connection pool strategies
 
 
-* Random - each query performed will use randomly one of the defined connections
-* RoundRobin -  each query performed picks an alive connection in round robin fashion  
-* StaticRoundRobin - connection are picked in round robin, but a connection is reused as long as it's alive. For example on first query connection 1 will be picked. If the connection works, query 2 will also use it and so on until the connection ends with hard error. In this case next queries will try to use the next connection from the pool (default)
+* [Random](https://manticoresoftware.github.io/manticoresearch-php/class-Manticoresearch.Connection.Strategy.Random.html) - each query performed will use randomly one of the defined connections
+* [RoundRobin](https://manticoresoftware.github.io/manticoresearch-php/class-Manticoresearch.Connection.Strategy.RoundRobin.html) -  each query performed picks an alive connection in round robin fashion  
+* [StaticRoundRobin](https://manticoresoftware.github.io/manticoresearch-php/class-Manticoresearch.Connection.Strategy.StaticRoundRobin.html) - connection are picked in round robin, but a connection is reused as long as it's alive. For example on first query connection 1 will be picked. If the connection works, query 2 will also use it and so on until the connection ends with hard error. In this case next queries will try to use the next connection from the pool (default)
 
 On all strategies if a connection returns a hard error it will not be used in future attempts.
 
-Custom strategy can be provided to the `connectionStrategy`. They must implement `Manticoresearch\Connection\Strategy\SelectorInterface`
+Custom strategy can be provided to the `connectionStrategy`. They must implement [SelectorInterface](https://manticoresoftware.github.io/manticoresearch-php/interface-Manticoresearch.Connection.Strategy.SelectorInterface.html)
 
 ```
 $params = [

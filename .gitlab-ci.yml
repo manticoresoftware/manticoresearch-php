@@ -23,8 +23,8 @@ unit_testing:
   stage: test
   script:
     - vendor/bin/phpunit test/
-  only:
-    - master
+  except:
+    - gh-pages
 
 apidoc_gen:
   stage: publish
@@ -38,5 +38,5 @@ apidoc_gen:
     - vendor/bin/apigen generate src --destination gh-pages
     - cd gh-pages && git add .
     - git diff-index --quiet HEAD || git commit -m"update apidocs" && git push
-  only:
-    - master
+  except:
+    - gh-pages

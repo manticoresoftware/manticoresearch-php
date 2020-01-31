@@ -51,7 +51,7 @@ class Connection
             'password' => null,
             'headers' => [],
             'curl' => [],
-            'persistent' => false
+            'persistent' => true
         );
         $this->config = array_merge($this->config, $params);
         $this->_alive = true;
