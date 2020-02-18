@@ -98,10 +98,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
                 self::$_curl = false;
                 throw new ConnectionException($error,$request);
             }
-            //soft error
-            if($response->hasError()) {
-                throw new ResponseException($request, $response);
-            }
+
 
             $this->_logger->debug('Request body:',[
                 'connection' => $connection->getConfig(),
@@ -114,7 +111,10 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
                 ]
             );
             $this->_logger->debug('Response body:',$response->getResponse());
-
+            //soft error
+            if($response->hasError()) {
+                throw new ResponseException($request, $response);
+            }
             return $response;
         }
 
