@@ -33,10 +33,11 @@ class Request
 
     public function __construct($params=[])
     {
-
-        $this->setBody($params['body'] ?? []);
-        $this->setQuery($params['query'] ?? []);
-        $this->setContentType($params['content_type'] ?? 'application/json');
+        if(count($params)>0) {
+            $this->setBody($params['body'] ?? []);
+            $this->setQuery($params['query'] ?? []);
+            $this->setContentType($params['content_type'] ?? 'application/json');
+        }
     }
 
     /**
@@ -69,6 +70,7 @@ class Request
     public function setBody($body)
     {
         $this->_body = $body;
+        return $this;
     }
 
     /**
