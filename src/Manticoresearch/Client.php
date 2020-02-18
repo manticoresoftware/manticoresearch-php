@@ -240,6 +240,31 @@ class Client
     }
 
     /**
+     * Endpoint: indices
+     * @param array $params
+     */
+    public function indices(array $params = []): Indices
+    {
+
+        return new Indices($this);
+    }
+
+    /**
+     * Endpoint: nodes
+     * @param array $params
+     */
+    public function nodes(array $params = []): Nodes
+    {
+
+        return new Nodes($this);
+    }
+
+    public function cluster(array $params=[]):Cluster
+    {
+        return new Cluster($this);
+    }
+
+    /**
      * Endpoint: bulk
      * @param array $params
      * @return array
@@ -247,6 +272,19 @@ class Client
     public function bulk(array $params = [])
     {
         $endpoint = new Endpoints\Bulk($params);
+        $response = $this->request($endpoint);
+
+        return $response->getResponse();
+    }
+
+    /**
+     * Endpoint: suggest
+     * @param array $params
+     * @return array
+     */
+    public function suggest(array $params = [])
+    {
+        $endpoint = new Endpoints\Suggest($params);
         $response = $this->request($endpoint);
 
         return $response->getResponse();
