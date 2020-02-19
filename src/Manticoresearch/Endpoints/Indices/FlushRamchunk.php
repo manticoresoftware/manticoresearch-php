@@ -4,11 +4,11 @@
 namespace Manticoresearch\Endpoints\Indices;
 
 
-use Manticoresearch\Endpoints\Sql;
+use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
 
-class FlushRamchunk extends Sql
+class FlushRamchunk extends EmulateBySql
 {
     use Utils;
     /**

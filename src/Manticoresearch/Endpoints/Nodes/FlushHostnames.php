@@ -2,11 +2,10 @@
 
 namespace Manticoresearch\Endpoints\Nodes;
 
-use Manticoresearch\Endpoints\Sql;
-use Manticoresearch\Exceptions\RuntimeException;
+use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Utils;
 
-class FlushHostnames extends Sql
+class FlushHostnames extends EmulateBySql
 {
     use Utils;
     /**

@@ -4,7 +4,7 @@
 namespace Manticoresearch\Endpoints\Indices;
 
 
-use Manticoresearch\Endpoints\Sql;
+use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
 
@@ -12,7 +12,7 @@ use Manticoresearch\Utils;
  * Class Status
  * @package Manticoresearch\Endpoints\Indices
  */
-class Status extends Sql
+class Status extends EmulateBySql
 {
     use Utils;
     /**
@@ -22,7 +22,9 @@ class Status extends Sql
 
     public function setBody($params)
     {
+        $this->_body = $params;
         if (isset($this->_index)) {
+
             return parent::setBody(['query' => "SHOW INDEX ".$this->_index. " STATUS".(isset($this->_body['pattern'])?" LIKE '".$params['pattern']."'":"")]);
         }
         throw new RuntimeException('Index name is missing.');

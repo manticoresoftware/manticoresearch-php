@@ -3,9 +3,9 @@
 
 namespace Manticoresearch\Endpoints\Nodes;
 
-use Manticoresearch\Endpoints\Sql;
+use Manticoresearch\Endpoints\EmulateBySql;
 
-class Threads extends Sql
+class Threads extends EmulateBySql
 {
     /**
      * @var string
@@ -21,6 +21,6 @@ class Threads extends Sql
             }
         }
 
-        return parent::setBody(['query' => "SHOW THREADS " . (count($options)>0)?' OPTION '.implode(",", $options):'']);
+        return parent::setBody(['query' => "SHOW THREADS " . ((count($options)>0)?' OPTION '.implode(",", $options):'')]);
     }
 }

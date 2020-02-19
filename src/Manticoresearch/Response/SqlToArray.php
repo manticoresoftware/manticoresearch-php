@@ -1,26 +1,16 @@
 <?php
 
 
-namespace Manticoresearch;
+namespace Manticoresearch\Response;
 
 
-trait Utils
+use Manticoresearch\Response;
+
+class SqlToArray extends Response
 {
-    public static function escape($string)
+    public function getResponse()
     {
-        $return = '';
-        for ($i = 0; $i < strlen($string); ++$i) {
-            $char = $string[$i];
-            $ord = ord($char);
-            if ($char !== "'" && $char !== "\"" && $char !== '\\' && $ord >= 32 && $ord <= 126)
-                $return .= $char;
-            else
-                $return .= '\\x' . dechex($ord);
-        }
-        return $return;
-    }
-    public static function parseSqltoArray($response)
-    {
+        $response = parent::getResponse();
         $return =$response;
 
         if(isset($response['columns']) && isset($response['data']))

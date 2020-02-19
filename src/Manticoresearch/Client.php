@@ -47,6 +47,7 @@ class Client
      * @var LoggerInterface|NullLogger
      */
     protected $_logger;
+
 /*
  * $config can be a connection array or
  * $config['connections] = array of connections
@@ -211,6 +212,9 @@ class Client
     public function sql(array $params = [])
     {
         $endpoint = new Endpoints\Sql($params);
+        if(isset($params['mode'])) {
+            $endpoint->setMode($params['mode']);
+        }
         $response = $this->request($endpoint);
         return $response->getResponse();
     }
@@ -231,9 +235,8 @@ class Client
 
     /**
      * Endpoint: pq
-     * @param array $params
      */
-    public function pq(array $params = []): Pq
+    public function pq(): Pq
     {
 
         return new Pq($this);
@@ -241,9 +244,8 @@ class Client
 
     /**
      * Endpoint: indices
-     * @param array $params
      */
-    public function indices(array $params = []): Indices
+    public function indices(): Indices
     {
 
         return new Indices($this);
@@ -251,15 +253,14 @@ class Client
 
     /**
      * Endpoint: nodes
-     * @param array $params
      */
-    public function nodes(array $params = []): Nodes
+    public function nodes(): Nodes
     {
 
         return new Nodes($this);
     }
 
-    public function cluster(array $params=[]):Cluster
+    public function cluster():Cluster
     {
         return new Cluster($this);
     }
@@ -285,9 +286,19 @@ class Client
     public function suggest(array $params = [])
     {
         $endpoint = new Endpoints\Suggest($params);
-        $response = $this->request($endpoint);
+        $endpoint->setIndex($params['index']);
+        $endpoint->setBody($params['body']);
+        $response = $this->request($endpoint,['responseClass'=>'Manticoresearch\\Response\\SqlToArray']);
+        return  $response->getResponse();
+    }
 
-        return $response->getResponse();
+    public function keywords(array $params = [])
+    {
+        $endpoint = new Endpoints\Keywords($params);
+        $endpoint->setIndex($params['index']);
+        $endpoint->setBody($params['body']);
+        $response = $this->request($endpoint,['responseClass'=>'Manticoresearch\\Response\\SqlToArray']);
+        return  $response->getResponse();
     }
 
 
@@ -295,13 +306,13 @@ class Client
      * @return callable|array
      */
 
-    public function request(Request $request)
+    public function request(Request $request, array $params =[])
     {
 
         $connection = $this->_connectionPool->getConnection();
 
         try {
-            $response = $connection->getTransportHandler($this->_logger)->execute($request);
+            $response = $connection->getTransportHandler($this->_logger)->execute($request,$params);
         } catch (ConnectionException $e) {
             //@todo implement retry
             $this->_logger->error('Manticore Search Request failed:', [
@@ -313,7 +324,7 @@ class Client
             if (!$this->_connectionPool->hasConnections()) {
                     throw $e;
             }
-            return $this->request($request);
+            return $this->request($request,$params);
 
         }
 

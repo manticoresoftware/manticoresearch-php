@@ -3,10 +3,10 @@
 
 namespace Manticoresearch\Endpoints\Nodes;
 
-use Manticoresearch\Endpoints\Sql;
+use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 
-class Set extends Sql
+class Set extends EmulateBySql
 {
     /**
      * @var string

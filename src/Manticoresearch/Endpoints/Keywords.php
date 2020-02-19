@@ -6,7 +6,7 @@ namespace Manticoresearch\Endpoints;
 
 use Manticoresearch\Utils;
 
-class Keywords extends Sql
+class Keywords extends EmulateBySql
 {
     use Utils;
 

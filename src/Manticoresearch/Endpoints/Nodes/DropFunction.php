@@ -3,10 +3,10 @@
 
 namespace Manticoresearch\Endpoints\Nodes;
 
-use Manticoresearch\Endpoints\Sql;
+use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 
-class DropFunction extends Sql
+class DropFunction extends EmulateBySql
 {
     /**
      * @var string

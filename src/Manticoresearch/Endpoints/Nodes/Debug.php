@@ -3,9 +3,9 @@
 
 namespace Manticoresearch\Endpoints\Nodes;
 
-use Manticoresearch\Endpoints\Sql;
+use Manticoresearch\Endpoints\EmulateBySql;
 
-class Debug extends Sql
+class Debug extends EmulateBySql
 {
     /**
      * @var string

@@ -3,9 +3,10 @@
 
 namespace Manticoresearch\Endpoints\Nodes;
 
-use Manticoresearch\Endpoints\Sql;
+use Manticoresearch\Endpoints\EmulateBySql;
 
-class Status extends Sql
+
+class Status extends EmulateBySql
 {
     /**
      * @var string

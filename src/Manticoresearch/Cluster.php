@@ -16,6 +16,7 @@ class Cluster
      * @var Client
      */
     protected $_client;
+    protected $_params;
 
     /**
      * Pq constructor.
@@ -24,6 +25,8 @@ class Cluster
     public function __construct($client)
     {
         $this->_client = $client;
+        $this->_params =['responseClass'=>'Manticoresearch\\Response\\SqlToArray'];
+
     }
 
     public function alter($params)
@@ -33,8 +36,8 @@ class Cluster
         $endpoint = new Alter();
         $endpoint->setCluster($cluster);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint);
-        return $response->getResponse();
+        $response = $this->_client->request($endpoint,$this->_params);
+        return  $response->getResponse();
 
     }
 
@@ -45,8 +48,8 @@ class Cluster
         $endpoint = new Create();
         $endpoint->setCluster($cluster);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint);
-        return $response->getResponse();
+        $response = $this->_client->request($endpoint,$this->_params);
+        return  $response->getResponse();
 
     }
 
@@ -57,8 +60,8 @@ class Cluster
         $endpoint = new Delete();
         $endpoint->setCluster($cluster);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint);
-        return $response->getResponse();
+        $response = $this->_client->request($endpoint,$this->_params);
+        return  $response->getResponse();
 
     }
 
@@ -69,8 +72,8 @@ class Cluster
         $endpoint = new Join();
         $endpoint->setCluster($cluster);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint);
-        return $response->getResponse();
+        $response = $this->_client->request($endpoint,$this->_params);
+        return  $response->getResponse();
 
     }
 
@@ -81,8 +84,8 @@ class Cluster
         $endpoint = new Set();
         $endpoint->setCluster($cluster);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint);
-        return $response->getResponse();
+        $response = $this->_client->request($endpoint,$this->_params);
+        return  $response->getResponse();
 
     }
 }

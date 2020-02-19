@@ -84,7 +84,13 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
             $end = microtime(true);
             $errorno = curl_errno($conn);
             $status = curl_getinfo($conn,CURLINFO_HTTP_CODE);
-            $response = new Response($responseString,$status);
+            if(isset($params['responseClass'])) {
+                $responseClass = $params['responseClass'];
+                $response = new $responseClass($responseString,$status);
+            }else{
+                $response = new Response($responseString,$status);
+            }
+
             $time = $end-$start;
             $response->setTime($time);
             $response->setTransportInfo([
@@ -113,6 +119,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
             $this->_logger->debug('Response body:',$response->getResponse());
             //soft error
             if($response->hasError()) {
+                $this->_logger->debug('Response error:',[$response->getError()]);
                 throw new ResponseException($request, $response);
             }
             return $response;

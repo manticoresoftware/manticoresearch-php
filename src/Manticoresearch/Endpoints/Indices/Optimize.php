@@ -4,7 +4,7 @@
 namespace Manticoresearch\Endpoints\Indices;
 
 
-use Manticoresearch\Endpoints\Sql;
+use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
 
@@ -12,7 +12,7 @@ use Manticoresearch\Utils;
  * Class Optimize
  * @package Manticoresearch\Endpoints\Indices
  */
-class Optimize extends Sql
+class Optimize extends EmulateBySql
 {
     use Utils;
     /**

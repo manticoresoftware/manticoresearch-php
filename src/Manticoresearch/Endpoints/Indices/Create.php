@@ -2,16 +2,15 @@
 
 namespace Manticoresearch\Endpoints\Indices;
 
-use Manticoresearch\Endpoints\Sql;
+use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
 
 /**
- * @todo maybe pattern should be a query parameter rather than body?
- * Class Status
+ * Class Create
  * @package Manticoresearch\Endpoints\Indices
  */
-class Create extends Sql
+class Create extends EmulateBySql
 {
     use Utils;
     /**

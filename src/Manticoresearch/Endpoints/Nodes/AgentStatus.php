@@ -2,9 +2,9 @@
 
 namespace Manticoresearch\Endpoints\Nodes;
 
-use Manticoresearch\Endpoints\Sql;
+use Manticoresearch\Endpoints\EmulateBySql;
 
-class AgentStatus extends Sql
+class AgentStatus extends EmulateBySql
 {
 
     public function setBody($params)

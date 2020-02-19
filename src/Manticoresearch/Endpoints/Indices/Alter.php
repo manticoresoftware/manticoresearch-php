@@ -4,11 +4,11 @@
 namespace Manticoresearch\Endpoints\Indices;
 
 
-use Manticoresearch\Endpoints\Sql;
+use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
 
-class Alter extends Sql
+class Alter extends EmulateBySql
 {
     use Utils;
     /**
@@ -30,6 +30,7 @@ class Alter extends Sql
                     return parent::setBody(['query' => "ALTER TABLE ".$this->_index." DROP COLUMN ". $params['column']['name']]);
                 }
             }
+            throw new RuntimeException('Operation is missing.');
 
         }
         throw new RuntimeException('Index name is missing.');

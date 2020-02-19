@@ -3,10 +3,10 @@
 
 namespace Manticoresearch\Endpoints\Indices;
 
-use Manticoresearch\Endpoints\Sql;
+use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 
-class Drop extends Sql
+class Drop extends EmulateBySql
 {
     /**
      * @var string

@@ -3,9 +3,9 @@
 
 namespace Manticoresearch\Endpoints\Nodes;
 
-use Manticoresearch\Endpoints\Sql;
+use Manticoresearch\Endpoints\EmulateBySql;
 
-class Variables extends Sql
+class Variables extends EmulateBySql
 {
     /**
      * @var string

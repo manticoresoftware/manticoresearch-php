@@ -4,16 +4,10 @@
 namespace Manticoresearch\Endpoints\Nodes;
 
 
-use Manticoresearch\Endpoints\Sql;
-use Manticoresearch\Exceptions\RuntimeException;
+use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Utils;
 
-/**
- * @todo maybe pattern should be a query parameter rather than body?
- * Class Status
- * @package Manticoresearch\Endpoints\Indices
- */
-class Plugins extends Sql
+class Plugins extends EmulateBySql
 {
     use Utils;
     /**

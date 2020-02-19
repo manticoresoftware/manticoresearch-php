@@ -3,10 +3,10 @@
 
 namespace Manticoresearch\Endpoints\Nodes;
 
-use Manticoresearch\Endpoints\Sql;
+use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 
-class CreateFunction extends Sql
+class CreateFunction extends EmulateBySql
 {
     /**
      * @var string

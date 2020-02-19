@@ -71,7 +71,7 @@ class Response
     public function hasError()
     {
         $response = $this->getResponse();
-        return isset($response['error']);
+        return isset($response['error']) && $response['error']!='';
     }
 
     /*
@@ -84,7 +84,7 @@ class Response
         if (isset($response['error'])) {
             return json_encode($response['error'], true);
         } else {
-            return '';
+            return false;
         }
     }
 
