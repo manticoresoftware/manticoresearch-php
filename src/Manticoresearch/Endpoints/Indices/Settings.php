@@ -12,7 +12,7 @@ use Manticoresearch\Utils;
  * Class Status
  * @package Manticoresearch\Endpoints\Indices
  */
-class Status extends EmulateBySql
+class Settings extends EmulateBySql
 {
     use Utils;
     /**
@@ -24,7 +24,7 @@ class Status extends EmulateBySql
     {
         if (isset($this->_index)) {
 
-            return parent::setBody(['query' => "SHOW INDEX ".$this->_index. " STATUS".(isset($this->_body['pattern'])?" LIKE '".$params['pattern']."'":"")]);
+            return parent::setBody(['query' => "SHOW INDEX ".$this->_index. " SETTINGS"]);
         }
         throw new RuntimeException('Index name is missing.');
     }

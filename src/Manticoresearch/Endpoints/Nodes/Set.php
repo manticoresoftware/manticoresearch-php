@@ -15,6 +15,7 @@ class Set extends EmulateBySql
 
     public function setBody($params)
     {
+        $this->_body = $params;
         if (isset($params['variable']) && is_array($params['variable'])) {
             return parent::setBody([
                 'query' => "SET " . (isset($params['type']) ?  $params['type'] . "'" : "")." ".

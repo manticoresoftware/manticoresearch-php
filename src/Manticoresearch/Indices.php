@@ -24,6 +24,9 @@ class Indices
      */
     protected $_client;
 
+    /**
+     * @var array
+     */
     protected $_params;
 
     /**
@@ -33,7 +36,7 @@ class Indices
     public function __construct($client)
     {
         $this->_client = $client;
-        $this->_params =['responseClass'=>'Manticoresearch\\Response\\SqlToArray'];
+        $this->_params = ['responseClass' => 'Manticoresearch\\Response\\SqlToArray'];
 
     }
 
@@ -48,104 +51,136 @@ class Indices
         $endpoint = new Alter();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
-        return  $response->getResponse();
+        $response = $this->_client->request($endpoint, $this->_params);
+        return $response->getResponse();
 
     }
 
+
+    /**
+     *
+     * @param $params
+     * @return mixed
+     */
     public function create($params)
     {
+
         $index = $params['index'] ?? null;
         $body = $params['body'];
         $endpoint = new Create();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
-        return  $response->getResponse();
+        $response = $this->_client->request($endpoint, $this->_params);
+        return $response->getResponse();
 
     }
 
+    /**
+     * @param $params
+     * @return mixed
+     */
     public function describe($params)
     {
         $index = $params['index'] ?? null;
-        $body = $params['body'];
+        $body = $params['body'] ?? [];
         $endpoint = new Describe();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
-        return  $response->getResponse();
+        $response = $this->_client->request($endpoint, $this->_params);
+        return $response->getResponse();
 
     }
 
+    /**
+     * @param $params
+     * @return mixed
+     */
     public function drop($params)
     {
         $index = $params['index'] ?? null;
-        $body = $params['body'];
         $endpoint = new Drop();
         $endpoint->setIndex($index);
-        $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
-        return  $response->getResponse();
+        $endpoint->setBody();
+        $response = $this->_client->request($endpoint, $this->_params);
+        return $response->getResponse();
     }
 
+    /**
+     * @param $params
+     * @return mixed
+     */
     public function flushramchunk($params)
     {
         $index = $params['index'] ?? null;
-        $body = $params['body'];
         $endpoint = new FlushRamchunk();
         $endpoint->setIndex($index);
-        $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
-        return  $response->getResponse();
+        $endpoint->setBody();
+        $response = $this->_client->request($endpoint, $this->_params);
+        return $response->getResponse();
 
     }
 
+    /**
+     * @param $params
+     * @return mixed
+     */
     public function flushrtindex($params)
     {
         $index = $params['index'] ?? null;
-        $body = $params['body'];
         $endpoint = new FlushRtindex();
         $endpoint->setIndex($index);
-        $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
-        return  $response->getResponse();
+        $endpoint->setBody();
+        $response = $this->_client->request($endpoint, $this->_params);
+        return $response->getResponse();
 
     }
 
+    /**
+     * @param $params
+     * @return mixed
+     */
     public function optimize($params)
     {
         $index = $params['index'] ?? null;
-        $body = $params['body'];
+        $body = $params['body'] ?? null;
         $endpoint = new Optimize();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
-        return  $response->getResponse();
+        $response = $this->_client->request($endpoint, $this->_params);
+        return $response->getResponse();
 
     }
 
+    /**
+     * @param $params
+     * @return mixed
+     */
     public function status($params)
     {
         $index = $params['index'] ?? null;
-        $body = $params['body'];
+        $body = $params['body'] ?? null;
         $endpoint = new Status();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
-        return  $response->getResponse();
+        $response = $this->_client->request($endpoint, $this->_params);
+        return $response->getResponse();
 
 
     }
 
+    /**
+     * @param $params
+     * @return mixed
+     */
     public function truncate($params)
     {
         $index = $params['index'] ?? null;
-        $body = $params['body'];
+        $body = $params['body'] ?? null;
         $endpoint = new Truncate();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
-        return  $response->getResponse();
+        $response = $this->_client->request($endpoint, $this->_params);
+        return $response->getResponse();
 
     }
 }

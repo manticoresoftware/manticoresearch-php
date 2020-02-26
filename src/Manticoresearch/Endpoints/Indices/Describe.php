@@ -19,7 +19,7 @@ class Describe extends EmulateBySql
     public function setBody($params)
     {
         if (isset($this->_index)) {
-            return parent::setBody(['query' => "DESCRIBE ".$this->_index. " STATUS".(isset($this->_body['pattern'])?" LIKE '".$params['pattern']."'":"")]);
+            return parent::setBody(['query' => "DESCRIBE ".$this->_index. " ".(isset($this->_body['pattern'])?" LIKE '".$params['pattern']."'":"")]);
 
         }
         throw new RuntimeException('Index name is missing.');

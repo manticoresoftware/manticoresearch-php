@@ -18,14 +18,26 @@ class Create extends EmulateBySql
      */
     protected $_index;
 
+    /**
+     * @param mixed $params
+     * @return $this|EmulateBySql
+     */
     public function setBody($params)
     {
         if (isset($this->_index)) {
-            $properties = [];
-            foreach ($params['properties'] as $name => $settings) {
-                $properties[] = $name . ' ' . $settings['type'];
+            $columns = [];
+            foreach ($params['columns'] as $name => $settings) {
+                $column = $name . ' ' . $settings['type'];
+                if(isset($settings['options']) && count($settings['opions'])>0) {
+                    $column .= ' '. implode(' ',$settings['options']);
+                }
+                $columns[] = $column;
             }
-            return parent::setBody(['query' => "CREATE TABLE ".$this->_index."(".implode(",",$properties).")"]);
+            $options = "";
+            foreach($params['settings'] as $name=>$value) {
+                $options.=" ".$name." = ".$value;
+            }
+            return parent::setBody(['query' => "CREATE TABLE ".$this->_index."(".implode(",",$columns).")".$options]);
             return $this;
         }
         throw new RuntimeException('Index name is missing.');

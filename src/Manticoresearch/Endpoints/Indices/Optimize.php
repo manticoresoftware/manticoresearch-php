@@ -23,7 +23,7 @@ class Optimize extends EmulateBySql
     public function setBody($params)
     {
         if (isset($this->_index)) {
-            return parent::setBody(['query' => "OPTIMIZE INDEX ".$this->_index. "".(isset($this->_body['sync'])?" OPTION sync='".$params['sync']."'":"")]);
+            return parent::setBody(['query' => "OPTIMIZE INDEX ".$this->_index. "".(isset($params['sync'])?" OPTION sync='".$params['sync']."'":"")]);
         }
         throw new RuntimeException('Index name is missing.');
     }

@@ -18,6 +18,7 @@ class ReloadPlugins extends EmulateBySql
 
     public function setBody($params)
     {
+        $this->_body = $params;
         if(isset($params['library'])) {
             return parent::setBody(['query' => "RELOAD PLUGINS FROM SONAME ".$params['library']]);
         }

@@ -23,7 +23,7 @@ class Delete extends Sql
     {
         if (isset($this->_cluster)) {
 
-            return parent::setBody(['query' => "CREATE CLUSTER ".$this->_cluster]);
+            return parent::setBody(['query' => "DELETE CLUSTER ".$this->_cluster]);
         }
         throw new RuntimeException('Cluster name is missing.');
     }

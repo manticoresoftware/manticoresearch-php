@@ -116,10 +116,10 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
                     'time' => $time
                 ]
             );
-            $this->_logger->debug('Response body:',$response->getResponse());
+            $this->_logger->debug('Response body:',[json_decode($responseString,true)]);
             //soft error
             if($response->hasError()) {
-                $this->_logger->debug('Response error:',[$response->getError()]);
+                $this->_logger->error('Response error:',[$response->getError()]);
                 throw new ResponseException($request, $response);
             }
             return $response;

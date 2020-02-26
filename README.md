@@ -14,11 +14,14 @@ Official client for Manticore Search using the HTTP JSON protocol.
 
 Features
 --------
-- One to one mapping with the HTTP JSON API
+- One to one mapping with the HTTP JSON API*
 - connection pools with pluggable selection strategy. Defaults to static round robin
 - pluggable PSR/Log interface
 - pluggable transport protocols. Default to CURL (alternative HTTPLug 1.0)
 - persistent connections
+
+
+\* for methods available in HTTP API 
 
 Requirements
 ------------

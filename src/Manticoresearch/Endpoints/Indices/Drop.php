@@ -13,9 +13,9 @@ class Drop extends EmulateBySql
      */
     protected $_index;
 
-    public function setBody($params)
+    public function setBody()
     {
-        if(isset($params['name'])) {
+        if(isset( $this->_index)) {
             return parent::setBody(['query' => "DROP TABLE " . $this->_index]);
         }
         throw new RuntimeException('Missing index name in /indices/drop');
