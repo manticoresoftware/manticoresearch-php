@@ -14,7 +14,7 @@ class Alter extends Sql
      */
     protected $_cluster;
 
-    public function setBody($params)
+    public function setBody($params = null)
     {
         if (isset($this->_index)) {
             if (isset($params['operation'])) {

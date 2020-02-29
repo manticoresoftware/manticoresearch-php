@@ -29,8 +29,7 @@ class StaticRoundRobin implements SelectorInterface
             return $connection->isAlive() ?? false;
         });
         $this->current += 1;
-        $connection = $alives[$this->current % count($connections)];
 
-        return $connection;
+        return $alives[$this->current % count($connections)];
     }
 }

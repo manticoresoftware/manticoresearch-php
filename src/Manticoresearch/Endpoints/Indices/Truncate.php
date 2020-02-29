@@ -20,10 +20,10 @@ class Truncate extends EmulateBySql
      */
     protected $_index;
 
-    public function setBody($params)
+    public function setBody($params = null)
     {
         if (isset($this->_index)) {
-            return parent::setBody(['query' => "TRUNCATE RTINDEX ".$this->_index. "".(isset($this->_body['with'])?" WITH'".strtoupper($params['with'])."'":"")]);
+            return parent::setBody(['query' => "TRUNCATE RTINDEX ".$this->_index. "".(isset($params['with'])?" WITH'".strtoupper($params['with'])."'":"")]);
         }
         throw new RuntimeException('Index name is missing.');
     }

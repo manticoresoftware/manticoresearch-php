@@ -16,7 +16,7 @@ class FlushRamchunk extends EmulateBySql
      */
     protected $_index;
 
-    public function setBody($params)
+    public function setBody($params = null)
     {
 
         if (isset($this->_index)) {

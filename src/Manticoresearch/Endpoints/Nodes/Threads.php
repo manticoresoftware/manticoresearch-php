@@ -12,7 +12,7 @@ class Threads extends EmulateBySql
      */
     protected $_index;
 
-    public function setBody($params)
+    public function setBody($params = null)
     {
         $options = [];
         if (count($params) > 2) {

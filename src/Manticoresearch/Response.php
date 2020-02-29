@@ -11,7 +11,7 @@ namespace Manticoresearch;
 class Response
 {
     /**
-    * execution time to get the response
+     * execution time to get the response
      * @var integer|float
      */
     protected $_time;
@@ -28,14 +28,14 @@ class Response
      */
     protected $_transportInfo;
 
-
+    protected $_status;
     /**
      * response as array
      * @var array|string
      */
     protected $_response;
 
-    public function __construct(string $responseString, $status = null)
+    public function __construct( $responseString, $status = null)
     {
         if (is_array($responseString)) {
             $this->_response = $responseString;
@@ -71,7 +71,7 @@ class Response
     public function hasError()
     {
         $response = $this->getResponse();
-        return isset($response['error']) && $response['error']!='';
+        return isset($response['error']) && $response['error'] != '';
     }
 
     /*

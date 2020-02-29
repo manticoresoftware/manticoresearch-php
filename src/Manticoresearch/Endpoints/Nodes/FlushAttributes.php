@@ -15,7 +15,7 @@ class FlushAttributes extends EmulateBySql
      */
     protected $_index;
 
-    public function setBody($params)
+    public function setBody($params = null)
     {
 
         return parent::setBody(['query' => "FLUSH ATTRIBUTES"]);

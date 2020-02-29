@@ -16,7 +16,7 @@ class ReloadPlugins extends EmulateBySql
      */
     protected $_index;
 
-    public function setBody($params)
+    public function setBody($params = null)
     {
         $this->_body = $params;
         if(isset($params['library'])) {

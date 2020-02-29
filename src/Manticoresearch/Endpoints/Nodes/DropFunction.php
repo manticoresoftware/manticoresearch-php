@@ -13,7 +13,7 @@ class DropFunction extends EmulateBySql
      */
     protected $_index;
 
-    public function setBody($params)
+    public function setBody($params = null)
     {
         if(isset($params['name'])) {
             return parent::setBody(['query' => "DROP FUNCTION " . $params['name']]);

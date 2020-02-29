@@ -19,7 +19,7 @@ class Join extends Sql
      */
     protected $_cluster;
 
-    public function setBody($params)
+    public function setBody($params = null)
     {
         if (isset($this->_cluster)) {
             if(isset($params['node'])) {
@@ -29,11 +29,11 @@ class Join extends Sql
                 if(isset($params['path'])) {
                     $options[] = "'".$params['path']. "' AS path";
                 }
-                if(iseet($params['nodes'])) {
+                if(isset($params['nodes'])) {
                     $options[] = "'".$params['nodes']. "' AS nodes";
                 }
-                $this->_body = ['query' => "JOIN CLUSTER ".$this->_index.
-                (count($options)>0)?" ".implode(',', $options):""];
+                $this->_body = ['query' => "JOIN CLUSTER ".$this->_cluster.
+                    ((count($options)>0)?" ".implode(',', $options):"")];
             }
 
         }

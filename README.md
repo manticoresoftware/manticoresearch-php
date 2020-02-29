@@ -52,7 +52,7 @@ composer require manticoresoftware/manticoresearch-php
 
 Once installed, you can start using the client to perform search queries:
 
-```php
+```
    require_once __DIR__ . '/vendor/autoload.php';
    ...
    $config = ['host'=>'127.0.0.1','port'=>9308];

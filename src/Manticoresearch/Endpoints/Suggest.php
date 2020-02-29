@@ -10,11 +10,9 @@ class Suggest extends EmulateBySql
 {
     use Utils;
     protected $_index;
-    public function setBody($parameters)
+    public function setBody($parameters = null)
     {
-        $params = [];
-        $params[] = "'" . Utils::escape($parameters['query']) . "'";
-        $params[] = "'" . $this->_index. "'";
+        $params = [ "'" . Utils::escape($parameters['query']) . "'","'" . $this->_index. "'"];
         if (count($parameters) > 2) {
             foreach (array_splice($parameters, 2) as $name => $value) {
                 $params[] = "$value AS $name";

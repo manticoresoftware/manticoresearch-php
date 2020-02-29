@@ -12,8 +12,8 @@ class Debug extends EmulateBySql
      */
     protected $_index;
 
-    public function setBody($params)
+    public function setBody($params = null)
     {
-        return parent::setBody(['query' => "DEBUG " . (isset($params['subcommand']) ? $params['subcommand'] : "")]);
+        return parent::setBody(['query' => "DEBUG " . ($params['subcommand'] ?? "")]);
     }
 }

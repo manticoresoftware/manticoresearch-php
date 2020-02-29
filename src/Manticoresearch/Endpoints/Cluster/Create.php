@@ -19,18 +19,18 @@ class Create extends Sql
      */
     protected $_cluster;
 
-    public function setBody($params)
+    public function setBody($params = null)
     {
         if (isset($this->_cluster)) {
             $options = [];
             if (isset($params['path'])) {
                 $options[] = "'" . $params['path'] . "' AS path";
             }
-            if (iseet($params['nodes'])) {
+            if (isset($params['nodes'])) {
                 $options[] = "'" . $params['nodes'] . "' AS nodes";
             }
             return parent::setBody(['query' => "CREATE CLUSTER " . $this->_cluster .
-            (count($options) > 0) ? " " . implode(',', $options) : ""]);
+                ((count($options) > 0) ? ' ' . implode(',', $options) : '')]);
         }
         throw new RuntimeException('Cluster name is missing.');
     }

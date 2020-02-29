@@ -18,11 +18,7 @@ class Create extends EmulateBySql
      */
     protected $_index;
 
-    /**
-     * @param mixed $params
-     * @return $this|EmulateBySql
-     */
-    public function setBody($params)
+    public function setBody($params = null)
     {
         if (isset($this->_index)) {
             $columns = [];
@@ -38,7 +34,6 @@ class Create extends EmulateBySql
                 $options.=" ".$name." = ".$value;
             }
             return parent::setBody(['query' => "CREATE TABLE ".$this->_index."(".implode(",",$columns).")".$options]);
-            return $this;
         }
         throw new RuntimeException('Index name is missing.');
     }

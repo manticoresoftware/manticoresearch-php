@@ -20,7 +20,7 @@ class Optimize extends EmulateBySql
      */
     protected $_index;
 
-    public function setBody($params)
+    public function setBody($params = null)
     {
         if (isset($this->_index)) {
             return parent::setBody(['query' => "OPTIMIZE INDEX ".$this->_index. "".(isset($params['sync'])?" OPTION sync='".$params['sync']."'":"")]);

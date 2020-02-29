@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Manticoresearch;
 
+use Manticoresearch\Connection\ConnectionPool;
 use Manticoresearch\Connection\Strategy\Random;
 use Manticoresearch\Connection\Strategy\RoundRobin;
 use Manticoresearch\Connection\Strategy\SelectorInterface;
@@ -39,9 +40,9 @@ class Client
      */
     private $_connectionStrategy = StaticRoundRobin::class;
     /**
-     * @var array
+     * @var ConnectionPool
      */
-    protected $_connectionPool;
+    protected  $_connectionPool;
 
     /**
      * @var LoggerInterface|NullLogger
@@ -113,7 +114,7 @@ class Client
      * @param array $config
      * @return $this
      */
-    public function setConfig(array $config)
+    public function setConfig(array $config): self
     {
         $this->_config = array_merge($this->_config, $config);
         return $this;
@@ -132,7 +133,7 @@ class Client
      * @param $config
      * @return Client
      */
-    public static function createFromArray($config)
+    public static function createFromArray($config): Client
     {
 
         return new self($config);
@@ -182,6 +183,7 @@ class Client
     /**
      * Endpoint: replace
      * @param array $params
+     * @return mixed
      */
     public function replace(array $params = [])
     {
@@ -305,10 +307,10 @@ class Client
 
 
     /*
-     * @return callable|array
+     * @return
      */
 
-    public function request(Request $request, array $params =[])
+    public function request(Request $request, array $params =[]):Response
     {
 
         $connection = $this->_connectionPool->getConnection();

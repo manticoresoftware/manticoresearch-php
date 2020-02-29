@@ -34,12 +34,12 @@ class Sql extends Request
      */
     public function getBody()
     {
-        if($this->_mode=='raw') {
+        if($this->_mode === 'raw') {
             $return = ['mode=raw'];
             foreach($this->_body as $k=>$v) {
                 $return[]= $k.'='.$v;
-                return implode('&',$return);
             }
+            return implode('&',$return);
         }else{
             return http_build_query($this->_body);
         }

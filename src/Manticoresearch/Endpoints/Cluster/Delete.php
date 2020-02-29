@@ -19,7 +19,7 @@ class Delete extends Sql
      */
     protected $_cluster;
 
-    public function setBody($params)
+    public function setBody($params = null)
     {
         if (isset($this->_cluster)) {
 

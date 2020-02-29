@@ -45,8 +45,7 @@ class ConnectionPool
     public function getConnection(): Connection
     {
 
-        $connection = $this->_strategy->getConnection($this->_connections);
-        return $connection;
+        return  $this->_strategy->getConnection($this->_connections);
     }
 
     public function hasConnections(): bool

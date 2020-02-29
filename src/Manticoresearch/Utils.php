@@ -6,16 +6,18 @@ namespace Manticoresearch;
 
 trait Utils
 {
-    public static function escape($string)
+    public static function escape($string): string
     {
         $return = '';
-        for ($i = 0; $i < strlen($string); ++$i) {
+        $stringlen = strlen($string);
+        for ($i = 0; $i < $stringlen; ++$i) {
             $char = $string[$i];
             $ord = ord($char);
-            if ($char !== "'" && $char !== "\"" && $char !== '\\' && $ord >= 32 && $ord <= 126)
+            if ($char !== "'" && $char !== "\"" && $char !== '\\' && $ord >= 32 && $ord <= 126) {
                 $return .= $char;
-            else
+            } else {
                 $return .= '\\x' . dechex($ord);
+            }
         }
         return $return;
     }

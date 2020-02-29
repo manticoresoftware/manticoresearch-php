@@ -19,7 +19,7 @@ class Request
      */
     protected $_method;
     /**
-     * @var string
+     * @var array
      */
     protected $_body;
     /**
@@ -67,7 +67,7 @@ class Request
     /**
      * @param mixed $body
      */
-    public function setBody($body)
+    public function setBody($body = null)
     {
         $this->_body = $body;
         return $this;
