@@ -8,13 +8,10 @@ manticoresearch-php
 
 Official client for Manticore Search using the HTTP JSON protocol.
 
-| WARNING: This software is currently under development and not ready for production. |
-| --- |
-
 
 Features
 --------
-- One to one mapping with the HTTP JSON API
+- One to one mapping with the HTTP  API
 - connection pools with pluggable selection strategy. Defaults to static round robin
 - pluggable PSR/Log interface
 - pluggable transport protocols. Default to CURL (alternative HTTPLug 1.0)
@@ -23,17 +20,15 @@ Features
 Requirements
 ------------
 
-This client works only with Manticore Search 2.5.1 and above.
+This client works only with Manticore Search 2.5.1 and above with the HTTP protocol enabled.
 
-Requires PHP 7.0 or greater with the native JSON extension. It's recommended to have Curl enabled in your PHP setup.
+Requires PHP 7.0 or greater with the native JSON extension. Default transport handler uses the cURL extension.
 
 
 Documentation
 -------------
 
 Full documentation is available in  [docs](docs) folder.
-
-For complete API reference of the client check [generated reference](https://manticoresoftware.github.io/manticoresearch-php/).
 
 Manticore Search server documentation: https://docs.manticoresearch.com/latest/html/.
 
