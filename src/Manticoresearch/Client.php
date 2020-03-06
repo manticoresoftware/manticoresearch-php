@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Manticoresearch;
 
 use Manticoresearch\Connection\ConnectionPool;
-use Manticoresearch\Connection\Strategy\Random;
-use Manticoresearch\Connection\Strategy\RoundRobin;
 use Manticoresearch\Connection\Strategy\SelectorInterface;
 use Manticoresearch\Connection\Strategy\StaticRoundRobin;
-use Manticoresearch\Endpoints\AbstractEndpoint;
 
 use Manticoresearch\Endpoints\Pq;
 use Manticoresearch\Exceptions\ConnectionException;
+use Manticoresearch\Exceptions\NoMoreNodesException;
 use Manticoresearch\Exceptions\RuntimeException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -42,18 +40,18 @@ class Client
     /**
      * @var ConnectionPool
      */
-    protected  $_connectionPool;
+    protected $_connectionPool;
 
     /**
      * @var LoggerInterface|NullLogger
      */
     protected $_logger;
 
-/*
- * $config can be a connection array or
- * $config['connections] = array of connections
- * $config['connectionStrategy'] = class name of pool strategy
- */
+    /*
+     * $config can be a connection array or
+     * $config['connections] = array of connections
+     * $config['connectionStrategy'] = class name of pool strategy
+     */
     public function __construct($config = [], LoggerInterface $logger = null)
     {
         $this->setConfig($config);
@@ -67,9 +65,9 @@ class Client
         $connections = [];
         if (isset($this->_config['connections'])) {
             foreach ($this->_config['connections'] as $connection) {
-                if(is_array( $connection)) {
+                if (is_array($connection)) {
                     $connections[] = Connection::create($connection);
-                }else {
+                } else {
                     $connections[] = $connection;
                 }
 
@@ -81,24 +79,26 @@ class Client
             $connections[] = Connection::create($this->_config);
         }
         if (isset($this->_config['connectionStrategy'])) {
-            if(is_string($this->_config['connectionStrategy'])) {
+            if (is_string($this->_config['connectionStrategy'])) {
                 $strategyName = '\\Manticoresearch\\Connection\\Strategy\\' . $this->_config['connectionStrategy'];
                 if (class_exists($strategyName)) {
                     $strategy = new $strategyName();
-                }elseif(class_exists($this->_config['connectionStrategy'])) {
+                } elseif (class_exists($this->_config['connectionStrategy'])) {
                     $strategyName = $this->_config['connectionStrategy'];
                     $strategy = new $strategyName();
                 }
-            }elseif($this->_config['connectionStrategy'] instanceof SelectorInterface) {
+            } elseif ($this->_config['connectionStrategy'] instanceof SelectorInterface) {
                 $strategy = $this->_config['connectionStrategy'];
-            }else{
+            } else {
                 throw new RuntimeException('Cannot create a strategy based on provided settings!');
             }
         } else {
             $strategy = new $this->_connectionStrategy;
         }
-
-        $this->_connectionPool = new Connection\ConnectionPool($connections, $strategy);
+        if (!isset($this->_config['retries'])) {
+            $this->_config['retries'] = count($connections);
+        }
+        $this->_connectionPool = new Connection\ConnectionPool($connections, $strategy, $this->_config['retries']);
     }
 
     /**
@@ -154,6 +154,7 @@ class Client
     {
         return $this->_connectionPool;
     }
+
     /**
      * Endpoint: search
      * @param array $params
@@ -214,10 +215,10 @@ class Client
     public function sql(array $params = [])
     {
         $endpoint = new Endpoints\Sql($params);
-        if(isset($params['mode'])) {
+        if (isset($params['mode'])) {
             $endpoint->setMode($params['mode']);
-            $response = $this->request($endpoint,['responseClass'=>'Manticoresearch\\Response\\SqlToArray']);
-        }else{
+            $response = $this->request($endpoint, ['responseClass' => 'Manticoresearch\\Response\\SqlToArray']);
+        } else {
             $response = $this->request($endpoint);
         }
         return $response->getResponse();
@@ -264,7 +265,7 @@ class Client
         return new Nodes($this);
     }
 
-    public function cluster():Cluster
+    public function cluster(): Cluster
     {
         return new Cluster($this);
     }
@@ -292,8 +293,8 @@ class Client
         $endpoint = new Endpoints\Suggest($params);
         $endpoint->setIndex($params['index']);
         $endpoint->setBody($params['body']);
-        $response = $this->request($endpoint,['responseClass'=>'Manticoresearch\\Response\\SqlToArray']);
-        return  $response->getResponse();
+        $response = $this->request($endpoint, ['responseClass' => 'Manticoresearch\\Response\\SqlToArray']);
+        return $response->getResponse();
     }
 
     public function keywords(array $params = [])
@@ -301,8 +302,8 @@ class Client
         $endpoint = new Endpoints\Keywords($params);
         $endpoint->setIndex($params['index']);
         $endpoint->setBody($params['body']);
-        $response = $this->request($endpoint,['responseClass'=>'Manticoresearch\\Response\\SqlToArray']);
-        return  $response->getResponse();
+        $response = $this->request($endpoint, ['responseClass' => 'Manticoresearch\\Response\\SqlToArray']);
+        return $response->getResponse();
     }
 
 
@@ -310,28 +311,27 @@ class Client
      * @return
      */
 
-    public function request(Request $request, array $params =[]):Response
+    public function request(Request $request, array $params = []): Response
     {
 
-        $connection = $this->_connectionPool->getConnection();
 
         try {
-            $response = $connection->getTransportHandler($this->_logger)->execute($request,$params);
+            $connection = $this->_connectionPool->getConnection();
+            $response = $connection->getTransportHandler($this->_logger)->execute($request, $params);
+        } catch (NoMoreNodesException $e) {
+            $this->_logger->error('Manticore Search Request out of retries:', [
+                'exception' => $e->getMessage(),
+                'request' => $request->toArray()
+            ]);
+            throw $e;
         } catch (ConnectionException $e) {
-            //@todo implement retry
-            $this->_logger->error('Manticore Search Request failed:', [
-                'exception' => $e,
+            $this->_logger->warning('Manticore Search Request failed '.$this->_connectionPool->retries_attempts.':', [
+                'exception' => $e->getMessage(),
                 'request' => $e->getRequest()->toArray()
             ]);
-
             $connection->mark(false);
-            if (!$this->_connectionPool->hasConnections()) {
-                    throw $e;
-            }
-            return $this->request($request,$params);
-
+            return $this->request($request, $params);
         }
-
         return $response;
     }
 

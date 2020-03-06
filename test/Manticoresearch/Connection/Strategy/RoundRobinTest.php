@@ -33,7 +33,7 @@ class RoundRobinTest extends TestCase
         for($i=0;$i<10;$i++) {
             $mConns[] = mock::mock(\Manticoresearch\Connection::class)->shouldReceive('isAlive')->andReturn(true)->getMock();
         }
-        $connectionPool = new \Manticoresearch\Connection\ConnectionPool($mConns, new \Manticoresearch\Connection\Strategy\RoundRobin());
+        $connectionPool = new \Manticoresearch\Connection\ConnectionPool($mConns, new \Manticoresearch\Connection\Strategy\RoundRobin(),10);
         foreach(range(0,9) as $i) {
             $c = $connectionPool->getConnection();
             $this->assertSame($mConns[$i], $c);
