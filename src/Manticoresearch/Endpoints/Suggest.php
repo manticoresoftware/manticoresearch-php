@@ -4,21 +4,27 @@
 namespace Manticoresearch\Endpoints;
 
 
+use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
 
 class Suggest extends EmulateBySql
 {
     use Utils;
     protected $_index;
-    public function setBody($parameters = null)
+    public function setBody($params = null)
     {
-        $params = [ "'" . Utils::escape($parameters['query']) . "'","'" . $this->_index. "'"];
-        if (count($parameters) > 2) {
-            foreach (array_splice($parameters, 2) as $name => $value) {
-                $params[] = "$value AS $name";
+        if (isset($this->_index)) {
+            $binds =[];
+            $binds[] = "'" . Utils::escape($params['query']) . "'";
+            $binds[] = "'" . $this->_index . "'";
+            if (count($params['options']) > 0) {
+                foreach ($params['options'] as $name => $value) {
+                    $binds[] = "$value AS $name";
+                }
             }
+            $this->_body = ['query' => "CALL SUGGEST(" . implode(",", $binds) . ")"];
         }
-        parent::setBody(['query' => "CALL SUGGEST(" . implode(",", $params) . ")"]);
+        throw new RuntimeException('Index name is missing.');
     }
     /**
      * @return mixed

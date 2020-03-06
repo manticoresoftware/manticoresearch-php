@@ -19,6 +19,8 @@ Table of Contents
 
 * [Percolate searches](percolate.md)
 
+* [Keyword helpers](keywordhelpers.md)
+
 * Administrative operations
 
     * [Indices](indices.md)

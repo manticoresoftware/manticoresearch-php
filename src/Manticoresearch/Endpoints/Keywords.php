@@ -4,6 +4,7 @@
 namespace Manticoresearch\Endpoints;
 
 
+use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
 
 class Keywords extends EmulateBySql
@@ -11,17 +12,21 @@ class Keywords extends EmulateBySql
     use Utils;
     protected $_index;
 
-    public function setBody($parameters = null)
+    public function setBody($params = null)
     {
-        $params = [];
-        $params[] = "'" . Utils::escape($parameters['query']) . "'";
-        $params[] = "'" . $parameters['index'] . "'";
-        if (count($parameters) > 2) {
-            foreach (array_splice($parameters, 2) as $name => $value) {
-                $params[] = "$value AS $name";
+        if (isset($this->_index)) {
+            $binds =[];
+            $binds[] = "'" . Utils::escape($params['query']) . "'";
+            $binds[] = "'" . $this->_index . "'";
+            if (count($params['options']) > 0) {
+                foreach ($params['options'] as $name => $value) {
+                    $binds[] = "$value AS $name";
+                }
             }
+            $this->_body = ['query' => "CALL KEYWORDS(" . implode(",", $binds) . ")"];
         }
-        $this->_body = ['query' => "CALL KEYWORDS(" . implode(",", $params) . ")"];
+        throw new RuntimeException('Index name is missing.');
+
     }
     public function getIndex()
     {
