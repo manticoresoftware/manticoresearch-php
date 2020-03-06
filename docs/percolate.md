@@ -10,6 +10,8 @@ Operations with the percolate indexes have their own namespace. The following me
 
 For [storing](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html#store-query) queries the `index` parameter is mandatory. 
 
+`index` is mandatory. 
+
 Simple insertion with auto generated id:
 
 ```
@@ -43,6 +45,8 @@ $response = $client->pq()->doc($params);
 
 For [searching](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html#search-matching-document) the `index` parameter is mandatory.
 
+`index` is mandatory. 
+
 ```
 $params = [
     'index' => 'pq',
@@ -65,6 +69,8 @@ $response = $client->pq()->search($params);
 
 For [listing](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html#list-stored-queries) stored queries the `index` parameter is mandatory.
 
+`index` is mandatory. 
+
 ```
 $params = [
     'index' => 'test_pq',
@@ -77,6 +83,8 @@ $response = $client->pq()->search($params);
 ## Delete stored queries
 
 For [deleting](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html#delete-stored-queries) stored queries the `index` parameter is mandatory.
+
+`index` is mandatory. 
 
 ```
 $params = [

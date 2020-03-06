@@ -11,3 +11,5 @@
 [Running queries](usage.md)
 
 [Logging](logging.md)
+
+[docBlocks documentation](https://manticoresoftware.github.io/manticoresearch-php/).

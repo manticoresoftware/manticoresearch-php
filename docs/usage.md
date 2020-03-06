@@ -1,35 +1,39 @@
-# Running Queries
+Running Queries
+===============
 
-A quick example of performing a simple search:
+Table of Contents
+-----------------
 
-```
-require_once __DIR__ . '/vendor/autoload.php';
+* [General notes on requests](#requests) 
+* [Search](#search)
 
-$config = ['host'=>'127.0.0.1', 'port'=>9306];
-$client = new \Manticoresearch\Client($config);
+* [Insert documents](#insert)
 
-$params = [
-    'body' => [
-        'index' => 'movies',
-        'query' => [
-            'match_phrase' => [
-                'movie_title' => 'star trek nemesis',
-            ]
-        ]
-    ]
-];
-$response = $client->search($params);
+* [Update documents](#update)
 
-```
+* [Replace documents](#replace)
+
+* [Delete documents](#delete)
+
+* [Bulk operations with documents](#bulk)
+
+* [Percolate searches](percolate.md)
+
+* Administrative operations
+
+    * [Indices](indices.md)
+    * [Nodes](nodes.md)
+    * [Cluster](cluster.md)
+    
+* [Running SQL](sql.md)
 
 
-### Queries
+### Requests
 
-All queries reflect the HTTP API making very easy to write them using the client.
-Each method represents an API endpoint and accept an array with the following elements:
+Each request array can have one of the 
 
 * body -  the API endpoint POST payload
-* index  - index name 
+* index/cluster  - index/cluster name
 * id - document id
 * query - endpoint parameters
 
@@ -40,25 +44,148 @@ On the body payload there is no check regarding the validity made before sending
 ### Responses 
 
 Responses are returned as arrays reflection of the response object received from the API endpoint. 
-There is no other change or parsing performed.
 
 
-### List of APIs
+### Search
+For complete reference of payload and response see Manticore's [Search API](https://docs.manticoresearch.com/latest/html/http_reference/json_search.html)
 
+`body` requires presence of `index` and `query` parameters. 
 
-[Search API](search.md)
+A simple search example:
+```
+$params = [
+    'body' => [
+        'index' => 'movies',
+        'query' => [
+            'match_phrase' => [
+                'movie_title' => 'star trek nemesis',
+            ]
+        ]
+    ]
+];
 
-[Data APIs](data.md)
+$response = $client->search($params);
+```
 
-[SQL API](sql.md)
+### Insert
 
-[Percolate API](percolate.md)
+For complete reference of payload and response see Manticore's [Insert API](https://docs.manticoresearch.com/latest/html/http_reference/json_insert.html)
 
-Namespaces:
+`body` requires presence of `index`, `id` and  `doc` parameters.
 
-[Indices](indices.md)
-[Nodes](nodes.md)
-[Cluster](cluster.md)
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'id' => 3,
+        'doc' => [
+            'gid' => 10,
+            'title' => 'some title here',
+            'content' => 'some content here',
+            'newfield' => 'this is a new field',
+            'unreal' => 'engine',
+            'real' => 8.99,
+            'j' => [
+                'hello' => ['testing', 'json', 'here'],
+                'numbers' => [1, 2, 3],
+                'value' => 10.0
+            ]
+        ]
+    ]
+];
 
+$response = $client->insert($doc);
+```
 
+### Replace
+
+For complete reference of payload and response see Manticore's [Replace API](https://docs.manticoresearch.com/latest/html/http_reference/json_replace.html)
+
+`body` requires presence of `index`, `id` and  `doc` parameters.
+
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'id' => 3,
+        'doc' => [
+            'gid' => 10,
+            'content' => 'updated content here',
+        ]
+    ]
+];
+
+$response = $client->replace($doc);
+```
+
+### Update
+
+For complete reference of payload and response see Manticore's [Update API](https://docs.manticoresearch.com/latest/html/http_reference/json_update.html)
+
+`body` requires presence of `index`, `id` and  `doc` parameters.
+
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'id' => 3,
+        'doc' => [
+            'gid' => 20,
+        ]
+    ]
+];
+
+$response = $client->update($doc);
+```
+
+### Delete
+
+For complete reference of payload and response see Manticore's [Delete API](https://docs.manticoresearch.com/latest/html/http_reference/json_delete.html)
+
+`body` requires presence of `index` and `id`  parameters.
+
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'id' => 3
+    ]
+];
+
+$response = $client->delete($doc);
+```
+
+### Bulk
+
+For complete reference of payload and response see Manticore's [Bulk API](https://docs.manticoresearch.com/latest/html/http_reference/json_bulk.html)
+
+Bulk allows to send in one request several operations of data manipulation (inserts,replaces, updates or deletes).
+
+```
+$doc = [
+    'body' => [
+        'insert' => [
+            'index' => 'testrt',
+            'id' => 34,
+            'doc' => [
+                'gid' => 1,
+                'title' => 'a new added document',
+            ]
+        ],
+        'update' => [
+            'index' => 'testrt',
+            'id' => 56,
+            'doc' => [
+                'gid' => 4,
+            ]
+        ],
+        'delete' => [
+            'index' => 'testrt',
+            'id' => 100
+        ]
+    ]
+];
+
+$response = $client->bulk($doc);
+```
 

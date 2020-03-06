@@ -1,11 +1,14 @@
 Nodes
 -----
 
-Nodes namespace contains method for dealing with daemon operations.
+Nodes namespace contains methods for dealing with daemon operations or getting information about current node.
 
 AgentStatus
 ===========
 Prints information about a specific remote agent or of all remote agents.
+
+`body` is optional. If body is not present, it will return information on all defined agents.
+Result can be filtered by asking information for one agent - set by `agent` or filter by an agent property with `pattern.
 
         $params = [
             'body' => [
@@ -20,10 +23,16 @@ CreateFunction
 
 Register an UDF.
 
+`body` parameters:
+
+* `name` - name of the function
+* `type` - the return type of the function (INT | INTEGER | BIGINT | FLOAT | STRING)
+* `library` -  name of the library file
+
         $params = [
             'body' => [
-                'name => ''
-                'type' => ''
+                'name => 'myudf'
+                'type' => 'FLOAT'
                 'library' => 'udf.so'
             ]
         ];
@@ -34,11 +43,17 @@ CreatePlugin
 
 Register a plugin.
 
+`body` parameters:
+
+* `name` - name of the plugin
+* `type` - can be 'ranker','index_token_filter','query_token_filter'
+* `library` -  name of the library file
+
         $params = [
             'body' => [
-                'name => ''
-                'type' => ''
-                'library' => 'udf.so'
+                'name => 'myranker'
+                'type' => 'ranker'
+                'library' => 'myplugins.so'
             ]
         ];
         $response = $client->nodes->createplugin($params);                 
@@ -47,10 +62,11 @@ Debug
 =====
 
 A command that can run some debug commands.
+`body` has one parameter: the `subcommand` it needs to run.
 
         $params = [
             'body' => [
-                'subcommand' => ''
+                'subcommand' => 'flush logs'
             ]
         ];
         $response = $client->nodes->createplugin($params);                  
@@ -62,7 +78,7 @@ De-register an UDF
 
         $params = [
             'body' => [
-                'name => ''
+                'name => ''myufg
             ]
         ];
         $response = $client->nodes->dropfunction($params);                 
@@ -74,7 +90,7 @@ De-register a plugin
 
         $params = [
             'body' => [
-                'name => ''
+                'name => 'myranker'
             ]
         ];
         $response = $client->nodes->dropplugin($params);                 
@@ -104,7 +120,7 @@ Flush hostnames cache.
 FlushLogs
 ========
 
-Flush logs
+Flush logs.
 
         $params = [
             'body' => [
@@ -115,7 +131,7 @@ Flush logs
 Plugins
 ========
 
-Return list of loaded plugins and functions
+Return list of loaded plugins and functions.
 
         $params = [
             'body' => [
@@ -126,18 +142,19 @@ Return list of loaded plugins and functions
 ReloadPlugins
 =============
 
-Reloads plugins from a library
+Reloads plugins from a library.
 
         $params = [
             'body' => [
-                'library' => ''
+                'library' => 'mylibrary.so'
             ]
         ];
         $response = $client->nodes->reloadplugins($params);               
 Set
 ===
 
-Set a server variable
+Set a server variable.
+`body` requires `variable` parameter which is an array containing the `name` of the value and the `value` to be set.
 
         $params = [
             'body' => [
@@ -151,7 +168,11 @@ Set a server variable
         
 Status
 ======
-Returns information about the current daemon.
+Returns information and performance metrics about the current node.
+
+If the node is part of a cluster, it will also provide information about the cluster. 
+
+Result can be filtered by setting `pattern` (on status metric names) parameter of `body`.
 
         $params = [
             'body' => [
@@ -161,7 +182,9 @@ Returns information about the current daemon.
         $response = $client->nodes->status($params);           
 Tables
 ======
-Return list of current indexes
+Return list of current indexes.
+
+Result can be filtered by setting `pattern` (on index names) parameter of `body`.
 
         $params = [
             'body' => [
@@ -173,6 +196,7 @@ Return list of current indexes
 Threads
 ======
 Return current running threads.
+Optional `body` can contain formatting of the result by setting `columns` (number of chars in 'Info' panel) and `format` (with possible value 'sphinxql' to force sphinxql format of the commands)
 
         $params = [
             'body' => [
@@ -183,7 +207,11 @@ Return current running threads.
         $response = $client->nodes->tables($params);                    
 Variables
 =========
+
 Return list of server variables
+
+Optional it can return the value of a single server variable by specifying in `variable_name` parameter of `body`.
+ 
 
         $params = [
             'body' => [

@@ -45,7 +45,27 @@ Http/Https adapters options:
 *  curl - array of CURL settings as option=>value 
 *  persistent -  define whenever connection is persistent or not
 
-Example:
+Simple example of multiple hosts:
+```
+        $params = ['connections'=>
+            [
+                [
+                    'host' => '123.0.0.1',
+                    'port' => '1234',
+                ],
+                [
+                    'host' => '123.0.0.2',
+                    'port' => '1235',
+                ],
+
+            ]
+        ];
+        $client =  new Client($params);
+```
+
+
+A mode advanced example where one host uses http auth and another requires SSL:
+
 ```
         $params = ['connections'=>
             [

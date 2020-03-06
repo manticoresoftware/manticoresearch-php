@@ -1,11 +1,17 @@
 Indices
 -------
 
-Indices namespace contains operations made on indices.
+Nodes namespace contains methods for  operations made on indices or information about them.
 
 Create
 ======
 Create a new index.
+
+`index` is mandatory.
+`body` require presence of `columns`  array where keys are the column names. Each column requires a  `type` defined.
+`text` type support 'indexed' and 'stored' options.
+Index settings can be set in `options` parameter.
+ 
 
         $params = [
             'index' => 'testrt',
@@ -29,7 +35,7 @@ Create a new index.
         
 Drop
 ===
-Drop an existing index
+Drop an existing index. `index` is mandatory.
 
         $params = [
             'index' => 'testrt',
@@ -39,6 +45,13 @@ Drop an existing index
 Alter
 ====
 Alter perform changes on indexes. Currently supported only add/drop columns.
+`body` parameters:
+ 
+* `operation` -  mandatory, possible values: add,drop
+* `column` -  for add,drop operations the column is an array of
+    * `name` -  column name
+    * `type` - data type
+ 
 
         $params = [
             'index' => 'testrt',
@@ -69,6 +82,8 @@ Describe
 ========
 Returns structure of an index.
 
+`body` is optional. It support `pattern` as a column name for filtering the structure result.
+
         $params = [
             'index' => 'testrt',
             'body' => [
@@ -98,7 +113,10 @@ Flushed the RT index to disk.
 Optimize
 ========
 
-Perform optimization on RT index. If sync=true, the command waits for execution to finish, otherwise it's launched in background.
+Launch optimization on RT index. The command doesn't wait by default for the optimize operation to finish. 
+
+`body` is optional. Supports `sync` parameter - if set, the command waits for the optimize to finish.
+
 
         $params = [
             'index' => 'testrt',
@@ -110,6 +128,8 @@ Status
 ======
 Return statistics about index: documents, size, chunks, as well as query statistics. 
 
+`body` is optional. It support `pattern` as a property/performance metric to filter upon.
+
         $params = [
             'index' => 'testrt',
             'body' => [
@@ -119,9 +139,9 @@ Return statistics about index: documents, size, chunks, as well as query statist
         $response = $client->indices->status($params);             
 Truncate
 ========
-
+Truncates an index. 
+ 
         $params = [
-            'index' => 'testrt',
-            'body' => [ 'with'=>'reconfigure']
+            'index' => 'testrt'
          ];
         $response = $client->indices->truncate($params);                                                  
