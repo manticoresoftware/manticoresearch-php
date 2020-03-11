@@ -157,23 +157,23 @@
 </span><span class="l" id="line-98">                self::<span class="php-var">$_curl</span> = <span class="php-keyword1">false</span>;
 </span><span class="l" id="line-99">                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> ConnectionException(<span class="php-var">$error</span>,<span class="php-var">$request</span>);
 </span><span class="l" id="line-100">            }
-</span><span class="l" id="line-101">            <span class="php-comment">//soft error</span>
-</span><span class="l" id="line-102">            <span class="php-keyword1">if</span>(<span class="php-var">$response</span>-&gt;hasError()) {
-</span><span class="l" id="line-103">                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> ResponseException(<span class="php-var">$request</span>, <span class="php-var">$response</span>);
-</span><span class="l" id="line-104">            }
-</span><span class="l" id="line-105">
-</span><span class="l" id="line-106">            <span class="php-var">$this</span>-&gt;_logger-&gt;debug(<span class="php-quote">'Request body:'</span>,[
-</span><span class="l" id="line-107">                <span class="php-quote">'connection'</span> =&gt; <span class="php-var">$connection</span>-&gt;getConfig(),
-</span><span class="l" id="line-108">                <span class="php-quote">'payload'</span>=&gt; <span class="php-var">$request</span>-&gt;getBody()
-</span><span class="l" id="line-109">            ]);
-</span><span class="l" id="line-110">            <span class="php-var">$this</span>-&gt;_logger-&gt;info(<span class="php-quote">'Request:'</span>,[
-</span><span class="l" id="line-111">                    <span class="php-quote">'url'</span> =&gt; <span class="php-var">$url</span>,
-</span><span class="l" id="line-112">                    <span class="php-quote">'status'</span> =&gt; <span class="php-var">$status</span>,
-</span><span class="l" id="line-113">                    <span class="php-quote">'time'</span> =&gt; <span class="php-var">$time</span>
-</span><span class="l" id="line-114">                ]
-</span><span class="l" id="line-115">            );
-</span><span class="l" id="line-116">            <span class="php-var">$this</span>-&gt;_logger-&gt;debug(<span class="php-quote">'Response body:'</span>,<span class="php-var">$response</span>-&gt;getResponse());
-</span><span class="l" id="line-117">
+</span><span class="l" id="line-101">
+</span><span class="l" id="line-102">
+</span><span class="l" id="line-103">            <span class="php-var">$this</span>-&gt;_logger-&gt;debug(<span class="php-quote">'Request body:'</span>,[
+</span><span class="l" id="line-104">                <span class="php-quote">'connection'</span> =&gt; <span class="php-var">$connection</span>-&gt;getConfig(),
+</span><span class="l" id="line-105">                <span class="php-quote">'payload'</span>=&gt; <span class="php-var">$request</span>-&gt;getBody()
+</span><span class="l" id="line-106">            ]);
+</span><span class="l" id="line-107">            <span class="php-var">$this</span>-&gt;_logger-&gt;info(<span class="php-quote">'Request:'</span>,[
+</span><span class="l" id="line-108">                    <span class="php-quote">'url'</span> =&gt; <span class="php-var">$url</span>,
+</span><span class="l" id="line-109">                    <span class="php-quote">'status'</span> =&gt; <span class="php-var">$status</span>,
+</span><span class="l" id="line-110">                    <span class="php-quote">'time'</span> =&gt; <span class="php-var">$time</span>
+</span><span class="l" id="line-111">                ]
+</span><span class="l" id="line-112">            );
+</span><span class="l" id="line-113">            <span class="php-var">$this</span>-&gt;_logger-&gt;debug(<span class="php-quote">'Response body:'</span>,<span class="php-var">$response</span>-&gt;getResponse());
+</span><span class="l" id="line-114">            <span class="php-comment">//soft error</span>
+</span><span class="l" id="line-115">            <span class="php-keyword1">if</span>(<span class="php-var">$response</span>-&gt;hasError()) {
+</span><span class="l" id="line-116">                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> ResponseException(<span class="php-var">$request</span>, <span class="php-var">$response</span>);
+</span><span class="l" id="line-117">            }
 </span><span class="l" id="line-118">            <span class="php-keyword1">return</span> <span class="php-var">$response</span>;
 </span><span class="l" id="line-119">        }
 </span><span class="l" id="line-120">
