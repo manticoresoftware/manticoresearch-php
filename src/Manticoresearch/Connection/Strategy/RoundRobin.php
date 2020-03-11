@@ -4,6 +4,8 @@
 namespace Manticoresearch\Connection\Strategy;
 
 
+use Manticoresearch\Connection;
+
 /**
  * Class RoundRobin
  * @package Manticoresearch\Connection\Strategy
@@ -19,14 +21,10 @@ class RoundRobin implements SelectorInterface
      * @param array $connections
      * @return mixed
      */
-    public function getConnection(array $connections)
+    public function getConnection(array $connections) :Connection
     {
-
-        $alives = array_filter($connections, function ($connection) {
-            return $connection->isAlive() ?? false;
-        });
-        $connection = $alives[$this->current % count($connections)];
-        $this->current += 1;
+        $connection = $connections[$this->current % count($connections)];
+        ++$this->current;
         return $connection;
     }
 }

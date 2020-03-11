@@ -15,6 +15,7 @@ class Sql extends Request
     /**
      * @return mixed|string
      */
+    protected $_mode;
     public function getPath()
     {
         return '/sql';
@@ -33,6 +34,25 @@ class Sql extends Request
      */
     public function getBody()
     {
-        return http_build_query($this->_body);
+        if($this->_mode === 'raw') {
+            $return = ['mode=raw'];
+            foreach($this->_body as $k=>$v) {
+                $return[]= $k.'='.$v;
+            }
+            return implode('&',$return);
+        }else{
+            return http_build_query($this->_body);
+        }
+
+    }
+
+    public function getMode()
+    {
+        return $this->_mode;
+    }
+
+    public function setMode($mode)
+    {
+        $this->_mode = $mode;
     }
 }

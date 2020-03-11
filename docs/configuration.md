@@ -16,6 +16,7 @@ Without any configuration provided, it tries to connect using HTTP `127.0.0.1` o
 *  connections - list of connections
 *  connectionStrategy - name of connection pool strategy, default is `StaticRoundRobin`
 *  transport -  transport class name, default `Http` (part of a connection)
+*  retries - number of retries to perform in case of hard failure 
 
 If there is a single connection used, it can be defined directly in the configuration array like:
 
@@ -45,7 +46,27 @@ Http/Https adapters options:
 *  curl - array of CURL settings as option=>value 
 *  persistent -  define whenever connection is persistent or not
 
-Example:
+Simple example of multiple hosts:
+```
+        $params = ['connections'=>
+            [
+                [
+                    'host' => '123.0.0.1',
+                    'port' => '1234',
+                ],
+                [
+                    'host' => '123.0.0.2',
+                    'port' => '1235',
+                ],
+
+            ]
+        ];
+        $client =  new Client($params);
+```
+
+
+A mode advanced example where one host uses http auth and another requires SSL:
+
 ```
         $params = ['connections'=>
             [
@@ -108,4 +129,32 @@ $params = [
     'post' => 9308,
     'connectionStrategy' => new MyCustomStrategy()
 ]
+```
+
+
+### Retries
+
+By default the number of retries is equal with the number of defined hosts. 
+
+If the number of hosts is 10 and retries 5, the query will retry on 5 hosts according to connection strategy and end with error after 5 attempts. 
+
+Multiple hosts example:
+
+```
+        $params = ['connections'=>
+            [
+                ['host' => '123.0.0.1', 'port' => '1234'],
+                ['host' => '123.0.0.2', 'port' => '1235'],
+                ['host' => '123.0.0.2', 'port' => '1236'],
+            ],
+            'retries' => 2
+        ];
+        $client =  new Client($params);
+```
+
+Single host example:
+
+```
+        $params = ['host' => '123.0.0.1', 'port' => '1234', 'retries' => 2];
+        $client =  new Client($params);
 ```

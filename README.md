@@ -6,7 +6,7 @@ manticoresearch-php
 [![License](https://poser.pugx.org/manticoresoftware/manticoresearch-php/license)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
 [![Slack][slack-badge]][slack-url]
 
-Official client for Manticore Search using the HTTP JSON protocol.
+Official PHP client for Manticore Search.
 
 
 Features
@@ -14,8 +14,9 @@ Features
 - One to one mapping with the HTTP  API
 - connection pools with pluggable selection strategy. Defaults to static round robin
 - pluggable PSR/Log interface
-- pluggable transport protocols. Default to CURL (alternative HTTPLug 1.0)
+- pluggable transport protocols.
 - persistent connections
+
 
 Requirements
 ------------
@@ -44,7 +45,7 @@ composer require manticoresoftware/manticoresearch-php
 
 Once installed, you can start using the client to perform search queries:
 
-```php
+```
    require_once __DIR__ . '/vendor/autoload.php';
    ...
    $config = ['host'=>'127.0.0.1','port'=>9308];

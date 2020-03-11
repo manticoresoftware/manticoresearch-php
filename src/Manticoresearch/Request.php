@@ -19,7 +19,7 @@ class Request
      */
     protected $_method;
     /**
-     * @var string
+     * @var array
      */
     protected $_body;
     /**
@@ -33,10 +33,11 @@ class Request
 
     public function __construct($params=[])
     {
-
-        $this->setBody($params['body'] ?? []);
-        $this->setQuery($params['query'] ?? []);
-        $this->setContentType($params['content_type'] ?? 'application/json');
+        if(count($params)>0) {
+            $this->setBody($params['body'] ?? []);
+            $this->setQuery($params['query'] ?? []);
+            $this->setContentType($params['content_type'] ?? 'application/json');
+        }
     }
 
     /**
@@ -66,9 +67,10 @@ class Request
     /**
      * @param mixed $body
      */
-    public function setBody($body)
+    public function setBody($body = null)
     {
         $this->_body = $body;
+        return $this;
     }
 
     /**

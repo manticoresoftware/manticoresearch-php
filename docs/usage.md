@@ -1,35 +1,42 @@
-# Running Queries
+Running Queries
+===============
 
-A quick example of performing a simple search:
+Table of Contents
+-----------------
 
-```
-require_once __DIR__ . '/vendor/autoload.php';
+* [General notes on requests](#requests) 
 
-$config = ['host'=>'127.0.0.1', 'port'=>9306];
-$client = new \Manticoresearch\Client($config);
+* [Search](#search)
 
-$params = [
-    'body' => [
-        'index' => 'movies',
-        'query' => [
-            'match_phrase' => [
-                'movie_title' => 'star trek nemesis',
-            ]
-        ]
-    ]
-];
-$response = $client->search($params);
+* [Insert documents](#insert)
 
-```
+* [Update documents](#update)
+
+* [Replace documents](#replace)
+
+* [Delete documents](#delete)
+
+* [Bulk operations with documents](#bulk)
+
+* [Percolate searches](percolate.md)
+
+* [Keyword helpers](keywordhelpers.md)
+
+* Administrative operations
+
+    * [Indices](indices.md)
+    * [Nodes](nodes.md)
+    * [Cluster](cluster.md)
+    
+* [Running SQL](sql.md)
 
 
-### Queries
+### Requests
 
-All queries reflect the HTTP API making very easy to write them using the client.
-Each method represents an API endpoint and accept an array with the following elements:
+Each request array can have one of the 
 
 * body -  the API endpoint POST payload
-* index  - index name 
+* index/cluster  - index/cluster name
 * id - document id
 * query - endpoint parameters
 
@@ -40,10 +47,12 @@ On the body payload there is no check regarding the validity made before sending
 ### Responses 
 
 Responses are returned as arrays reflection of the response object received from the API endpoint. 
-There is no other change or parsing performed.
 
-#### Search
+
+### Search
 For complete reference of payload and response see Manticore's [Search API](https://docs.manticoresearch.com/latest/html/http_reference/json_search.html)
+
+`body` requires presence of `index` and `query` parameters. 
 
 A simple search example:
 ```
@@ -61,10 +70,11 @@ $params = [
 $response = $client->search($params);
 ```
 
-
-#### Insert
+### Insert
 
 For complete reference of payload and response see Manticore's [Insert API](https://docs.manticoresearch.com/latest/html/http_reference/json_insert.html)
+
+`body` requires presence of `index`, `id` and  `doc` parameters.
 
 ```
 $doc = [
@@ -90,9 +100,11 @@ $doc = [
 $response = $client->insert($doc);
 ```
 
-#### Replace
+### Replace
 
 For complete reference of payload and response see Manticore's [Replace API](https://docs.manticoresearch.com/latest/html/http_reference/json_replace.html)
+
+`body` requires presence of `index`, `id` and  `doc` parameters.
 
 ```
 $doc = [
@@ -109,9 +121,11 @@ $doc = [
 $response = $client->replace($doc);
 ```
 
-#### Update
+### Update
 
 For complete reference of payload and response see Manticore's [Update API](https://docs.manticoresearch.com/latest/html/http_reference/json_update.html)
+
+`body` requires presence of `index`, `id` and  `doc` parameters.
 
 ```
 $doc = [
@@ -127,9 +141,11 @@ $doc = [
 $response = $client->update($doc);
 ```
 
-#### Delete
+### Delete
 
 For complete reference of payload and response see Manticore's [Delete API](https://docs.manticoresearch.com/latest/html/http_reference/json_delete.html)
+
+`body` requires presence of `index` and `id`  parameters.
 
 ```
 $doc = [
@@ -142,7 +158,7 @@ $doc = [
 $response = $client->delete($doc);
 ```
 
-#### Bulk
+### Bulk
 
 For complete reference of payload and response see Manticore's [Bulk API](https://docs.manticoresearch.com/latest/html/http_reference/json_bulk.html)
 
@@ -176,102 +192,3 @@ $doc = [
 $response = $client->bulk($doc);
 ```
 
-#### SQL
-For complete reference of payload and response see Manticore's [SQL API](https://docs.manticoresearch.com/latest/html/http_reference/sql.html).
-
-```
-$params = [
-    'body' => [
-        'query' => "SELECT * FROM movies where MATCH('@movie_title star trek')"
-    ]
-];
-
-$response = $client->sql($params);
-```
-
-#### Percolate operations
-
-For complete reference of payloads and responses see Manticore's [PQ API](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html)
-
-Operations with the percolate indexes have their own namespace. The following methods are available:
-
-##### Inserting stored query
-
-For [storing](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html#store-query) queries the `index` parameter is mandatory. 
-
-Simple insertion with auto generated id:
-
-```
-$params = [
-    'index' => 'test_pq',
-    'body' => [
-        'query' => ['match'=>['subject'=>'test']],
-        'tags' => ['test1','test2']
-    ]
-];
-$response = $client->pq()->doc($params);
-```
-
-Inserting with id specified and refresh command:
-
-```
-$params = [
-    'index' => 'test_pq',
-    'id' =>101,
-    'query' => ['refresh' =>1],
-    'body' => [
-        'query' => ['match'=>['subject'=>'testsasa']],
-        'tags' => ['test1','test2']
-    ]
-];
-$response = $client->pq()->doc($params);
-```
-
-##### Percolate search
-
-For [searching](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html#search-matching-document) the `index` parameter is mandatory.
-
-```
-$params = [
-    'index' => 'pq',
-    'body' => [
-        'query' => [
-            'percolate' => [
-                'document' => [
-                    'subject'=>'test',
-                    'content' => 'some content',
-                    'catid' =>5
-                ]
-            ]
-        ]
-    ]
-];
-$response = $client->pq()->search($params);
-```
-
-##### List stored queries
-
-For [listing](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html#list-stored-queries) stored queries the `index` parameter is mandatory.
-
-```
-$params = [
-    'index' => 'test_pq',
-    'body' => [
-    ]
-];
-$response = $client->pq()->search($params);
-```
-
-##### Delete stored queries
-
-For [deleting](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html#delete-stored-queries) stored queries the `index` parameter is mandatory.
-
-```
-$params = [
-    'index' => 'test_pq',
-    'body' => [
-        'id' => [5,6]
-    ]
-];
-$response = $client->pq()->deleteByQuery($params);
-```

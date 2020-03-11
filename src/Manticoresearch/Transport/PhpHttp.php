@@ -23,11 +23,15 @@ use Psr\Log\LoggerInterface;
 class PhpHttp extends Transport implements TransportInterface
 {
 
+    protected $client;
+    protected $messageFactory;
     /**
      * PhpHttp constructor.
      * @param Connection|null $connection
+     * @param LoggerInterface|null $logger
      */
-    public function __construct(Connection $connection = null,LoggerInterface $logger)
+
+    public function __construct(Connection $connection = null,LoggerInterface $logger = null)
     {
         $this->client = HttpClientDiscovery::find();
         $this->messageFactory = MessageFactoryDiscovery::find();

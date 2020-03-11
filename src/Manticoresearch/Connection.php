@@ -61,7 +61,7 @@ class Connection
      * @param $host
      * @return $this
      */
-    public function setHost($host)
+    public function setHost($host): self
     {
         $this->config['host'] = $host;
         return $this;
@@ -79,7 +79,7 @@ class Connection
      * @param $port
      * @return $this
      */
-    public function setPort($port)
+    public function setPort($port): self
     {
         $this->config['port'] = (int)$port;
         return $this;
@@ -97,7 +97,7 @@ class Connection
      * @param $timeout
      * @return $this
      */
-    public function setTimeout($timeout)
+    public function setTimeout($timeout): self
     {
         $this->config['timeout'] = (int)$timeout;
         return $this;
@@ -115,7 +115,7 @@ class Connection
      * @param $headers
      * @return $this
      */
-    public function setheaders($headers)
+    public function setheaders($headers): self
     {
         $this->config['headers'] = $headers;
         return $this;
@@ -133,7 +133,7 @@ class Connection
      * @param $connecttimeout
      * @return $this
      */
-    public function setConnectTimeout($connecttimeout)
+    public function setConnectTimeout($connecttimeout): self
     {
         $this->config['connect_timeout'] = (int)$connecttimeout;
         return $this;
@@ -151,7 +151,7 @@ class Connection
      * @param $transport
      * @return $this
      */
-    public function setTransport($transport)
+    public function setTransport($transport): self
     {
         $this->config['transport'] = $transport;
         return $this;
@@ -179,7 +179,7 @@ class Connection
      * @param $config
      * @return $this
      */
-    public function setConfig($config)
+    public function setConfig($config): self
     {
         foreach ($config as $ckey => $cvalue) {
             $this->config[$ckey] = $cvalue;
@@ -196,11 +196,7 @@ class Connection
         if($key == null) {
             return $this->config;
         }
-        if (isset($this->config[$key])) {
-            return $this->config[$key];
-        } else {
-            return null;
-        }
+        return $this->config[$key] ?? null;
     }
 
     /**

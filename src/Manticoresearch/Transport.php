@@ -26,8 +26,9 @@ class Transport
     /**
      * Transport constructor.
      * @param Connection|null $connection
+     * @param LoggerInterface|null $logger
      */
-    public function __construct(Connection $connection = null, LoggerInterface $logger)
+    public function __construct(Connection $connection = null, LoggerInterface $logger = null)
     {
         if ($connection) {
             $this->_connection = $connection;
@@ -84,11 +85,11 @@ class Transport
     {
         if (!empty($query)) {
             foreach ($query as $k => $v) {
-                if (is_bool($query)) {
+                if (is_bool($v)) {
                     $query[$k] = $v ? 'true' : 'false';
                 }
             }
-            $uri = $uri . '?' . http_build_query($query);
+            $uri .=  '?' . http_build_query($query);
         }
         return $uri;
     }

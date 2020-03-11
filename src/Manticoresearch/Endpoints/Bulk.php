@@ -37,11 +37,11 @@ class Bulk extends Request
     /**
      * @param mixed $body
      */
-    public function setBody($body)
+    public function setBody($body = null)
     {
         if (is_array($body) || $body instanceof \Traversable) {
             foreach ($body as $b) {
-                $this->body .= json_encode($b, true) . "\n";
+                $this->_body .= json_encode($b, true) . "\n";
             }
         } else {
             $this->_body = $body;
