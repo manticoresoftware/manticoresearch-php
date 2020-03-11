@@ -11,7 +11,7 @@ Official PHP client for Manticore Search.
 
 Features
 --------
-- One to one mapping with the HTTP JSON API*
+- One to one mapping with the HTTP  API
 - connection pools with pluggable selection strategy. Defaults to static round robin
 - pluggable PSR/Log interface
 - pluggable transport protocols.
@@ -30,8 +30,6 @@ Documentation
 -------------
 
 Full documentation is available in  [docs](docs) folder.
-
-
 
 Manticore Search server documentation: https://docs.manticoresearch.com/latest/html/.
 
