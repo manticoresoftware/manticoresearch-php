@@ -5,6 +5,7 @@ Table of Contents
 -----------------
 
 * [General notes on requests](#requests) 
+
 * [Search](#search)
 
 * [Insert documents](#insert)
