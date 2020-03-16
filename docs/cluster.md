@@ -1,7 +1,7 @@
 Cluster
 -----
 
-Nodes namespace contains methods for dealing with cluster operations.
+Nodes namespace contains methods for dealing with cluster operations. Available for  Manticore Search 3.4 or above.
 
 Create
 ======

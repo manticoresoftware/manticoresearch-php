@@ -1,7 +1,7 @@
 Indices
 -------
 
-Nodes namespace contains methods for  operations made on indices or information about them.
+Nodes namespace contains methods for operations made on indices or information about them. Available for  Manticore Search 3.4 or above.
 
 Create
 ======
