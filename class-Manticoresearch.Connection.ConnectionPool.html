@@ -118,7 +118,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#___construct">#</a>
-            <code><a href="source-class-Manticoresearch.Connection.ConnectionPool.html#23-27">__construct</a>( <span> array <span class="property-name">$connections</span> </span>, <span> <a href="interface-Manticoresearch.Connection.Strategy.SelectorInterface.html">Manticoresearch\Connection\Strategy\SelectorInterface</a> <span class="property-name">$strategy</span> </span> )</code>
+            <code><a href="source-class-Manticoresearch.Connection.ConnectionPool.html#30-35">__construct</a>( <span> array <span class="property-name">$connections</span> </span>, <span> <a href="interface-Manticoresearch.Connection.Strategy.SelectorInterface.html">Manticoresearch\Connection\Strategy\SelectorInterface</a> <span class="property-name">$strategy</span> </span>, <span> int <span class="property-name">$retries</span> </span> )</code>
 
             <div class="description">
                 
@@ -150,7 +150,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_getConnections">#</a>
-            <code><a href="source-class-Manticoresearch.Connection.ConnectionPool.html#32-35">getConnections</a>( )</code>
+            <code><a href="source-class-Manticoresearch.Connection.ConnectionPool.html#40-43">getConnections</a>( )</code>
 
             <div class="description">
                 
@@ -182,7 +182,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_setConnections">#</a>
-            <code><a href="source-class-Manticoresearch.Connection.ConnectionPool.html#40-43">setConnections</a>( <span> array <span class="property-name">$connections</span> </span> )</code>
+            <code><a href="source-class-Manticoresearch.Connection.ConnectionPool.html#48-51">setConnections</a>( <span> array <span class="property-name">$connections</span> </span> )</code>
 
             <div class="description">
                 
@@ -214,7 +214,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_getConnection">#</a>
-            <code><a href="source-class-Manticoresearch.Connection.ConnectionPool.html#45-50">getConnection</a>( )</code>
+            <code><a href="source-class-Manticoresearch.Connection.ConnectionPool.html#52-64">getConnection</a>( )</code>
 
             <div class="description">
                 
@@ -246,7 +246,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_hasConnections">#</a>
-            <code><a href="source-class-Manticoresearch.Connection.ConnectionPool.html#52-60">hasConnections</a>( )</code>
+            <code><a href="source-class-Manticoresearch.Connection.ConnectionPool.html#66-72">hasConnections</a>( )</code>
 
             <div class="description">
                 
@@ -278,7 +278,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_getStrategy">#</a>
-            <code><a href="source-class-Manticoresearch.Connection.ConnectionPool.html#65-68">getStrategy</a>( )</code>
+            <code><a href="source-class-Manticoresearch.Connection.ConnectionPool.html#77-80">getStrategy</a>( )</code>
 
             <div class="description">
                 
@@ -310,7 +310,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_setStrategy">#</a>
-            <code><a href="source-class-Manticoresearch.Connection.ConnectionPool.html#73-76">setStrategy</a>( <span> <a href="interface-Manticoresearch.Connection.Strategy.SelectorInterface.html">Manticoresearch\Connection\Strategy\SelectorInterface</a> <span class="property-name">$strategy</span> </span> )</code>
+            <code><a href="source-class-Manticoresearch.Connection.ConnectionPool.html#85-88">setStrategy</a>( <span> <a href="interface-Manticoresearch.Connection.Strategy.SelectorInterface.html">Manticoresearch\Connection\Strategy\SelectorInterface</a> <span class="property-name">$strategy</span> </span> )</code>
 
             <div class="description">
                 
@@ -345,7 +345,7 @@
 
     <td class="name">
         <code>
-            <a href="source-class-Manticoresearch.Connection.ConnectionPool.html#17" class="property-name">$_connections</a>
+            <a href="source-class-Manticoresearch.Connection.ConnectionPool.html#19" class="property-name">$_connections</a>
         </code>
         <div class="description">
             
@@ -360,10 +360,10 @@
         </div>
     </td>
 </tr>
-<tr id="$_strategy">
+<tr id="$strategy">
     <td class="attributes">
         <code class="keyword">
-            protected 
+            public 
 
             <a href="interface-Manticoresearch.Connection.Strategy.SelectorInterface.html">Manticoresearch\Connection\Strategy\SelectorInterface</a>
         </code>
@@ -371,7 +371,7 @@
 
     <td class="name">
         <code>
-            <a href="source-class-Manticoresearch.Connection.ConnectionPool.html#21" class="property-name">$_strategy</a>
+            <a href="source-class-Manticoresearch.Connection.ConnectionPool.html#24" class="property-name">$strategy</a>
         </code>
         <div class="description">
             
@@ -381,8 +381,60 @@
     </td>
     <td class="value">
         <div>
-            <a href="#$_strategy" class="anchor pull-right">#</a>
+            <a href="#$strategy" class="anchor pull-right">#</a>
             <code><span class="php-keyword1">NULL</span></code>
+        </div>
+    </td>
+</tr>
+<tr id="$retries">
+    <td class="attributes">
+        <code class="keyword">
+            public 
+
+            
+        </code>
+    </td>
+
+    <td class="name">
+        <code>
+            <a href="source-class-Manticoresearch.Connection.ConnectionPool.html#26" class="property-name">$retries</a>
+        </code>
+        <div class="description">
+            
+
+                <br>
+        </div>
+    </td>
+    <td class="value">
+        <div>
+            <a href="#$retries" class="anchor pull-right">#</a>
+            <code><span class="php-keyword1">NULL</span></code>
+        </div>
+    </td>
+</tr>
+<tr id="$retries_attempts">
+    <td class="attributes">
+        <code class="keyword">
+            public 
+
+            
+        </code>
+    </td>
+
+    <td class="name">
+        <code>
+            <a href="source-class-Manticoresearch.Connection.ConnectionPool.html#28" class="property-name">$retries_attempts</a>
+        </code>
+        <div class="description">
+            
+
+                <br>
+        </div>
+    </td>
+    <td class="value">
+        <div>
+            <a href="#$retries_attempts" class="anchor pull-right">#</a>
+            <code><span class="php-num">0</span></code>
         </div>
     </td>
 </tr>
