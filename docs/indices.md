@@ -8,9 +8,15 @@ Create
 Create a new index.
 
 `index` is mandatory.
-`body` require presence of `columns`  array where keys are the column names. Each column requires a  `type` defined.
+`body` can contain:
+
+* `columns` - definition of fields for indexes with data
+* `options` - various index settings
+* `silent` -  if set to true, the create will not fail with error if there is already an index with the designated name
+
+`body` require presence of `columns`  array for RT and PQ indexes where keys are the column names. Each column requires a  `type` defined.
 `text` type support 'indexed' and 'stored' options.
-Index settings can be set in `options` parameter.
+Index settings can be set in `options` parameter. By default, the index type is Real-Time. For PQ or distributed indexes, the options must contain a `type` property.
  
 
         $params = [
@@ -33,9 +39,27 @@ Index settings can be set in `options` parameter.
         ];
         $response = $client->indices->create($params);
         
+For distributed indexes, the body must have only the `options` array, since they don't have any data (so no `columns`).
+
+        $params = [
+            'index' => 'mydistributed',
+            'body' => [
+                'options' => [
+                    'type' => 'distributed',
+                    'local' => 'index1'
+                    'local' => 'index2`
+                ]
+            ]
+        ];
+        $response = $client->indices->create($params);        
+
+       
 Drop
 ===
 Drop an existing index. `index` is mandatory.
+
+`body` can contain optional parameter `silent` - for not failing with error in case the index doesn't exist.
+
 
         $params = [
             'index' => 'testrt',

@@ -36,4 +36,38 @@ class CreateTest  extends \PHPUnit\Framework\TestCase
         $response = $client->indices()->drop($params);
         $this->assertSame( ['total'=>0,'error'=>'','warning'=>''],$response);
     }
+
+    public function testCreateDistributed()
+    {
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => 9308];
+        $client = new Client($params);
+        $params = [
+            'index' => 'testrtdist',
+            'body' => [
+                'settings' =>[
+                    'type' =>'distributed',
+                    'local' => 'testrt'
+                ]
+            ]
+        ];
+        $response = $client->indices()->create($params);
+        $this->assertSame( ['total'=>0,'error'=>'','warning'=>''],$response);
+        $params = [
+            'index'=>'testrtdist'
+        ];
+        $response = $client->indices()->drop($params);
+        $this->assertSame( ['total'=>0,'error'=>'','warning'=>''],$response);
+    }
+
+    public function testNoIndexDrop()
+    {
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => 9308];
+        $client = new Client($params);
+        $params = [
+            'index'=>'noindexname',
+            'body' => ['silent'=>true]
+        ];
+        $response = $client->indices()->drop($params);
+        $this->assertSame( ['total'=>0,'error'=>'','warning'=>''],$response);
+    }
 }

@@ -34,11 +34,13 @@ class Create extends EmulateBySql
             $options = "";
             if(isset($params['settings'] )) {
                 foreach($params['settings'] as $name=>$value) {
-                    $options.=" ".$name." = ".$value;
+                    $options.=" ".$name." = '".$value."'";
                 }
 
             }
-            return parent::setBody(['query' => "CREATE TABLE ".$this->_index.
+            return parent::setBody(['query' => "CREATE TABLE ".
+                (isset($params['silent']) && $params['silent']===true?' IF NOT EXISTS ':'').
+                $this->_index.
                 (count($columns)>0?"(".implode(",",$columns).")":" ")
                 .$options]);
         }
