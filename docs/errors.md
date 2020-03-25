@@ -1,10 +1,10 @@
 # Errors and exceptions
 
-The client throws several types of exceptions:
+The client throws several types of exceptions. All are under the namespace ``Manticoresearch\Exceptions``.
 
 ## NoMoreNodesException
 
-When nodes fail with hard errors and no retries are left
+When nodes fail with hard errors and no retries are left.
 
 ## ResponseException
 
