@@ -30,6 +30,7 @@ Table of Contents
     
 * [Running SQL](sql.md)
 
+* [Error handling](errors.md)
 
 ### Requests
 
