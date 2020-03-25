@@ -23,7 +23,7 @@ class Alter extends EmulateBySql
                 if ($params['operation'] === 'add' && isset($params['column'])) {
                         return parent::setBody(['query' => "ALTER TABLE " . $this->_index . " ADD COLUMN " . $params['column']['name'] . " " . strtoupper($params['column']['type'])]);
                 }
-                if ($params['operation'] == 'drop') {
+                if ($params['operation'] === 'drop') {
                     return parent::setBody(['query' => "ALTER TABLE " . $this->_index . " DROP COLUMN " . $params['column']['name']]);
                 }
                 //@todo alter setting, once is merged in master

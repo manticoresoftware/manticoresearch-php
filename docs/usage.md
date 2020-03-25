@@ -192,3 +192,35 @@ $doc = [
 $response = $client->bulk($doc);
 ```
 
+
+```
+    {
+      "index": "geodemo",
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "match": {
+                "*": "station"
+              }
+            },
+            {
+              "equals": {
+                "state_code": "ENG"
+              }
+            },
+            {
+              "geo_distance": {
+                "distance_type": "adaptive",
+                "location_anchor": {
+                  "lat": 52.396,
+                  "lon": -1.774
+                },
+                "location_source": "latitude_deg,longitude_deg",
+                "distance": "10000 m"
+              }
+            }
+          ]
+        }
+      }
+    }

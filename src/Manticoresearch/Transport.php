@@ -4,6 +4,7 @@
 namespace Manticoresearch;
 
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -57,10 +58,9 @@ class Transport
     /**
      * @param $transport
      * @param Connection $connection
-     * @param array $params
      * @param LoggerInterface $logger
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public static function create($transport, Connection $connection, LoggerInterface $logger)
     {
@@ -71,7 +71,7 @@ class Transport
         if ($transport instanceof self) {
             $transport->setConnection($connection);
         } else {
-            throw new \Exception('Bad transport');
+            throw new Exception('Bad transport');
         }
         return $transport;
     }
