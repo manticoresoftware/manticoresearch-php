@@ -49,7 +49,8 @@ class CreateTest  extends \PHPUnit\Framework\TestCase
                         'type' => 'text',
                         'options' => ['indexed', 'stored']
                     ]
-                ]
+                ],
+                'silent' => true
             ]
         ];
         $response = $client->indices()->create($params);

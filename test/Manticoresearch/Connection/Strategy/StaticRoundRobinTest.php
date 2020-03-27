@@ -56,7 +56,8 @@ class StaticRoundRobinTest extends TestCase
                         'type' => 'text',
                         'options' => ['indexed', 'stored']
                     ]
-                ]
+                ],
+                'silent' => true
             ]
         ];
         $response = $client->indices()->create($params);
