@@ -19,7 +19,7 @@ Create a new cluster.
                 
             ]
         ];
-        $response = $client->cluster->create($params);
+        $response = $client->cluster()->create($params);
 Alter
 ======
 Update a cluster.
@@ -41,7 +41,7 @@ Update a cluster.
                 
             ]
         ];
-        $response = $client->cluster->alter($params);        
+        $response = $client->cluster()->alter($params);        
         
         $params = [
             'cluster' => 'mycluster',
@@ -59,7 +59,7 @@ Update a cluster.
                
             ]
         ];
-        $response = $client->cluster->alter($params);  
+        $response = $client->cluster()->alter($params);  
                   
 Create
 ======
@@ -72,7 +72,7 @@ Delete a cluster.
                 
             ]
         ];
-        $response = $client->cluster->delete($params);                
+        $response = $client->cluster()->delete($params);                
         
 Join
 ====
@@ -99,7 +99,7 @@ There are 2 syntaxes for `body` :
                 
             ]
         ];
-        $response = $client->cluster->join($params);
+        $response = $client->cluster()->join($params);
  
  Set
  ===
@@ -115,5 +115,5 @@ Set a Galera option to the cluster.
                  
              ]
          ];
-         $response = $client->cluster->set($params);
+         $response = $client->cluster()->set($params);
   

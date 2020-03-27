@@ -37,7 +37,7 @@ Index settings can be set in `options` parameter. By default, the index type is 
                 ]
             ]
         ];
-        $response = $client->indices->create($params);
+        $response = $client->indices()->create($params);
         
 For distributed indexes, the body must have only the `options` array, since they don't have any data (so no `columns`).
 
@@ -51,7 +51,7 @@ For distributed indexes, the body must have only the `options` array, since they
                 ]
             ]
         ];
-        $response = $client->indices->create($params);        
+        $response = $client->indices()->create($params);        
 
        
 Drop
@@ -64,7 +64,7 @@ Drop an existing index. `index` is mandatory.
         $params = [
             'index' => 'testrt',
          ];
-        $response = $client->indices->drop($params);
+        $response = $client->indices()->drop($params);
         
 Alter
 ====
@@ -88,7 +88,7 @@ Alter perform changes on indexes. Currently supported only add/drop columns.
                    
             ]
         ];
-        $response = $client->indices->alter($params);
+        $response = $client->indices()->alter($params);
         
         $params = [
             'index' => 'testrt',
@@ -100,7 +100,7 @@ Alter perform changes on indexes. Currently supported only add/drop columns.
                    
             ]
         ];
-        $response = $client->indices->alter($params);        
+        $response = $client->indices()->alter($params);        
 
 Describe
 ========
@@ -114,7 +114,7 @@ Returns structure of an index.
                 'pattern' => 'columnname'
             ]
         ];
-        $response = $client->indices->describe($params);
+        $response = $client->indices()->describe($params);
 
 FlushRamchunk
 =============
@@ -123,7 +123,7 @@ Flushed RAM chunk for a RT index.
         $params = [
             'index' => 'testrt',
          ];
-        $response = $client->indices->flushramchunk($params);               
+        $response = $client->indices()->flushramchunk($params);               
 
 FlushRtindex
 ============
@@ -132,7 +132,7 @@ Flushed the RT index to disk.
         $params = [
             'index' => 'testrt',
          ];
-        $response = $client->indices->flushrtindex($params);
+        $response = $client->indices()->flushrtindex($params);
 
 Optimize
 ========
@@ -146,7 +146,7 @@ Launch optimization on RT index. The command doesn't wait by default for the opt
             'index' => 'testrt',
             'body' => [ 'sync'=>true]
          ];
-        $response = $client->indices->optimize($params);      
+        $response = $client->indices()->optimize($params);      
 
 Status
 ======
@@ -160,7 +160,7 @@ Return statistics about index: documents, size, chunks, as well as query statist
                 'pattern' => 'propertyname'
             ]
         ];
-        $response = $client->indices->status($params);             
+        $response = $client->indices()->status($params);             
 Truncate
 ========
 Truncates an index. 
@@ -168,4 +168,4 @@ Truncates an index.
         $params = [
             'index' => 'testrt'
          ];
-        $response = $client->indices->truncate($params);                                                  
+        $response = $client->indices()->truncate($params);                                                  
