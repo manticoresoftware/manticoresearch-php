@@ -47,6 +47,19 @@ class StaticRoundRobinTest extends TestCase
             ],
 
         ]);
+
+        $params = [
+            'index' => 'testrt',
+            'body' => [
+                'columns' => [
+                    'title' => [
+                        'type' => 'text',
+                        'options' => ['indexed', 'stored']
+                    ]
+                ]
+            ]
+        ];
+        $response = $client->indices()->create($params);
         $params = [
             'body' => [
                 'index' => 'testrt',

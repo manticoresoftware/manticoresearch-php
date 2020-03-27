@@ -16,7 +16,7 @@ Create a new index.
 
 `body` require presence of `columns`  array for RT and PQ indexes where keys are the column names. Each column requires a  `type` defined.
 `text` type support 'indexed' and 'stored' options.
-Index settings can be set in `options` parameter. By default, the index type is Real-Time. For PQ or distributed indexes, the options must contain a `type` property.
+Index settings can be set in `settings` parameter. By default, the index type is Real-Time. For PQ or distributed indexes, the options must contain a `type` property.
  
 
         $params = [
@@ -31,7 +31,7 @@ Index settings can be set in `options` parameter. By default, the index type is 
                         'type' => 'integer'
                     ]
                 ],
-                'options' => [
+                'settings' => [
                     'rt_mem_limit' => '256M',
                     'min_infix_len' => '3'
                 ]

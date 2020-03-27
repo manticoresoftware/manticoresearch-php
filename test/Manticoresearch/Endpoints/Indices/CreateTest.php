@@ -22,7 +22,7 @@ class CreateTest  extends \PHPUnit\Framework\TestCase
                         'type' => 'float'
                     ]
                 ],
-                'options' => [
+                'settings' => [
                     'rt_mem_limit' => '256M',
                     'min_infix_len' => '3'
                 ]
@@ -41,6 +41,19 @@ class CreateTest  extends \PHPUnit\Framework\TestCase
     {
         $params = ['host' => $_SERVER['MS_HOST'], 'port' => 9308];
         $client = new Client($params);
+        $params = [
+            'index' => 'testrt',
+            'body' => [
+                'columns' => [
+                    'title' => [
+                        'type' => 'text',
+                        'options' => ['indexed', 'stored']
+                    ]
+                ]
+            ]
+        ];
+        $response = $client->indices()->create($params);
+
         $params = [
             'index' => 'testrtdist',
             'body' => [
