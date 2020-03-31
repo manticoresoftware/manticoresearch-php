@@ -10,6 +10,7 @@ use Manticoresearch\Endpoints\Indices\Describe;
 use Manticoresearch\Endpoints\Indices\Drop;
 use Manticoresearch\Endpoints\Indices\FlushRamchunk;
 use Manticoresearch\Endpoints\Indices\FlushRtindex;
+use Manticoresearch\Endpoints\Indices\Import;
 use Manticoresearch\Endpoints\Indices\Optimize;
 use Manticoresearch\Endpoints\Indices\Status;
 use Manticoresearch\Endpoints\Indices\Truncate;
@@ -98,13 +99,27 @@ class Indices
     public function drop($params)
     {
         $index = $params['index'] ?? null;
+        $body = $params['body'] ?? [];
         $endpoint = new Drop();
         $endpoint->setIndex($index);
-        $endpoint->setBody();
+        $endpoint->setBody($body);
         $response = $this->_client->request($endpoint, $this->_params);
         return $response->getResponse();
     }
-
+    /**
+     * @param $params
+     * @return mixed
+     */
+    public function import($params)
+    {
+        $index = $params['index'] ?? null;
+        $body = $params['body'] ?? [];
+        $endpoint = new Import();
+        $endpoint->setIndex($index);
+        $endpoint->setBody($body);
+        $response = $this->_client->request($endpoint, $this->_params);
+        return $response->getResponse();
+    }
     /**
      * @param $params
      * @return mixed

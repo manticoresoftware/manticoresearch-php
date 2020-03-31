@@ -1,6 +1,8 @@
 Keyword helpers
 --------------
 
+Available for  Manticore Search 3.4 or above.
+
 ## Keywords Analysis
 
 Return the tokenized versions of words from an input string.

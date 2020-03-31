@@ -16,7 +16,7 @@ Result can be filtered by asking information for one agent - set by `agent` or f
                 'pattern' => 'propertyname'
             ]
         ];
-        $response = $client->nodes->agentstatus($params);            
+        $response = $client->nodes()->agentstatus($params);            
 
 CreateFunction
 ==============
@@ -36,7 +36,7 @@ Register an UDF.
                 'library' => 'udf.so'
             ]
         ];
-        $response = $client->nodes->createfunction($params);  
+        $response = $client->nodes()->createfunction($params);  
         
 CreatePlugin
 ============
@@ -56,7 +56,7 @@ Register a plugin.
                 'library' => 'myplugins.so'
             ]
         ];
-        $response = $client->nodes->createplugin($params);                 
+        $response = $client->nodes()->createplugin($params);                 
         
 Debug
 =====
@@ -69,7 +69,7 @@ A command that can run some debug commands.
                 'subcommand' => 'flush logs'
             ]
         ];
-        $response = $client->nodes->createplugin($params);                  
+        $response = $client->nodes()->createplugin($params);                  
         
 DropFunction
 ============
@@ -81,7 +81,7 @@ De-register an UDF
                 'name => ''myufg
             ]
         ];
-        $response = $client->nodes->dropfunction($params);                 
+        $response = $client->nodes()->dropfunction($params);                 
         
 DropPlugin
 ===========
@@ -93,7 +93,7 @@ De-register a plugin
                 'name => 'myranker'
             ]
         ];
-        $response = $client->nodes->dropplugin($params);                 
+        $response = $client->nodes()->dropplugin($params);                 
 
 FlushAttributes
 ================
@@ -105,7 +105,7 @@ Flush attributes to disk
 
             ]
         ];
-        $response = $client->nodes->flushattributes($params);
+        $response = $client->nodes()->flushattributes($params);
 FlushHostnames
 ================
 
@@ -116,7 +116,7 @@ Flush hostnames cache.
 
             ]
         ];
-        $response = $client->nodes->flushhostnames($params);                    
+        $response = $client->nodes()->flushhostnames($params);                    
 FlushLogs
 ========
 
@@ -127,7 +127,7 @@ Flush logs.
 
             ]
         ];
-        $response = $client->nodes->flushlogs($params);                                                                         
+        $response = $client->nodes()->flushlogs($params);                                                                         
 Plugins
 ========
 
@@ -138,7 +138,7 @@ Return list of loaded plugins and functions.
 
             ]
         ];
-        $response = $client->nodes->plugins($params);                     
+        $response = $client->nodes()->plugins($params);                     
 ReloadPlugins
 =============
 
@@ -149,7 +149,7 @@ Reloads plugins from a library.
                 'library' => 'mylibrary.so'
             ]
         ];
-        $response = $client->nodes->reloadplugins($params);               
+        $response = $client->nodes()->reloadplugins($params);               
 Set
 ===
 
@@ -164,7 +164,7 @@ Set a server variable.
                 ]
             ]
         ];
-        $response = $client->nodes->set($params);      
+        $response = $client->nodes()->set($params);      
         
 Status
 ======
@@ -179,7 +179,7 @@ Result can be filtered by setting `pattern` (on status metric names) parameter o
                 'pattern' => 'uptime'
             ]
         ];
-        $response = $client->nodes->status($params);           
+        $response = $client->nodes()->status($params);           
 Tables
 ======
 Return list of current indexes.
@@ -191,7 +191,7 @@ Result can be filtered by setting `pattern` (on index names) parameter of `body`
                 'pattern' => 'rt'
             ]
         ];
-        $response = $client->nodes->tables($params);                 
+        $response = $client->nodes()->tables($params);                 
         
 Threads
 ======
@@ -204,7 +204,7 @@ Optional `body` can contain formatting of the result by setting `columns` (numbe
                 'format' => 'sphinxql'
             ]
         ];
-        $response = $client->nodes->tables($params);                    
+        $response = $client->nodes()->tables($params);                    
 Variables
 =========
 
@@ -218,4 +218,4 @@ Optional it can return the value of a single server variable by specifying in `v
                 'variable_name' => 'character_set_client'
             ]
         ];
-        $response = $client->nodes->tables($params);                                                                                                                            
+        $response = $client->nodes()->tables($params);                                                                                                                            

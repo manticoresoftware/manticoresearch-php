@@ -150,7 +150,7 @@ class Client
     /**
      * @return mixed
      */
-    public function getConnectionPool()
+    public function getConnectionPool():ConnectionPool
     {
         return $this->_connectionPool;
     }
@@ -308,7 +308,7 @@ class Client
 
 
     /*
-     * @return
+     * @return Response
      */
 
     public function request(Request $request, array $params = []): Response
