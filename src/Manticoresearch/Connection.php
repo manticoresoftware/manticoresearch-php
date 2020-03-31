@@ -4,6 +4,7 @@
 namespace Manticoresearch;
 
 
+use Manticoresearch\Exceptions\RuntimeException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -193,7 +194,7 @@ class Connection
      */
     public function getConfig($key =  null)
     {
-        if($key == null) {
+        if($key === null) {
             return $this->config;
         }
         return $this->config[$key] ?? null;
@@ -211,6 +212,7 @@ class Connection
         if ($params instanceof self) {
             return $params;
         }
+        throw new RuntimeException('connection must receive array of parameters or self');
     }
 
     /**

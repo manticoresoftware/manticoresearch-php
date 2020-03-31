@@ -4,6 +4,8 @@
 namespace Manticoresearch;
 
 
+use Manticoresearch\Exceptions\RuntimeException;
+
 /**
  * Class Response
  * @package Manticoresearch
@@ -51,11 +53,11 @@ class Response
      */
     public function getResponse()
     {
-        if (null == $this->_response) {
+        if (null === $this->_response) {
             try {
                 $this->_response = json_decode($this->_string, true);
-            } catch (\JsonException $e) {
-
+            } catch (\Exception $e) {
+                throw new RuntimeException('fatal error while trying to decode JSON response');
             }
             if (empty($this->_response)) {
                 $this->_response = [];
@@ -71,7 +73,7 @@ class Response
     public function hasError()
     {
         $response = $this->getResponse();
-        return isset($response['error']) && $response['error'] != '';
+        return isset($response['error']) && $response['error'] !== '';
     }
 
     /*

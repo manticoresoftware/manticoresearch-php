@@ -12,4 +12,4 @@
 
 [Logging](logging.md)
 
-[docBlocks documentation](https://manticoresoftware.github.io/manticoresearch-php/).
+[docBlocks documentation](https://manticoresoftware.github.io/manticoresearch-php/)

@@ -1,16 +1,22 @@
 Indices
 -------
 
-Nodes namespace contains methods for  operations made on indices or information about them.
+Nodes namespace contains methods for operations made on indices or information about them. Available for  Manticore Search 3.4 or above.
 
 Create
 ======
 Create a new index.
 
 `index` is mandatory.
-`body` require presence of `columns`  array where keys are the column names. Each column requires a  `type` defined.
+`body` can contain:
+
+* `columns` - definition of fields for indexes with data
+* `options` - various index settings
+* `silent` -  if set to true, the create will not fail with error if there is already an index with the designated name
+
+`body` require presence of `columns`  array for RT and PQ indexes where keys are the column names. Each column requires a  `type` defined.
 `text` type support 'indexed' and 'stored' options.
-Index settings can be set in `options` parameter.
+Index settings can be set in `settings` parameter. By default, the index type is Real-Time. For PQ or distributed indexes, the options must contain a `type` property.
  
 
         $params = [
@@ -25,22 +31,40 @@ Index settings can be set in `options` parameter.
                         'type' => 'integer'
                     ]
                 ],
-                'options' => [
+                'settings' => [
                     'rt_mem_limit' => '256M',
                     'min_infix_len' => '3'
                 ]
             ]
         ];
-        $response = $client->indices->create($params);
+        $response = $client->indices()->create($params);
         
+For distributed indexes, the body must have only the `options` array, since they don't have any data (so no `columns`).
+
+        $params = [
+            'index' => 'mydistributed',
+            'body' => [
+                'options' => [
+                    'type' => 'distributed',
+                    'local' => 'index1'
+                    'local' => 'index2`
+                ]
+            ]
+        ];
+        $response = $client->indices()->create($params);        
+
+       
 Drop
 ===
 Drop an existing index. `index` is mandatory.
 
+`body` can contain optional parameter `silent` - for not failing with error in case the index doesn't exist.
+
+
         $params = [
             'index' => 'testrt',
          ];
-        $response = $client->indices->drop($params);
+        $response = $client->indices()->drop($params);
         
 Alter
 ====
@@ -64,7 +88,7 @@ Alter perform changes on indexes. Currently supported only add/drop columns.
                    
             ]
         ];
-        $response = $client->indices->alter($params);
+        $response = $client->indices()->alter($params);
         
         $params = [
             'index' => 'testrt',
@@ -76,7 +100,7 @@ Alter perform changes on indexes. Currently supported only add/drop columns.
                    
             ]
         ];
-        $response = $client->indices->alter($params);        
+        $response = $client->indices()->alter($params);        
 
 Describe
 ========
@@ -90,7 +114,7 @@ Returns structure of an index.
                 'pattern' => 'columnname'
             ]
         ];
-        $response = $client->indices->describe($params);
+        $response = $client->indices()->describe($params);
 
 FlushRamchunk
 =============
@@ -99,7 +123,7 @@ Flushed RAM chunk for a RT index.
         $params = [
             'index' => 'testrt',
          ];
-        $response = $client->indices->flushramchunk($params);               
+        $response = $client->indices()->flushramchunk($params);               
 
 FlushRtindex
 ============
@@ -108,7 +132,7 @@ Flushed the RT index to disk.
         $params = [
             'index' => 'testrt',
          ];
-        $response = $client->indices->flushrtindex($params);
+        $response = $client->indices()->flushrtindex($params);
 
 Optimize
 ========
@@ -122,7 +146,7 @@ Launch optimization on RT index. The command doesn't wait by default for the opt
             'index' => 'testrt',
             'body' => [ 'sync'=>true]
          ];
-        $response = $client->indices->optimize($params);      
+        $response = $client->indices()->optimize($params);      
 
 Status
 ======
@@ -136,7 +160,7 @@ Return statistics about index: documents, size, chunks, as well as query statist
                 'pattern' => 'propertyname'
             ]
         ];
-        $response = $client->indices->status($params);             
+        $response = $client->indices()->status($params);             
 Truncate
 ========
 Truncates an index. 
@@ -144,4 +168,4 @@ Truncates an index.
         $params = [
             'index' => 'testrt'
          ];
-        $response = $client->indices->truncate($params);                                                  
+        $response = $client->indices()->truncate($params);                                                  

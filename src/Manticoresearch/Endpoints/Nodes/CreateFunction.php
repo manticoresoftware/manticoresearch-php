@@ -15,7 +15,7 @@ class CreateFunction extends EmulateBySql
 
     public function setBody($params = null)
     {
-        if (isset($params['name']) && isset($params['type']) && $params['library']) {
+        if (isset($params['name'], $params['type']) && $params['library']) {
             return parent::setBody(['query' => "CREATE FUNCTION " . $params['name'] . " RETURNS " . strtoupper($params['type']) . " SONAME " . $params['library']]);
         }
         throw new RuntimeException('Incomplete request for /nodes/createplugin');

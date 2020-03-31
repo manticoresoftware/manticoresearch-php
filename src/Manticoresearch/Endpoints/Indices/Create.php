@@ -22,18 +22,27 @@ class Create extends EmulateBySql
     {
         if (isset($this->_index)) {
             $columns = [];
-            foreach ($params['columns'] as $name => $settings) {
-                $column = $name . ' ' . $settings['type'];
-                if(isset($settings['options']) && count($settings['opions'])>0) {
-                    $column .= ' '. implode(' ',$settings['options']);
+            if(isset($params['columns'] )) {
+                foreach ($params['columns'] as $name => $settings) {
+                    $column = $name . ' ' . $settings['type'];
+                    if (isset($settings['options']) && count($settings['options']) > 0) {
+                        $column .= ' ' . implode(' ', $settings['options']);
+                    }
+                    $columns[] = $column;
                 }
-                $columns[] = $column;
             }
             $options = "";
-            foreach($params['settings'] as $name=>$value) {
-                $options.=" ".$name." = ".$value;
+            if(isset($params['settings'] )) {
+                foreach($params['settings'] as $name=>$value) {
+                    $options.=" ".$name." = '".$value."'";
+                }
+
             }
-            return parent::setBody(['query' => "CREATE TABLE ".$this->_index."(".implode(",",$columns).")".$options]);
+            return parent::setBody(['query' => "CREATE TABLE ".
+                (isset($params['silent']) && $params['silent']===true?' IF NOT EXISTS ':'').
+                $this->_index.
+                (count($columns)>0?"(".implode(",",$columns).")":" ")
+                .$options]);
         }
         throw new RuntimeException('Index name is missing.');
     }

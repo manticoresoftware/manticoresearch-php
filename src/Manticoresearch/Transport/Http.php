@@ -46,7 +46,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
             $data = $request->getBody();
             $method = $request->getMethod();
             $headers = $connection->getHeaders();
-            array_push($headers, sprintf('Content-Type: %s', $request->getContentType()));
+            $headers[] = sprintf('Content-Type: %s', $request->getContentType());
             if(!empty($data)) {
                 if (is_array($data)) {
                     $content = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
@@ -64,11 +64,11 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
                 curl_setopt($conn, CURLOPT_CONNECTTIMEOUT, $connection->getConnectTimeout());
             }
 
-            if(!is_null($connection->getConfig('username')) &&  !is_null($connection->getConfig('password'))) {
+            if($connection->getConfig('username') !== null && $connection->getConfig('password') !== null) {
                 curl_setopt($conn, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
                 curl_setopt($conn, CURLOPT_USERPWD, $connection->getConfig('username').":".$connection->getConfig('password'));
             }
-            if(!is_null($connection->getConfig('proxy'))) {
+            if($connection->getConfig('proxy') !== null) {
                 curl_setopt($conn, CURLOPT_PROXY, $connection->getConfig('proxy'));
             }
             if(!empty($connection->getConfig('curl'))) {
