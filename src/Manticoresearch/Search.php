@@ -264,7 +264,7 @@ class Search
 
         if (isset($this->_params['script_fields'])) {
             $body['script_fields'] = $this->_params['script_fields']->toArray();
-            unset($body['script_fields']);
+            unset($this->_params['script_fields']);
         }
 
         return $body;
