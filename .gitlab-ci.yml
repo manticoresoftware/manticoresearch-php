@@ -1,7 +1,6 @@
 stages:
   - test
   - publish
-image: php:7.0-cli-stretch
 
 cache:
   paths:
@@ -18,6 +17,7 @@ services:
   - manticoresearch/manticore
 
 unit_testing:
+  image: php:7.0-cli-stretch
   variables:
     MS_HOST: "manticoresearch-manticore"
   stage: test
@@ -27,6 +27,7 @@ unit_testing:
     - gh-pages
 
 apidoc_gen:
+  image: php:7.2-cli-stretch
   stage: publish
   script:
     - mkdir gh-pages
