@@ -1,7 +1,7 @@
 stages:
   - test
   - publish
-image: php:7.2-cli-stretch
+image: php:7.0-cli-stretch
 
 cache:
   paths:
