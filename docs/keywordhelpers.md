@@ -39,4 +39,11 @@ Optional settings can be passed via `options` array. For complete list of option
             ]
          ];
         $response = $client->suggest($params);
-        
+  
+ Note that the index must be created as a keyword dictionary with a minimum infix length, otherwise manticore will
+ error.  To do this, pass in a settings options as below in the body part of an index creation request.
+ 
+        'settings' => [
+             'dict' => 'keywords',
+             'min_infix_len' => 2
+         ]     
