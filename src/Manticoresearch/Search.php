@@ -9,6 +9,7 @@ use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\Distance;
 use Manticoresearch\Query\Equals;
 use Manticoresearch\Query\Match;
+use Manticoresearch\Query\QueryString;
 use Manticoresearch\Query\Range;
 use Manticoresearch\Query\ScriptFields;
 
@@ -24,6 +25,7 @@ class Search
     protected $_client;
 
     protected $_query;
+    protected $_body;
     /**
      * @var array
      */
@@ -50,22 +52,36 @@ class Search
 
     /**
      * @param $string
-     * @param null $fields
      * @return $this
      */
-    public function search($string, $fields = null): self
+    public function search($string): self
+    {
+
+        if (is_object($string)) {
+            $this->_query = $string;
+            return $this;
+        }
+        $this->_query->must(new QueryString($string));
+        return $this;
+    }
+    public function match($keywords,$fields=null):self
     {
         $f = "*";
         if ($fields !== null && is_string($fields)) {
             $f = $fields;
         }
-        if (is_object($string)) {
-            $this->_query = $string;
+        $this->_query->must(new Match($keywords, $f));
+        return $this;
+    }
+    public function phrase($string,$fields=null):self
+    {
+        $f = "*";
+        if ($fields !== null && is_string($fields)) {
+            $f = $fields;
         }
         $this->_query->must(new Match($string, $f));
         return $this;
     }
-
     public function limit($limit): self
     {
         $this->_params['limit'] = $limit;
@@ -180,6 +196,7 @@ class Search
         if (!is_array($values)) {
             $values = [$values];
         }
+        var_dump($values);
         switch ($op) {
             case 'range':
                 $this->_query->mustNot(new Range($attr, [
@@ -250,7 +267,8 @@ class Search
 
     public function get()
     {
-        return $this->_client->search(['body' => $this->compile()]);
+        $this->_body = $this->compile();
+        return $this->_client->search(['body' => $this->_body]);
     }
 
     public function compile()
@@ -272,12 +290,16 @@ class Search
 
     public function getBody()
     {
-        return $this->compile();
+        return $this->_body;
     }
 
     public function reset()
     {
         $this->_params = [];
         $this->_query = new BoolQuery();
+    }
+    public function getClient()
+    {
+        return $this->_client;
     }
 }

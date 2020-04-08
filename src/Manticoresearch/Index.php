@@ -135,6 +135,13 @@ class Index
         ];
         return $this->_client->indices()->describe($params);
     }
+    public function status()
+    {
+        $params = [
+            'index' => $this->_index,
+        ];
+        return $this->_client->indices()->status($params);
+    }
     public function truncate()
     {
         $params = [

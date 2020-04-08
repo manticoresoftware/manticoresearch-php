@@ -26,7 +26,7 @@ class Query implements Arrayable
             } elseif (is_array($v)) {
                 $return[$k] = $this->_toArray($v);
             } else {
-                if($v!=null) {
+                if($v!==null) {
                     $return[$k] = $v;
                 }else {
                     return null;
