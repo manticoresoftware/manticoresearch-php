@@ -79,6 +79,11 @@ class PhpHttp extends Transport implements TransportInterface
         $response = new Response($responsePSR->getBody(), $status);
         $time = $end-$start;
         $response->setTime($time);
+        $response->setTransportInfo([
+            'url' => $url,
+            'headers' => $headers,
+            'body' => $request->getBody()
+        ]);
         $this->_logger->debug('Request body:',[
             'connection' => $connection->getConfig(),
             'payload'=> $request->getBody()

@@ -47,6 +47,8 @@ class Client
      */
     protected $_logger;
 
+    protected $_lastResponse;
+
     /*
      * $config can be a connection array or
      * $config['connections] = array of connections
@@ -150,7 +152,7 @@ class Client
     /**
      * @return mixed
      */
-    public function getConnectionPool():ConnectionPool
+    public function getConnectionPool(): ConnectionPool
     {
         return $this->_connectionPool;
     }
@@ -317,7 +319,7 @@ class Client
 
         try {
             $connection = $this->_connectionPool->getConnection();
-            $response = $connection->getTransportHandler($this->_logger)->execute($request, $params);
+            $this->_lastResponse = $connection->getTransportHandler($this->_logger)->execute($request, $params);
         } catch (NoMoreNodesException $e) {
             $this->_logger->error('Manticore Search Request out of retries:', [
                 'exception' => $e->getMessage(),
@@ -325,15 +327,24 @@ class Client
             ]);
             throw $e;
         } catch (ConnectionException $e) {
-            $this->_logger->warning('Manticore Search Request failed '.$this->_connectionPool->retries_attempts.':', [
+            $this->_logger->warning('Manticore Search Request failed ' . $this->_connectionPool->retries_attempts . ':', [
                 'exception' => $e->getMessage(),
                 'request' => $e->getRequest()->toArray()
             ]);
             $connection->mark(false);
             return $this->request($request, $params);
         }
-        return $response;
+        return $this->_lastResponse;
     }
 
+    /*
+     *
+     * @return Response
+     */
+    
+    public function getLastResponse(): Response
+    {
+        return $this->_lastResponse;
+    }
 
 }
