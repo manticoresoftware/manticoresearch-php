@@ -25,7 +25,8 @@ class CreateTest  extends \PHPUnit\Framework\TestCase
                 'settings' => [
                     'rt_mem_limit' => '256M',
                     'min_infix_len' => '3'
-                ]
+                ],
+                'silent' => true
             ]
         ];
         $response = $client->indices()->create($params);

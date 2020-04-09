@@ -17,7 +17,7 @@ services:
   - manticoresearch/manticore
 
 unit_testing:
-  image: php:7.0-cli-stretch
+  image: php:7.1-cli-stretch
   variables:
     MS_HOST: "manticoresearch-manticore"
   stage: test
