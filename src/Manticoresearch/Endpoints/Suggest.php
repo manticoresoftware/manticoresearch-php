@@ -22,7 +22,7 @@ class Suggest extends EmulateBySql
                     $binds[] = "$value AS $name";
                 }
             }
-            $this->_body = ['query' => "CALL SUGGEST(" . implode(",", $binds) . ")"];
+            return parent::setBody( ['query' => "CALL SUGGEST(" . implode(",", $binds) . ")"]);
         }
         throw new RuntimeException('Index name is missing.');
     }

@@ -23,7 +23,7 @@ class Keywords extends EmulateBySql
                     $binds[] = "$value AS $name";
                 }
             }
-            $this->_body = ['query' => "CALL KEYWORDS(" . implode(",", $binds) . ")"];
+            return parent::setBody( ['query' => "CALL KEYWORDS(" . implode(",", $binds) . ")"]);
         }
         throw new RuntimeException('Index name is missing.');
 

@@ -292,7 +292,7 @@ class Client
      */
     public function suggest(array $params = [])
     {
-        $endpoint = new Endpoints\Suggest($params);
+        $endpoint = new Endpoints\Suggest();
         $endpoint->setIndex($params['index']);
         $endpoint->setBody($params['body']);
         $response = $this->request($endpoint, ['responseClass' => 'Manticoresearch\\Response\\SqlToArray']);
@@ -301,7 +301,7 @@ class Client
 
     public function keywords(array $params = [])
     {
-        $endpoint = new Endpoints\Keywords($params);
+        $endpoint = new Endpoints\Keywords();
         $endpoint->setIndex($params['index']);
         $endpoint->setBody($params['body']);
         $response = $this->request($endpoint, ['responseClass' => 'Manticoresearch\\Response\\SqlToArray']);
@@ -341,7 +341,7 @@ class Client
      *
      * @return Response
      */
-    
+
     public function getLastResponse(): Response
     {
         return $this->_lastResponse;
