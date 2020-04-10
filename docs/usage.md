@@ -168,25 +168,25 @@ Bulk allows to send in one request several operations of data manipulation (inse
 ```
 $doc = [
     'body' => [
-        'insert' => [
+        ['insert' => [
             'index' => 'testrt',
             'id' => 34,
             'doc' => [
                 'gid' => 1,
                 'title' => 'a new added document',
             ]
-        ],
-        'update' => [
+        ]],
+        ['update' => [
             'index' => 'testrt',
             'id' => 56,
             'doc' => [
                 'gid' => 4,
             ]
-        ],
-        'delete' => [
+        ]],
+        ['delete' => [
             'index' => 'testrt',
             'id' => 100
-        ]
+        ]]
     ]
 ];
 
