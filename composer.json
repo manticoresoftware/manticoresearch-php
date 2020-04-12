@@ -26,6 +26,11 @@
           "Manticoresearch\\" : "src/Manticoresearch/"
       }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Test\\ManticoreSearch\\": "test/Manticoresearch"
+        }
+    },
     "config": {
         "sort-packages": true
     },
