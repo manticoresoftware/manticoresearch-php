@@ -19,7 +19,7 @@ class SearchTest extends TestCase
         $params = ['host' => $_SERVER['MS_HOST'], 'port' => 9308];
 
         $client = new Client($params);
-        $client->indices()->drop(['index' => 'movies']);
+        $client->indices()->drop(['index' => 'movies','body'=>['silent'=>true]]);
         $index = [
             'index' => 'movies',
             'body' => [
