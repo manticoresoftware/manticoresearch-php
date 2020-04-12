@@ -192,7 +192,7 @@ class Search
         if (!is_array($values)) {
             $values = [$values];
         }
-        var_dump($values);
+
         switch ($op) {
             case 'range':
                 $this->_query->mustNot(new Range($attr, [

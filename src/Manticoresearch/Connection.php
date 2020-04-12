@@ -3,6 +3,7 @@
 
 namespace Manticoresearch;
 
+
 use Psr\Log\LoggerInterface;
 
 /**
@@ -19,19 +20,19 @@ class Connection
      * @var bool
      */
     protected $_alive;
-    /*
-     * $params['transport']  = transport class name
-     * $params['host']       = hostname
-     * $params['port']       = port number
-     * $params['timeout']    = connection timeout
-     * $params['connect_timeout'] = connection connect timeout
-     * $params['proxy']       = proxy host:port string
-     * $params['username']  = username for http auth
-     * $params['password']  = password for http auth
-     * $params['headers']   = array of custom headers
-     * $params['curl']      = array of pairs of curl option=>value
-     * $params['persistent'] = bool if connection is persistent
-     */
+/*
+ * $params['transport']  = transport class name
+ * $params['host']       = hostname
+ * $params['port']       = port number
+ * $params['timeout']    = connection timeout
+ * $params['connect_timeout'] = connection connect timeout
+ * $params['proxy']       = proxy host:port string
+ * $params['username']  = username for http auth
+ * $params['password']  = password for http auth
+ * $params['headers']   = array of custom headers
+ * $params['curl']      = array of pairs of curl option=>value
+ * $params['persistent'] = bool if connection is persistent
+ */
     /**
      * Connection constructor.
      * @param array $params
@@ -57,7 +58,7 @@ class Connection
     }
 
     /**
-     * @param $host
+     * @param string $host
      * @return $this
      */
     public function setHost($host): self
@@ -75,7 +76,7 @@ class Connection
     }
 
     /**
-     * @param $port
+     * @param string|integer $port
      * @return $this
      */
     public function setPort($port): self
@@ -93,7 +94,7 @@ class Connection
     }
 
     /**
-     * @param $timeout
+     * @param integer $timeout
      * @return $this
      */
     public function setTimeout($timeout): self
@@ -111,7 +112,7 @@ class Connection
     }
 
     /**
-     * @param $headers
+     * @param array $headers
      * @return $this
      */
     public function setheaders($headers): self
@@ -129,7 +130,7 @@ class Connection
     }
 
     /**
-     * @param $connecttimeout
+     * @param integer $connecttimeout
      * @return $this
      */
     public function setConnectTimeout($connecttimeout): self
@@ -147,7 +148,7 @@ class Connection
     }
 
     /**
-     * @param $transport
+     * @param Transport $transport
      * @return $this
      */
     public function setTransport($transport): self
@@ -171,11 +172,11 @@ class Connection
      */
     public function getTransportHandler(LoggerInterface $logger)
     {
-        return Transport::create($this->getTransport(), $this, $logger);
+        return Transport::create($this->getTransport(), $this,$logger);
     }
 
     /**
-     * @param $config
+     * @param array $config
      * @return $this
      */
     public function setConfig($config): self
@@ -187,22 +188,23 @@ class Connection
     }
 
     /**
-     * @param string|null
+     * @param string|null $key
      * @return mixed|null
+     *
      */
     public function getConfig($key =  null)
     {
-        if ($key === null) {
+        if($key === null) {
             return $this->config;
         }
         return $this->config[$key] ?? null;
     }
 
     /**
-     * @param array $params
+     * @param array $params|self
      * @return array|static
      */
-    public static function create($params = [])
+    public static function create($params)
     {
         if (is_array($params)) {
             return new static($params);

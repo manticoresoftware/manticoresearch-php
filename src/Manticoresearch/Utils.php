@@ -3,6 +3,7 @@
 
 namespace Manticoresearch;
 
+
 trait Utils
 {
     public static function escape($string): string

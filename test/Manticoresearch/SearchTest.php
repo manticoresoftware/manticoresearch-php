@@ -16,7 +16,7 @@ class SearchTest extends TestCase
 
     protected function _getSearch(): Search
     {
-        $params = ['host' => $_SERVER['MS_HOST'], 'port' => 6368];
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => 9308];
 
         $client = new Client($params);
         $client->indices()->drop(['index' => 'movies']);

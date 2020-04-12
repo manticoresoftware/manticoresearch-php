@@ -3,6 +3,7 @@
 
 namespace Manticoresearch;
 
+
 use Manticoresearch\Exceptions\RuntimeException;
 
 /**
@@ -36,7 +37,7 @@ class Response
      */
     protected $_response;
 
-    public function __construct($responseString, $status = null)
+    public function __construct( $responseString, $status = null)
     {
         if (is_array($responseString)) {
             $this->_response = $responseString;
@@ -111,7 +112,7 @@ class Response
 
     /**
      *  set request info
-     * @param array
+     * @param array $info
      * @return $this
      */
     public function setTransportInfo($info)

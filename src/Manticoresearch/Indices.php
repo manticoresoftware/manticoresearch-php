@@ -31,7 +31,7 @@ class Indices
 
     /**
      * Pq constructor.
-     * @param $client
+     * @param Client $client
      */
     public function __construct($client)
     {
@@ -40,7 +40,7 @@ class Indices
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function alter($params)
@@ -57,7 +57,7 @@ class Indices
 
     /**
      *
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function create($params)
@@ -72,7 +72,7 @@ class Indices
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function describe($params)
@@ -87,7 +87,7 @@ class Indices
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function drop($params)
@@ -101,7 +101,7 @@ class Indices
         return $response->getResponse();
     }
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function import($params)
@@ -115,7 +115,7 @@ class Indices
         return $response->getResponse();
     }
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function flushramchunk($params)
@@ -129,7 +129,7 @@ class Indices
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function flushrtindex($params)
@@ -143,7 +143,7 @@ class Indices
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function optimize($params)
@@ -158,7 +158,7 @@ class Indices
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function status($params)
@@ -173,7 +173,7 @@ class Indices
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function truncate($params)

@@ -19,7 +19,7 @@ class Cluster
 
     /**
      * Pq constructor.
-     * @param $client
+     * @param Client $client
      */
     public function __construct($client)
     {
