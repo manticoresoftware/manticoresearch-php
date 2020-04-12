@@ -1,5 +1,5 @@
 <phpunit bootstrap="test/bootstrap.php" colors="true">
-    <testsuite name="Default">
+    <testsuite name="Manticore PHP Client">
         <directory>test/</directory>
     </testsuite>
     <filter>
