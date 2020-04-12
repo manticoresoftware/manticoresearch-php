@@ -3,7 +3,6 @@
 
 namespace Manticoresearch;
 
-
 class Index
 {
     protected $_client;
@@ -16,11 +15,11 @@ class Index
         $this->_index = $index;
     }
 
-    public function search($string, $fields = null): Search
+    public function search($string): Search
     {
         $search = new Search($this->_client);
         $search->setIndex($this->_index);
-        return $search->search($string, $fields);
+        return $search->search($string);
     }
 
     public function getDocumentById($id)
@@ -123,7 +122,7 @@ class Index
         $params = [
             'index' => $this->_index,
         ];
-        if($silent===true) {
+        if ($silent===true) {
             $params['body'] = ['silent'=>true];
         }
         return $this->_client->indices()->drop($params);

@@ -3,10 +3,8 @@
 
 namespace Manticoresearch\Endpoints\Nodes;
 
-
 use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Utils;
-
 
 class FlushLogs extends EmulateBySql
 {
@@ -20,5 +18,4 @@ class FlushLogs extends EmulateBySql
     {
         return parent::setBody(['query' => "FLUSH LOGS"]);
     }
-
 }

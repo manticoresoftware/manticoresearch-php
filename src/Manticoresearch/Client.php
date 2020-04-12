@@ -57,7 +57,6 @@ class Client
         $this->setConfig($config);
         $this->_logger = $logger ?? new NullLogger();
         $this->_initConnections();
-
     }
 
     protected function _initConnections()
@@ -70,9 +69,7 @@ class Client
                 } else {
                     $connections[] = $connection;
                 }
-
             }
-
         }
 
         if (empty($connections)) {
@@ -135,7 +132,6 @@ class Client
      */
     public static function createFromArray($config): Client
     {
-
         return new self($config);
     }
 
@@ -158,11 +154,10 @@ class Client
     /**
      * Endpoint: search
      * @param array $params
+     * @return array
      */
     public function search(array $params = [])
     {
-
-
         $endpoint = new Endpoints\Search($params);
         $response = $this->request($endpoint);
         return $response->getResponse();
@@ -171,10 +166,10 @@ class Client
     /**
      * Endpoint: insert
      * @param array $params
+     * @return array
      */
     public function insert(array $params = [])
     {
-
         $endpoint = new Endpoints\Insert($params);
         $response = $this->request($endpoint);
 
@@ -188,7 +183,6 @@ class Client
      */
     public function replace(array $params = [])
     {
-
         $endpoint = new Endpoints\Replace($params);
         $response = $this->request($endpoint);
 
@@ -197,11 +191,11 @@ class Client
 
     /**
      * Endpoint: update
+     * @return array
      * @param array $params
      */
     public function update(array $params = [])
     {
-
         $endpoint = new Endpoints\Update($params);
         $response = $this->request($endpoint);
 
@@ -211,6 +205,7 @@ class Client
     /**
      * Endpoint: sql
      * @param array $params
+     * @return array
      */
     public function sql(array $params = [])
     {
@@ -231,7 +226,6 @@ class Client
      */
     public function delete(array $params = [])
     {
-
         $endpoint = new Endpoints\Delete($params);
         $response = $this->request($endpoint);
 
@@ -243,7 +237,6 @@ class Client
      */
     public function pq(): Pq
     {
-
         return new Pq($this);
     }
 
@@ -252,7 +245,6 @@ class Client
      */
     public function indices(): Indices
     {
-
         return new Indices($this);
     }
 
@@ -261,7 +253,6 @@ class Client
      */
     public function nodes(): Nodes
     {
-
         return new Nodes($this);
     }
 
@@ -290,7 +281,7 @@ class Client
      */
     public function suggest(array $params = [])
     {
-        $endpoint = new Endpoints\Suggest($params);
+        $endpoint = new Endpoints\Suggest();
         $endpoint->setIndex($params['index']);
         $endpoint->setBody($params['body']);
         $response = $this->request($endpoint, ['responseClass' => 'Manticoresearch\\Response\\SqlToArray']);
@@ -299,7 +290,7 @@ class Client
 
     public function keywords(array $params = [])
     {
-        $endpoint = new Endpoints\Keywords($params);
+        $endpoint = new Endpoints\Keywords();
         $endpoint->setIndex($params['index']);
         $endpoint->setBody($params['body']);
         $response = $this->request($endpoint, ['responseClass' => 'Manticoresearch\\Response\\SqlToArray']);
@@ -313,8 +304,6 @@ class Client
 
     public function request(Request $request, array $params = []): Response
     {
-
-
         try {
             $connection = $this->_connectionPool->getConnection();
             $response = $connection->getTransportHandler($this->_logger)->execute($request, $params);
@@ -334,6 +323,4 @@ class Client
         }
         return $response;
     }
-
-
 }

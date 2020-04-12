@@ -17,5 +17,4 @@ class FlushHostnames extends EmulateBySql
     {
         return parent::setBody(['query' => "FLUSH HOSTNAMES"]);
     }
-
 }

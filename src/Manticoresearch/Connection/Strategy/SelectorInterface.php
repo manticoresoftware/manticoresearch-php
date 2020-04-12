@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Connection\Strategy;
 
-
 use Manticoresearch\Connection;
 
 /**

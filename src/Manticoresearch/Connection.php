@@ -3,8 +3,6 @@
 
 namespace Manticoresearch;
 
-
-use Manticoresearch\Exceptions\RuntimeException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -21,19 +19,19 @@ class Connection
      * @var bool
      */
     protected $_alive;
-/*
- * $params['transport']  = transport class name
- * $params['host']       = hostname
- * $params['port']       = port number
- * $params['timeout']    = connection timeout
- * $params['connect_timeout'] = connection connect timeout
- * $params['proxy']       = proxy host:port string
- * $params['username']  = username for http auth
- * $params['password']  = password for http auth
- * $params['headers']   = array of custom headers
- * $params['curl']      = array of pairs of curl option=>value
- * $params['persistent'] = bool if connection is persistent
- */
+    /*
+     * $params['transport']  = transport class name
+     * $params['host']       = hostname
+     * $params['port']       = port number
+     * $params['timeout']    = connection timeout
+     * $params['connect_timeout'] = connection connect timeout
+     * $params['proxy']       = proxy host:port string
+     * $params['username']  = username for http auth
+     * $params['password']  = password for http auth
+     * $params['headers']   = array of custom headers
+     * $params['curl']      = array of pairs of curl option=>value
+     * $params['persistent'] = bool if connection is persistent
+     */
     /**
      * Connection constructor.
      * @param array $params
@@ -167,13 +165,13 @@ class Connection
     }
 
     /**
-     * @param LoggerInterface
+     * @param LoggerInterface $logger
      * @return mixed
      * @throws \Exception
      */
     public function getTransportHandler(LoggerInterface $logger)
     {
-        return Transport::create($this->getTransport(), $this,$logger);
+        return Transport::create($this->getTransport(), $this, $logger);
     }
 
     /**
@@ -194,7 +192,7 @@ class Connection
      */
     public function getConfig($key =  null)
     {
-        if($key === null) {
+        if ($key === null) {
             return $this->config;
         }
         return $this->config[$key] ?? null;
@@ -212,7 +210,6 @@ class Connection
         if ($params instanceof self) {
             return $params;
         }
-        throw new RuntimeException('connection must receive array of parameters or self');
     }
 
     /**

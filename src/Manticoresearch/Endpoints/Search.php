@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Endpoints;
 
-
 use Manticoresearch\Request;
 
 /**

@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Endpoints\Nodes;
 
-
 use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Utils;
 
@@ -19,5 +18,4 @@ class ReloadIndexes extends EmulateBySql
     {
         return parent::setBody(['query' => "RELOAD INDEXES"]);
     }
-
 }

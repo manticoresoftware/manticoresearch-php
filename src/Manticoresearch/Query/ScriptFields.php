@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Query;
 
-
 use Manticoresearch\Query;
 
 class ScriptFields extends Query
@@ -17,7 +16,6 @@ class ScriptFields extends Query
 
     public function add($field, $args = [])
     {
-
         $this->obj->$field = [
             'script' => [
                 'inline' => $args
@@ -28,9 +26,6 @@ class ScriptFields extends Query
 
     public function toArray()
     {
-
-        return parent::_toArray(json_decode(json_encode($this->obj)));
+        return $this->_toArray(json_decode(json_encode($this->obj), true));
     }
-
-
 }

@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Endpoints;
 
-
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
 
@@ -26,7 +25,6 @@ class Keywords extends EmulateBySql
             $this->_body = ['query' => "CALL KEYWORDS(" . implode(",", $binds) . ")"];
         }
         throw new RuntimeException('Index name is missing.');
-
     }
     public function getIndex()
     {

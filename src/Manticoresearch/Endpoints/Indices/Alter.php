@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Endpoints\Indices;
 
-
 use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
@@ -21,7 +20,7 @@ class Alter extends EmulateBySql
         if (isset($this->_index)) {
             if (isset($params['operation'])) {
                 if ($params['operation'] === 'add' && isset($params['column'])) {
-                        return parent::setBody(['query' => "ALTER TABLE " . $this->_index . " ADD COLUMN " . $params['column']['name'] . " " . strtoupper($params['column']['type'])]);
+                    return parent::setBody(['query' => "ALTER TABLE " . $this->_index . " ADD COLUMN " . $params['column']['name'] . " " . strtoupper($params['column']['type'])]);
                 }
                 if ($params['operation'] === 'drop') {
                     return parent::setBody(['query' => "ALTER TABLE " . $this->_index . " DROP COLUMN " . $params['column']['name']]);
@@ -29,7 +28,6 @@ class Alter extends EmulateBySql
                 //@todo alter setting, once is merged in master
             }
             throw new RuntimeException('Operation is missing.');
-
         }
         throw new RuntimeException('Index name is missing.');
     }

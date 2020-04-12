@@ -21,7 +21,6 @@ class Set extends EmulateBySql
                 'query' => "SET " . (isset($params['type']) ?  $params['type'] . "'" : "")." ".
                     $params['variable']['name']." '" . $params['variable']['value']
             ]);
-
         }
         throw new RuntimeException('Variable is missing for /nodes/set');
     }

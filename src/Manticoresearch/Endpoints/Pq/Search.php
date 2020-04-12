@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Endpoints\Pq;
 
-
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Request;
 
@@ -34,7 +33,6 @@ class Search extends Request
     {
         if (isset($this->_index)) {
             return "/json/pq/" . $this->_index . "/_search";
-
         }
         throw new RuntimeException('Index name is missing.');
     }
@@ -54,5 +52,4 @@ class Search extends Request
     {
         $this->_index = $index;
     }
-
 }

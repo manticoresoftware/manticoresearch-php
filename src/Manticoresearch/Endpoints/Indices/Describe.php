@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Endpoints\Indices;
 
-
 use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
@@ -20,7 +19,6 @@ class Describe extends EmulateBySql
     {
         if (isset($this->_index)) {
             return parent::setBody(['query' => "DESCRIBE ".$this->_index. " ".(isset($params['pattern'])?" LIKE '".$params['pattern']."'":"")]);
-
         }
         throw new RuntimeException('Index name is missing.');
     }
@@ -39,5 +37,4 @@ class Describe extends EmulateBySql
     {
         $this->_index = $index;
     }
-
 }

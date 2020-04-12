@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Query;
 
-
 use Manticoresearch\Query;
 
 class BoolQuery extends Query

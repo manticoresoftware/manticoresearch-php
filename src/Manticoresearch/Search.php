@@ -3,7 +3,6 @@
 
 namespace Manticoresearch;
 
-
 use http\Exception\RuntimeException;
 use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\Distance;
@@ -35,7 +34,6 @@ class Search
     {
         $this->_client = $client;
         $this->_query = new BoolQuery();
-
     }
 
     public function setIndex($index): self
@@ -56,7 +54,6 @@ class Search
      */
     public function search($string): self
     {
-
         if (is_object($string)) {
             $this->_query = $string;
             return $this;
@@ -64,7 +61,7 @@ class Search
         $this->_query->must(new QueryString($string));
         return $this;
     }
-    public function match($keywords,$fields=null):self
+    public function match($keywords, $fields=null):self
     {
         $f = "*";
         if ($fields !== null && is_string($fields)) {
@@ -73,7 +70,7 @@ class Search
         $this->_query->must(new Match($keywords, $f));
         return $this;
     }
-    public function phrase($string,$fields=null):self
+    public function phrase($string, $fields=null):self
     {
         $f = "*";
         if ($fields !== null && is_string($fields)) {
@@ -104,9 +101,8 @@ class Search
 
     public function highlight($fields = []): self
     {
-
         if (count($fields) > 0) {
-            $hfields = new \Manticoresearch\Query();
+            $hfields = new Query();
             foreach ($fields as $f) {
                 $hfields->add($f, null);
             }
@@ -173,7 +169,7 @@ class Search
                 ]));
                 break;
             case 'lt':
-            case 'lte' :
+            case 'lte':
             case 'gte':
             case 'gt':
                 $this->_query->should(new Range($attr, [
@@ -205,7 +201,7 @@ class Search
                 ]));
                 break;
             case 'lt':
-            case 'lte' :
+            case 'lte':
             case 'gte':
             case 'gt':
                 $this->_query->mustNot(new Range($attr, [
@@ -273,7 +269,6 @@ class Search
 
     public function compile()
     {
-
         $body = $this->_params;
         $query = $this->_query->toArray();
         if ($query !== null) {

@@ -50,5 +50,4 @@ class Create extends Sql
     {
         $this->_cluster = $cluster;
     }
-
 }

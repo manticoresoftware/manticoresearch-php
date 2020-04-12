@@ -3,7 +3,6 @@
 
 namespace Manticoresearch;
 
-
 use Manticoresearch\Endpoints\Indices\Alter;
 use Manticoresearch\Endpoints\Indices\Create;
 use Manticoresearch\Endpoints\Indices\Describe;
@@ -38,7 +37,6 @@ class Indices
     {
         $this->_client = $client;
         $this->_params = ['responseClass' => 'Manticoresearch\\Response\\SqlToArray'];
-
     }
 
     /**
@@ -54,7 +52,6 @@ class Indices
         $endpoint->setBody($body);
         $response = $this->_client->request($endpoint, $this->_params);
         return $response->getResponse();
-
     }
 
 
@@ -65,7 +62,6 @@ class Indices
      */
     public function create($params)
     {
-
         $index = $params['index'] ?? null;
         $body = $params['body'];
         $endpoint = new Create();
@@ -73,7 +69,6 @@ class Indices
         $endpoint->setBody($body);
         $response = $this->_client->request($endpoint, $this->_params);
         return $response->getResponse();
-
     }
 
     /**
@@ -89,7 +84,6 @@ class Indices
         $endpoint->setBody($body);
         $response = $this->_client->request($endpoint, $this->_params);
         return $response->getResponse();
-
     }
 
     /**
@@ -132,7 +126,6 @@ class Indices
         $endpoint->setBody();
         $response = $this->_client->request($endpoint, $this->_params);
         return $response->getResponse();
-
     }
 
     /**
@@ -147,7 +140,6 @@ class Indices
         $endpoint->setBody();
         $response = $this->_client->request($endpoint, $this->_params);
         return $response->getResponse();
-
     }
 
     /**
@@ -163,7 +155,6 @@ class Indices
         $endpoint->setBody($body);
         $response = $this->_client->request($endpoint, $this->_params);
         return $response->getResponse();
-
     }
 
     /**
@@ -179,8 +170,6 @@ class Indices
         $endpoint->setBody($body);
         $response = $this->_client->request($endpoint, $this->_params);
         return $response->getResponse();
-
-
     }
 
     /**
@@ -196,6 +185,5 @@ class Indices
         $endpoint->setBody($body);
         $response = $this->_client->request($endpoint, $this->_params);
         return $response->getResponse();
-
     }
 }

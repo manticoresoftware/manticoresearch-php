@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Endpoints\Indices;
 
-
 use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
@@ -42,5 +41,4 @@ class Optimize extends EmulateBySql
     {
         $this->_index = $index;
     }
-
 }

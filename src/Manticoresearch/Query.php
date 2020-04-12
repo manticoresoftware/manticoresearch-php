@@ -3,18 +3,17 @@
 
 namespace Manticoresearch;
 
-
 class Query implements Arrayable
 {
     protected $_params;
 
-    public function add($k,$v) {
+    public function add($k, $v)
+    {
         $this->_params[$k] = $v;
     }
     public function toArray()
     {
-
-       return  $this->_toArray($this->_params);
+        return  $this->_toArray($this->_params);
     }
 
     protected function _toArray($params)
@@ -26,12 +25,11 @@ class Query implements Arrayable
             } elseif (is_array($v)) {
                 $return[$k] = $this->_toArray($v);
             } else {
-                if($v!==null) {
+                if ($v!==null) {
                     $return[$k] = $v;
-                }else {
+                } else {
                     return null;
                 }
-
             }
         }
         return $return;

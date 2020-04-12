@@ -5,7 +5,6 @@ namespace Manticoresearch\Endpoints\Nodes;
 
 use Manticoresearch\Endpoints\EmulateBySql;
 
-
 class Status extends EmulateBySql
 {
     /**

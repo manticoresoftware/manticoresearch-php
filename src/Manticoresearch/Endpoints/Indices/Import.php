@@ -23,7 +23,6 @@ class Import extends EmulateBySql
                         ' FROM ' .
                         $params['path']
                 ]);
-
             }
             throw new RuntimeException('Missing import index path in /indices/import');
         }

@@ -10,23 +10,15 @@ use Manticoresearch\Query\Match;
 use Manticoresearch\Query\Range;
 use Manticoresearch\Search;
 use PHPUnit\Framework\TestCase;
-use Monolog\Logger;
-
-use Monolog\Handler\StreamHandler;
 
 class SearchTest extends TestCase
 {
 
     protected function _getSearch(): Search
     {
-
-
-        $log = new Logger('name');
-        $stream = new StreamHandler('php://stdout', Logger::DEBUG);
-        $log->pushHandler($stream);
         $params = ['host' => $_SERVER['MS_HOST'], 'port' => 6368];
 
-        $client = new Client($params, $log);
+        $client = new Client($params);
         $client->indices()->drop(['index' => 'movies']);
         $index = [
             'index' => 'movies',
@@ -141,8 +133,6 @@ class SearchTest extends TestCase
             ->filter("advise", 'equals', 'R')
             ->get();
 
-        print_r($search->getBody());
-        print_r($response);
         $this->assertEquals(2, $response['hits']['total']);
         $search->reset();
         $search->setIndex('movies');

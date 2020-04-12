@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Endpoints\Nodes;
 
-
 use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Utils;
 
@@ -17,10 +16,6 @@ class FlushAttributes extends EmulateBySql
 
     public function setBody($params = null)
     {
-
         return parent::setBody(['query' => "FLUSH ATTRIBUTES"]);
-
     }
-
-
 }

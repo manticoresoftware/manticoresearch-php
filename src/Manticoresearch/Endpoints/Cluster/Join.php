@@ -22,20 +22,19 @@ class Join extends Sql
     public function setBody($params = null)
     {
         if (isset($this->_cluster)) {
-            if(isset($params['node'])) {
+            if (isset($params['node'])) {
                 $this->_body = ['query' => "JOIN CLUSTER ".$this->_cluster." AT ".$params['node']];
-            }else{
+            } else {
                 $options =[];
-                if(isset($params['path'])) {
+                if (isset($params['path'])) {
                     $options[] = "'".$params['path']. "' AS path";
                 }
-                if(isset($params['nodes'])) {
+                if (isset($params['nodes'])) {
                     $options[] = "'".$params['nodes']. "' AS nodes";
                 }
                 $this->_body = ['query' => "JOIN CLUSTER ".$this->_cluster.
                     ((count($options)>0)?" ".implode(',', $options):"")];
             }
-
         }
         throw new RuntimeException('Cluster name is missing.');
     }
@@ -54,5 +53,4 @@ class Join extends Sql
     {
         $this->_cluster = $cluster;
     }
-
 }

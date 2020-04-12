@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Endpoints\Indices;
 
-
 use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
@@ -18,7 +17,6 @@ class FlushRamchunk extends EmulateBySql
 
     public function setBody($params = null)
     {
-
         if (isset($this->_index)) {
             return parent::setBody(['query' => "FLUSH RAMCHUNK".$this->_index]);
         }
@@ -39,5 +37,4 @@ class FlushRamchunk extends EmulateBySql
     {
         $this->_index = $index;
     }
-
 }

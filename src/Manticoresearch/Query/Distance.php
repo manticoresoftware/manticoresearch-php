@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Query;
 
-
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Query;
 
@@ -14,7 +13,6 @@ class Distance extends Query
         $this->_params['geo_distance'] = [];
         $this->_params['geo_distance']['distance_type'] = $args['type'] ?? 'adaptive';
         if (count($args) > 0) {
-
             if (!isset($args['location_anchor'])) {
                 throw new RuntimeException('anchors not provided');
             }
@@ -31,9 +29,7 @@ class Distance extends Query
                 throw new RuntimeException('distance not provided');
             }
             $this->_params['geo_distance']['distance'] = $args['location_distance'];
-
         }
-
     }
 
     public function setDistance($distance)

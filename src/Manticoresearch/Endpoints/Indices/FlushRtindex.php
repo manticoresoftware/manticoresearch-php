@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Endpoints\Indices;
 
-
 use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
@@ -18,7 +17,6 @@ class FlushRtindex extends EmulateBySql
 
     public function setBody($params = null)
     {
-
         if (isset($this->_index)) {
             return parent::setBody(['query' => "FLUSH RTINDEX ".$this->_index]);
         }
@@ -39,5 +37,4 @@ class FlushRtindex extends EmulateBySql
     {
         $this->_index = $index;
     }
-
 }

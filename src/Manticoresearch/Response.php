@@ -3,7 +3,6 @@
 
 namespace Manticoresearch;
 
-
 use Manticoresearch\Exceptions\RuntimeException;
 
 /**
@@ -33,11 +32,11 @@ class Response
     protected $_status;
     /**
      * response as array
-     * @var array|string
+     * @var array
      */
     protected $_response;
 
-    public function __construct( $responseString, $status = null)
+    public function __construct($responseString, $status = null)
     {
         if (is_array($responseString)) {
             $this->_response = $responseString;
@@ -49,7 +48,7 @@ class Response
 
     /*
      * Return response
-     * @return array|mixed|string
+     * @return array
      */
     public function getResponse()
     {

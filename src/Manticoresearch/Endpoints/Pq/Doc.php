@@ -73,5 +73,4 @@ class Doc extends \Manticoresearch\Request
     {
         $this->_id = $id;
     }
-
 }

@@ -53,11 +53,10 @@ class ConnectionPool
     {
         $this->retries_attempts++;
         $connection =   $this->strategy->getConnection($this->_connections);
-        if($connection->isAlive()) {
+        if ($connection->isAlive()) {
             return $connection;
         }
         if ($this->retries_attempts < $this->retries) {
-
             return $connection;
         }
         throw new NoMoreNodesException('No more retries left');
@@ -65,10 +64,7 @@ class ConnectionPool
 
     public function hasConnections(): bool
     {
-        if ($this->retries_attempts < $this->retries) {
-            return true;
-        }
-        return false;
+        return $this->retries_attempts < $this->retries;
     }
 
     /**
@@ -86,6 +82,4 @@ class ConnectionPool
     {
         $this->strategy = $strategy;
     }
-
-
 }

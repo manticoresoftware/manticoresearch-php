@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Transport;
 
-
 use Http\Discovery\MessageFactoryDiscovery;
 
 use Manticoresearch\Connection;
@@ -15,14 +14,12 @@ use Manticoresearch\Transport;
 use Http\Discovery\HttpClientDiscovery;
 use Psr\Log\LoggerInterface;
 
-
 /**
  * Class PhpHttp
  * @package Manticoresearch\Transport
  */
 class PhpHttp extends Transport implements TransportInterface
 {
-
     protected $client;
     protected $messageFactory;
     /**
@@ -31,11 +28,11 @@ class PhpHttp extends Transport implements TransportInterface
      * @param LoggerInterface|null $logger
      */
 
-    public function __construct(Connection $connection = null,LoggerInterface $logger = null)
+    public function __construct(Connection $connection = null, LoggerInterface $logger = null)
     {
         $this->client = HttpClientDiscovery::find();
         $this->messageFactory = MessageFactoryDiscovery::find();
-        parent::__construct($connection,$logger);
+        parent::__construct($connection, $logger);
     }
 
     /**
@@ -63,7 +60,6 @@ class PhpHttp extends Transport implements TransportInterface
             } else {
                 $content = $data;
             }
-
         } else {
             $content = '';
         }
@@ -71,25 +67,27 @@ class PhpHttp extends Transport implements TransportInterface
         $message = $this->messageFactory->createRequest($method, $url, $headers, $content);
         try {
             $responsePSR = $this->client->sendRequest($message);
-        }catch (\Exception $e) {
-            throw new ConnectionException($e->getMessage(),$request);
+        } catch (\Exception $e) {
+            throw new ConnectionException($e->getMessage(), $request);
         }
         $end = microtime(true);
         $status = $responsePSR->getStatusCode();
         $response = new Response($responsePSR->getBody(), $status);
         $time = $end-$start;
         $response->setTime($time);
-        $this->_logger->debug('Request body:',[
+        $this->_logger->debug('Request body:', [
             'connection' => $connection->getConfig(),
             'payload'=> $request->getBody()
         ]);
-        $this->_logger->info('Request:',[
+        $this->_logger->info(
+            'Request:',
+            [
                  'url' => $url,
                 'status' => $status,
                 'time' => $time
             ]
         );
-        $this->_logger->debug('Response body:',$response->getResponse());
+        $this->_logger->debug('Response body:', $response->getResponse());
 
         return $response;
     }

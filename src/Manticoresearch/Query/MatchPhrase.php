@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Query;
 
-
 use Manticoresearch\Query;
 
 class MatchPhrase extends Query
@@ -12,5 +11,4 @@ class MatchPhrase extends Query
     {
         $this->_params['match_phrase'] = [$fields => $string];
     }
-
 }

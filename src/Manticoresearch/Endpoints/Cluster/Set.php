@@ -22,7 +22,6 @@ class Set extends Sql
                 'query' => "SET CLUSTER" . $this->_cluster . " GLOBAL '" . $params['variable']['name'], "'=" .
                 (is_numeric($params['variable']['value']) ? $params['variable']['value'] : "'" . $params['variable']['value'] . "'")
             ]);
-
         }
         throw new RuntimeException('Variable is missing for /cluster/set');
     }

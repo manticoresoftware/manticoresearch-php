@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Exceptions;
 
-
 use Manticoresearch\Request;
 use Manticoresearch\Response;
 use Throwable;
@@ -51,5 +50,4 @@ class ResponseException extends \RuntimeException implements ExceptionInterface
     {
         return $this->_response;
     }
-
 }
