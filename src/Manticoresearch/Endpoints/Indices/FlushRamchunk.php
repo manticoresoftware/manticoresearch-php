@@ -20,7 +20,7 @@ class FlushRamchunk extends EmulateBySql
     {
 
         if (isset($this->_index)) {
-            return parent::setBody(['query' => "FLUSH RAMCHUNK".$this->_index]);
+            return parent::setBody(['query' => "FLUSH RAMCHUNK ".$this->_index]);
         }
         throw new RuntimeException('Index name is missing.');
     }
