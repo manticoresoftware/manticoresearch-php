@@ -31,7 +31,11 @@ class SettingsTest  extends \PHPUnit\Framework\TestCase
     {
         $response = self::$client->indices()->settings(['index' => 'products']);
 
-        $this->assertEquals([], $response);
+        $expectedSettings = "min_prefix_len = 1\n" .
+                            "min_infix_len = 3\n" .
+                            "charset_table = non_cjk\n";
+
+        $this->assertEquals(['settings' => $expectedSettings], $response);
     }
 
     public function testSetGetIndex()
