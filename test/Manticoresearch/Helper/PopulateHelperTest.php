@@ -12,12 +12,13 @@ class PopulateHelperTest extends \PHPUnit\Framework\TestCase
 
     public function getClient()
     {
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => 9308];
+        $this->client = new Client($params);
         return $this->client;
     }
 
     public function populateForKeywords() {
-        $params = ['host' => $_SERVER['MS_HOST'], 'port' => 9308];
-        $this->client = new Client($params);
+        $this->getClient();
         $params = [
             'index' => 'products',
             'body' => [
@@ -52,6 +53,8 @@ class PopulateHelperTest extends \PHPUnit\Framework\TestCase
 
     public function search($indexName, $query, $numberOfResultsExpected)
     {
+        $this->getClient();
+
         $search = [
             'body' => [
                 'index' => $indexName,
