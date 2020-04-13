@@ -12,14 +12,14 @@ class AgentStatusTest  extends \PHPUnit\Framework\TestCase
 
     public function testGetPath()
     {
-        $replace = new AgentStatus();
-        $this->assertEquals('/sql', $replace->getPath());
+        $agentStatus = new AgentStatus();
+        $this->assertEquals('/sql', $agentStatus->getPath());
     }
 
     public function testGetMethod()
     {
-        $replace = new AgentStatus();
-        $this->assertEquals('POST', $replace->getMethod());
+        $agentStatus = new AgentStatus();
+        $this->assertEquals('POST', $agentStatus->getMethod());
     }
 
     public function testGetStatus()

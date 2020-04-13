@@ -13,14 +13,14 @@ class StatusTest  extends \PHPUnit\Framework\TestCase
 
     public function testGetPath()
     {
-        $replace = new Status();
-        $this->assertEquals('/sql', $replace->getPath());
+        $status = new Status();
+        $this->assertEquals('/sql', $status->getPath());
     }
 
     public function testGetMethod()
     {
-        $replace = new Status();
-        $this->assertEquals('POST', $replace->getMethod());
+        $status = new Status();
+        $this->assertEquals('POST', $status->getMethod());
     }
 
     public function testGetStatus()
