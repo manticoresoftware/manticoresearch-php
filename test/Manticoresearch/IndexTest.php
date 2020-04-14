@@ -14,7 +14,7 @@ class IndexTest extends TestCase
     protected function _getIndex(): Index
     {
 
-        $params = ['host' => $_SERVER['MS_HOST'], 'port' => 9308];
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => 6368];
         $index = new Index(new Client($params));
         $index->setName('testindex');
         $index->drop(true);
@@ -35,8 +35,11 @@ class IndexTest extends TestCase
                 'rule' => ['one', 'two']
             ]
         ], 1);
-        $result = $index->getDocumentById(1);
-        $this->assertEquals($result['hits']['total'], 1);
+        $hit = $index->getDocumentById(1);
+        $this->assertInstanceOf('Manticoresearch\ResultHit',$hit);
+        $hit = $index->getDocumentById(2);
+        $this->assertNull($hit);
+
         $update = $index->updateDocument(['tags' => [10, 12, 14]], 1);
         $this->assertEquals($update['_id'], 1);
         $delete = $index->deleteDocument(1);

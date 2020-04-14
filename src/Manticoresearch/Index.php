@@ -36,7 +36,8 @@ class Index
                 ]
             ]
         ];
-        return $this->_client->search($params);
+        $result=  new ResultSet($this->_client->search($params,true));
+        return $result->valid()?$result->current():null;
     }
 
     public function addDocument($data, $id = null)
