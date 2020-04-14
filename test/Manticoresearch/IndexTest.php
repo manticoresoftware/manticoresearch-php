@@ -61,7 +61,7 @@ class IndexTest extends TestCase
             ]
         ], 1);
         $result = $index->search('find')->get();
-        $this->assertEquals($result['hits']['total'], 1);
+        $this->assertCount(1,$result);
         $index->drop();
     }
 }

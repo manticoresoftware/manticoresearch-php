@@ -98,49 +98,49 @@ class SearchTest extends TestCase
     public function testSearch()
     {
         $search = $this->_getSearch();
-        $response = $search->search('"team of explorers"/2')->get();
-        $this->assertEquals(4, $response['hits']['total']);
+        $result = $search->search('"team of explorers"/2')->get();
+        $this->assertCount(4, $result);
         $search->reset();
         $search->setIndex('movies');
 
-        $response = $search->search('"team of explorers"/2')->filter('year', 'equals', 2014)->get();
-        $this->assertEquals(1, $response['hits']['total']);
+        $result = $search->search('"team of explorers"/2')->filter('year', 'equals', 2014)->get();
+        $this->assertCount(1, $result);
         $search->reset();
         $search->setIndex('movies');
 
-        $response = $search->match('team of explorers')->get();
-        $this->assertEquals(5, $response['hits']['total']);
+        $result = $search->match('team of explorers')->get();
+        $this->assertCount(5, $result);
         $search->reset();
         $search->setIndex('movies');
 
 
-        $response = $search->match(['query' => 'team of explorers', 'operator' => 'and'])->get();
-        $this->assertEquals(3, $response['hits']['total']);
+        $result = $search->match(['query' => 'team of explorers', 'operator' => 'and'])->get();
+        $this->assertCount(3, $result);
         $search->reset();
         $search->setIndex('movies');
 
-        $response = $search->match(['query' => 'team of explorers', 'operator' => 'and'])->filter('year', 'equals', 2014)->get();
-        $this->assertEquals(1, $response['hits']['total']);
+        $result = $search->match(['query' => 'team of explorers', 'operator' => 'and'])->filter('year', 'equals', 2014)->get();
+        $this->assertCount(1, $result);
         $search->reset();
         $search->setIndex('movies');
 
 
         $search = $this->_getSearch();
-        $response = $search->search('"team of explorers"/2')
+        $result = $search->search('"team of explorers"/2')
             ->expression('genre', "in(meta['genre'],'adventure')")
             ->notfilter('genre', 'equals', 1)
             ->filter('year', 'lte', 2000)
             ->filter("advise", 'equals', 'R')
             ->get();
 
-        $this->assertEquals(2, $response['hits']['total']);
+        $this->assertCount(2, $result);
         $search->reset();
         $search->setIndex('movies');
 
         $q = new BoolQuery();
         $q->must(new Match(['query' => 'team of explorers', 'operator' => 'and'], '*'));
-        $response = $search->search($q)->get();
-        $this->assertEquals(3, $response['hits']['total']);
+        $result = $search->search($q)->get();
+        $this->assertCount(3, $result);
         $search->reset();
         $search->setIndex('movies');
 
@@ -148,16 +148,16 @@ class SearchTest extends TestCase
         $q = new BoolQuery();
         $q->must(new Match(['query' => 'team of explorers', 'operator' => 'or'], '*'));
         $q->must(new Equals('year', 2014));
-        $response = $search->search($q)->get();
-        $this->assertEquals(1, $response['hits']['total']);
+        $result = $search->search($q)->get();
+        $this->assertCount(1, $result);
         $search->reset();
         $search->setIndex('movies');
 
         $q = new BoolQuery();
         $q->must(new Match(['query' => 'team of explorers', 'operator' => 'or'], '*'));
         $q->must(new Range('year', ['lte' => 2020]));
-        $response = $search->search($q)->get();
-        $this->assertEquals(5, $response['hits']['total']);
+        $result = $search->search($q)->get();
+        $this->assertCount(5, $result);
         $search->reset();
         $search->setIndex('movies');
 
