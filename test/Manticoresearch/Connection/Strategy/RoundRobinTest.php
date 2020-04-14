@@ -12,7 +12,7 @@ class RoundRobinTest extends TestCase
         $client->setHosts([
             [
                 'host' => $_SERVER['MS_HOST'],
-                'port' => 9308
+                'port' => $_SERVER['MS_PORT']
             ],
             [
                 'host' => $_SERVER['MS_HOST'],
@@ -23,7 +23,7 @@ class RoundRobinTest extends TestCase
 
         $connection = $client->getConnectionPool()->getConnection();
         $this->assertSame( $_SERVER['MS_HOST'], $connection->getHost());
-        $this->assertSame(9308, $connection->getPort());
+        $this->assertSame($_SERVER['MS_PORT'], $connection->getPort());
 
         $connection = $client->getConnectionPool()->getConnection();
         $this->assertSame( $_SERVER['MS_HOST'], $connection->getHost());

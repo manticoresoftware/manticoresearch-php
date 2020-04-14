@@ -8,7 +8,7 @@ class CreateTest  extends \PHPUnit\Framework\TestCase
 {
     public function testCreateTableWithOptions()
     {
-        $params = ['host' => $_SERVER['MS_HOST'], 'port' => 9308];
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
         $client = new Client($params);
         $params = [
             'index' => 'products',
@@ -39,7 +39,7 @@ class CreateTest  extends \PHPUnit\Framework\TestCase
 
     public function testCreateDistributed()
     {
-        $params = ['host' => $_SERVER['MS_HOST'], 'port' => 9308];
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
         $client = new Client($params);
         $params = [
             'index' => 'testrt',
@@ -75,7 +75,7 @@ class CreateTest  extends \PHPUnit\Framework\TestCase
 
     public function testNoIndexDrop()
     {
-        $params = ['host' => $_SERVER['MS_HOST'], 'port' => 9308];
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
         $client = new Client($params);
         $params = [
             'index'=>'noindexname',

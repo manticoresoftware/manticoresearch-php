@@ -20,6 +20,7 @@ services:
 unit_testing:
   variables:
     MS_HOST: "manticoresearch-manticore"
+    MS_PORT: "9308"
   stage: test
   script:
     - vendor/bin/phpunit test/
