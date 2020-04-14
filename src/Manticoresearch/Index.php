@@ -3,6 +3,10 @@
 
 namespace Manticoresearch;
 
+/**
+ * Manticore index object
+ * @author Adrian Nuta <adrian.nuta@manticoresearch.com>
+ */
 class Index
 {
     protected $_client;
@@ -45,6 +49,23 @@ class Index
             ]
         ];
         return $this->_client->insert($params);
+    }
+
+    public function addDocuments($documents)
+    {
+        $toinsert = [];
+        foreach ($documents as $document) {
+            $id = $document['id'];
+            unset($document['id']);
+            $toinsert[] = [
+                'insert' => [
+                    'index' => $this->_index,
+                    'id' => $id,
+                    'doc' => $document
+                ]
+            ];
+        }
+        return $this->_client->bulk($toinsert);
     }
 
     public function deleteDocument($id)
@@ -105,6 +126,23 @@ class Index
         return $this->_client->replace($params);
     }
 
+    public function replaceDocuments($documents)
+    {
+        $toreplace = [];
+        foreach ($documents as $document) {
+            $id = $document['id'];
+            unset($document['id']);
+            $toreplace[] = [
+                'replace' => [
+                    'index' => $this->_index,
+                    'id' => $id,
+                    'doc' => $document
+                ]
+            ];
+        }
+        return $this->_client->bulk($toreplace);
+    }
+
     public function create($fields, $settings)
     {
         $params = [
@@ -117,16 +155,17 @@ class Index
         return $this->_client->indices()->create($params);
     }
 
-    public function drop($silent=false)
+    public function drop($silent = false)
     {
         $params = [
             'index' => $this->_index,
         ];
-        if ($silent===true) {
-            $params['body'] = ['silent'=>true];
+        if ($silent === true) {
+            $params['body'] = ['silent' => true];
         }
         return $this->_client->indices()->drop($params);
     }
+
     public function describe()
     {
         $params = [
@@ -134,6 +173,7 @@ class Index
         ];
         return $this->_client->indices()->describe($params);
     }
+
     public function status()
     {
         $params = [
@@ -141,6 +181,7 @@ class Index
         ];
         return $this->_client->indices()->status($params);
     }
+
     public function truncate()
     {
         $params = [
@@ -148,17 +189,18 @@ class Index
         ];
         return $this->_client->indices()->truncate($params);
     }
-    public function getClient():Client
+
+    public function getClient(): Client
     {
         return $this->_client;
     }
 
-    public function getName():string
+    public function getName(): string
     {
         return $this->_index;
     }
 
-    public function setName($index):self
+    public function setName($index): self
     {
         $this->_index = $index;
         return $this;

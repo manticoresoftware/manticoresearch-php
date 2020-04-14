@@ -13,8 +13,8 @@ use Manticoresearch\Query\Range;
 use Manticoresearch\Query\ScriptFields;
 
 /**
- * Class Search
- * @package Manticoresearch
+ * Manticore search object
+ * @author Adrian Nuta <adrian.nuta@manticoresearch.com>
  */
 class Search
 {
@@ -264,7 +264,9 @@ class Search
     public function get()
     {
         $this->_body = $this->compile();
-        return $this->_client->search(['body' => $this->_body]);
+        $resp = $this->_client->search(['body' => $this->_body],true);
+        return new ResultSet($resp);
+
     }
 
     public function compile()

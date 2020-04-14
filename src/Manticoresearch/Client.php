@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 /**
- * Class Client
+ * Manticore  client object
  * @package Manticoresearch
  * @category Manticoresearch
  * @author Adrian Nuta <adrian.nuta@manticoresearch.com>
@@ -46,6 +46,8 @@ class Client
      * @var LoggerInterface|NullLogger
      */
     protected $_logger;
+
+    protected $_lastResponse;
 
     /*
      * $config can be a connection array or
@@ -154,13 +156,18 @@ class Client
     /**
      * Endpoint: search
      * @param array $params
-     * @return array
+     * @param bool $obj
+     * @return array|Response
      */
-    public function search(array $params = [])
+    public function search(array $params = [],$obj=false)
     {
         $endpoint = new Endpoints\Search($params);
         $response = $this->request($endpoint);
-        return $response->getResponse();
+        if($obj ===true) {
+            return $response;
+        }else{
+            return $response->getResponse();
+        }
     }
 
     /**
@@ -306,7 +313,7 @@ class Client
     {
         try {
             $connection = $this->_connectionPool->getConnection();
-            $response = $connection->getTransportHandler($this->_logger)->execute($request, $params);
+            $this->_lastResponse = $connection->getTransportHandler($this->_logger)->execute($request, $params);
         } catch (NoMoreNodesException $e) {
             $this->_logger->error('Manticore Search Request out of retries:', [
                 'exception' => $e->getMessage(),
@@ -325,6 +332,16 @@ class Client
 
             return $this->request($request, $params);
         }
-        return $response;
+        return $this->_lastResponse;
     }
+    /*
+ *
+ * @return Response
+ */
+
+    public function getLastResponse(): Response
+    {
+        return $this->_lastResponse;
+    }
+
 }
