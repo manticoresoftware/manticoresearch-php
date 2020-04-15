@@ -3,7 +3,6 @@
 
 namespace Manticoresearch;
 
-use http\Exception\RuntimeException;
 use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\Distance;
 use Manticoresearch\Query\Equals;
@@ -14,7 +13,10 @@ use Manticoresearch\Query\ScriptFields;
 
 /**
  * Manticore search object
+ * @category ManticoreSearch
+ * @package ManticoreSearch
  * @author Adrian Nuta <adrian.nuta@manticoresearch.com>
+ * @link https://manticoresearch.com
  */
 class Search
 {
@@ -61,7 +63,8 @@ class Search
         $this->_query->must(new QueryString($string));
         return $this;
     }
-    public function match($keywords, $fields=null):self
+
+    public function match($keywords, $fields = null): self
     {
         $f = "*";
         if ($fields !== null && is_string($fields)) {
@@ -70,7 +73,8 @@ class Search
         $this->_query->must(new Match($keywords, $f));
         return $this;
     }
-    public function phrase($string, $fields=null):self
+
+    public function phrase($string, $fields = null): self
     {
         $f = "*";
         if ($fields !== null && is_string($fields)) {
@@ -79,6 +83,7 @@ class Search
         $this->_query->must(new Match($string, $f));
         return $this;
     }
+
     public function limit($limit): self
     {
         $this->_params['limit'] = $limit;
@@ -99,18 +104,23 @@ class Search
         return $this;
     }
 
-    public function highlight($fields = []): self
+    public function highlight($fields = [],$settings=[]): self
     {
-        if (count($fields) > 0) {
-            $hfields = new Query();
-            foreach ($fields as $f) {
-                $hfields->add($f, null);
-            }
-            $this->_params['highlight'] = $hfields->toArray();
-        } else {
-            $this->_params['highlight'] = new \stdClass();
-        }
 
+        if (count($fields) === 0 && count($settings)===0) {
+            $this->_params['highlight'] =  new \stdClass();
+            return $this;
+        }
+        $this->_params['highlight'] = [];
+        if (count($fields) > 0) {
+            $this->_params['highlight']['fields'] =$fields;
+        }
+        if(count($settings)>0) {
+            foreach($settings as $name=>$value)
+            {
+                $this->_params['highlight'][$name] =$value;
+            }
+        }
         return $this;
     }
 
@@ -264,7 +274,7 @@ class Search
     public function get()
     {
         $this->_body = $this->compile();
-        $resp = $this->_client->search(['body' => $this->_body],true);
+        $resp = $this->_client->search(['body' => $this->_body], true);
         return new ResultSet($resp);
 
     }
@@ -295,6 +305,7 @@ class Search
         $this->_params = [];
         $this->_query = new BoolQuery();
     }
+
     public function getClient()
     {
         return $this->_client;

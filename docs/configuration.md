@@ -5,7 +5,7 @@
 
 
 The [Client()](https://manticoresoftware.github.io/manticoresearch-php/class-Manticoresearch.Client.html) class accepts a configuration as an array. 
-Without any configuration provided, it tries to connect using HTTP `127.0.0.1` on port `9308`.
+Without any configuration provided, it tries to connect to `127.0.0.1` on port `9308`.
 
 
 #### config paramaters
@@ -13,9 +13,9 @@ Without any configuration provided, it tries to connect using HTTP `127.0.0.1` o
 
 *  host -  IP or DNS of server (part of a connection)
 *  port -   HTTP API port (part of a connection)
-*  connections - list of connections
+*  connections - array of connections
 *  connectionStrategy - name of connection pool strategy, default is `StaticRoundRobin`
-*  transport -  transport class name, default `Http` (part of a connection)
+*  transport -  transport class name or object, default `Http` (part of a connection)
 *  retries - number of retries to perform in case of hard failure 
 
 If there is a single connection used, it can be defined directly in the configuration array like:
@@ -25,7 +25,16 @@ If there is a single connection used, it can be defined directly in the configur
    $client = new \Manticoresearch\Client($config);
 ```
 
-If multiple connections can used, they must be defined in `connections` array (see below). 
+If multiple connections can used, they must be defined in `connections` array (see below).
+
+A connection array can contain:
+
+*  host -  IP or DNS of server 
+*  port -   HTTP API port 
+*  transport -  transport class name or object, default `Http` 
+
+In addition the connection array can contain various options of the transport adapter.
+
 
 #### Transport
 

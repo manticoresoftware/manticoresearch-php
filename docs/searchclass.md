@@ -1,6 +1,7 @@
 # Search
 
-This class is query builder for creating search queries.
+This class allow performing search operations.
+
 
 ## Initiation
 
@@ -22,17 +23,22 @@ $search->setIndex('indexname');
 
 ## Performing a search
 
-All methods of Search class can be chained. get() function runs the query and returns the result
+All methods of Search class can be chained. 
+
+When all the search conditions and options are set, `get()` will be called to process and query the search engine.
+
 
 ### search()
 
-It can accept a string a full-text match string. The full Manticore query syntax (https://docs.manticoresearch.com/latest/html/searching/extended_query_syntax.html) is supported.
+It can accept a string a full-text match string or a [Query object](query.md). 
+
+The full Manticore query syntax (https://docs.manticoresearch.com/latest/html/searching/extended_query_syntax.html) is supported.
+
 ```php
 $search->search('find me')->get();
 ```
 
-It can also accept a BoolQuery() class
-
+It returns a [ResultSet](searchresults.md#resultset-object)  object.
 
 ### match()
 

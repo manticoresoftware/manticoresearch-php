@@ -2,7 +2,7 @@
 
 
 use Manticoresearch\Client;
-use Manticoresearch\Exceptions\ConnectionException;
+
 
 class SearchTest  extends \PHPUnit\Framework\TestCase
 {
@@ -26,7 +26,7 @@ class SearchTest  extends \PHPUnit\Framework\TestCase
         $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
         $client = new Client($params);
         $this->expectException(\Manticoresearch\Exceptions\ResponseException::class);
-        $response =$client->search( [
+        $client->search( [
             'body' => [
 
                 'query' => [

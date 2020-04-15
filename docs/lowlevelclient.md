@@ -30,7 +30,6 @@ Table of Contents
     
 * [Running SQL](sql.md)
 
-* [Error handling](errors.md)
 
 ### Requests
 
@@ -192,3 +191,4 @@ $doc = [
 
 $response = $client->bulk($doc);
 ```
+

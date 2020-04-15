@@ -101,7 +101,7 @@ class Client
     }
 
     /**
-     * @param string $hosts
+     * @param string|array $hosts
      */
     public function setHosts($hosts)
     {

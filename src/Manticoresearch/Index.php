@@ -5,7 +5,10 @@ namespace Manticoresearch;
 
 /**
  * Manticore index object
+ * @category ManticoreSearch
+ * @package ManticoreSearch
  * @author Adrian Nuta <adrian.nuta@manticoresearch.com>
+ * @link https://manticoresearch.com
  */
 class Index
 {
@@ -19,11 +22,11 @@ class Index
         $this->_index = $index;
     }
 
-    public function search($string): Search
+    public function search($input): Search
     {
         $search = new Search($this->_client);
         $search->setIndex($this->_index);
-        return $search->search($string);
+        return $search->search($input);
     }
 
     public function getDocumentById($id)
@@ -36,8 +39,8 @@ class Index
                 ]
             ]
         ];
-        $result=  new ResultSet($this->_client->search($params,true));
-        return $result->valid()?$result->current():null;
+        $result = new ResultSet($this->_client->search($params, true));
+        return $result->valid() ? $result->current() : null;
     }
 
     public function addDocument($data, $id = null)
@@ -66,7 +69,7 @@ class Index
                 ]
             ];
         }
-        return $this->_client->bulk($toinsert);
+        return $this->_client->bulk(['body' => $toinsert]);
     }
 
     public function deleteDocument($id)
@@ -141,10 +144,10 @@ class Index
                 ]
             ];
         }
-        return $this->_client->bulk($toreplace);
+        return $this->_client->bulk(['body' => $toreplace]);
     }
 
-    public function create($fields, $settings)
+    public function create($fields, $settings = [])
     {
         $params = [
             'index' => $this->_index,
@@ -189,6 +192,70 @@ class Index
             'index' => $this->_index,
         ];
         return $this->_client->indices()->truncate($params);
+    }
+
+    public function optimize($sync = false)
+    {
+        $params = [
+            'index' => $this->_index,
+        ];
+        if ($sync === true) {
+            $params['body'] = ['sync' => true];
+        }
+        return $this->_client->indices()->optimize($params);
+    }
+
+    public function flush()
+    {
+        $params = [
+            'index' => $this->_index,
+        ];
+        $this->_client->indices()->flushrtindex($params);
+    }
+
+    public function flushramchunk()
+    {
+        $params = [
+            'index' => $this->_index,
+        ];
+        $this->_client->indices()->flushramchunk($params);
+    }
+
+    public function alter($name, $type, $op)
+    {
+        $params = [
+            'index' => $this->_index,
+            'body' => [
+                'operation' => $op,
+                'column' => ['name' => $name, 'type' => $type]
+            ]
+        ];
+        return $this->_client->indices()->alter($params);
+    }
+
+    public function keywords($query, $options)
+    {
+        $params = [
+            'index' => $this->_index,
+            'body' => [
+                '$query' => $query,
+                'options' => $options
+            ]
+        ];
+        return $this->_client->keywords($params);
+    }
+
+    public function suggest($query, $options)
+    {
+        $params = [
+            'index' => $this->_index,
+            'body' => [
+                '$query' => $query,
+                'options' => $options
+            ]
+        ];
+        return $this->_client->suggest($params);
+
     }
 
     public function getClient(): Client

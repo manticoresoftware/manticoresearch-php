@@ -33,7 +33,7 @@ class ResultHit
 
     public function getScore()
     {
-        return $this->_data['_source'];
+        return $this->_data['_score'];
     }
 
     public function getHighlight()
