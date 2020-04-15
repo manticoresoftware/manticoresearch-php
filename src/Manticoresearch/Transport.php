@@ -3,6 +3,7 @@
 
 namespace Manticoresearch;
 
+
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -62,9 +63,11 @@ class Transport
      */
     public static function create($transport, Connection $connection, LoggerInterface $logger)
     {
-        $className = "Manticoresearch\\Transport\\$transport";
-        if (class_exists($className)) {
-            $transport = new $className($connection, $logger);
+        if (is_string($transport)) {
+            $className = "Manticoresearch\\Transport\\$transport";
+            if (class_exists($className)) {
+                $transport = new $className($connection, $logger);
+            }
         }
         if ($transport instanceof self) {
             $transport->setConnection($connection);
@@ -87,7 +90,7 @@ class Transport
                     $query[$k] = $v ? 'true' : 'false';
                 }
             }
-            $uri .=  '?' . http_build_query($query);
+            $uri .= '?' . http_build_query($query);
         }
         return $uri;
     }
