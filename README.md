@@ -12,7 +12,7 @@ Official PHP client for Manticore Search.
 
 Features
 --------
-- One to one mapping with the HTTP  API
+- One to one mapping with the HTTP API
 - connection pools with pluggable selection strategy. Defaults to static round robin
 - pluggable PSR/Log interface
 - pluggable transport protocols.
@@ -32,6 +32,8 @@ Documentation
 
 Full documentation is available in  [docs](docs) folder.
 
+
+
 Manticore Search server documentation: https://docs.manticoresearch.com/latest/html/.
 
 
@@ -43,158 +45,113 @@ Install the Manticore Search PHP client using [composer](https://getcomposer.org
 ```bash
 composer require manticoresoftware/manticoresearch-php
 ```
-
-#### Initiate the client:
+### Initiate the index:
 
 ```php
    require_once __DIR__ . '/vendor/autoload.php';
-   ...
+
    $config = ['host'=>'127.0.0.1','port'=>9308];
    $client = new \Manticoresearch\Client($config);
+   $index = new \Manticoresearch\Index($client);
+   $index->setName('movies'); 
 ```
 
-#### Create index:
+### Create index:
+
 ```php
-    $index = [
-        'index' => 'movies',
-        'body' => [
-            'columns' => ['title'=>['type'=>'text'],'plot'=>['type'=>'text'],'year'=>['type'=>'integer'],'rating'=>['type'=>'float']]
+$index->create([
+    'title'=>['type'=>'text'],
+    'plot'=>['type'=>'text'],
+    'year'=>['type'=>'integer'],
+    'rating'=>['type'=>'float']
+    ]);
+```
+
+### Add a document:
+
+```php
+$index->addDocument([
+        'title' => 'Star Trek: Nemesis',
+        'plot' => 'The Enterprise is diverted to the Romulan homeworld Romulus, supposedly because they want to negotiate a peace treaty. Captain Picard and his crew discover a serious threat to the Federation once Praetor Shinzon plans to attack Earth.',
+        'year' => 2002,
+        'rating' => 6.4
         ],
-    ];
-    $client->indices()->create($index);
-````
-
-#### Add a document:
-
-```php
-   $doc = [
-        'index'=>'movies',
-        'id' => 1,
-        'doc' => [
-            'title' => 'Star Trek: Nemesis',
-            'plot' => 'The Enterprise is diverted to the Romulan homeworld Romulus, supposedly because they want to negotiate a peace treaty. Captain Picard and his crew discover a serious threat to the Federation once Praetor Shinzon plans to attack Earth.',
-            'year' => 2002,
-            'rating' => 6.4
-        ]
-    ];
-    $client->insert(['body' =>$doc]);
+    1);
 ```
 
-#### Adding in bulk:
+### Add several documents at once:
 
 ```php
-    $docs =[
-      ['insert'=> ['index'=>'movies','id'=>2,'doc'=>['title'=>'Interstellar','plot'=>'A team of explorers travel through a wormhole in space in an attempt to ensure humanity\'s survival.','year'=>2014,'rating'=>8.5]]],
-      ['insert'=> ['index'=>'movies','id'=>3,'doc'=>['title'=>'Inception','plot'=>'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.','year'=>2010,'rating'=>8.8]]],
-      ['insert'=> ['index'=>'movies','id'=>4,'doc'=>['title'=>'1917 ','plot'=>' As a regiment assembles to wage war deep in enemy territory, two soldiers are assigned to race against time and deliver a message that will stop 1,600 men from walking straight into a deadly trap.','year'=>2018,'rating'=>8.4]]],
-      ['insert'=> ['index'=>'movies','id'=>5,'doc'=>['title'=>'Alien','plot'=>' After a space merchant vessel receives an unknown transmission as a distress call, one of the team\'s member is attacked by a mysterious life form and they soon realize that its life cycle has merely begun.','year'=>1979,'rating'=>8.4]]]
-    ];
-    $client->bulk(['body'=>$docs]);
+$index->addDocuments([
+        ['id'=>2,'title'=>'Interstellar','plot'=>'A team of explorers travel through a wormhole in space in an attempt to ensure humanity\'s survival.','year'=>2014,'rating'=>8.5],
+        ['id'=>3,'title'=>'Inception','plot'=>'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.','year'=>2010,'rating'=>8.8],
+        ['id'=>4,'title'=>'1917 ','plot'=>' As a regiment assembles to wage war deep in enemy territory, two soldiers are assigned to race against time and deliver a message that will stop 1,600 men from walking straight into a deadly trap.','year'=>2018,'rating'=>8.4],
+        ['id'=>5,'title'=>'Alien','plot'=>' After a space merchant vessel receives an unknown transmission as a distress call, one of the team\'s member is attacked by a mysterious life form and they soon realize that its life cycle has merely begun.','year'=>1979,'rating'=>8.4]
+    ]); 
 ```
 
-#### Searching:
+### Perform a search:
 
 ```php
-   $search = [
-        'body' => [
-            'index' => 'movies',
-            'query' => [
-                        'match' => ['*' => 'space team'],
-            ],
-        ]
-    ];
-    $result = $client->search($search);
-```
-Response:
 
-```json
-{
-    "took": 0,
-    "timed_out": false,
-    "hits": {
-        "total": 2,
-        "hits": [
-            {
-                "_id": "2",
-                "_score": 1587,
-                "_source": {
-                    "year": 2014,
-                    "rating": 8.5,
-                    "title": "Interstellar",
-                    "plot": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival."
-                }
-            },
-            {
-                "_id": "5",
-                "_score": 1587,
-                "_source": {
-                    "year": 1979,
-                    "rating": 8.4,
-                    "title": "Alien",
-                    "plot": " After a space merchant vessel receives an unknown transmission as a distress call, one of the team's member is attacked by a mysterious life form and they soon realize that its life cycle has merely begun."
-                }
-            }
-        ]
+$results = $index->search('space team')->get();
+
+foreach($results as $doc) {
+   echo 'Document:'.$doc->getId()."\n";
+   foreach($doc->getData() as $field=>$value)
+   {   
+        echo $field.": ".$value."\n";
+   }
+}
+```
+Result:
+```
+Document:2
+year: 2014
+rating: 8.5
+title: Interstellar
+plot: A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.
+
+```
+A text search with attribute filters:
+
+```php
+
+$results = $index->search('space team')
+                 ->filter('year','gte',2000)
+                 ->filter('rating','gte',8.0)
+                 ->sort('year','desc')
+                 ->get();
+
+foreach($results as $doc) {
+    echo 'Document:'.$doc->getId()."\n";
+    foreach($doc->getData() as $field=>$value)
+    {   
+        echo $field.": ".$value."\n";
     }
 }
 ```
-A search with matching and filters:
+
+
+
+### Update a document:
 
 ```php
-   $search = [
-        'body' => [
-            'index' => 'movies',
-            'query' => [
-                'bool' => [
-                    'must' =>[
-                        'match' => ['*' => 'space team'],
-                        'range' => ['year'=>['gte'=>2000],'rating'=>['gte'=>8.0]]
-                    ]
-                ]
-            ],
-            'sort' => ['_score',['year'=>'desc']]
-        ]
-    ];
-    $result = $client->search($search);
+$index->updateDocument(['year'=>2019],4);
+
 ```
 
-#### Update a document:
+### Get index schema:
+```php
+$index->describe();
+```
+
+### Drop index:
 
 ```php
-   $partial = [
-        'body' => [
-            'index' => 'movies',
-            'id' => 4,
-            'doc' => ['year'=>2019]
-        ]
-    ];
-    $result = $client->update($partial);
+$index->drop();
 ```
 
-
-#### Get index schema:
-
-```php
-    $client->indices()->describe(['index'=>'movies']);
-```
-
-#### Get list of all indices:
-
-```php
-    $client->nodes()->tables();
-```
-
-
-#### Delete index:
-
-```php
-    $client->indices()->drop(['index'=>'movies']);
-```
-
-#### Get server status:
-```php
-    $client->nodes()->status();
-```
 
 
 

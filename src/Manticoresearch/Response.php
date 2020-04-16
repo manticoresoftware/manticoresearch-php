@@ -3,7 +3,14 @@
 
 namespace Manticoresearch;
 
-
+/**
+ * Manticore response object
+ *  Stores result array, time and errors
+ * @category ManticoreSearch
+ * @package ManticoreSearch
+ * @author Adrian Nuta <adrian.nuta@manticoresearch.com>
+ * @link https://manticoresearch.com
+ */
 use Manticoresearch\Exceptions\RuntimeException;
 
 /**
@@ -33,7 +40,7 @@ class Response
     protected $_status;
     /**
      * response as array
-     * @var array|string
+     * @var array
      */
     protected $_response;
 
@@ -49,7 +56,7 @@ class Response
 
     /*
      * Return response
-     * @return array|mixed|string
+     * @return array
      */
     public function getResponse()
     {
@@ -74,7 +81,7 @@ class Response
     public function hasError()
     {
         $response = $this->getResponse();
-        return isset($response['error']) && $response['error'] !== '';
+        return (isset($response['error']) && $response['error'] !== '') ||  (isset($response['errors']) && $response['errors'] !== false);
     }
 
     /*
@@ -86,8 +93,10 @@ class Response
         $response = $this->getResponse();
         if (isset($response['error'])) {
             return json_encode($response['error'], true);
+        } elseif   (isset($response['errors'])){
+            return json_encode($response['errors'], true);
         } else {
-            return false;
+            return '';
         }
     }
 
@@ -113,7 +122,7 @@ class Response
 
     /**
      *  set request info
-     * @param array
+     * @param array $info
      * @return $this
      */
     public function setTransportInfo($info)

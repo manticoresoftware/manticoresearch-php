@@ -17,9 +17,7 @@ class Random implements SelectorInterface
     public function getConnection(array $connections):Connection
     {
         shuffle($connections);
-        foreach ($connections as $connection) {
-                return $connection;
-        }
+        return $connections[0];
 
     }
 

@@ -11,8 +11,8 @@ Create a new index.
 `body` can contain:
 
 * `columns` - definition of fields for indexes with data
-* `options` - various index settings
-* `silent` -  if set to true, the create will not fail with error if there is already an index with the designated name
+* `settings` - various index settings
+* `silent` -  optional, if set to true, the create will not fail with error if there is already an index with the designated name
 
 `body` require presence of `columns`  array for RT and PQ indexes where keys are the column names. Each column requires a  `type` defined.
 `text` type support 'indexed' and 'stored' options.
@@ -63,12 +63,17 @@ Drop an existing index. `index` is mandatory.
 
         $params = [
             'index' => 'testrt',
+            ['body' => ['silent'=>true ]]
          ];
         $response = $client->indices()->drop($params);
         
 Alter
 ====
 Alter perform changes on indexes. Currently supported only add/drop columns.
+Note that `text` type cannot be used in this call.
+
+Expects `index` name.
+
 `body` parameters:
  
 * `operation` -  mandatory, possible values: add,drop
@@ -106,6 +111,8 @@ Describe
 ========
 Returns structure of an index.
 
+Expects `index` name.
+
 `body` is optional. It support `pattern` as a column name for filtering the structure result.
 
         $params = [
@@ -120,6 +127,8 @@ FlushRamchunk
 =============
 Flushed RAM chunk for a RT index.
 
+Expects `index` name.
+
         $params = [
             'index' => 'testrt',
          ];
@@ -128,6 +137,7 @@ Flushed RAM chunk for a RT index.
 FlushRtindex
 ============
 Flushed the RT index to disk.
+Expects only `index` name.
 
         $params = [
             'index' => 'testrt',
@@ -138,6 +148,8 @@ Optimize
 ========
 
 Launch optimization on RT index. The command doesn't wait by default for the optimize operation to finish. 
+
+Expects `index` name.
 
 `body` is optional. Supports `sync` parameter - if set, the command waits for the optimize to finish.
 
@@ -150,7 +162,9 @@ Launch optimization on RT index. The command doesn't wait by default for the opt
 
 Status
 ======
-Return statistics about index: documents, size, chunks, as well as query statistics. 
+Return statistics about index: documents, size, chunks, as well as query statistics.
+
+Expects `index` name. 
 
 `body` is optional. It support `pattern` as a property/performance metric to filter upon.
 
@@ -164,6 +178,8 @@ Return statistics about index: documents, size, chunks, as well as query statist
 Truncate
 ========
 Truncates an index. 
+
+Expects `index` name.
  
         $params = [
             'index' => 'testrt'

@@ -6,10 +6,16 @@
 
 [Installation](installation.md)
 
-[Configuration](configuration.md)
+[Client configuration](configuration.md)
 
-[Running queries](usage.md)
+[Index API](indexclass.md)
+
+[Search API](searchclass.md)
+
+[Search query build](query.md)
+
+[Low-level API](lowlevelclient.md)
 
 [Logging](logging.md)
 
-[docBlocks documentation](https://manticoresoftware.github.io/manticoresearch-php/)
+[docBlocks documentation](https://manticoresoftware.github.io/manticoresearch-php/).

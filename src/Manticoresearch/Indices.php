@@ -3,7 +3,6 @@
 
 namespace Manticoresearch;
 
-
 use Manticoresearch\Endpoints\Indices\Alter;
 use Manticoresearch\Endpoints\Indices\Create;
 use Manticoresearch\Endpoints\Indices\Describe;
@@ -33,17 +32,16 @@ class Indices
 
     /**
      * Pq constructor.
-     * @param $client
+     * @param Client $client
      */
     public function __construct($client)
     {
         $this->_client = $client;
         $this->_params = ['responseClass' => 'Manticoresearch\\Response\\SqlToArray'];
-
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function alter($params)
@@ -55,18 +53,16 @@ class Indices
         $endpoint->setBody($body);
         $response = $this->_client->request($endpoint, $this->_params);
         return $response->getResponse();
-
     }
 
 
     /**
      *
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function create($params)
     {
-
         $index = $params['index'] ?? null;
         $body = $params['body'];
         $endpoint = new Create();
@@ -74,11 +70,10 @@ class Indices
         $endpoint->setBody($body);
         $response = $this->_client->request($endpoint, $this->_params);
         return $response->getResponse();
-
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function describe($params)
@@ -90,11 +85,10 @@ class Indices
         $endpoint->setBody($body);
         $response = $this->_client->request($endpoint, $this->_params);
         return $response->getResponse();
-
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function drop($params)
@@ -108,7 +102,7 @@ class Indices
         return $response->getResponse();
     }
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function import($params)
@@ -122,7 +116,7 @@ class Indices
         return $response->getResponse();
     }
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function flushramchunk($params)
@@ -133,11 +127,10 @@ class Indices
         $endpoint->setBody();
         $response = $this->_client->request($endpoint, $this->_params);
         return $response->getResponse();
-
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function flushrtindex($params)
@@ -148,11 +141,10 @@ class Indices
         $endpoint->setBody();
         $response = $this->_client->request($endpoint, $this->_params);
         return $response->getResponse();
-
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function optimize($params)
@@ -164,11 +156,10 @@ class Indices
         $endpoint->setBody($body);
         $response = $this->_client->request($endpoint, $this->_params);
         return $response->getResponse();
-
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function status($params)
@@ -198,7 +189,7 @@ class Indices
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function truncate($params)
@@ -210,6 +201,5 @@ class Indices
         $endpoint->setBody($body);
         $response = $this->_client->request($endpoint, $this->_params);
         return $response->getResponse();
-
     }
 }

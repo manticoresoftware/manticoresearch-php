@@ -33,7 +33,7 @@ class Nodes
 
     /**
      * Nodes namespace
-     * @param $client
+     * @param Client $client
      */
     public function __construct($client)
     {
@@ -159,7 +159,7 @@ class Nodes
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function status($params=[])

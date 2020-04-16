@@ -14,7 +14,7 @@ You can also directly add this line in the `require` block of `composer.json`:
 ```json
 {
 "require" : {
-   "manticoresoftware/manticoresearch-php":"^0.1"
+   "manticoresoftware/manticoresearch-php":"^1.0"
    }
 }
 
@@ -29,15 +29,5 @@ To use the client you just have to include the autoload:
 ```
   require_once __DIR__ . '/vendor/autoload.php';
 
-  $client = new \Manticoresearch\Client()
+  $client = new \Manticoresearch\Client();
 ```
-
-## Requirements
-
-
-PHP 7.0+
-
-Manticoresearch
-
-Default driver uses CURL extension. An adapter for HTTPLug 1.0 is provided. 
-

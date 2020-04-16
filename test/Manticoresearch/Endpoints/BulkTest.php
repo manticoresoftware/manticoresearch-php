@@ -1,41 +1,59 @@
 <?php
-namespace Manticoresearch\Test\Endpoints;
 
 use Manticoresearch\Client;
-use Manticoresearch\Test\Helper\PopulateHelperTest;
+use Manticoresearch\Exceptions\ResponseException;
 
-class BulkTest  extends \PHPUnit\Framework\TestCase
+class BulkTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Client */
     private static $client;
-
-    /** @var PopulateHelperTest */
-    private static $helper;
-
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-
-        $helper = new PopulateHelperTest();
-        $helper->populateForKeywords();
-        self::$client = $helper->getClient();
-        self::$helper = $helper;
-    }
-    public function testBulk()
-    {
-        $bulk =[
-            ['insert'=> ['index'=>'products','id'=>101,'doc'=>['title'=>'Blue Toy Car','price' => '10.00']]],
-            ['insert'=> ['index'=>'products','id'=>102,'doc'=>['title'=>'Red Toy Car','price' => '5.00']]],
-            ['insert'=> ['index'=>'products','id'=>103,'doc'=>['title'=>'Green Toy Car','price' => '10.00']]],
-            ['insert'=> ['index'=>'products','id'=>104,'doc'=>['title'=>'Purple Toy Car','price' => '20.00']]],
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
+        static::$client = new Client($params);
+        $params = [
+            'index' => 'bulktest',
+            'body' => [
+                'columns' => [
+                    'title' => [
+                        'type' => 'text'
+                    ],
+                ],
+                'silent' => true
+            ]
         ];
-        self::$client->bulk(['body'=>$bulk]);
 
+        static::$client->indices()->create($params);
+        static::$client->indices()->truncate(['index'=>'bulktest']);
 
-        // expect one document returned for each color
-        self::$helper->search('products', 'Blue', 1);
-        self::$helper->search('products', 'red', 1);
-        self::$helper->search('products', 'green', 1);
-        self::$helper->search('products', 'purple', 1);
     }
+    public function testBulkInsertError()
+    {
+        $response = static::$client->bulk(['body'=>[
+            ['insert'=>['index'=>'bulktest','id'=>1,'doc'=>['title'=>'test']]],
+            ['insert'=>['index'=>'bulktest','id'=>2,'doc'=>['title'=>'test']]],
+            ['insert'=>['index'=>'bulktest','id'=>3,'doc'=>['title'=>'test']]],
+        ]]);
+        $this->expectException(ResponseException::class);
+        $response = static::$client->bulk(['body'=>[
+            ['insert'=>['index'=>'bulktest','id'=>1,'doc'=>['title'=>'test']]],
+            ['insert'=>['index'=>'bulktest','id'=>2,'doc'=>['title'=>'test']]],
+            ['insert'=>['index'=>'bulktest','id'=>3,'doc'=>['title'=>'test']]],
+        ]]);
+
+    }
+
+    public function testDelete()
+    {
+        $response =static:: $client->bulk(['body'=>[
+            ['insert'=>['index'=>'bulktest','id'=>4,'doc'=>['title'=>'test']]],
+            ['delete'=>['index'=>'bulktest','id'=>2]],
+            ['delete'=>['index'=>'bulktest','id'=>3]],
+        ]]);
+
+        $this->assertEquals(3,count($response['items']));
+        $response = static::$client->search(['body'=>['index'=>'bulktest','query'=>['match_all'=>'']]]);
+        $this->assertEquals(2,$response['hits']['total']);
+    }
+
 }
