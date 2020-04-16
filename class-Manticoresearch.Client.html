@@ -35,6 +35,9 @@
                                 <a href="interfaces.html">Interfaces</a>
                             </li>
 
+                            <li>
+                                <a href="traits.html">Traits</a>
+                            </li>
 
 
                             <li>
@@ -81,7 +84,7 @@
 
         <div class="panel panel-default">
             <div class="panel-body">
-                Class Client
+                Manticore  client object
             </div>
         </div>
 
@@ -117,7 +120,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#___construct">#</a>
-            <code><a href="source-class-Manticoresearch.Client.html#53-59">__construct</a>( <span> <span class="property-name">$config</span> = <span class="php-keyword1">array</span> ( )</span>, <span> Psr\Log\LoggerInterface <span class="property-name">$logger</span> = <span class="php-keyword1">NULL</span></span> )</code>
+            <code><a href="source-class-Manticoresearch.Client.html#57-62">__construct</a>( <span> <span class="property-name">$config</span> = <span class="php-keyword1">array</span> ( )</span>, <span> Psr\Log\LoggerInterface <span class="property-name">$logger</span> = <span class="php-keyword1">NULL</span></span> )</code>
 
             <div class="description">
                 
@@ -149,7 +152,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#__initConnections">#</a>
-            <code><a href="source-class-Manticoresearch.Client.html#61-101">_initConnections</a>( )</code>
+            <code><a href="source-class-Manticoresearch.Client.html#64-101">_initConnections</a>( )</code>
 
             <div class="description">
                 
@@ -181,7 +184,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_setHosts">#</a>
-            <code><a href="source-class-Manticoresearch.Client.html#106-110">setHosts</a>( <span> <span class="property-name">$hosts</span> </span> )</code>
+            <code><a href="source-class-Manticoresearch.Client.html#106-110">setHosts</a>( <span> string|array <span class="property-name">$hosts</span> </span> )</code>
 
             <div class="description">
                 
@@ -245,7 +248,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_create">#</a>
-            <code><a href="source-class-Manticoresearch.Client.html#126-129">create</a>( <span> <span class="property-name">$config</span> </span> )</code>
+            <code><a href="source-class-Manticoresearch.Client.html#126-129">create</a>( <span> array <span class="property-name">$config</span> </span> )</code>
 
             <div class="description">
                 
@@ -277,7 +280,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_createFromArray">#</a>
-            <code><a href="source-class-Manticoresearch.Client.html#135-139">createFromArray</a>( <span> <span class="property-name">$config</span> </span> )</code>
+            <code><a href="source-class-Manticoresearch.Client.html#135-138">createFromArray</a>( <span> array <span class="property-name">$config</span> </span> )</code>
 
             <div class="description">
                 
@@ -309,7 +312,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_getConnections">#</a>
-            <code><a href="source-class-Manticoresearch.Client.html#144-147">getConnections</a>( )</code>
+            <code><a href="source-class-Manticoresearch.Client.html#143-146">getConnections</a>( )</code>
 
             <div class="description">
                 
@@ -341,7 +344,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_getConnectionPool">#</a>
-            <code><a href="source-class-Manticoresearch.Client.html#152-155">getConnectionPool</a>( )</code>
+            <code><a href="source-class-Manticoresearch.Client.html#151-154">getConnectionPool</a>( )</code>
 
             <div class="description">
                 
@@ -373,7 +376,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_search">#</a>
-            <code><a href="source-class-Manticoresearch.Client.html#160-167">search</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
+            <code><a href="source-class-Manticoresearch.Client.html#162-171">search</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span>, <span> bool <span class="property-name">$obj</span> = <span class="php-keyword1">false</span></span> )</code>
 
             <div class="description">
                 Endpoint: search
@@ -405,7 +408,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_insert">#</a>
-            <code><a href="source-class-Manticoresearch.Client.html#173-180">insert</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
+            <code><a href="source-class-Manticoresearch.Client.html#178-184">insert</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
 
             <div class="description">
                 Endpoint: insert
@@ -437,7 +440,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_replace">#</a>
-            <code><a href="source-class-Manticoresearch.Client.html#186-193">replace</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
+            <code><a href="source-class-Manticoresearch.Client.html#191-197">replace</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
 
             <div class="description">
                 Endpoint: replace
@@ -469,7 +472,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_update">#</a>
-            <code><a href="source-class-Manticoresearch.Client.html#199-206">update</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
+            <code><a href="source-class-Manticoresearch.Client.html#204-210">update</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
 
             <div class="description">
                 Endpoint: update
@@ -501,7 +504,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_sql">#</a>
-            <code><a href="source-class-Manticoresearch.Client.html#212-217">sql</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
+            <code><a href="source-class-Manticoresearch.Client.html#217-227">sql</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
 
             <div class="description">
                 Endpoint: sql
@@ -533,7 +536,7 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_delete">#</a>
-            <code><a href="source-class-Manticoresearch.Client.html#224-231">delete</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
+            <code><a href="source-class-Manticoresearch.Client.html#234-240">delete</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
 
             <div class="description">
                 Endpoint: delete
@@ -565,10 +568,106 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_pq">#</a>
-            <code><a href="source-class-Manticoresearch.Client.html#237-241">pq</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
+            <code><a href="source-class-Manticoresearch.Client.html#245-248">pq</a>( )</code>
 
             <div class="description">
                 Endpoint: pq
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </td>
+</tr>
+
+
+
+<tr id="_indices">
+
+    <td class="attributes col-md-1">
+        <code class="keyword">
+                 public 
+                
+                
+        </code>
+    </td>
+
+    <td class="name">
+        <div>
+            <a class="anchor pull-right" href="#_indices">#</a>
+            <code><a href="source-class-Manticoresearch.Client.html#253-256">indices</a>( )</code>
+
+            <div class="description">
+                Endpoint: indices
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </td>
+</tr>
+
+
+
+<tr id="_nodes">
+
+    <td class="attributes col-md-1">
+        <code class="keyword">
+                 public 
+                
+                
+        </code>
+    </td>
+
+    <td class="name">
+        <div>
+            <a class="anchor pull-right" href="#_nodes">#</a>
+            <code><a href="source-class-Manticoresearch.Client.html#261-264">nodes</a>( )</code>
+
+            <div class="description">
+                Endpoint: nodes
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </td>
+</tr>
+
+
+
+<tr id="_cluster">
+
+    <td class="attributes col-md-1">
+        <code class="keyword">
+                 public 
+                
+                
+        </code>
+    </td>
+
+    <td class="name">
+        <div>
+            <a class="anchor pull-right" href="#_cluster">#</a>
+            <code><a href="source-class-Manticoresearch.Client.html#266-269">cluster</a>( )</code>
+
+            <div class="description">
+                
 
 
 
@@ -597,10 +696,74 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_bulk">#</a>
-            <code><a href="source-class-Manticoresearch.Client.html#248-254">bulk</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
+            <code><a href="source-class-Manticoresearch.Client.html#276-282">bulk</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
 
             <div class="description">
                 Endpoint: bulk
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </td>
+</tr>
+
+
+
+<tr id="_suggest">
+
+    <td class="attributes col-md-1">
+        <code class="keyword">
+                 public 
+                
+                
+        </code>
+    </td>
+
+    <td class="name">
+        <div>
+            <a class="anchor pull-right" href="#_suggest">#</a>
+            <code><a href="source-class-Manticoresearch.Client.html#289-296">suggest</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
+
+            <div class="description">
+                Endpoint: suggest
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </td>
+</tr>
+
+
+
+<tr id="_keywords">
+
+    <td class="attributes col-md-1">
+        <code class="keyword">
+                 public 
+                
+                
+        </code>
+    </td>
+
+    <td class="name">
+        <div>
+            <a class="anchor pull-right" href="#_keywords">#</a>
+            <code><a href="source-class-Manticoresearch.Client.html#298-305">keywords</a>( <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
+
+            <div class="description">
+                
 
 
 
@@ -629,7 +792,39 @@
     <td class="name">
         <div>
             <a class="anchor pull-right" href="#_request">#</a>
-            <code><a href="source-class-Manticoresearch.Client.html#261-283">request</a>( <span> <a href="class-Manticoresearch.Request.html">Manticoresearch\Request</a> <span class="property-name">$request</span> </span>, <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
+            <code><a href="source-class-Manticoresearch.Client.html#312-336">request</a>( <span> <a href="class-Manticoresearch.Request.html">Manticoresearch\Request</a> <span class="property-name">$request</span> </span>, <span> array <span class="property-name">$params</span> = <span class="php-keyword1">array</span> ( )</span> )</code>
+
+            <div class="description">
+                
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </td>
+</tr>
+
+
+
+<tr id="_getLastResponse">
+
+    <td class="attributes col-md-1">
+        <code class="keyword">
+                 public 
+                
+                
+        </code>
+    </td>
+
+    <td class="name">
+        <div>
+            <a class="anchor pull-right" href="#_getLastResponse">#</a>
+            <code><a href="source-class-Manticoresearch.Client.html#342-345">getLastResponse</a>( )</code>
 
             <div class="description">
                 
@@ -662,7 +857,7 @@
     </td>
     <td class="name">
         <code>
-            <a href="source-class-Manticoresearch.Client.html#29" class="constant-name">VERSION</a>
+            <a href="source-class-Manticoresearch.Client.html#30" class="constant-name">VERSION</a>
         </code>
 
         <div class="description">
@@ -693,7 +888,7 @@
 
     <td class="name">
         <code>
-            <a href="source-class-Manticoresearch.Client.html#34" class="property-name">$_config</a>
+            <a href="source-class-Manticoresearch.Client.html#35" class="property-name">$_config</a>
         </code>
         <div class="description">
             
@@ -717,13 +912,13 @@
         <code class="keyword">
             protected 
 
-            array
+            <a href="class-Manticoresearch.Connection.ConnectionPool.html">Manticoresearch\Connection\ConnectionPool</a>
         </code>
     </td>
 
     <td class="name">
         <code>
-            <a href="source-class-Manticoresearch.Client.html#42" class="property-name">$_connectionPool</a>
+            <a href="source-class-Manticoresearch.Client.html#43" class="property-name">$_connectionPool</a>
         </code>
         <div class="description">
             
@@ -752,7 +947,7 @@
 
     <td class="name">
         <code>
-            <a href="source-class-Manticoresearch.Client.html#47" class="property-name">$_logger</a>
+            <a href="source-class-Manticoresearch.Client.html#48" class="property-name">$_logger</a>
         </code>
         <div class="description">
             
@@ -766,6 +961,35 @@
     <td class="value">
         <div>
             <a href="#$_logger" class="anchor pull-right">#</a>
+            <code><span class="php-keyword1">NULL</span></code>
+        </div>
+    </td>
+</tr>
+<tr id="$_lastResponse">
+    <td class="attributes">
+        <code class="keyword">
+            protected 
+
+            
+        </code>
+    </td>
+
+    <td class="name">
+        <code>
+            <a href="source-class-Manticoresearch.Client.html#50" class="property-name">$_lastResponse</a>
+        </code>
+        <div class="description">
+            
+
+                <br>
+                <br>
+                <br>
+                <a href="https://manticoresearch.com">https://manticoresearch.com</a><br>
+        </div>
+    </td>
+    <td class="value">
+        <div>
+            <a href="#$_lastResponse" class="anchor pull-right">#</a>
             <code><span class="php-keyword1">NULL</span></code>
         </div>
     </td>

@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="resources/style.css">
 
         <title>
-            Class Manticoresearch\Endpoints\AbstractEndpoint
+            Class Manticoresearch\Indices
         </title>
     </head>
 
@@ -35,6 +35,9 @@
                                 <a href="interfaces.html">Interfaces</a>
                             </li>
 
+                            <li>
+                                <a href="traits.html">Traits</a>
+                            </li>
 
 
                             <li>
@@ -65,13 +68,9 @@
         <li>
             <a href="namespace-Manticoresearch.html">Manticoresearch</a>
         </li>
-            <li class="backslash">\</li>
-        <li>
-            <a href="namespace-Manticoresearch.Endpoints.html">Endpoints</a>
-        </li>
 
         <li class="backslash">\</li>
-        <li class="active">AbstractEndpoint</li>
+        <li class="active">Indices</li>
 </ol>
                         </div>
                     </div>
@@ -81,16 +80,24 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-    <h1>AbstractEndpoint</h1>
+    <h1>Indices</h1>
 
 
+        <dl class="tree">
+            <dd>
+
+
+                    uses
+                        <a href="trait-Manticoresearch.Utils.html">Manticoresearch\Utils</a>
+            </dd>
+        </dl>
 
 
 
     <div class="info">
-        <strong>Abstract</strong><br>
+        
 
-            <a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html" class="open-source-code">Open source code</a>
+            <a href="source-class-Manticoresearch.Indices.html" class="open-source-code">Open source code</a>
         <br>
     </div>
 
@@ -99,103 +106,7 @@
 
 
 
-<tr id="_getAllowedParams">
-
-    <td class="attributes col-md-1">
-        <code class="keyword">
-                abstract public 
-                
-                
-        </code>
-    </td>
-
-    <td class="name">
-        <div>
-            <a class="anchor pull-right" href="#_getAllowedParams">#</a>
-            <code><a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#18">getAllowedParams</a>( )</code>
-
-            <div class="description">
-                
-
-
-
-
-
-
-
-
-            </div>
-        </div>
-    </td>
-</tr>
-
-
-
-<tr id="_getURL">
-
-    <td class="attributes col-md-1">
-        <code class="keyword">
-                abstract public 
-                
-                
-        </code>
-    </td>
-
-    <td class="name">
-        <div>
-            <a class="anchor pull-right" href="#_getURL">#</a>
-            <code><a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#20">getURL</a>( )</code>
-
-            <div class="description">
-                
-
-
-
-
-
-
-
-
-            </div>
-        </div>
-    </td>
-</tr>
-
-
-
-<tr id="_getMethod">
-
-    <td class="attributes col-md-1">
-        <code class="keyword">
-                abstract public 
-                
-                
-        </code>
-    </td>
-
-    <td class="name">
-        <div>
-            <a class="anchor pull-right" href="#_getMethod">#</a>
-            <code><a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#22">getMethod</a>( )</code>
-
-            <div class="description">
-                
-
-
-
-
-
-
-
-
-            </div>
-        </div>
-    </td>
-</tr>
-
-
-
-<tr id="_setIndex">
+<tr id="___construct">
 
     <td class="attributes col-md-1">
         <code class="keyword">
@@ -207,8 +118,40 @@
 
     <td class="name">
         <div>
-            <a class="anchor pull-right" href="#_setIndex">#</a>
-            <code><a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#24-31">setIndex</a>( <span> <span class="property-name">$index</span> </span> )</code>
+            <a class="anchor pull-right" href="#___construct">#</a>
+            <code><a href="source-class-Manticoresearch.Indices.html#36-40">__construct</a>( <span> \Client <span class="property-name">$client</span> </span> )</code>
+
+            <div class="description">
+                Pq constructor.
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </td>
+</tr>
+
+
+
+<tr id="_alter">
+
+    <td class="attributes col-md-1">
+        <code class="keyword">
+                 public 
+                
+                
+        </code>
+    </td>
+
+    <td class="name">
+        <div>
+            <a class="anchor pull-right" href="#_alter">#</a>
+            <code><a href="source-class-Manticoresearch.Indices.html#46-55">alter</a>( <span> array <span class="property-name">$params</span> </span> )</code>
 
             <div class="description">
                 
@@ -227,7 +170,7 @@
 
 
 
-<tr id="_getIndex">
+<tr id="_create">
 
     <td class="attributes col-md-1">
         <code class="keyword">
@@ -239,8 +182,8 @@
 
     <td class="name">
         <div>
-            <a class="anchor pull-right" href="#_getIndex">#</a>
-            <code><a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#33-36">getIndex</a>( )</code>
+            <a class="anchor pull-right" href="#_create">#</a>
+            <code><a href="source-class-Manticoresearch.Indices.html#63-72">create</a>( <span> array <span class="property-name">$params</span> </span> )</code>
 
             <div class="description">
                 
@@ -259,7 +202,7 @@
 
 
 
-<tr id="_setParams">
+<tr id="_describe">
 
     <td class="attributes col-md-1">
         <code class="keyword">
@@ -271,8 +214,8 @@
 
     <td class="name">
         <div>
-            <a class="anchor pull-right" href="#_setParams">#</a>
-            <code><a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#38-42">setParams</a>( <span> <span class="property-name">$params</span> </span> )</code>
+            <a class="anchor pull-right" href="#_describe">#</a>
+            <code><a href="source-class-Manticoresearch.Indices.html#78-87">describe</a>( <span> array <span class="property-name">$params</span> </span> )</code>
 
             <div class="description">
                 
@@ -291,7 +234,7 @@
 
 
 
-<tr id="_getParams">
+<tr id="_drop">
 
     <td class="attributes col-md-1">
         <code class="keyword">
@@ -303,8 +246,8 @@
 
     <td class="name">
         <div>
-            <a class="anchor pull-right" href="#_getParams">#</a>
-            <code><a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#44-47">getParams</a>( )</code>
+            <a class="anchor pull-right" href="#_drop">#</a>
+            <code><a href="source-class-Manticoresearch.Indices.html#93-102">drop</a>( <span> array <span class="property-name">$params</span> </span> )</code>
 
             <div class="description">
                 
@@ -323,7 +266,7 @@
 
 
 
-<tr id="_validateParams">
+<tr id="_import">
 
     <td class="attributes col-md-1">
         <code class="keyword">
@@ -335,8 +278,8 @@
 
     <td class="name">
         <div>
-            <a class="anchor pull-right" href="#_validateParams">#</a>
-            <code><a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#49-56">validateParams</a>( )</code>
+            <a class="anchor pull-right" href="#_import">#</a>
+            <code><a href="source-class-Manticoresearch.Indices.html#107-116">import</a>( <span> array <span class="property-name">$params</span> </span> )</code>
 
             <div class="description">
                 
@@ -355,7 +298,7 @@
 
 
 
-<tr id="_getBody">
+<tr id="_flushramchunk">
 
     <td class="attributes col-md-1">
         <code class="keyword">
@@ -367,8 +310,8 @@
 
     <td class="name">
         <div>
-            <a class="anchor pull-right" href="#_getBody">#</a>
-            <code><a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#61-64">getBody</a>( )</code>
+            <a class="anchor pull-right" href="#_flushramchunk">#</a>
+            <code><a href="source-class-Manticoresearch.Indices.html#121-129">flushramchunk</a>( <span> array <span class="property-name">$params</span> </span> )</code>
 
             <div class="description">
                 
@@ -387,7 +330,7 @@
 
 
 
-<tr id="_setBody">
+<tr id="_flushrtindex">
 
     <td class="attributes col-md-1">
         <code class="keyword">
@@ -399,8 +342,8 @@
 
     <td class="name">
         <div>
-            <a class="anchor pull-right" href="#_setBody">#</a>
-            <code><a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#69-72">setBody</a>( <span> null <span class="property-name">$body</span> </span> )</code>
+            <a class="anchor pull-right" href="#_flushrtindex">#</a>
+            <code><a href="source-class-Manticoresearch.Indices.html#135-143">flushrtindex</a>( <span> array <span class="property-name">$params</span> </span> )</code>
 
             <div class="description">
                 
@@ -419,7 +362,7 @@
 
 
 
-<tr id="_getId">
+<tr id="_optimize">
 
     <td class="attributes col-md-1">
         <code class="keyword">
@@ -431,8 +374,8 @@
 
     <td class="name">
         <div>
-            <a class="anchor pull-right" href="#_getId">#</a>
-            <code><a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#77-80">getId</a>( )</code>
+            <a class="anchor pull-right" href="#_optimize">#</a>
+            <code><a href="source-class-Manticoresearch.Indices.html#149-158">optimize</a>( <span> array <span class="property-name">$params</span> </span> )</code>
 
             <div class="description">
                 
@@ -451,7 +394,7 @@
 
 
 
-<tr id="_setId">
+<tr id="_status">
 
     <td class="attributes col-md-1">
         <code class="keyword">
@@ -463,8 +406,40 @@
 
     <td class="name">
         <div>
-            <a class="anchor pull-right" href="#_setId">#</a>
-            <code><a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#85-88">setId</a>( <span> null <span class="property-name">$id</span> </span> )</code>
+            <a class="anchor pull-right" href="#_status">#</a>
+            <code><a href="source-class-Manticoresearch.Indices.html#164-173">status</a>( <span> array <span class="property-name">$params</span> </span> )</code>
+
+            <div class="description">
+                
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </td>
+</tr>
+
+
+
+<tr id="_truncate">
+
+    <td class="attributes col-md-1">
+        <code class="keyword">
+                 public 
+                
+                
+        </code>
+    </td>
+
+    <td class="name">
+        <div>
+            <a class="anchor pull-right" href="#_truncate">#</a>
+            <code><a href="source-class-Manticoresearch.Indices.html#179-188">truncate</a>( <span> array <span class="property-name">$params</span> </span> )</code>
 
             <div class="description">
                 
@@ -483,23 +458,35 @@
         </table>
 
 
+        <table class="summary table table-bordered table-responsive table-striped">
+            <tr><th>Methods used from <a href="trait-Manticoresearch.Utils.html#methods">Manticoresearch\Utils</a> trait</th></tr>
+            <tr>
+                <td>
+                    <code>
+                            <a href="trait-Manticoresearch.Utils.html#_escape">
+                                escape()
+                            </a>
+                    </code>
+                </td>
+            </tr>
+        </table>
 
 
 
         <table class="summary table table-bordered table-responsive table-striped" id="properties">
             <tr><th colspan="3">Properties Summary</th></tr>
-<tr id="$params">
+<tr id="$_client">
     <td class="attributes">
         <code class="keyword">
             protected 
 
-            
+            <a href="class-Manticoresearch.Client.html">Manticoresearch\Client</a>
         </code>
     </td>
 
     <td class="name">
         <code>
-            <a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#11" class="property-name">$params</a>
+            <a href="source-class-Manticoresearch.Indices.html#25" class="property-name">$_client</a>
         </code>
         <div class="description">
             
@@ -508,49 +495,23 @@
     </td>
     <td class="value">
         <div>
-            <a href="#$params" class="anchor pull-right">#</a>
-            <code><span class="php-keyword1">array</span> (
-)</code>
-        </div>
-    </td>
-</tr>
-<tr id="$index">
-    <td class="attributes">
-        <code class="keyword">
-            protected 
-
-            
-        </code>
-    </td>
-
-    <td class="name">
-        <code>
-            <a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#12" class="property-name">$index</a>
-        </code>
-        <div class="description">
-            
-
-        </div>
-    </td>
-    <td class="value">
-        <div>
-            <a href="#$index" class="anchor pull-right">#</a>
+            <a href="#$_client" class="anchor pull-right">#</a>
             <code><span class="php-keyword1">NULL</span></code>
         </div>
     </td>
 </tr>
-<tr id="$id">
+<tr id="$_params">
     <td class="attributes">
         <code class="keyword">
             protected 
 
-            
+            array
         </code>
     </td>
 
     <td class="name">
         <code>
-            <a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#13" class="property-name">$id</a>
+            <a href="source-class-Manticoresearch.Indices.html#30" class="property-name">$_params</a>
         </code>
         <div class="description">
             
@@ -559,90 +520,25 @@
     </td>
     <td class="value">
         <div>
-            <a href="#$id" class="anchor pull-right">#</a>
+            <a href="#$_params" class="anchor pull-right">#</a>
             <code><span class="php-keyword1">NULL</span></code>
-        </div>
-    </td>
-</tr>
-<tr id="$method">
-    <td class="attributes">
-        <code class="keyword">
-            protected 
-
-            
-        </code>
-    </td>
-
-    <td class="name">
-        <code>
-            <a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#14" class="property-name">$method</a>
-        </code>
-        <div class="description">
-            
-
-        </div>
-    </td>
-    <td class="value">
-        <div>
-            <a href="#$method" class="anchor pull-right">#</a>
-            <code><span class="php-keyword1">NULL</span></code>
-        </div>
-    </td>
-</tr>
-<tr id="$body">
-    <td class="attributes">
-        <code class="keyword">
-            protected 
-
-            
-        </code>
-    </td>
-
-    <td class="name">
-        <code>
-            <a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#15" class="property-name">$body</a>
-        </code>
-        <div class="description">
-            
-
-        </div>
-    </td>
-    <td class="value">
-        <div>
-            <a href="#$body" class="anchor pull-right">#</a>
-            <code><span class="php-keyword1">NULL</span></code>
-        </div>
-    </td>
-</tr>
-<tr id="$options">
-    <td class="attributes">
-        <code class="keyword">
-            protected 
-
-            
-        </code>
-    </td>
-
-    <td class="name">
-        <code>
-            <a href="source-class-Manticoresearch.Endpoints.AbstractEndpoint.html#16" class="property-name">$options</a>
-        </code>
-        <div class="description">
-            
-
-        </div>
-    </td>
-    <td class="value">
-        <div>
-            <a href="#$options" class="anchor pull-right">#</a>
-            <code><span class="php-keyword1">array</span> (
-)</code>
         </div>
     </td>
 </tr>
         </table>
 
 
+        <table class="summary table table-bordered table-responsive table-striped">
+            <tr>
+                <th>Properties used from <a href="trait-Manticoresearch.Utils.html#properties">Manticoresearch\Utils</a></th>
+            </tr>
+            <tr>
+                <td>
+                    <code>
+                    </code>
+                </td>
+            </tr>
+        </table>
     <div id="footer">
         Generated by <a href="https://github.com/apigen/apigen">ApiGen</a>
     </div>
