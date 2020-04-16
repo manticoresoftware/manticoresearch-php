@@ -18,7 +18,7 @@ class Request
      */
     protected $_method;
     /**
-     * @var array
+     * @var array|string
      */
     protected $_body;
     /**
