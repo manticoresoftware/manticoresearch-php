@@ -70,6 +70,10 @@ Drop an existing index. `index` is mandatory.
 Alter
 ====
 Alter perform changes on indexes. Currently supported only add/drop columns.
+Note that `text` type cannot be used in this call.
+
+Expects `index` name.
+
 `body` parameters:
  
 * `operation` -  mandatory, possible values: add,drop
@@ -107,6 +111,8 @@ Describe
 ========
 Returns structure of an index.
 
+Expects `index` name.
+
 `body` is optional. It support `pattern` as a column name for filtering the structure result.
 
         $params = [
@@ -121,6 +127,8 @@ FlushRamchunk
 =============
 Flushed RAM chunk for a RT index.
 
+Expects `index` name.
+
         $params = [
             'index' => 'testrt',
          ];
@@ -129,6 +137,7 @@ Flushed RAM chunk for a RT index.
 FlushRtindex
 ============
 Flushed the RT index to disk.
+Expects only `index` name.
 
         $params = [
             'index' => 'testrt',
@@ -139,6 +148,8 @@ Optimize
 ========
 
 Launch optimization on RT index. The command doesn't wait by default for the optimize operation to finish. 
+
+Expects `index` name.
 
 `body` is optional. Supports `sync` parameter - if set, the command waits for the optimize to finish.
 
@@ -151,7 +162,9 @@ Launch optimization on RT index. The command doesn't wait by default for the opt
 
 Status
 ======
-Return statistics about index: documents, size, chunks, as well as query statistics. 
+Return statistics about index: documents, size, chunks, as well as query statistics.
+
+Expects `index` name. 
 
 `body` is optional. It support `pattern` as a property/performance metric to filter upon.
 
@@ -165,6 +178,8 @@ Return statistics about index: documents, size, chunks, as well as query statist
 Truncate
 ========
 Truncates an index. 
+
+Expects `index` name.
  
         $params = [
             'index' => 'testrt'

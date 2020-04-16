@@ -13,7 +13,7 @@ class SqlToArray extends Response
 
         if (isset($response['columns'], $response['data'])) {
             $data=[];
-            $names = array_walk($response['columns'], static function (&$value, $key) {
+           array_walk($response['columns'], static function (&$value, $key) {
                 $value= array_keys($value)[0];
             });
             foreach ($response['data'] as $property) {

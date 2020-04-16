@@ -62,7 +62,7 @@ class ResultHit
 
     public function has($key)
     {
-        return isset($this->data['_source'][$key]);
+        return isset($this->_data['_source'][$key]);
     }
 
     public function getData()
