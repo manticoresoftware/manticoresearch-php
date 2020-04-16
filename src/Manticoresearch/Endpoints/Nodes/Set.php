@@ -18,8 +18,8 @@ class Set extends EmulateBySql
         $this->_body = $params;
         if (isset($params['variable']) && is_array($params['variable'])) {
             return parent::setBody([
-                'query' => "SET " . (isset($params['type']) ?  $params['type'] . "'" : "")." ".
-                    $params['variable']['name']." '" . $params['variable']['value']
+                'query' =>  "SET " . (isset($params['type']) ?  $params['type'] . "'" : "")." ".
+                    $params['variable']['name']."=" . $params['variable']['value']
             ]);
 
         }
