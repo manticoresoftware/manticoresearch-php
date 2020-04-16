@@ -3,6 +3,9 @@
 namespace Manticoresearch\Test\Endpoints\Indices;
 
 use Manticoresearch\Client;
+use Manticoresearch\Endpoints\Indices\Create;
+use Manticoresearch\Endpoints\Indices\Drop;
+use Manticoresearch\Exceptions\RuntimeException;
 
 class CreateTest  extends \PHPUnit\Framework\TestCase
 {
@@ -84,5 +87,20 @@ class CreateTest  extends \PHPUnit\Framework\TestCase
         ];
         $response = $client->indices()->drop($params);
         $this->assertSame( ['total'=>0,'error'=>'','warning'=>''],$response);
+    }
+
+    public function testSetGetIndex()
+    {
+        $describe = new Create();
+        $describe->setIndex('testName');
+        $this->assertEquals('testName', $describe->getIndex());
+    }
+
+    public function testSetBodyNoIndex()
+    {
+        $describe = new Create();
+        $this->expectExceptionMessage('Index name is missing');
+        $this->expectException(RuntimeException::class);
+        $describe->setBody([]);
     }
 }

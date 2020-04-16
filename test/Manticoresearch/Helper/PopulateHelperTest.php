@@ -19,6 +19,13 @@ class PopulateHelperTest extends \PHPUnit\Framework\TestCase
 
     public function populateForKeywords() {
         $this->getClient();
+
+        $this->client->indices()->drop([
+            'index' => 'products',
+                'body' => ['silent' => true]
+            ]
+        );
+
         $params = [
             'index' => 'products',
             'body' => [
@@ -66,6 +73,7 @@ class PopulateHelperTest extends \PHPUnit\Framework\TestCase
         $results = $this->client->search($search);
         $actualTotal = $results['hits']['total'];
         $this->assertEquals($numberOfResultsExpected, $actualTotal);
+        return $results;
     }
 
     public function describe($indexName)
