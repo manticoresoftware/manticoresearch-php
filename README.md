@@ -1,11 +1,35 @@
 manticoresearch-php
 ===================
-
 [![Build Status](https://travis-ci.org/manticoresoftware/manticoresearch-php.svg?branch=master)](https://travis-ci.org/manticoresoftware/manticoresearch-php)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/manticoresoftware/manticoresearch-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/manticoresoftware/manticoresearch-php/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/manticoresoftware/manticoresearch-php/v/stable)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
 [![License](https://poser.pugx.org/manticoresoftware/manticoresearch-php/license)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
 [![Slack][slack-badge]][slack-url]
+
+[![Build Status](https://travis-ci.org/gordonbanderson/manticoresearch-php.svg?branch=testing)](https://travis-ci.org/gordonbanderson/manticoresearch-php)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/gordonbanderson/manticoresearch-php/badges/quality-score.png?b=testing)](https://scrutinizer-ci.com/g/gordonbanderson/manticoresearch-php/?branch=testing)
+[![Build Status](https://scrutinizer-ci.com/g/gordonbanderson/manticoresearch-php/badges/build.png?b=testing)](https://scrutinizer-ci.com/g/gordonbanderson/manticoresearch-php/build-status/testing)
+[![CircleCI](https://circleci.com/gh/gordonbanderson/manticoresearch-php.svg?style=svg)](https://circleci.com/gh/gordonbanderson/manticoresearch-php)
+
+[![codecov.io](https://codecov.io/github/gordonbanderson/manticoresearch-php/coverage.svg?branch=testing)](https://codecov.io/github/gordonbanderson/manticoresearch-php?branch=testing)
+
+
+[![Latest Stable Version](https://poser.pugx.org/manticoresoftware/manticoresearch-php/version)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
+[![Latest Unstable Version](https://poser.pugx.org/manticoresoftware/manticoresearch-php/v/unstable)](//packagist.org/packages/manticoresoftware/manticoresearch-php)
+[![Total Downloads](https://poser.pugx.org/manticoresoftware/manticoresearch-php/downloads)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
+[![License](https://poser.pugx.org/manticoresoftware/manticoresearch-php/license)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
+[![Monthly Downloads](https://poser.pugx.org/manticoresoftware/manticoresearch-php/d/monthly)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
+[![Daily Downloads](https://poser.pugx.org/manticoresoftware/manticoresearch-php/d/daily)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
+[![composer.lock](https://poser.pugx.org/manticoresoftware/manticoresearch-php/composerlock)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
+
+[![GitHub Code Size](https://img.shields.io/github/languages/code-size/gordonbanderson/manticoresearch-php)](https://github.com/gordonbanderson/manticoresearch-php)
+[![GitHub Repo Size](https://img.shields.io/github/repo-size/gordonbanderson/manticoresearch-php)](https://github.com/gordonbanderson/manticoresearch-php)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/gordonbanderson/manticoresearch-php)](https://github.com/gordonbanderson/manticoresearch-php)
+[![GitHub Activity](https://img.shields.io/github/commit-activity/m/gordonbanderson/manticoresearch-php)](https://github.com/gordonbanderson/manticoresearch-php)
+[![GitHub Issues](https://img.shields.io/github/issues/gordonbanderson/manticoresearch-php)](https://github.com/gordonbanderson/manticoresearch-php/issues)
+
+![codecov.io](https://codecov.io/github/gordonbanderson/manticoresearch-php/branch.svg?branch=testing)
+
 
 Official PHP client for Manticore Search.
 
