@@ -4,7 +4,6 @@
 namespace Manticoresearch;
 
 
-use Manticoresearch\Exceptions\RuntimeException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -59,7 +58,7 @@ class Connection
     }
 
     /**
-     * @param $host
+     * @param string $host
      * @return $this
      */
     public function setHost($host): self
@@ -77,7 +76,7 @@ class Connection
     }
 
     /**
-     * @param $port
+     * @param string|integer $port
      * @return $this
      */
     public function setPort($port): self
@@ -95,7 +94,7 @@ class Connection
     }
 
     /**
-     * @param $timeout
+     * @param integer $timeout
      * @return $this
      */
     public function setTimeout($timeout): self
@@ -113,7 +112,7 @@ class Connection
     }
 
     /**
-     * @param $headers
+     * @param array $headers
      * @return $this
      */
     public function setheaders($headers): self
@@ -131,7 +130,7 @@ class Connection
     }
 
     /**
-     * @param $connecttimeout
+     * @param integer $connecttimeout
      * @return $this
      */
     public function setConnectTimeout($connecttimeout): self
@@ -149,7 +148,7 @@ class Connection
     }
 
     /**
-     * @param $transport
+     * @param Transport $transport
      * @return $this
      */
     public function setTransport($transport): self
@@ -167,7 +166,7 @@ class Connection
     }
 
     /**
-     * @param LoggerInterface
+     * @param LoggerInterface $logger
      * @return mixed
      * @throws \Exception
      */
@@ -177,7 +176,7 @@ class Connection
     }
 
     /**
-     * @param $config
+     * @param array $config
      * @return $this
      */
     public function setConfig($config): self
@@ -189,8 +188,9 @@ class Connection
     }
 
     /**
-     * @param string|null
+     * @param string|null $key
      * @return mixed|null
+     *
      */
     public function getConfig($key =  null)
     {
@@ -201,10 +201,10 @@ class Connection
     }
 
     /**
-     * @param array $params
+     * @param array $params|self
      * @return array|static
      */
-    public static function create($params = [])
+    public static function create($params)
     {
         if (is_array($params)) {
             return new static($params);

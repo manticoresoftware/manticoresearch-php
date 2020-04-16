@@ -13,18 +13,18 @@ class StaticRoundRobinTest extends TestCase
         $client->setHosts([
             [
                 'host' => $_SERVER['MS_HOST'],
-                'port' => 9308
+                'port' => $_SERVER['MS_PORT']
             ],
             [
                 'host' => $_SERVER['MS_HOST'],
-                'port' => 9308
+                'port' => $_SERVER['MS_PORT']
             ],
 
         ]);
 
         $connection = $client->getConnectionPool()->getConnection();
         $this->assertSame( $_SERVER['MS_HOST'], $connection->getHost());
-        $this->assertSame(9308, $connection->getPort());
+        $this->assertSame($_SERVER['MS_PORT'], $connection->getPort());
 
         $connection = $client->getConnectionPool()->getConnection();
         $this->assertSame( $_SERVER['MS_HOST'], $connection->getHost());
@@ -43,7 +43,7 @@ class StaticRoundRobinTest extends TestCase
             ],
             [
                 'host' => $_SERVER['MS_HOST'],
-                'port' => 9308
+                'port' => $_SERVER['MS_PORT']
             ],
 
         ]);
@@ -73,7 +73,7 @@ class StaticRoundRobinTest extends TestCase
         ];
 
         $client->search($params);
-        $this->assertSame(9308, $client->getConnectionPool()->getConnection()->getPort());
+        $this->assertSame($_SERVER['MS_PORT'], $client->getConnectionPool()->getConnection()->getPort());
     }
     public function testSequence()
     {
