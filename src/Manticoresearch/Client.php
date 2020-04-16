@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 /**
- * Class Client
+ * Manticore  client object
  * @package Manticoresearch
  * @category Manticoresearch
  * @author Adrian Nuta <adrian.nuta@manticoresearch.com>
@@ -59,7 +59,6 @@ class Client
         $this->setConfig($config);
         $this->_logger = $logger ?? new NullLogger();
         $this->_initConnections();
-
     }
 
     protected function _initConnections()
@@ -72,9 +71,7 @@ class Client
                 } else {
                     $connections[] = $connection;
                 }
-
             }
-
         }
 
         if (empty($connections)) {
@@ -100,11 +97,11 @@ class Client
         if (!isset($this->_config['retries'])) {
             $this->_config['retries'] = count($connections);
         }
-        $this->_connectionPool = new Connection\ConnectionPool($connections, $strategy, $this->_config['retries']);
+        $this->_connectionPool = new Connection\ConnectionPool($connections, $strategy ?? new $this->_connectionStrategy, $this->_config['retries']);
     }
 
     /**
-     * @param $hosts
+     * @param string|array $hosts
      */
     public function setHosts($hosts)
     {
@@ -123,7 +120,7 @@ class Client
     }
 
     /**
-     * @param $config
+     * @param array $config
      * @return Client
      */
     public static function create($config): Client
@@ -132,12 +129,11 @@ class Client
     }
 
     /**
-     * @param $config
+     * @param array $config
      * @return Client
      */
     public static function createFromArray($config): Client
     {
-
         return new self($config);
     }
 
@@ -150,7 +146,7 @@ class Client
     }
 
     /**
-     * @return mixed
+     * @return ConnectionPool
      */
     public function getConnectionPool(): ConnectionPool
     {
@@ -160,23 +156,27 @@ class Client
     /**
      * Endpoint: search
      * @param array $params
+     * @param bool $obj
+     * @return array|Response
      */
-    public function search(array $params = [])
+    public function search(array $params = [],$obj=false)
     {
-
-
         $endpoint = new Endpoints\Search($params);
         $response = $this->request($endpoint);
-        return $response->getResponse();
+        if($obj ===true) {
+            return $response;
+        }else{
+            return $response->getResponse();
+        }
     }
 
     /**
      * Endpoint: insert
      * @param array $params
+     * @return array
      */
     public function insert(array $params = [])
     {
-
         $endpoint = new Endpoints\Insert($params);
         $response = $this->request($endpoint);
 
@@ -190,7 +190,6 @@ class Client
      */
     public function replace(array $params = [])
     {
-
         $endpoint = new Endpoints\Replace($params);
         $response = $this->request($endpoint);
 
@@ -200,10 +199,10 @@ class Client
     /**
      * Endpoint: update
      * @param array $params
+     * @return array
      */
     public function update(array $params = [])
     {
-
         $endpoint = new Endpoints\Update($params);
         $response = $this->request($endpoint);
 
@@ -213,6 +212,7 @@ class Client
     /**
      * Endpoint: sql
      * @param array $params
+     * @return array
      */
     public function sql(array $params = [])
     {
@@ -233,7 +233,6 @@ class Client
      */
     public function delete(array $params = [])
     {
-
         $endpoint = new Endpoints\Delete($params);
         $response = $this->request($endpoint);
 
@@ -245,7 +244,6 @@ class Client
      */
     public function pq(): Pq
     {
-
         return new Pq($this);
     }
 
@@ -254,7 +252,6 @@ class Client
      */
     public function indices(): Indices
     {
-
         return new Indices($this);
     }
 
@@ -263,7 +260,6 @@ class Client
      */
     public function nodes(): Nodes
     {
-
         return new Nodes($this);
     }
 
@@ -315,8 +311,6 @@ class Client
 
     public function request(Request $request, array $params = []): Response
     {
-
-
         try {
             $connection = $this->_connectionPool->getConnection();
             $this->_lastResponse = $connection->getTransportHandler($this->_logger)->execute($request, $params);
@@ -331,16 +325,19 @@ class Client
                 'exception' => $e->getMessage(),
                 'request' => $e->getRequest()->toArray()
             ]);
-            $connection->mark(false);
+
+            if (isset($connection)) {
+                $connection->mark(false);
+            }
+
             return $this->request($request, $params);
         }
         return $this->_lastResponse;
     }
-
     /*
-     *
-     * @return Response
-     */
+ *
+ * @return Response
+ */
 
     public function getLastResponse(): Response
     {

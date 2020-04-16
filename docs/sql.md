@@ -14,3 +14,15 @@ $params = [
 
 $response = $client->sql($params);
 ```
+For non-SELECT commands, `mode` must be passed:
+
+```
+$params = [
+    'mode' => 'raw',
+    'body' => [
+        'query' => "UPDATE movies set rating=7.0 WHERE id=10"
+    ]
+];
+
+$response = $client->sql($params);
+```

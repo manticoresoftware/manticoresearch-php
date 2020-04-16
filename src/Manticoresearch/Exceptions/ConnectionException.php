@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Exceptions;
 
-
 use Manticoresearch\Request;
 use Throwable;
 

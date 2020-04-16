@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Transport;
 
-
 use Manticoresearch\Connection;
 use Manticoresearch\Request;
 use Manticoresearch\Transport;

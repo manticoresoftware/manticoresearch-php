@@ -3,7 +3,6 @@
 
 namespace Manticoresearch;
 
-
 use Manticoresearch\Endpoints\Cluster\Alter;
 use Manticoresearch\Endpoints\Cluster\Create;
 use Manticoresearch\Endpoints\Cluster\Delete;
@@ -20,13 +19,12 @@ class Cluster
 
     /**
      * Pq constructor.
-     * @param $client
+     * @param Client $client
      */
     public function __construct($client)
     {
         $this->_client = $client;
         $this->_params =['responseClass'=>'Manticoresearch\\Response\\SqlToArray'];
-
     }
 
     public function alter($params)
@@ -36,9 +34,8 @@ class Cluster
         $endpoint = new Alter();
         $endpoint->setCluster($cluster);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->_client->request($endpoint, $this->_params);
         return  $response->getResponse();
-
     }
 
     public function create($params)
@@ -48,9 +45,8 @@ class Cluster
         $endpoint = new Create();
         $endpoint->setCluster($cluster);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->_client->request($endpoint, $this->_params);
         return  $response->getResponse();
-
     }
 
     public function delete($params)
@@ -60,9 +56,8 @@ class Cluster
         $endpoint = new Delete();
         $endpoint->setCluster($cluster);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->_client->request($endpoint, $this->_params);
         return  $response->getResponse();
-
     }
 
     public function join($params)
@@ -72,9 +67,8 @@ class Cluster
         $endpoint = new Join();
         $endpoint->setCluster($cluster);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->_client->request($endpoint, $this->_params);
         return  $response->getResponse();
-
     }
 
     public function set($params)
@@ -84,8 +78,7 @@ class Cluster
         $endpoint = new Set();
         $endpoint->setCluster($cluster);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->_client->request($endpoint, $this->_params);
         return  $response->getResponse();
-
     }
 }

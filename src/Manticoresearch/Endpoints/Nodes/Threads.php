@@ -16,7 +16,7 @@ class Threads extends EmulateBySql
     {
         $options = [];
         if (count($params) > 2) {
-            foreach (array_splice($parameters, 2) as $name => $value) {
+            foreach (array_splice($params, 2) as $name => $value) {
                 $options[] = "$value=$name";
             }
         }

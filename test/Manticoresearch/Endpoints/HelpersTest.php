@@ -8,7 +8,7 @@ class HelpersTest  extends \PHPUnit\Framework\TestCase
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-        $params = ['host' => $_SERVER['MS_HOST'], 'port' => 9308];
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
         static::$client = new Client($params);
         $params = [
             'index' => 'products',
