@@ -19,6 +19,7 @@ unit_testing:
   image: php:7.1-cli-stretch
   variables:
     MS_HOST: "manticoresearch-manticore"
+    MS_PORT: "9308"
   stage: test
   script:
     - vendor/bin/phpunit test/
