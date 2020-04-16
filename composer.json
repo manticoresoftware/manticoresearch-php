@@ -6,7 +6,7 @@
     "type": "library",
     "require": {
         "php": "^7.1",
-        "ext-json": "^1",
+        "ext-json": "*",
         "psr/log": "^1.1"
     },
     "suggest": {
