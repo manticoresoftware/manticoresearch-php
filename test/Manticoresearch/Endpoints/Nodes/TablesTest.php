@@ -14,23 +14,19 @@ class TablesTest  extends \PHPUnit\Framework\TestCase
     {
         $helper = new PopulateHelperTest();
         $client = $helper->getClient();
-        $client->indices()->drop([
-                'index' => 'testrt',
-                'body' => ['silent' => true]
-            ]
-        );
 
-        $client->indices()->drop([
-                'index' => 'products',
-                'body' => ['silent' => true]
-            ]
-        );
+        // need to remove indexes created by other tests
+        $otherIndexes = [
+          'testrt', 'products', 'testrtdist', 'testindex', 'movies', 'bulktest'
+        ];
+        foreach($otherIndexes as $index) {
+            $client->indices()->drop([
+                    'index' => $index,
+                    'body' => ['silent' => true]
+                ]
+            );
+        }
 
-        $client->indices()->drop([
-                'index' => 'testrtdist',
-                'body' => ['silent' => true]
-            ]
-        );
 
         $helper->populateForKeywords();
 
