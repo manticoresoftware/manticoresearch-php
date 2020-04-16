@@ -1,6 +1,5 @@
 stages:
   - test
-  - publish
 
 cache:
   paths:
@@ -25,19 +24,3 @@ unit_testing:
     - vendor/bin/phpunit test/
   except:
     - gh-pages
-
-apidoc_gen:
-  image: php:7.2-cli-stretch
-  stage: publish
-  script:
-    - mkdir gh-pages
-    - url_host=`git remote get-url origin | sed -e "s/https:\/\/gitlab-ci-token:.*@//g"`
-    - git clone --branch=gh-pages "https://gitlab-ci-token:${WRTOK}@${url_host}" gh-pages
-    - git config --global user.email "$GITLAB_USER_EMAIL"
-    - git config --global user.name "$GITLAB_USER_NAME"
-    - php composer.phar require apigen/apigen:dev-master  roave/better-reflection:dev-master#ce9d784
-    - vendor/bin/apigen generate src --destination gh-pages
-    - cd gh-pages && git add .
-    - git diff-index --quiet HEAD || git commit -m"update apidocs" && git push
-  only:
-    - master
