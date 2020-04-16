@@ -43,14 +43,15 @@ Table of Contents
 
 Each request array can have one of the 
 
-* body -  the API endpoint POST payload
+* body - it's content goes as the payload of the HTTP request 
 * index/cluster  - index/cluster name
 * id - document id
-* query - endpoint parameters
+* query - endpoint URL parameters (not to be confused with `query` found in the payload of some responses)
 
 Depending on the request, some of the parameters are mandatory.
 
-On the body payload there is no check regarding the validity made before sending the request.
+On the body payload there is no check regarding the validity of it's structure before sending the request.
+
 
 ### Responses 
 
@@ -60,10 +61,19 @@ Responses are returned as arrays reflection of the response object received from
 ### Search
 For complete reference of payload and response see Manticore's [Search API](https://docs.manticoresearch.com/latest/html/http_reference/json_search.html)
 
-`body` requires presence of `index` and `query` parameters. 
+`body` properties:
+- index name (mandatory)
+- query  tree expression (mandatory)
+- sort array
+- script fields with expressions
+- highlight parameters
+- limit of result set
+- offset of result set
+- _source - list of fields that will appear in the result set
+- profile - when enabled it returns profiling of the search query
 
 A simple search example:
-```
+```php
 $params = [
     'body' => [
         'index' => 'movies',
@@ -71,18 +81,39 @@ $params = [
             'match_phrase' => [
                 'movie_title' => 'star trek nemesis',
             ]
-        ]
+        ],
+        'sort' => ['_score','id'],
+        'script_fields' =>['myexpr'=>['script'=>['inline'=>'IF(price<10,1,0)']]],
+        'highlight' => ['fields'=>['title','content']],
+        'limit' => 12,
+        'offset' =>100,
+        '_source'=>['title','content','cat_id'],
+        'profile' => true
     ]
 ];
 
 $response = $client->search($params);
 ```
 
+Response will be a JSON containing
+
+- took - query time
+- timed_out - boolean, true if query timed out
+- hits - array with matches
+- profile - optional, if profiling is set
+
+
 ### Insert
 
 For complete reference of payload and response see Manticore's [Insert API](https://docs.manticoresearch.com/latest/html/http_reference/json_insert.html)
 
-`body` requires presence of `index`, `id` and  `doc` parameters.
+`body` properties consist of:
+
+- index name
+- document as array of properties
+- id as document id
+
+All are mandatory.
 
 ```
 $doc = [
@@ -112,7 +143,13 @@ $response = $client->insert($doc);
 
 For complete reference of payload and response see Manticore's [Replace API](https://docs.manticoresearch.com/latest/html/http_reference/json_replace.html)
 
-`body` requires presence of `index`, `id` and  `doc` parameters.
+`body` properties consist of:
+
+- index name
+- document as array of properties
+- id as document id
+
+All are mandatory.
 
 ```
 $doc = [
@@ -133,8 +170,13 @@ $response = $client->replace($doc);
 
 For complete reference of payload and response see Manticore's [Update API](https://docs.manticoresearch.com/latest/html/http_reference/json_update.html)
 
-`body` requires presence of `index`, `id` and  `doc` parameters.
+`body` properties consist of:
 
+- index name
+- document as array of properties
+- id as document id
+
+All are mandatory.
 ```
 $doc = [
     'body' => [
@@ -153,7 +195,12 @@ $response = $client->update($doc);
 
 For complete reference of payload and response see Manticore's [Delete API](https://docs.manticoresearch.com/latest/html/http_reference/json_delete.html)
 
-`body` requires presence of `index` and `id`  parameters.
+`body` properties consist of:
+
+- index name
+- id as document id
+
+All are mandatory.
 
 ```
 $doc = [
@@ -172,28 +219,28 @@ For complete reference of payload and response see Manticore's [Bulk API](https:
 
 Bulk allows to send in one request several operations of data manipulation (inserts,replaces, updates or deletes).
 
-```
+```php
 $doc = [
     'body' => [
-        'insert' => [
+        ['insert' => [
             'index' => 'testrt',
             'id' => 34,
             'doc' => [
                 'gid' => 1,
                 'title' => 'a new added document',
             ]
-        ],
-        'update' => [
+        ]],
+        ['update' => [
             'index' => 'testrt',
             'id' => 56,
             'doc' => [
                 'gid' => 4,
             ]
-        ],
-        'delete' => [
+        ]],
+       [ 'delete' => [
             'index' => 'testrt',
             'id' => 100
-        ]
+        ]]
     ]
 ];
 

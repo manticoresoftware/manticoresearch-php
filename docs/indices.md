@@ -11,8 +11,8 @@ Create a new index.
 `body` can contain:
 
 * `columns` - definition of fields for indexes with data
-* `options` - various index settings
-* `silent` -  if set to true, the create will not fail with error if there is already an index with the designated name
+* `settings` - various index settings
+* `silent` -  optional, if set to true, the create will not fail with error if there is already an index with the designated name
 
 `body` require presence of `columns`  array for RT and PQ indexes where keys are the column names. Each column requires a  `type` defined.
 `text` type support 'indexed' and 'stored' options.
@@ -63,6 +63,7 @@ Drop an existing index. `index` is mandatory.
 
         $params = [
             'index' => 'testrt',
+            ['body' => ['silent'=>true ]]
          ];
         $response = $client->indices()->drop($params);
         
