@@ -5,7 +5,7 @@ namespace Manticoresearch;
 
 class Query implements Arrayable
 {
-    protected $_params;
+    protected $_params = [];
 
     public function add($k, $v)
     {
