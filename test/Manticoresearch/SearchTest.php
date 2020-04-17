@@ -162,44 +162,95 @@ class SearchTest extends TestCase
         $search->setIndex('movies');
     }
 
-    protected function getFirstResultHit()
+    protected function _getResultSet()
     {
         $search = $this->_getSearch();
         $result = $search->search('"team of explorers"/2')->get();
+        return $result;
+    }
+
+    protected function _getFirstResultHit()
+    {
+        $result = $this->_getResultSet();
         $result->rewind();
-        $result->next();
+        $this->assertEquals(0, $result->key());
         return $result->current();
     }
 
-    public function testResultHitGetScore()
+    public function testResultSetNextRewind()
     {
-        $resultHit = $this->getFirstResultHit();
-        $this->assertEquals(3464, $resultHit->getScore());
+        $result = $this->_getResultSet();
+        $this->assertEquals(0, $result->key());
+
+        $result->next();
+        $this->assertEquals(1, $result->key());
+        $result->next();
+        $this->assertEquals(2, $result->key());
+        $result->rewind();
+        $this->assertEquals(0, $result->key());
+    }
+
+    public function testResultSetGetTotal()
+    {
+        $result = $this->_getResultSet();
+        $this->assertEquals(4, $result->getTotal());
+    }
+
+    public function testResultSetGetTime()
+    {
+        $result = $this->_getResultSet();
+        $this->assertGreaterThanOrEqual(0, $result->getTime());
+    }
+
+    public function testResultSetHasNotTimedOut()
+    {
+        $result = $this->_getResultSet();
+        $this->assertFalse( $result->hasTimedout());
+    }
+
+    public function testResultSetGetResponse()
+    {
+        $result = $this->_getResultSet();
+        $keys = array_keys($result->getResponse()->getResponse());
+        sort($keys);
+        $this->assertEquals(['hits', 'timed_out', 'took'], $keys );
+    }
+
+    public function testResultSetGetNullProfile()
+    {
+        $result = $this->_getResultSet();
+        $this->assertNull($result->getProfile());
+    }
+
+        public function testResultHitGetScore()
+    {
+        $resultHit = $this->_getFirstResultHit();
+        $this->assertEquals(3468, $resultHit->getScore());
     }
 
     public function testResultHitGetID()
     {
-        $resultHit = $this->getFirstResultHit();
-        $this->assertEquals(2, $resultHit->getId());
+        $resultHit = $this->_getFirstResultHit();
+        $this->assertEquals(6, $resultHit->getId());
     }
 
     public function testResultHitGetValue()
     {
-        $resultHit = $this->getFirstResultHit();
-        $this->assertEquals(2014, $resultHit->get('year'));
-        $this->assertEquals(2014, $resultHit->__get('year'));
+        $resultHit = $this->_getFirstResultHit();
+        $this->assertEquals(1986, $resultHit->get('year'));
+        $this->assertEquals(1986, $resultHit->__get('year'));
     }
 
     public function testResultHitHasValue()
     {
-        $resultHit = $this->getFirstResultHit();
+        $resultHit = $this->_getFirstResultHit();
         $this->assertTrue($resultHit->has('year'));
         $this->assertTrue($resultHit->__isset('year'));
     }
 
     public function testResultHitDoesNotHaveValue()
     {
-        $resultHit = $this->getFirstResultHit();
+        $resultHit = $this->_getFirstResultHit();
         $this->assertFalse($resultHit->has('nonExistentKey'));
         $this->assertFalse($resultHit->__isset('nonExistentKey'));
         $this->assertEquals([], $resultHit->get('nonExistentKey'));
@@ -212,7 +263,7 @@ class SearchTest extends TestCase
 
     public function testResultHitGetData()
     {
-        $resultHit = $this->getFirstResultHit();
+        $resultHit = $this->_getFirstResultHit();
         $keys = array_keys($resultHit->getData());
         sort($keys);
         $this->assertEquals([
@@ -231,7 +282,7 @@ class SearchTest extends TestCase
 
     public function testSetGetID()
     {
-        $resultHit = $this->getFirstResultHit();
+        $resultHit = $this->_getFirstResultHit();
         $arbitraryID = 668689;
         $resultHit->setId($arbitraryID);
         $this->assertEquals($arbitraryID, $resultHit->getId());
