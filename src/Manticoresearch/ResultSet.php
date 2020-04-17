@@ -15,12 +15,22 @@ namespace Manticoresearch;
  */
 class ResultSet implements \Iterator, \Countable
 {
+    /** @var int The position of the iterator through the result set */
     private $_position = 0;
+
+    /** @var Response */
     private $_response;
+
     private $_array = [];
+
+    /** @var int|mixed Total number of results */
     private $_total = 0;
+
     private $_took;
+
+    /** @var mixed Did the query time out? */
     private $_timed_out;
+
     private $_profile;
 
     public function __construct($responseObj)
@@ -81,6 +91,9 @@ class ResultSet implements \Iterator, \Countable
         return $this->_timed_out;
     }
 
+    /**
+     * @return Response
+     */
     public function getResponse()
     {
         return $this->_response;
