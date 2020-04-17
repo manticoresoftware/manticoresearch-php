@@ -11,6 +11,7 @@ use Manticoresearch\Endpoints\Indices\FlushRamchunk;
 use Manticoresearch\Endpoints\Indices\FlushRtindex;
 use Manticoresearch\Endpoints\Indices\Import;
 use Manticoresearch\Endpoints\Indices\Optimize;
+use Manticoresearch\Endpoints\Indices\Settings;
 use Manticoresearch\Endpoints\Indices\Status;
 use Manticoresearch\Endpoints\Indices\Truncate;
 use Manticoresearch\Endpoints\Sql;
@@ -166,6 +167,21 @@ class Indices
         $index = $params['index'] ?? null;
         $body = $params['body'] ?? null;
         $endpoint = new Status();
+        $endpoint->setIndex($index);
+        $endpoint->setBody($body);
+        $response = $this->_client->request($endpoint, $this->_params);
+        return $response->getResponse();
+    }
+
+    /**
+     * @param $params
+     * @return array|mixed|string
+     */
+    public function settings($params)
+    {
+        $index = $params['index'] ?? null;
+        $body = $params['body'] ?? null;
+        $endpoint = new Settings();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
         $response = $this->_client->request($endpoint, $this->_params);
