@@ -174,7 +174,20 @@ Expects `index` name.
                 'pattern' => 'propertyname'
             ]
         ];
-        $response = $client->indices()->status($params);             
+        $response = $client->indices()->status($params);
+
+Settings
+========
+Return a report with index's current settings.
+
+Expects `index` name.
+
+
+        $params = [
+            'index' => 'testrt',
+        ];
+        $response = $client->indices()->status($params);
+
 Truncate
 ========
 Truncates an index. 
