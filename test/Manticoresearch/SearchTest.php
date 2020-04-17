@@ -160,32 +160,60 @@ class SearchTest extends TestCase
         $this->assertCount(5, $result);
         $search->reset();
         $search->setIndex('movies');
-
-
     }
 
-    public function testResultHit()
+    protected function getFirstResultHit()
     {
         $search = $this->_getSearch();
         $result = $search->search('"team of explorers"/2')->get();
         $result->rewind();
         $result->next();
-        $hit = $result->current();
+        return $result->current();
+    }
 
-        $this->assertEquals(3464, $hit->getScore());
-        $this->assertEquals(2, $hit->getId());
+    public function testResultHitGetScore()
+    {
+        $resultHit = $this->getFirstResultHit();
+        $this->assertEquals(3464, $resultHit->getScore());
+    }
 
-        // @todo Not enabled $this->assertEquals(2, $hit->getHighlight());
+    public function testResultHitGetID()
+    {
+        $resultHit = $this->getFirstResultHit();
+        $this->assertEquals(2, $resultHit->getId());
+    }
 
-        // assert a value and that it exists
-        $this->assertEquals(2014, $hit->get('year'));
-        $this->assertEquals(2014, $hit->__get('year'));
-        $this->assertTrue($hit->has('year'));
+    public function testResultHitGetValue()
+    {
+        $resultHit = $this->getFirstResultHit();
+        $this->assertEquals(2014, $resultHit->get('year'));
+        $this->assertEquals(2014, $resultHit->__get('year'));
+    }
 
-        $this->assertFalse($hit->has('nonExistentKey'));
-        $this->assertEquals([], $hit->get('nonExistentKey'));
+    public function testResultHitHasValue()
+    {
+        $resultHit = $this->getFirstResultHit();
+        $this->assertTrue($resultHit->has('year'));
+        $this->assertTrue($resultHit->__isset('year'));
+    }
 
-        $keys = array_keys($hit->getData());
+    public function testResultHitDoesNotHaveValue()
+    {
+        $resultHit = $this->getFirstResultHit();
+        $this->assertFalse($resultHit->has('nonExistentKey'));
+        $this->assertFalse($resultHit->__isset('nonExistentKey'));
+        $this->assertEquals([], $resultHit->get('nonExistentKey'));
+    }
+
+    public function testResultHitDoesGetHighlight()
+    {
+        $this->markTestSkipped('TODO - highlight check');
+    }
+
+    public function testResultHitGetData()
+    {
+        $resultHit = $this->getFirstResultHit();
+        $keys = array_keys($resultHit->getData());
         sort($keys);
         $this->assertEquals([
             0 => 'advise',
@@ -198,5 +226,14 @@ class SearchTest extends TestCase
             7 => 'title',
             8 => 'year',
         ], $keys);
+    }
+
+
+    public function testSetGetID()
+    {
+        $resultHit = $this->getFirstResultHit();
+        $arbitraryID = 668689;
+        $resultHit->setId($arbitraryID);
+        $this->assertEquals($arbitraryID, $resultHit->getId());
     }
 }
