@@ -164,5 +164,39 @@ class SearchTest extends TestCase
 
     }
 
+    public function testResultHit()
+    {
+        $search = $this->_getSearch();
+        $result = $search->search('"team of explorers"/2')->get();
+        $result->rewind();
+        $result->next();
+        $hit = $result->current();
 
+        $this->assertEquals(3464, $hit->getScore());
+        $this->assertEquals(2, $hit->getId());
+
+        // @todo Not enabled $this->assertEquals(2, $hit->getHighlight());
+
+        // assert a value and that it exists
+        $this->assertEquals(2014, $hit->get('year'));
+        $this->assertEquals(2014, $hit->__get('year'));
+        $this->assertTrue($hit->has('year'));
+
+        $this->assertFalse($hit->has('nonExistentKey'));
+        $this->assertEquals([], $hit->get('nonExistentKey'));
+
+        $keys = array_keys($hit->getData());
+        sort($keys);
+        $this->assertEquals([
+            0 => 'advise',
+            1 => 'language',
+            2 => 'lat',
+            3 => 'lon',
+            4 => 'meta',
+            5 => 'plot',
+            6 => 'rating',
+            7 => 'title',
+            8 => 'year',
+        ], $keys);
+    }
 }
