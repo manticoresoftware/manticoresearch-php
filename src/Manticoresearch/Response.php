@@ -61,11 +61,12 @@ class Response
     public function getResponse()
     {
         if (null === $this->_response) {
-            try {
-                $this->_response = json_decode($this->_string, true);
-            } catch (\Exception $e) {
+            $this->_response = json_decode($this->_string, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new RuntimeException('fatal error while trying to decode JSON response');
             }
+
             if (empty($this->_response)) {
                 $this->_response = [];
             }
