@@ -242,6 +242,13 @@ class SearchTest extends TestCase
         $search->reset();
         $search->setIndex('movies');
 
+        $q = new BoolQuery();
+        $q->should(new Match(['query' => 'team of explorers', 'operator' => 'and'], '*'));
+        $result = $search->search($q)->get();
+        $this->assertCount(3, $result);
+        $search->reset();
+        $search->setIndex('movies');
+
 
         $q = new BoolQuery();
         $q->must(new Match(['query' => 'team of explorers', 'operator' => 'or'], '*'));
