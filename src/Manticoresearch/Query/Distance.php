@@ -8,6 +8,10 @@ use Manticoresearch\Query;
 
 class Distance extends Query
 {
+    /**
+     * Distance constructor.
+     * @param array $args
+     */
     public function __construct($args = [])
     {
         $this->_params['geo_distance'] = [];
@@ -32,11 +36,17 @@ class Distance extends Query
         }
     }
 
+    /**
+     * @param $distance the distance and it's units, e.g. 1000m, 200km
+     */
     public function setDistance($distance)
     {
         $this->_params['geo_distance']['distance'] = $distance;
     }
 
+    /**
+     * @param $source array|string Either an array or comma separated string of the fields to reference for lat & lon
+     */
     public function setSource($source)
     {
         if (is_array($source)) {
@@ -45,11 +55,20 @@ class Distance extends Query
         $this->_params['geo_distance']['location_source'] = $source;
     }
 
+    /**
+     * Set the location of the anchor, namely the point by which distances will be measured from
+     *
+     * @param $lat the latitude of the anchor
+     * @param $lon the longitude of the anchor
+     */
     public function setAnchor($lat, $lon)
     {
         $this->_params['geo_distance']['location_anchor'] = ['lat' => $lat, 'lon' => $lon];
     }
 
+    /**
+     * @param $algorithm the algorithm for distance measurement, either adaptive or haversine
+     */
     public function setDistanceType($algorithm)
     {
         $this->_params['geo_distance']['distance_type'] = $algorithm ?? 'adaptive';
