@@ -4,7 +4,9 @@
 namespace Manticoresearch\Test;
 
 use Manticoresearch\Client;
+use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Query\BoolQuery;
+use Manticoresearch\Query\Distance;
 use Manticoresearch\Query\Equals;
 use Manticoresearch\Query\Match;
 use Manticoresearch\Query\Range;
@@ -93,6 +95,81 @@ class SearchTest extends TestCase
         $search = new Search($client);
         $search->setIndex('movies');
         return $search;
+    }
+
+
+    public function testDistanceArrayParamCreation()
+    {
+        $search = $this->_getSearch();
+        $q = new BoolQuery();
+
+        $q->must(new \Manticoresearch\Query\Distance([
+            'location_anchor'=>
+                ['lat'=>52.2, 'lon'=> 48.6],
+            'location_source' =>
+                ['lat', 'lon'],
+            'location_distance' => '100 km'
+        ]));
+
+        $result = $search->search($q)->get();
+        $this->assertCount(4, $result);
+    }
+
+    public function testDistanceArrayParamCreationNoLocationAnchor()
+    {
+        $search = $this->_getSearch();
+        $q = new BoolQuery();
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('source attributes not provided');
+        $q->must(new \Manticoresearch\Query\Distance([
+            'location_anchor'=>
+                ['lat'=>52.2, 'lon'=> 48.6],
+            'location_distance' => '100 km'
+        ]));
+    }
+
+    public function testDistanceArrayParamCreationNoLocationDistancce()
+    {
+        $search = $this->_getSearch();
+        $q = new BoolQuery();
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('distance not provided');
+        $q->must(new \Manticoresearch\Query\Distance([
+            'location_anchor'=>
+                ['lat'=>52.2, 'lon'=> 48.6],
+            'location_source' =>
+                ['lat', 'lon'],
+        ]));
+    }
+
+    public function testDistanceArrayParamCreationNoLocationSource()
+    {
+        $search = $this->_getSearch();
+        $q = new BoolQuery();
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('anchors not provided');
+        $q->must(new \Manticoresearch\Query\Distance([
+            'location_source' =>
+                ['lat', 'lon'],
+            'location_distance' => '100 km'
+        ]));
+    }
+
+    public function testDistanceUsingObject()
+    {
+        $search = $this->_getSearch();
+        $q = new BoolQuery();
+        $distanceQuery = new Distance();
+        $distanceQuery->setAnchor(52.2, 48.6);
+        $distanceQuery->setSource(['lat', 'lon']);
+        $distanceQuery->setDistance('100 km');
+        $distanceQuery->setDistanceType('adaptive'); // the default
+        $q->must($distanceQuery);
+
+        $result = $search->search($q)->get();
+
+        $this->assertCount(4, $result);
+
     }
 
     public function testSearch()
