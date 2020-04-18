@@ -94,6 +94,28 @@ class SearchTest extends TestCase
         $search->setIndex('movies');
         return $search;
     }
+    
+    public function testMatchExactPhrase()
+    {
+        $search = $this->_getSearch();
+        $q = new BoolQuery();
+        $q->must(new \Manticoresearch\Query\MatchPhrase('wormhole in space', 'title,plot'));
+        $result = $search->search($q)->get();
+        $this->assertCount(1, $result);
+
+        $q->must(new \Manticoresearch\Query\MatchPhrase('WORMhoLE in space', 'title,plot'));
+        $result = $search->search($q)->get();
+        $this->assertCount(1, $result);
+    }
+
+    public function testMatchInexactPhrase()
+    {
+        $search = $this->_getSearch();
+        $q = new BoolQuery();
+        $q->must(new \Manticoresearch\Query\MatchPhrase('wormhole space', 'title,plot'));
+        $result = $search->search($q)->get();
+        $this->assertCount(0, $result);
+    }
 
     public function testSearch()
     {
