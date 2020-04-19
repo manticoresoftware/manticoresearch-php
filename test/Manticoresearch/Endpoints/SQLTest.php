@@ -1,9 +1,6 @@
 <?php
 
 
-use Manticoresearch\Client;
-use Manticoresearch\Exceptions\ConnectionException;
-
 class SQLTest  extends \PHPUnit\Framework\TestCase
 {
     public function testPath()

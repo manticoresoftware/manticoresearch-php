@@ -4,11 +4,6 @@ namespace Manticoresearch\Test\Endpoints\Indices;
 
 use Manticoresearch\Client;
 use Manticoresearch\Endpoints\Indices\Alter;
-use Manticoresearch\Endpoints\Indices\Describe;
-use Manticoresearch\Endpoints\Indices\Drop;
-use Manticoresearch\Endpoints\Indices\Optimize;
-use Manticoresearch\Endpoints\Indices\Status;
-use Manticoresearch\Endpoints\Indices\Truncate;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 

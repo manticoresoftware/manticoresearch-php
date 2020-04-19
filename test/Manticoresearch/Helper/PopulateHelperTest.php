@@ -3,7 +3,6 @@ namespace Manticoresearch\Test\Helper;
 
 
 use Manticoresearch\Client;
-use PHPUnit\Framework\TestCase;
 
 class PopulateHelperTest extends \PHPUnit\Framework\TestCase
 {

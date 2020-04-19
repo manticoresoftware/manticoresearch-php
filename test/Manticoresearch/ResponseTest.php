@@ -4,12 +4,7 @@
 namespace Manticoresearch\Test;
 
 
-use Manticoresearch\Client;
-use Manticoresearch\Connection\Strategy\Random;
-use Manticoresearch\Connection\Strategy\RoundRobin;
-use Manticoresearch\Exceptions\ConnectionException;
 use Manticoresearch\Exceptions\RuntimeException;
-use Manticoresearch\Request;
 use Manticoresearch\Response;
 use PHPUnit\Framework\TestCase;
 

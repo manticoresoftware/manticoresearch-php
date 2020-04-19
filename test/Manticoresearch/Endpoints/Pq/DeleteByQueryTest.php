@@ -3,9 +3,7 @@
 namespace Manticoresearch\Test\Endpoints\Pq;
 
 
-use Manticoresearch\Client;
 use Manticoresearch\Endpoints\Pq\DeleteByQuery;
-use Manticoresearch\Endpoints\Pq\Search;
 use Manticoresearch\Exceptions\RuntimeException;
 
 class DeleteByQueryTest extends \PHPUnit\Framework\TestCase

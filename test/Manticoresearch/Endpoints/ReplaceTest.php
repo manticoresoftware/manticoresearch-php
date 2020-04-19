@@ -2,9 +2,6 @@
 namespace Manticoresearch\Test\Endpoints;
 
 
-use Manticoresearch\Client;
-use Manticoresearch\Exceptions\ConnectionException;
-
 class ReplaceTest  extends \PHPUnit\Framework\TestCase
 {
 

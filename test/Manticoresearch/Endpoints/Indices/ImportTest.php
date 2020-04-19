@@ -2,11 +2,7 @@
 
 namespace Manticoresearch\Test\Endpoints\Indices;
 
-use Manticoresearch\Client;
-use Manticoresearch\Endpoints\Indices\Create;
-use Manticoresearch\Endpoints\Indices\Drop;
 use Manticoresearch\Endpoints\Indices\Import;
-use Manticoresearch\Exceptions\RuntimeException;
 
 class ImportTest  extends \PHPUnit\Framework\TestCase
 {

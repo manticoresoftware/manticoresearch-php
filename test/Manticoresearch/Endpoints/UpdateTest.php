@@ -4,7 +4,6 @@ namespace Manticoresearch\Test\Endpoints;
 
 use Manticoresearch\Client;
 use Manticoresearch\Endpoints\Update;
-use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
 class UpdateTest  extends \PHPUnit\Framework\TestCase

@@ -4,7 +4,6 @@ namespace Manticoresearch\Test\Endpoints\Pq;
 
 
 use Manticoresearch\Client;
-use Manticoresearch\Endpoints\Pq\DeleteByQuery;
 use Manticoresearch\Endpoints\Pq\Doc;
 use Manticoresearch\Exceptions\RuntimeException;
 

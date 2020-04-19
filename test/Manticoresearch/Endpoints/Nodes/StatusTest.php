@@ -2,10 +2,7 @@
 namespace Manticoresearch\Test\Endpoints;
 
 
-use Manticoresearch\Client;
-use Manticoresearch\Endpoints\Nodes\AgentStatus;
 use Manticoresearch\Endpoints\Nodes\Status;
-use Manticoresearch\Exceptions\ConnectionException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
 class StatusTest  extends \PHPUnit\Framework\TestCase

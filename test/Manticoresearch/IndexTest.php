@@ -4,8 +4,8 @@
 namespace Manticoresearch\Test;
 
 
-use Manticoresearch\Index;
 use Manticoresearch\Client;
+use Manticoresearch\Index;
 use PHPUnit\Framework\TestCase;
 
 

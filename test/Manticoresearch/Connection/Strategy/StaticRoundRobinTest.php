@@ -2,8 +2,8 @@
 namespace Manticoresearch\Test\Connection\Strategy;
 
 use Manticoresearch\Client;
-use PHPUnit\Framework\TestCase;
 use Mockery as mock;
+use PHPUnit\Framework\TestCase;
 
 class StaticRoundRobinTest extends TestCase
 {

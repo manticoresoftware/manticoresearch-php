@@ -3,7 +3,6 @@
 namespace Manticoresearch\Test\Connection;
 
 use Manticoresearch\Connection;
-use Manticoresearch\Exceptions\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 class ConnectionPoolTest extends TestCase
