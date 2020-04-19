@@ -45,4 +45,18 @@ class VariablesTest  extends \PHPUnit\Framework\TestCase
         ], $keys);
     }
 
+    public function testVariablesWithWhere()
+    {
+        $helper = new PopulateHelperTest();
+        $client = $helper->getClient();
+        $response = $client->nodes()->variables(['body' => ['where' => ['variable_name' => 'character_set_client' ]]]);
+
+        $keys = array_keys($response);
+        sort($keys);
+        $this->assertEquals([
+            'character_set_client',
+            'character_set_connection',
+        ], $keys);
+    }
+
 }
