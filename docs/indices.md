@@ -87,7 +87,7 @@ Expects `index` name.
             'body' => [
                 'operation' => 'add',
                 'column' => [
-                    'name' => 'tag'
+                    'name' => 'tag',
                     'type'=> 'string'
                 ]
                    
