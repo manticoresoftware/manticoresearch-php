@@ -100,19 +100,49 @@ $index->addDocument([
         ], 1);
 ```
 
+It returns an array with:
 
+- _index as index name
+- _id as the id updated
+- result whenever update was successful ('updated') or not ('noop')
+
+```json
+{"_index":"test","_id":4,"result":"updated"}
+```
 ### updateDocuments()
 
 It can update multiple documents that match a condition.
 
 Expects:
 -  array with key pairs of attribute names and values
--  query expression
+-  query expression - can be either as array or as [Query](query.md) object
 
-Example:
+Example with array:
 
 ```php
 $index->updateDocuments(['price'=>100],['match'=>['*'=>'apple']]);
+```
+
+Example with Query object:
+
+```php
+$index->updateDocuments(['year'=>2000], new Match('team','*'));
+```
+
+```php
+$bool = new BoolQuery();
+$bool->must(new Match('team','*'));
+$bool->must(new Range('rating',['gte'=>8.5]));
+$response = $index->updateDocuments(['year'=>2000], $bool);
+```
+
+It returns an array with:
+
+- _index as index_name
+- updated  as number of documents updated
+
+```json
+{"_index":"test","updated":2}
 ```
 
 ### deleteDocument()
@@ -125,14 +155,40 @@ Example:
 $index->deleteDocument(100);
 ```
 
+It returns an array with:
+
+- _index as index name
+- _id as the document id
+- found - true if document existed
+- result whenever update was successful ('deleted') or not ('not found')
+
+```json
+{"_index":"test","_id":5,"found":true,"result":"deleted"}
+```
+
 ### deleteDocuments()
 
-Deletes documents using a query expression.
+Deletes documents using a query expression which can be passed either as array or as [Query](query.md) object.
 
-Example:
+Example with query as array:
 
 ```php
 $index->deleteDocuments(['match'=>['*'=>'apple']]);
+```
+
+Example with query as Query object:
+
+```php
+$index->deleteDocuments( new Match('apple','*'));
+```
+
+It returns an array with:
+
+- _index as index name
+- deleted as number of found documents and deleted
+
+```json
+{"_index":"test","deleted":0}
 ```
 
 ### search()

@@ -151,12 +151,22 @@ foreach($results as $doc) {
 
 
 
-### Update a document:
+### Update documents:
+
+By document id:
 
 ```php
 $index->updateDocument(['year'=>2019],4);
 
 ```
+
+By query:
+
+```php
+$index->updateDocument(['year'=>2019],['match'=>['*'=>'team']]);
+
+```
+
 
 ### Get index schema:
 ```php

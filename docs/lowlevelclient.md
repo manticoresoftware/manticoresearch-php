@@ -174,9 +174,9 @@ For complete reference of payload and response see Manticore's [Update API](http
 
 - index name
 - document as array of properties
-- id as document id
+- id as document id or query array
 
-All are mandatory.
+If id is used, only one document can be updated:
 ```
 $doc = [
     'body' => [
@@ -190,6 +190,23 @@ $doc = [
 
 $response = $client->update($doc);
 ```
+
+With query it's possible to update multiple documents at a time:
+
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'query' => ['match'=>['*' =>'find me']],
+        'doc' => [
+            'gid' => 20,
+        ]
+    ]
+];
+
+$response = $client->update($doc);
+```
+
 
 ### Delete
 
