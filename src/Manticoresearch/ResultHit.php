@@ -28,7 +28,7 @@ class ResultHit
 
     public function setId($id)
     {
-        $this->_data['id'] = $id;
+        $this->_data['_id'] = $id;
     }
 
     public function getScore()
