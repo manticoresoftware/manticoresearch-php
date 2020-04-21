@@ -96,7 +96,7 @@ class SearchTest extends TestCase
         $search->setIndex('movies');
         return $search;
     }
-    
+
     public function testMatchExactPhrase()
     {
         $search = $this->_getSearch();
@@ -243,6 +243,13 @@ class SearchTest extends TestCase
         $search->reset();
         $search->setIndex('movies');
 
+        $q = new BoolQuery();
+        $q->should(new Match(['query' => 'team of explorers', 'operator' => 'and'], '*'));
+        $result = $search->search($q)->get();
+        $this->assertCount(3, $result);
+        $search->reset();
+        $search->setIndex('movies');
+
 
         $q = new BoolQuery();
         $q->must(new Match(['query' => 'team of explorers', 'operator' => 'or'], '*'));
@@ -259,9 +266,132 @@ class SearchTest extends TestCase
         $this->assertCount(5, $result);
         $search->reset();
         $search->setIndex('movies');
-
-
     }
 
+    protected function _getResultSet()
+    {
+        $search = $this->_getSearch();
+        $result = $search->search('"team of explorers"/2')->get();
+        return $result;
+    }
+
+    protected function _getFirstResultHit()
+    {
+        $result = $this->_getResultSet();
+        $result->rewind();
+        $this->assertEquals(0, $result->key());
+        return $result->current();
+    }
+
+    public function testResultSetNextRewind()
+    {
+        $result = $this->_getResultSet();
+        $this->assertEquals(0, $result->key());
+
+        $result->next();
+        $this->assertEquals(1, $result->key());
+        $result->next();
+        $this->assertEquals(2, $result->key());
+        $result->rewind();
+        $this->assertEquals(0, $result->key());
+    }
+
+    public function testResultSetGetTotal()
+    {
+        $result = $this->_getResultSet();
+        $this->assertEquals(4, $result->getTotal());
+    }
+
+    public function testResultSetGetTime()
+    {
+        $result = $this->_getResultSet();
+        $this->assertGreaterThanOrEqual(0, $result->getTime());
+    }
+
+    public function testResultSetHasNotTimedOut()
+    {
+        $result = $this->_getResultSet();
+        $this->assertFalse( $result->hasTimedout());
+    }
+
+    public function testResultSetGetResponse()
+    {
+        $result = $this->_getResultSet();
+        $keys = array_keys($result->getResponse()->getResponse());
+        sort($keys);
+        $this->assertEquals(['hits', 'timed_out', 'took'], $keys );
+    }
+
+    public function testResultSetGetNullProfile()
+    {
+        $result = $this->_getResultSet();
+        $this->assertNull($result->getProfile());
+    }
+
+    public function testResultHitGetScore()
+    {
+        $resultHit = $this->_getFirstResultHit();
+        $this->assertEquals(3468, $resultHit->getScore());
+    }
+
+    public function testResultHitGetID()
+    {
+        $resultHit = $this->_getFirstResultHit();
+        $this->assertEquals(6, $resultHit->getId());
+    }
+
+    public function testResultHitGetValue()
+    {
+        $resultHit = $this->_getFirstResultHit();
+        $this->assertEquals(1986, $resultHit->get('year'));
+        $this->assertEquals(1986, $resultHit->__get('year'));
+    }
+
+    public function testResultHitHasValue()
+    {
+        $resultHit = $this->_getFirstResultHit();
+        $this->assertTrue($resultHit->has('year'));
+        $this->assertTrue($resultHit->__isset('year'));
+    }
+
+    public function testResultHitDoesNotHaveValue()
+    {
+        $resultHit = $this->_getFirstResultHit();
+        $this->assertFalse($resultHit->has('nonExistentKey'));
+        $this->assertFalse($resultHit->__isset('nonExistentKey'));
+        $this->assertEquals([], $resultHit->get('nonExistentKey'));
+    }
+
+    public function testResultHitDoesGetHighlight()
+    {
+        $this->markTestSkipped('TODO - highlight check');
+    }
+
+    public function testResultHitGetData()
+    {
+        $resultHit = $this->_getFirstResultHit();
+        $keys = array_keys($resultHit->getData());
+        sort($keys);
+        $this->assertEquals([
+            0 => 'advise',
+            1 => 'language',
+            2 => 'lat',
+            3 => 'lon',
+            4 => 'meta',
+            5 => 'plot',
+            6 => 'rating',
+            7 => 'title',
+            8 => 'year',
+        ], $keys);
+    }
+
+
+    public function testSetGetID()
+    {
+        $resultHit = $this->_getFirstResultHit();
+        $arbitraryID = 668689;
+        $resultHit->setId($arbitraryID);
+        $this->assertEquals($arbitraryID, $resultHit->getId());
+    }
 
 }

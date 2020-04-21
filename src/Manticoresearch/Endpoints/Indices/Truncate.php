@@ -9,7 +9,7 @@ use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
 
 /**
- * Class Optimize
+ * Class Truncate
  * @package Manticoresearch\Endpoints\Indices
  */
 class Truncate extends EmulateBySql

@@ -1,0 +1,13 @@
+<phpunit bootstrap="test/bootstrap.php" colors="true">
+    <testsuite name="Manticore PHP Client">
+        <directory>test/</directory>
+    </testsuite>
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src/</directory>
+            <exclude>
+                <directory suffix=".php">test/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

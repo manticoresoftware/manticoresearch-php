@@ -4,8 +4,8 @@
 namespace Manticoresearch\Test;
 
 
-use Manticoresearch\Index;
 use Manticoresearch\Client;
+use Manticoresearch\Index;
 use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\Match;
 use Manticoresearch\Query\Range;
@@ -49,7 +49,7 @@ class IndexTest extends TestCase
         $index->deleteDocument(1);
         $this->assertEquals($update['_id'], 1);
         $result = $index->getDocumentById(1);
-        $this->assertEquals($result['hits']['total'], 0);
+        $this->assertNull($result);
         $index->drop();
 
     }
@@ -106,7 +106,7 @@ class IndexTest extends TestCase
             ->highlight()
             ->get();
 
-  
+
 
         foreach($results as $hit) {
 

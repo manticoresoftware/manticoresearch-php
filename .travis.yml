@@ -1,8 +1,17 @@
 language: php
 
-php:
-  - '7.1'
-  - '7.2'
+matrix:
+  include:
+    - php: 7.1
+      env: PHPUNIT_TEST=1
+    - php: 7.2
+      env: PHPUNIT_COVERAGE_TEST=1
+    - php: 7.2
+      env: PHPCS_TEST=1
+    - php: 7.3
+      env: PHPUNIT_TEST=1
+    - php: 7.4
+      env: PHPUNIT_TEST=1
 
 services:
   -  docker
@@ -11,12 +20,22 @@ before_install:
   - docker pull manticoresearch/manticore
   - docker network create manticore
   - docker run --rm --publish 9308:9308 --network manticore --name=manticoresearch-manticore --detach manticoresearch/manticore
+  - sudo apt update && sudo apt install php-json
 env:
   global:
     - MS_HOST=127.0.0.1
     - MS_PORT=9308
+
+before_script:
+  - composer validate
+
 install:
   - composer install --prefer-dist
 
 script:
-  - vendor/bin/phpunit test/
+  - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit -d memory_limit=4G  test/; fi
+  - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit -d memory_limit=4G --coverage-clover=coverage.xml   test/   ; fi
+  - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs --config-set ignore_errors_on_exit 1 && vendor/bin/phpcs --config-set ignore_warnings_on_exit 1 && vendor/bin/phpcs src/ test/ ; fi
+
+after_script:
+  - if [[ $PHPUNIT_COVERAGE_TEST ]]; then bash <(curl -s https://codecov.io/bash) -f coverage.xml; fi
