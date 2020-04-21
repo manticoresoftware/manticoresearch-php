@@ -6,6 +6,9 @@ namespace Manticoresearch\Test;
 
 use Manticoresearch\Index;
 use Manticoresearch\Client;
+use Manticoresearch\Query\BoolQuery;
+use Manticoresearch\Query\Match;
+use Manticoresearch\Query\Range;
 use PHPUnit\Framework\TestCase;
 
 
@@ -109,9 +112,31 @@ class IndexTest extends TestCase
 
             $this->assertInstanceOf('Manticoresearch\ResultHit', $hit);
         }
-        $index->updateDocument(['year'=>2019],4);
+        $response = $index->updateDocument(['year'=>2019],4);
+        $this->assertEquals(4, $response['_id']);
+
         $schema = $index->describe();
         $this->assertCount(5, $schema);
+
+        $response = $index->updateDocuments(['year'=>2000], ['match'=>['*'=>'team']]);
+        $this->assertEquals(2, $response['updated']);
+
+        $response = $index->updateDocuments(['year'=>2000], new Match('team','*'));
+        $this->assertEquals(2, $response['updated']);
+
+        $bool = new BoolQuery();
+        $bool->must(new Match('team','*'));
+        $bool->must(new Range('rating',['gte'=>8.5]));
+        $response = $index->updateDocuments(['year'=>2000], $bool);
+        $this->assertEquals(1, $response['updated']);
+
+        $response = $index->deleteDocument(4);
+        $this->assertEquals(4, $response['_id']);
+
+        $response = $index->deleteDocuments(new Range('id',['gte'=>100]));
+        $this->assertEquals(0, $response['deleted']);
+
+
         $index->truncate();
         $results = $index->search('')
             ->get();

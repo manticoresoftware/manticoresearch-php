@@ -87,6 +87,9 @@ class Index
 
     public function deleteDocuments($query)
     {
+        if($query instanceof Query) {
+            $query = $query->toArray();
+        }
         $params = [
             'body' => [
                 'index' => $this->_index,
@@ -110,6 +113,9 @@ class Index
 
     public function updateDocuments($data, $query)
     {
+        if($query instanceof Query) {
+            $query = $query->toArray();
+        }
         $params = [
             'body' => [
                 'index' => $this->_index,
