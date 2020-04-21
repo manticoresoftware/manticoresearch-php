@@ -13,13 +13,14 @@ class ConnectionPoolTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->connectionPool = new Connection\ConnectionPool([]);
+        $this->connectionPool = new Connection\ConnectionPool([], new Connection\Strategy\StaticRoundRobin(), 4);
     }
 
     public function testSetGetStrategy()
     {
-        $this->connectionPool->setStrategy('StaticRoundRobin');
-        $this->assertEquals('StaticRoundRobin', $this->connectionPool->getStrategy());
+        // change the connection pool strategy
+        $this->connectionPool->setStrategy(new Connection\Strategy\RoundRobin());
+        $this->assertEquals('Manticoresearch\Connection\Strategy\RoundRobin', get_class($this->connectionPool->getStrategy()));
     }
 
 
