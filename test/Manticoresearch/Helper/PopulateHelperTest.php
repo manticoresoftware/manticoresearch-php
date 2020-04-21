@@ -84,4 +84,10 @@ class PopulateHelperTest extends \PHPUnit\Framework\TestCase
     {
         return $this->client->nodes()->status();
     }
+    
+    public function testDummy()
+    {
+       $a = 1;
+       $this->assertEquals(1,$a);
+    }
 }
