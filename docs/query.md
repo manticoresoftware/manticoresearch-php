@@ -19,7 +19,7 @@ Constructor accepts:
 - string of fields delimited by comma on which the keywords will be searched
 
  ```php
-$bool->must(new \Manticoresearch\Query\Match(['query' => 'team of explorers', 'operator' => 'and'], 'title, content'));
+$bool->must(new \Manticoresearch\Query\Match(['query' => 'team of explorers', 'operator' => 'and'], 'title,content'));
 ```
 
 ## MatchPhrase()
@@ -30,7 +30,7 @@ Constructor accepts:
 - string of fields delimited by comma on which the keywords will be searched
 
  ```php
-$bool->must(new \Manticoresearch\Query\MatchPhrase('team of exlorers', 'title, content'));
+$bool->must(new \Manticoresearch\Query\MatchPhrase('team of explorers', 'title,content'));
 ```
 
 

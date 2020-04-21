@@ -7,6 +7,7 @@ use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\Distance;
 use Manticoresearch\Query\Equals;
 use Manticoresearch\Query\Match;
+use Manticoresearch\Query\MatchPhrase;
 use Manticoresearch\Query\QueryString;
 use Manticoresearch\Query\Range;
 use Manticoresearch\Query\ScriptFields;
@@ -80,7 +81,7 @@ class Search
         if ($fields !== null && is_string($fields)) {
             $f = $fields;
         }
-        $this->_query->must(new Match($string, $f));
+        $this->_query->must(new MatchPhrase($string, $f));
         return $this;
     }
 
