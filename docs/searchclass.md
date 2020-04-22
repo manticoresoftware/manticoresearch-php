@@ -82,6 +82,7 @@ notFilter() executes a negation of the operator.
 
 ```php
 $search->filter('year', 'lte', 2000);
+$search->filter('year', 'range', [1960,1992]);
 ```
 
 The functions can also accept a single parameter as a filter class like Range(),  Equals() or Distance()
