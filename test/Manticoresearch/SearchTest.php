@@ -97,6 +97,36 @@ class SearchTest extends TestCase
         return $search;
     }
 
+    // attribute tests
+    public function testFilterLTE()
+    {
+        $search = $this->_getSearch();
+        $results = $search->filter('year', 'lte', 1990)->get();
+        $this->assertCount(2, $results);
+    }
+
+    public function testFilterGTE()
+    {
+        $search = $this->_getSearch();
+        $results = $search->filter('year', 'gte', 1990)->get();
+        $this->assertCount(4, $results);
+    }
+
+    public function testFilterEq()
+    {
+        $search = $this->_getSearch();
+        $results = $search->filter('year', 'equals', 1979)->get();
+        $this->assertCount(1, $results);
+    }
+
+    public function testFilterRange()
+    {
+        $search = $this->_getSearch();
+        $results = $search->filter('year', 'range', [1960,1992])->get();
+        $this->assertCount(3, $results);
+    }
+
+    // text tests
     public function testMatchExactPhrase()
     {
         $search = $this->_getSearch();
