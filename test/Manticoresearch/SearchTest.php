@@ -200,6 +200,64 @@ class SearchTest extends TestCase
         $this->assertEquals([1986], $this->yearsFromResults($results));
     }
 
+    public function testNotFilterLTE()
+    {
+        $results = self::$search->phrase('team of explorers')->notFilter('year', 'lte', 1990)->get();
+        $this->assertEquals([2014,1992], $this->yearsFromResults($results));
+
+        $results = self::$search->phrase('team of explorers')->notFilter('year', 'lte', 1992)->get();
+        $this->assertEquals([2014], $this->yearsFromResults($results));
+    }
+
+    public function testNotFilterRange()
+    {
+        $results = self::$search->notFilter('year', 'range', [1900,1990])->get();
+        $this->assertEquals([2014,2010,2018,1992], $this->yearsFromResults($results));
+    }
+
+    public function testNotFilterRangeAsObject()
+    {
+        $range = new Range('year', ['gte' => 1900, 'lte' => 1990]);
+        $results = self::$search->notFilter($range)->get();
+        $this->assertEquals([2014,2010,2018,1992], $this->yearsFromResults($results));
+    }
+
+    public function testOrFilterRange()
+    {
+        $results = self::$search->phrase('team of explorers')->orFilter('year', 'range', [1900,1990])->get();
+        $this->assertEquals([1986], $this->yearsFromResults($results));
+    }
+
+    public function testOrFilterRangeAsObject()
+    {
+        $range = new Range('year', ['gte' => 1900, 'lte' => 1990]);
+
+        $results = self::$search->phrase('team of explorers')->orFilter($range)->get();
+        $this->assertEquals([1986], $this->yearsFromResults($results));
+    }
+
+    /**
+     * Search for years less than 1990, more than 1999
+     */
+    public function testOrFilterRangeSkip90s()
+    {
+        $results = self::$search->
+            orFilter('year', 'lt', 1990)->
+            orFilter('year', 'gte', 2000)->
+            get();
+        $this->assertEquals([2014,2010,2018,1979,1986], $this->yearsFromResults($results));
+    }
+
+    public function testOrFilterEquals()
+    {
+        $results = self::$search->
+        orFilter('year', 'equals', 1979)->
+        orFilter('year', 'equals', 1986)->
+        get();
+        $this->assertEquals([1979,1986], $this->yearsFromResults($results));
+    }
+
+
     public function testSortMethodAscending()
     {
         $results = self::$search->sort('year' )->phrase('team of explorers')->get();
