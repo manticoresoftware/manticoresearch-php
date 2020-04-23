@@ -131,6 +131,20 @@ class SearchTest extends TestCase
         return $years;
     }
 
+    protected function _getResultSet()
+    {
+        $result = self::$search->search('"team of explorers"/2')->get();
+        return $result;
+    }
+
+    protected function _getFirstResultHit()
+    {
+        $result = $this->_getResultSet();
+        $result->rewind();
+        $this->assertEquals(0, $result->key());
+        return $result->current();
+    }
+
     public function testConstructor()
     {
         $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
@@ -432,43 +446,52 @@ class SearchTest extends TestCase
         $this->assertCount(4, $result);
     }
 
-    public function testSearch()
+
+    public function testTextSearch()
     {
         $result = self::$search->search('"team of explorers"/2')->get();
         $this->assertCount(4, $result);
-        self::$search->reset();
-        self::$search->setIndex('movies');
+    }
 
+    public function testTextSearchFilterToAYear()
+    {
         $result = self::$search->search('"team of explorers"/2')->filter('year', 'equals', 2014)->get();
         $this->assertCount(1, $result);
-        self::$search->reset();
-        self::$search->setIndex('movies');
+    }
 
+    public function testMatchAllFieldsOrMatch()
+    {
         $result = self::$search->match('team of explorers')->get();
         $this->assertCount(5, $result);
-        self::$search->reset();
-        self::$search->setIndex('movies');
+    }
 
+    public function testMatchTitleOnly()
+    {
         $result = self::$search->match(['query' => 'team of explorers', 'operator' => 'and'], 'title')->get();
         $this->assertCount(0, $result);
-        self::$search->reset();
-        self::$search->setIndex('movies');
+    }
 
+    public function testMatchTitleAndPlot()
+    {
         $result = self::$search->match(['query' => 'team of explorers', 'operator' => 'and'], 'title,plot')->get();
         $this->assertCount(3, $result);
-        self::$search->reset();
-        self::$search->setIndex('movies');
+    }
 
+    public function testMatchAllFieldsAnd()
+    {
         $result = self::$search->match(['query' => 'team of explorers', 'operator' => 'and'])->get();
         $this->assertCount(3, $result);
-        self::$search->reset();
-        self::$search->setIndex('movies');
+    }
 
-        $result = self::$search->match(['query' => 'team of explorers', 'operator' => 'and'])->filter('year', 'equals', 2014)->get();
+    public function testMatchFilteredToSingleYear()
+    {
+        $result = self::$search->match(['query' => 'team of explorers', 'operator' => 'and'])->
+            filter('year', 'equals', 2014)->get();
         $this->assertCount(1, $result);
-        self::$search->reset();
-        self::$search->setIndex('movies');
+    }
 
+    public function testComplexSearchWithFilters()
+    {
         $result = self::$search->search('"team of explorers"/2')
             ->expression('genre', "in(meta['genre'],'adventure')")
             ->notfilter('genre', 'equals', 1)
@@ -477,52 +500,40 @@ class SearchTest extends TestCase
             ->get();
 
         $this->assertCount(2, $result);
-        self::$search->reset();
-        self::$search->setIndex('movies');
+    }
 
+    public function testMatchBoolQueryMust()
+    {
         $q = new BoolQuery();
         $q->must(new Match(['query' => 'team of explorers', 'operator' => 'and'], '*'));
         $result = self::$search->search($q)->get();
         $this->assertCount(3, $result);
-        self::$search->reset();
-        self::$search->setIndex('movies');
+    }
 
+    public function testMatchBoolQueryShould()
+    {
         $q = new BoolQuery();
         $q->should(new Match(['query' => 'team of explorers', 'operator' => 'and'], '*'));
         $result = self::$search->search($q)->get();
         $this->assertCount(3, $result);
-        self::$search->reset();
-        self::$search->setIndex('movies');
+    }
 
+    public function testBoolQueryMutipleFilters1()
+    {
         $q = new BoolQuery();
         $q->must(new Match(['query' => 'team of explorers', 'operator' => 'or'], '*'));
         $q->must(new Equals('year', 2014));
         $result = self::$search->search($q)->get();
         $this->assertCount(1, $result);
-        self::$search->reset();
-        self::$search->setIndex('movies');
+    }
 
+    public function testBoolQueryMutipleFilters2()
+    {
         $q = new BoolQuery();
         $q->must(new Match(['query' => 'team of explorers', 'operator' => 'or'], '*'));
         $q->must(new Range('year', ['lte' => 2020]));
         $result = self::$search->search($q)->get();
         $this->assertCount(5, $result);
-        self::$search->reset();
-        self::$search->setIndex('movies');
-    }
-
-    protected function _getResultSet()
-    {
-        $result = self::$search->search('"team of explorers"/2')->get();
-        return $result;
-    }
-
-    protected function _getFirstResultHit()
-    {
-        $result = $this->_getResultSet();
-        $result->rewind();
-        $this->assertEquals(0, $result->key());
-        return $result->current();
     }
 
     public function testResultSetNextRewind()
