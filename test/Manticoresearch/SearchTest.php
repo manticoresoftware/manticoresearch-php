@@ -131,6 +131,14 @@ class SearchTest extends TestCase
         return $years;
     }
 
+    public function testConstructor()
+    {
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
+        $client = new Client($params);
+        $searchObj = new Search($client);
+        $this->assertEquals($client, $searchObj->getClient());
+    }
+
     public function testFilterLTE()
     {
         $results = self::$search->filter('year', 'lte', 1990)->get();
@@ -560,9 +568,30 @@ class SearchTest extends TestCase
         $this->assertEquals([], $resultHit->get('nonExistentKey'));
     }
 
-    public function testResultHitDoesGetHighlight()
+    public function testGetHighlight()
     {
-        $this->markTestSkipped('TODO - highlight check');
+        $results = self::$search->match('salvage')->highlight(
+            ['plot'],
+            ['pre_tags' => '<i>','post_tags'=>'</i>']
+        )->get();
+
+        $this->assertEquals(1, $results->count());
+        $this->assertEquals(['plot' => [' is rescued by a deep <i>salvage</i> team of explorers after being']],
+            $results->current()->getHighlight());
+    }
+
+    public function testHighlightParamsMissing()
+    {
+        $results = self::$search->match('salvage')->highlight()->get();
+
+        $this->assertEquals(1, $results->count());
+
+        // default highlighter is bold, all text fields are searched.  The 'plot field' has a highlights match
+        $this->assertEquals([
+            'plot' => [' is rescued by a deep <b>salvage</b> team of explorers after being'],
+            'title' => []
+        ],
+            $results->current()->getHighlight());
     }
 
     public function testResultHitGetData()
