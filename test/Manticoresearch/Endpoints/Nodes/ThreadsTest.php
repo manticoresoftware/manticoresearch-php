@@ -2,6 +2,7 @@
 namespace Manticoresearch\Test\Endpoints;
 
 
+use Manticoresearch\Endpoints\Nodes\Threads;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
 class ThreadsTest  extends \PHPUnit\Framework\TestCase
@@ -26,6 +27,16 @@ class ThreadsTest  extends \PHPUnit\Framework\TestCase
             'Time',
             'Info'
         ], $keys);
+    }
+
+    public function testSetBody()
+    {
+        $threads = new Threads();
+
+        // @todo What are better representative values here
+        $threads->setBody(['ignored', 'ignored', 'red', 'yellow']);
+
+        $this->assertEquals('mode=raw&query=SHOW THREADS  OPTION red=0,yellow=1', $threads->getBody());
     }
 
 }
