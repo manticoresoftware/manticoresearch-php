@@ -19,6 +19,18 @@ class ClientTest extends TestCase
         $this->assertCount(1, $client->getConnections());
     }
 
+    public function testObjectStrategy()
+    {
+        $client = new Client(["connectionStrategy"  => new Connection\Strategy\RoundRobin()]);
+        $this->assertCount(1, $client->getConnections());
+    }
+
+    public function testClassnameStrategy()
+    {
+        $client = new Client(["connectionStrategy"  => 'Connection\Strategy\RoundRobin']);
+        $this->assertCount(1, $client->getConnections());
+    }
+
     public function testCluster()
     {
         $client = new Client();
@@ -29,7 +41,17 @@ class ClientTest extends TestCase
     {
         $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
         $connection = new Connection($params);
-        $client = new Client($connection);
+        $params = ['connections' => $connection];
+        $client = new Client($params);
+        $this->assertCount(1, $client->getConnections());
+    }
+
+    public function testCreationWithConnectionSingularArray()
+    {
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
+        $connection = new Connection($params);
+        $params = ['connections' => [$connection]];
+        $client = new Client($params);
         $this->assertCount(1, $client->getConnections());
     }
 
