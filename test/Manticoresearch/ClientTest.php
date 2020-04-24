@@ -5,6 +5,7 @@ namespace Manticoresearch\Test;
 
 
 use Manticoresearch\Client;
+use Manticoresearch\Connection;
 use Manticoresearch\Connection\Strategy\Random;
 use Manticoresearch\Exceptions\ConnectionException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
@@ -15,6 +16,20 @@ class ClientTest extends TestCase
     public function testEmptyConfig()
     {
         $client = new Client();
+        $this->assertCount(1, $client->getConnections());
+    }
+
+    public function testCluster()
+    {
+        $client = new Client();
+        $this->assertInstanceOf('Manticoresearch\Cluster', $client->cluster());
+    }
+
+    public function testCreationWithConnection()
+    {
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
+        $connection = new Connection($params);
+        $client = new Client($connection);
         $this->assertCount(1, $client->getConnections());
     }
 
