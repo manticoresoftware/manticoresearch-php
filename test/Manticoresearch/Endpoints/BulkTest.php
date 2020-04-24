@@ -56,4 +56,11 @@ class BulkTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(2,$response['hits']['total']);
     }
 
+    public function testSetBodyAsString()
+    {
+        $bulk = new \Manticoresearch\Endpoints\Bulk();
+        $bulk->setBody('some string');
+        $this->assertEquals('some string', $bulk->getBody());
+    }
+
 }
