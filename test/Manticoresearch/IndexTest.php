@@ -15,22 +15,36 @@ use PHPUnit\Framework\TestCase;
 class IndexTest extends TestCase
 {
 
-    protected function _getIndex(): Index
+    protected function _getIndex($keywords = false): Index
     {
-
         $params = ['host' => $_SERVER['MS_HOST'],'port'=> $_SERVER['MS_PORT']];
         $index = new Index(new Client($params));
         $index->setName('testindex');
         $index->drop(true);
-        $index->create(['title' => ['type' => 'text'], 'gid' => ['type' => 'int'], 'label' => ['type' => 'string'], 'tags' => ['type' => 'multi'], 'props' => ['type' => 'json']], []);
+
+        $options = [];
+        if ($keywords === true) {
+            $options = [
+
+                    'dict' => 'keywords',
+                    'min_infix_len' => 2
+
+            ];
+        }
+        $index->create([
+            'title' => ['type' => 'text'],
+            'gid' => ['type' => 'int'],
+            'label' => ['type' => 'string'],
+            'tags' => ['type' => 'multi'],
+            'props' => ['type' => 'json']
+        ], $options);
         return $index;
     }
 
-    public function testDocuments()
+    protected function _addDocument($index)
     {
-        $index = $this->_getIndex();
         $index->addDocument([
-            'title' => 'find me',
+            'title' => 'This is an example document for testing',
             'gid' => 1,
             'label' => 'not used',
             'tags' => [1, 2, 3],
@@ -39,37 +53,135 @@ class IndexTest extends TestCase
                 'rule' => ['one', 'two']
             ]
         ], 1);
+    }
+
+    public function testClassOfHit()
+    {
+        $index = $this->_getIndex();
+        $this->_addDocument($index);
         $hit = $index->getDocumentById(1);
         $this->assertInstanceOf('Manticoresearch\ResultHit', $hit);
+    }
+
+    public function testClassOfNonExistentHit()
+    {
+        $index = $this->_getIndex();
+        $this->_addDocument($index);
         $hit = $index->getDocumentById(2);
         $this->assertNull($hit);
+    }
 
+    public function testUpdateTagsThenDeleteDocument()
+    {
+        $index = $this->_getIndex();
+        $this->_addDocument($index);
         $update = $index->updateDocument(['tags' => [10, 12, 14]], 1);
         $this->assertEquals($update['_id'], 1);
+
         $index->deleteDocument(1);
         $this->assertEquals($update['_id'], 1);
+
         $result = $index->getDocumentById(1);
         $this->assertNull($result);
-        $index->drop();
-
     }
+
+    public function testStatus()
+    {
+        $index = $this->_getIndex();
+        $this->_addDocument($index);
+        $status = $index->status();
+        $this->assertEquals(1, $status['indexed_documents']);
+        $keys = array_keys($status);
+        sort($keys);
+
+        $this->assertEquals([
+            'disk_bytes',
+            'disk_chunks',
+            'found_rows_15min',
+            'found_rows_1min',
+            'found_rows_5min',
+            'found_rows_total',
+            'index_type',
+            'indexed_bytes',
+            'indexed_documents',
+            'mem_limit',
+            'query_time_15min',
+            'query_time_1min',
+            'query_time_5min',
+            'query_time_total',
+            'ram_bytes',
+            'ram_bytes_retired',
+            'ram_chunk',
+            'ram_chunks_count',
+            'tid',
+            'tid_saved',
+        ], $keys);
+    }
+
+
+    public function testDescribe()
+    {
+        $index = $this->_getIndex();
+        $keys = array_keys($index->describe());
+        sort($keys);
+        $this->assertEquals([
+            'gid',
+            'id',
+            'label',
+            'props',
+            'tags',
+            'title',
+        ], $keys);
+    }
+
+    public function testTruncate()
+    {
+        $index = $this->_getIndex();
+        $response = $index->truncate();
+        $this->assertEquals( ['total'=>0,'error'=>'','warning'=>''],$response);
+    }
+
+    public function testOptimze()
+    {
+        $index = $this->_getIndex();
+        $response = $index->optimize(true);
+        $this->assertEquals( ['total'=>0,'error'=>'','warning'=>''],$response);
+    }
+
+    public function testFlush()
+    {
+        $index = $this->_getIndex();
+        $response = $index->flush();
+
+        // @todo Is this correct?
+        $this->assertEquals( null,$response);
+    }
+
+    public function testFlushRamChunk()
+    {
+        $index = $this->_getIndex();
+        $response = $index->flushramchunk();
+
+        // @todo Is this correct?
+        $this->assertEquals( null,$response);
+    }
+
 
     public function testSearch()
     {
         $index = $this->_getIndex();
-        $index->addDocument([
-            'title' => 'find me',
-            'gid' => 1,
-            'label' => 'not used',
-            'tags' => [1, 2, 3],
-            'props' => [
-                'color' => 'blue',
-                'rule' => ['one', 'two']
-            ]
-        ], 1);
-        $result = $index->search('find')->get();
+        $this->_addDocument($index);
+        $result = $index->search('testing')->get();
         $this->assertCount(1, $result);
         $index->drop();
+    }
+
+    public function testIndexSuggest()
+    {
+        $index = $this->_getIndex(true);
+        $this->_addDocument($index);
+        $result = $index->suggest('tasting', []);
+        $this->assertEquals(['distance' => 1, 'docs' => 1], $result['testing']);
     }
 
     public function testStart()
@@ -106,12 +218,10 @@ class IndexTest extends TestCase
             ->highlight()
             ->get();
 
-
-
         foreach($results as $hit) {
-
             $this->assertInstanceOf('Manticoresearch\ResultHit', $hit);
         }
+
         $response = $index->updateDocument(['year'=>2019],4);
         $this->assertEquals(4, $response['_id']);
 
@@ -143,5 +253,19 @@ class IndexTest extends TestCase
         $this->assertCount(0, $results);
         $response = $index->drop();
         $this->assertEquals('', $response['error']);
+    }
+
+
+    public function testGetClient()
+    {
+        $index = $this->_getIndex();
+        $this->assertInstanceOf('Manticoresearch\Client', $index->getClient());
+    }
+
+
+    public function testSetGetName()
+    {
+        $index = $this->_getIndex();
+        $this->assertEquals('testindex', $index->getName());
     }
 }
