@@ -274,7 +274,7 @@ class Index
         $params = [
             'index' => $this->_index,
             'body' => [
-                '$query' => $query,
+                'query' => $query,
                 'options' => $options
             ]
         ];
