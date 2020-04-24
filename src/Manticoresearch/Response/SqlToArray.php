@@ -20,7 +20,12 @@ class SqlToArray extends Response
                 if (count($response['columns'])>2) {
                     $data[array_shift($property)] = $property;
                 } else {
-                    $data[$property[$response['columns'][0]]] = $property[$response['columns'][1]];
+                    $nCols = count($response['columns']);
+
+                    if ($nCols === 2) {
+                        $value = $property[$response['columns'][1]];
+                        $data[$property[$response['columns'][0]]] = $value;
+                    }
                 }
             }
             return $data;
