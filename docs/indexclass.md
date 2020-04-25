@@ -307,4 +307,5 @@ Parameters:
 
 ```php
 $index->keywords($query, $options);
+$index->suggest('trsting', ['limit' => 5]);
 ```
