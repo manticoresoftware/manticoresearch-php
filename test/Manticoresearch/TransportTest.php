@@ -18,6 +18,16 @@ class TransportTest extends TestCase
         $this->expectException('Exception');
         $this->expectExceptionMessage('Bad transport');
         $transport = Transport::create('badtransport', $connection, new NullLogger());
+    }
 
+    public function testSetUpURI()
+    {
+        $transport = new Transport();
+        $class = new \ReflectionClass('Manticoresearch\Transport');
+        $method = $class->getMethod('setupURI');
+        $method->setAccessible(true);
+
+        $url = $method->invokeArgs($transport, ['/search', ['a' => 1, 'b' => false]]);
+        $this->assertEquals('/search?a=1&b=false', $url);
     }
 }
