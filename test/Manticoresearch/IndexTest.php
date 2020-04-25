@@ -5,6 +5,7 @@ namespace Manticoresearch\Test;
 
 
 use Manticoresearch\Client;
+use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Index;
 use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\Match;
@@ -25,12 +26,14 @@ class IndexTest extends TestCase
         $options = [];
         if ($keywords === true) {
             $options = [
-
                     'dict' => 'keywords',
                     'min_infix_len' => 2
-
             ];
         }
+
+        // for coverage purposes, does not affect functionality as index already dropped silently
+        $options['silent'] = true;
+
         $index->create([
             'title' => ['type' => 'text'],
             'gid' => ['type' => 'int'],
@@ -53,6 +56,61 @@ class IndexTest extends TestCase
                 'rule' => ['one', 'two']
             ]
         ], 1);
+    }
+
+
+    public function testReplaceDocument()
+    {
+        $index = $this->_getIndex();
+        $this->_addDocument($index);
+        $response = $index->replaceDocument([
+            'title' => 'This is an example document for cooking',
+            'gid' => 1,
+            'label' => 'not used',
+            'tags' => [1, 2, 3],
+            'props' => [
+                'color' => 'blue',
+                'rule' => ['one', 'two']
+            ]
+        ], 1);
+
+        $this->assertEquals([
+            '_index' => 'testindex',
+            '_id' => 1,
+            'created' => false,
+            'result' => 'updated',
+            'status' => 200,
+        ], $response);
+    }
+
+    public function testReplaceDocuments()
+    {
+        $index = $this->_getIndex();
+        $this->_addDocument($index);
+        $response = $index->replaceDocuments([[
+            'id' => 1,
+            'title' => 'This is an example document for cooking',
+            'gid' => 1,
+            'label' => 'not used',
+            'tags' => [1, 2, 3],
+            'props' => [
+                'color' => 'blue',
+                'rule' => ['one', 'two']
+            ]
+        ]]);
+
+        $this->assertEquals([
+            'items' => [
+                ['replace' => [
+                    '_index' => 'testindex',
+                    '_id' => 1,
+                    'created' => false,
+                    'result' => 'updated',
+                    'status' => 200
+                ]]
+            ],
+            'errors' => false
+        ], $response);
     }
 
     public function testClassOfHit()
@@ -134,6 +192,55 @@ class IndexTest extends TestCase
         ], $keys);
     }
 
+    public function testAlterDrop()
+    {
+        $index = $this->_getIndex();
+        $response = $index->alter('drop', 'props');
+        $this->assertEquals( ['total'=>0,'error'=>'','warning'=>''],$response);
+
+        // use describe to demonstrate the field has been removed
+        $keys = array_keys($index->describe());
+        sort($keys);
+        $this->assertEquals([
+            'gid',
+            'id',
+            'label',
+            'tags',
+            'title',
+        ], $keys);
+    }
+
+    public function testAlterAdd()
+    {
+        $index = $this->_getIndex();
+        $response = $index->alter('add', 'example', 'string');
+        $this->assertEquals( ['total'=>0,'error'=>'','warning'=>''],$response);
+
+        // use describe to demonstrate the field has been removed
+        $description = $index->describe();
+        $keys = array_keys($description);
+        sort($keys);
+        $this->assertEquals([
+            'example',
+            'gid',
+            'id',
+            'label',
+            'props',
+            'tags',
+            'title',
+        ], $keys);
+
+        $this->assertEquals(['Type' => 'string', 'Properties' => ''], $description['example']);
+    }
+
+    public function testAlterInvalidOperation()
+    {
+        $index = $this->_getIndex();
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Alter operation not recognized');
+        $response = $index->alter('invalidOperation', 'example', 'string');
+    }
+
     public function testTruncate()
     {
         $index = $this->_getIndex();
@@ -184,13 +291,30 @@ class IndexTest extends TestCase
         $this->assertEquals(['distance' => 1, 'docs' => 1], $result['testing']);
     }
 
+    public function testIndexKeywords()
+    {
+        $index = $this->_getIndex(true);
+        $this->_addDocument($index);
+        $result = $index->keywords('tasting', []);
+
+        // @todo Is this correct functionality
+        $this->assertEquals(['tokenized' => 'tasting', 'normalized' => 'tasting'], $result[1]);
+    }
+
     public function testStart()
     {
         $index = $this->_getIndex();
 
         $index->setName('test');
         $index->drop(true);
-        $index->create(['title' => ['type' => 'text'], 'plot' => ['type' => 'text'], 'year' => ['type' => 'integer'], 'rating' => ['type' => 'float']]);
+        $index->create(['title' => [
+            'type' => 'text'],
+            'plot' => ['type' => 'text'],
+            'year' => ['type' => 'integer'],
+            'rating' => ['type' => 'float']
+        ],
+        [],
+        true);
         $index->addDocument([
             'title' => 'Star Trek: Nemesis',
             'plot' => 'The Enterprise is diverted to the Romulan homeworld Romulus, supposedly because they want to negotiate a peace treaty. Captain Picard and his crew discover a serious threat to the Federation once Praetor Shinzon plans to attack Earth.',
