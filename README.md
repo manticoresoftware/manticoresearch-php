@@ -2,17 +2,12 @@ manticoresearch-php
 ===================
 [![Build Status](https://travis-ci.org/manticoresoftware/manticoresearch-php.svg?branch=master)](https://travis-ci.org/manticoresoftware/manticoresearch-php)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/manticoresoftware/manticoresearch-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/manticoresoftware/manticoresearch-php/?branch=master)
+[![codecov.io](https://codecov.io/github/manticoresoftware/manticoresearch-php/coverage.svg)](https://codecov.io/github/manticoresoftware/manticoresearch-php)
 [![Latest Stable Version](https://poser.pugx.org/manticoresoftware/manticoresearch-php/v/stable)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
 [![License](https://poser.pugx.org/manticoresoftware/manticoresearch-php/license)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
 [![Slack][slack-badge]][slack-url]
 
-[![codecov.io](https://codecov.io/github/manticoresoftware/manticoresearch-php/coverage.svg)](https://codecov.io/github/manticoresoftware/manticoresearch-php)
-
-
-[![Latest Stable Version](https://poser.pugx.org/manticoresoftware/manticoresearch-php/version)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
-[![Latest Unstable Version](https://poser.pugx.org/manticoresoftware/manticoresearch-php/v/unstable)](//packagist.org/packages/manticoresoftware/manticoresearch-php)
 [![Total Downloads](https://poser.pugx.org/manticoresoftware/manticoresearch-php/downloads)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
-[![License](https://poser.pugx.org/manticoresoftware/manticoresearch-php/license)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
 [![Monthly Downloads](https://poser.pugx.org/manticoresoftware/manticoresearch-php/d/monthly)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
 [![Daily Downloads](https://poser.pugx.org/manticoresoftware/manticoresearch-php/d/daily)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
 [![composer.lock](https://poser.pugx.org/manticoresoftware/manticoresearch-php/composerlock)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
