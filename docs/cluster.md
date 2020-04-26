@@ -61,7 +61,7 @@ Update a cluster.
         ];
         $response = $client->cluster()->alter($params);  
                   
-Create
+Delete
 ======
 Delete a cluster.
 `cluster` is mandatory as the name of the cluster.
