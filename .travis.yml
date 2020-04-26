@@ -20,7 +20,7 @@ before_install:
   - docker pull manticoresearch/manticore
   - docker network create manticore
   - docker run --rm --publish 9308:9308 --network manticore --name=manticoresearch-manticore --detach manticoresearch/manticore
-  - sudo apt update && sudo apt install php-json
+  - sudo apt update && sudo apt install php-json zip unzip git
 env:
   global:
     - MS_HOST=127.0.0.1
@@ -30,6 +30,8 @@ before_script:
   - composer validate
 
 install:
+  # See https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
+  - composer global require hirak/prestissimo
   - composer install --prefer-dist
 
 script:
