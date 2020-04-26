@@ -1,8 +1,8 @@
-FROM php:7.1-cli-stretch
+FROM php:7.4-cli-buster
 
 RUN apt -y update && apt -y upgrade
 RUN apt -y install figlet git zip unzip
-RUN apt -y autoremove
+RUN apt-get autoremove && sudo apt-get clean
 
 # alter bash prompt
 ENV PS1A="\u@manticore.test:\w> "
