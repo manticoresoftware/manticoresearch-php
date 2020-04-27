@@ -174,6 +174,13 @@ $index->describe();
 $index->drop();
 ```
 
+The above will fail if the index does not exist.  To get around this pass a parameter of true, which cause the failure
+to be silent.
+
+```php
+$index->drop(true);
+```
+
 
 
 

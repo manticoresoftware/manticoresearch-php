@@ -232,7 +232,7 @@ class Index
         $this->_client->indices()->flushramchunk($params);
     }
 
-    public function alter($operation,$name, $type)
+    public function alter($operation,$name, $type = null)
     {
         if($operation==='add') {
             $params = [
@@ -262,7 +262,7 @@ class Index
         $params = [
             'index' => $this->_index,
             'body' => [
-                '$query' => $query,
+                'query' => $query,
                 'options' => $options
             ]
         ];
