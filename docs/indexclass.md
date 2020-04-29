@@ -26,14 +26,28 @@ $index->setName('myindex');
 
 Creates the index, accepts:
 
-- fields - array with columns
+- fields - array of the fields where key is the field name
 - settings - optional list of index settings
 - silent - default is false, if true, no error is returned if an index with same name already exists
+
+Each field is an array consisting of:
+- `type` -  the field/attribute type
+- `options` -  an array of options of the field, currently only `text` can have `indexed`,`stored` (default is both)
 
 Example:
 
 ```php
- $index->create(['title' => ['type' => 'text'], 'gid' => ['type' => 'int'], 'label' => ['type' => 'string'], 'tags' => ['type' => 'multi'], 'props' => ['type' => 'json']], []);
+ $index->create([
+    'title' => ['type' => 'text'],
+    'content' => ['type' => 'text','options'=>['indexed']],
+    'gid' => ['type' => 'int'],
+    'label' => ['type' => 'string'],
+    'tags' => ['type' => 'multi'],
+    'props' => ['type' => 'json']
+    ], [
+    'rt_mem_limit' => '256M',
+    'min_infix_len' => '3'
+]);
 ```
 
 ### addDocument()
