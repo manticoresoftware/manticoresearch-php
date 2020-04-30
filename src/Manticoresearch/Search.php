@@ -272,6 +272,9 @@ class Search
         return $this;
     }
 
+    /**
+     * @return ResultSet
+     */
     public function get()
     {
         $this->_body = $this->compile();

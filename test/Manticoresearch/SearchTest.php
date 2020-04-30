@@ -10,13 +10,31 @@ use Manticoresearch\Query\Distance;
 use Manticoresearch\Query\Equals;
 use Manticoresearch\Query\Match;
 use Manticoresearch\Query\Range;
+use Manticoresearch\ResultSet;
 use Manticoresearch\Search;
 use PHPUnit\Framework\TestCase;
 
 class SearchTest extends TestCase
 {
+    /**
+     * @var Search
+     */
+    private static $search;
 
-    protected function _getSearch(): Search
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+        self::$search = self::indexDocuments();
+    }
+
+    protected function setUp()
+    {
+        parent::setUp();
+        self::$search->reset();
+        self::$search->setIndex('movies');
+    }
+
+    protected static function indexDocuments(): Search
     {
         $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
 
@@ -97,32 +115,255 @@ class SearchTest extends TestCase
         return $search;
     }
 
+    /**
+     * Helper method to return just the years from the results.  This is used to validate filtering and sorting
+     * @param ResultSet $results
+     */
+    private function yearsFromResults($results)
+    {
+        $years = [];
+        while($results->valid()) {
+            $hit = $results->current();
+            $data = $hit->getData();
+            $years[] = $data['year'];
+            $results->next();
+        }
+        return $years;
+    }
+
+    protected function _getResultSet()
+    {
+        $result = self::$search->search('"team of explorers"/2')->get();
+        return $result;
+    }
+
+    protected function _getFirstResultHit()
+    {
+        $result = $this->_getResultSet();
+        $result->rewind();
+        $this->assertEquals(0, $result->key());
+        return $result->current();
+    }
+
+    public function testConstructor()
+    {
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
+        $client = new Client($params);
+        $searchObj = new Search($client);
+        $this->assertEquals($client, $searchObj->getClient());
+    }
+
+    public function testFilterLTE()
+    {
+        $results = self::$search->filter('year', 'lte', 1990)->get();
+        $this->assertEquals([1979,1986], $this->yearsFromResults($results));
+    }
+
+    public function testFilterLTEAsObject()
+    {
+        $results = self::$search->filter(new Range('year', ['lte' => 1990]))->get();
+        $this->assertEquals([1979,1986], $this->yearsFromResults($results));
+    }
+
+    public function testFilterGTE()
+    {
+        $results = self::$search->filter('year', 'gte', 1990)->get();
+        $this->assertEquals([2014,2010,2018,1992], $this->yearsFromResults($results));
+    }
+
+    public function testFilterEq()
+    {
+
+        $results = self::$search->filter('year', 'equals', 1979)->get();
+        $this->assertCount(1, $results);
+    }
+
+    public function testFilterRange()
+    {
+        $results = self::$search->filter('year', 'range', [1960,1992])->get();
+        $this->assertEquals([1979,1986,1992], $this->yearsFromResults($results));
+    }
+
+    /**
+     * Demonstrate that the array of years gets smaller for the same phrase match as the limit is applied
+     */
+    public function testLimitMethod()
+    {
+        $results = self::$search->limit(3)->phrase('team of explorers')->get();
+        $this->assertEquals([1986,2014,1992], $this->yearsFromResults($results));
+
+        $results = self::$search->limit(2)->phrase('team of explorers')->get();
+        $this->assertEquals([1986,2014], $this->yearsFromResults($results));
+
+        $results = self::$search->limit(1)->phrase('team of explorers')->get();
+        $this->assertEquals([1986], $this->yearsFromResults($results));
+    }
+
+    /**
+     * Demonstrate that the array of years gets smaller for the same phrase match as the limit is applied
+     */
+    public function testMaxMatchesMethod()
+    {
+        $results = self::$search->maxMatches(3)->phrase('team of explorers')->get();
+        $this->assertEquals([1986,2014,1992], $this->yearsFromResults($results));
+
+        $results = self::$search->maxMatches(2)->phrase('team of explorers')->get();
+        $this->assertEquals([1986,2014], $this->yearsFromResults($results));
+
+        $results = self::$search->maxMatches(1)->phrase('team of explorers')->get();
+        $this->assertEquals([1986], $this->yearsFromResults($results));
+    }
+
+    public function testNotFilterLTE()
+    {
+        $results = self::$search->phrase('team of explorers')->notFilter('year', 'lte', 1990)->get();
+        $this->assertEquals([2014,1992], $this->yearsFromResults($results));
+
+        $results = self::$search->phrase('team of explorers')->notFilter('year', 'lte', 1992)->get();
+        $this->assertEquals([2014], $this->yearsFromResults($results));
+    }
+
+    public function testNotFilterRange()
+    {
+        $results = self::$search->notFilter('year', 'range', [1900,1990])->get();
+        $this->assertEquals([2014,2010,2018,1992], $this->yearsFromResults($results));
+    }
+
+    public function testNotFilterRangeAsObject()
+    {
+        $range = new Range('year', ['gte' => 1900, 'lte' => 1990]);
+        $results = self::$search->notFilter($range)->get();
+        $this->assertEquals([2014,2010,2018,1992], $this->yearsFromResults($results));
+    }
+
+    public function testOrFilterRange()
+    {
+        $results = self::$search->phrase('team of explorers')->orFilter('year', 'range', [1900,1990])->get();
+        $this->assertEquals([1986], $this->yearsFromResults($results));
+    }
+
+    public function testOrFilterRangeAsObject()
+    {
+        $range = new Range('year', ['gte' => 1900, 'lte' => 1990]);
+
+        $results = self::$search->phrase('team of explorers')->orFilter($range)->get();
+        $this->assertEquals([1986], $this->yearsFromResults($results));
+    }
+
+    /**
+     * Search for years less than 1990, more than 1999
+     */
+    public function testOrFilterRangeSkip90s()
+    {
+        $results = self::$search->
+            orFilter('year', 'lt', 1990)->
+            orFilter('year', 'gte', 2000)->
+            get();
+        $this->assertEquals([2014,2010,2018,1979,1986], $this->yearsFromResults($results));
+    }
+
+    public function testOrFilterEquals()
+    {
+        $results = self::$search->
+        orFilter('year', 'equals', 1979)->
+        orFilter('year', 'equals', 1986)->
+        get();
+        $this->assertEquals([1979,1986], $this->yearsFromResults($results));
+    }
+
+
+    public function testSortMethodAscending()
+    {
+        $results = self::$search->sort('year' )->phrase('team of explorers')->get();
+        $this->assertEquals([1986,1992,2014], $this->yearsFromResults($results));
+    }
+
+    public function testSortMethodDescending()
+    {
+        $results = self::$search->sort('year', 'desc' )->phrase('team of explorers')->get();
+        $this->assertEquals([2014,1992,1986], $this->yearsFromResults($results));
+    }
+
+    public function testOffsetMethod()
+    {
+        $results = self::$search->offset(0)->phrase('team of explorers')->get();
+        $this->assertEquals([1986,2014,1992], $this->yearsFromResults($results));
+
+        $results = self::$search->offset(1)->phrase('team of explorers')->get();
+        $this->assertEquals([2014,1992], $this->yearsFromResults($results));
+
+        $results = self::$search->offset(2)->phrase('team of explorers')->get();
+        $this->assertEquals([1992], $this->yearsFromResults($results));
+    }
+
+    public function testPhraseMethodAllFieldsMatchingPhrase()
+    {
+        $results = self::$search->phrase('team of explorers')->get();
+        $this->assertCount(3, $results);
+    }
+
+    public function testPhraseMethodAllFieldsNoMatchingPhrase()
+    {
+        // search for a non matching phrase
+        $results = self::$search->phrase('team with explorers')->get();
+        $this->assertCount(0, $results);
+    }
+
+    public function testPhraseMethodSpecifiedFieldsTitleOnly()
+    {
+        // the title fields do not contain the matching text
+        $results = self::$search->phrase('team of explorers', 'title')->get();
+        $this->assertCount(0, $results);
+    }
+
+    public function testPhraseMethodSpecifiedFieldsPlotOnly()
+    {
+        $results = self::$search->phrase('team of explorers', 'plot')->get();
+        $this->assertCount(3, $results);
+    }
+
+    public function testPhraseMethodSpecifiedFieldsTitleAndPlot()
+    {
+        $results = self::$search->phrase('team of explorers', 'title,plot')->get();
+        $this->assertCount(3, $results);
+    }
+
     public function testMatchExactPhrase()
     {
-        $search = $this->_getSearch();
         $q = new BoolQuery();
         $q->must(new \Manticoresearch\Query\MatchPhrase('wormhole in space', 'title,plot'));
-        $result = $search->search($q)->get();
+        $result = self::$search->search($q)->get();
         $this->assertCount(1, $result);
 
         $q->must(new \Manticoresearch\Query\MatchPhrase('WORMhoLE in space', 'title,plot'));
-        $result = $search->search($q)->get();
+        $result = self::$search->search($q)->get();
         $this->assertCount(1, $result);
     }
 
     public function testMatchInexactPhrase()
     {
-        $search = $this->_getSearch();
         $q = new BoolQuery();
         $q->must(new \Manticoresearch\Query\MatchPhrase('wormhole space', 'title,plot'));
-        $result = $search->search($q)->get();
+        $result = self::$search->search($q)->get();
         $this->assertCount(0, $result);
     }
 
 
-    public function testDistanceArrayParamCreation()
+    public function testSearchDistanceMethod()
     {
-        $search = $this->_getSearch();
+        $result = self::$search->distance([
+            'location_anchor'=>
+                ['lat'=>52.2, 'lon'=> 48.6],
+            'location_source' =>
+                ['lat', 'lon'],
+            'location_distance' => '100 km'
+        ])->get();
+
+        $this->assertCount(4, $result);
+    }
+
+    public function testDistanceObjectArrayParamCreation()
+    {
         $q = new BoolQuery();
 
         $q->must(new \Manticoresearch\Query\Distance([
@@ -133,13 +374,28 @@ class SearchTest extends TestCase
             'location_distance' => '100 km'
         ]));
 
-        $result = $search->search($q)->get();
+        $result = self::$search->search($q)->get();
+        $this->assertCount(4, $result);
+    }
+
+    public function testDistanceArrayParamCreation()
+    {
+        $q = new BoolQuery();
+
+        $q->must(new \Manticoresearch\Query\Distance([
+            'location_anchor'=>
+                ['lat'=>52.2, 'lon'=> 48.6],
+            'location_source' =>
+                ['lat', 'lon'],
+            'location_distance' => '100 km'
+        ]));
+
+        $result = self::$search->search($q)->get();
         $this->assertCount(4, $result);
     }
 
     public function testDistanceArrayParamCreationNoLocationAnchor()
     {
-        $search = $this->_getSearch();
         $q = new BoolQuery();
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('source attributes not provided');
@@ -152,7 +408,6 @@ class SearchTest extends TestCase
 
     public function testDistanceArrayParamCreationNoLocationDistancce()
     {
-        $search = $this->_getSearch();
         $q = new BoolQuery();
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('distance not provided');
@@ -166,7 +421,6 @@ class SearchTest extends TestCase
 
     public function testDistanceArrayParamCreationNoLocationSource()
     {
-        $search = $this->_getSearch();
         $q = new BoolQuery();
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('anchors not provided');
@@ -179,7 +433,6 @@ class SearchTest extends TestCase
 
     public function testDistanceUsingObject()
     {
-        $search = $this->_getSearch();
         $q = new BoolQuery();
         $distanceQuery = new Distance();
         $distanceQuery->setAnchor(52.2, 48.6);
@@ -188,44 +441,58 @@ class SearchTest extends TestCase
         $distanceQuery->setDistanceType('adaptive'); // the default
         $q->must($distanceQuery);
 
-        $result = $search->search($q)->get();
+        $result = self::$search->search($q)->get();
 
         $this->assertCount(4, $result);
-
     }
 
-    public function testSearch()
+
+    public function testTextSearch()
     {
-        $search = $this->_getSearch();
-        $result = $search->search('"team of explorers"/2')->get();
+        $result = self::$search->search('"team of explorers"/2')->get();
         $this->assertCount(4, $result);
-        $search->reset();
-        $search->setIndex('movies');
+    }
 
-        $result = $search->search('"team of explorers"/2')->filter('year', 'equals', 2014)->get();
+    public function testTextSearchFilterToAYear()
+    {
+        $result = self::$search->search('"team of explorers"/2')->filter('year', 'equals', 2014)->get();
         $this->assertCount(1, $result);
-        $search->reset();
-        $search->setIndex('movies');
+    }
 
-        $result = $search->match('team of explorers')->get();
+    public function testMatchAllFieldsOrMatch()
+    {
+        $result = self::$search->match('team of explorers')->get();
         $this->assertCount(5, $result);
-        $search->reset();
-        $search->setIndex('movies');
+    }
 
+    public function testMatchTitleOnly()
+    {
+        $result = self::$search->match(['query' => 'team of explorers', 'operator' => 'and'], 'title')->get();
+        $this->assertCount(0, $result);
+    }
 
-        $result = $search->match(['query' => 'team of explorers', 'operator' => 'and'])->get();
+    public function testMatchTitleAndPlot()
+    {
+        $result = self::$search->match(['query' => 'team of explorers', 'operator' => 'and'], 'title,plot')->get();
         $this->assertCount(3, $result);
-        $search->reset();
-        $search->setIndex('movies');
+    }
 
-        $result = $search->match(['query' => 'team of explorers', 'operator' => 'and'])->filter('year', 'equals', 2014)->get();
+    public function testMatchAllFieldsAnd()
+    {
+        $result = self::$search->match(['query' => 'team of explorers', 'operator' => 'and'])->get();
+        $this->assertCount(3, $result);
+    }
+
+    public function testMatchFilteredToSingleYear()
+    {
+        $result = self::$search->match(['query' => 'team of explorers', 'operator' => 'and'])->
+            filter('year', 'equals', 2014)->get();
         $this->assertCount(1, $result);
-        $search->reset();
-        $search->setIndex('movies');
+    }
 
-
-        $search = $this->_getSearch();
-        $result = $search->search('"team of explorers"/2')
+    public function testComplexSearchWithFilters()
+    {
+        $result = self::$search->search('"team of explorers"/2')
             ->expression('genre', "in(meta['genre'],'adventure')")
             ->notfilter('genre', 'equals', 1)
             ->filter('year', 'lte', 2000)
@@ -233,54 +500,40 @@ class SearchTest extends TestCase
             ->get();
 
         $this->assertCount(2, $result);
-        $search->reset();
-        $search->setIndex('movies');
+    }
 
+    public function testMatchBoolQueryMust()
+    {
         $q = new BoolQuery();
         $q->must(new Match(['query' => 'team of explorers', 'operator' => 'and'], '*'));
-        $result = $search->search($q)->get();
+        $result = self::$search->search($q)->get();
         $this->assertCount(3, $result);
-        $search->reset();
-        $search->setIndex('movies');
+    }
 
+    public function testMatchBoolQueryShould()
+    {
         $q = new BoolQuery();
         $q->should(new Match(['query' => 'team of explorers', 'operator' => 'and'], '*'));
-        $result = $search->search($q)->get();
+        $result = self::$search->search($q)->get();
         $this->assertCount(3, $result);
-        $search->reset();
-        $search->setIndex('movies');
+    }
 
-
+    public function testBoolQueryMutipleFilters1()
+    {
         $q = new BoolQuery();
         $q->must(new Match(['query' => 'team of explorers', 'operator' => 'or'], '*'));
         $q->must(new Equals('year', 2014));
-        $result = $search->search($q)->get();
+        $result = self::$search->search($q)->get();
         $this->assertCount(1, $result);
-        $search->reset();
-        $search->setIndex('movies');
+    }
 
+    public function testBoolQueryMutipleFilters2()
+    {
         $q = new BoolQuery();
         $q->must(new Match(['query' => 'team of explorers', 'operator' => 'or'], '*'));
         $q->must(new Range('year', ['lte' => 2020]));
-        $result = $search->search($q)->get();
+        $result = self::$search->search($q)->get();
         $this->assertCount(5, $result);
-        $search->reset();
-        $search->setIndex('movies');
-    }
-
-    protected function _getResultSet()
-    {
-        $search = $this->_getSearch();
-        $result = $search->search('"team of explorers"/2')->get();
-        return $result;
-    }
-
-    protected function _getFirstResultHit()
-    {
-        $result = $this->_getResultSet();
-        $result->rewind();
-        $this->assertEquals(0, $result->key());
-        return $result->current();
     }
 
     public function testResultSetNextRewind()
@@ -328,6 +581,28 @@ class SearchTest extends TestCase
         $this->assertNull($result->getProfile());
     }
 
+    /**
+     * @todo What is the intended functionality here?
+     */
+    public function testNonExistentSource()
+    {
+        $results = self::$search->setSource('source_does_not_exist')->phrase('team of explorers')->get();
+        while($results->valid()) {
+            $hit = $results->current();
+            $this->assertEquals([], $hit->getData());
+            $results->next();
+        }
+    }
+
+    public function testProfileForSearch()
+    {
+        $results = self::$search->profile()->phrase('team of explorers')->get();
+        $profile = $results->getProfile();
+        $expected = 'PHRASE( AND(KEYWORD(team, querypos=1)),  AND(KEYWORD(of, querypos=2)),  AND(KEYWORD(explorers, ' .
+            'querypos=3)))';
+        $this->assertEquals($expected, $profile['query']['description']);
+    }
+
     public function testResultHitGetScore()
     {
         $resultHit = $this->_getFirstResultHit();
@@ -362,9 +637,30 @@ class SearchTest extends TestCase
         $this->assertEquals([], $resultHit->get('nonExistentKey'));
     }
 
-    public function testResultHitDoesGetHighlight()
+    public function testGetHighlight()
     {
-        $this->markTestSkipped('TODO - highlight check');
+        $results = self::$search->match('salvage')->highlight(
+            ['plot'],
+            ['pre_tags' => '<i>','post_tags'=>'</i>']
+        )->get();
+
+        $this->assertEquals(1, $results->count());
+        $this->assertEquals(['plot' => [' is rescued by a deep <i>salvage</i> team of explorers after being']],
+            $results->current()->getHighlight());
+    }
+
+    public function testHighlightParamsMissing()
+    {
+        $results = self::$search->match('salvage')->highlight()->get();
+
+        $this->assertEquals(1, $results->count());
+
+        // default highlighter is bold, all text fields are searched.  The 'plot field' has a highlights match
+        $this->assertEquals([
+            'plot' => [' is rescued by a deep <b>salvage</b> team of explorers after being'],
+            'title' => []
+        ],
+            $results->current()->getHighlight());
     }
 
     public function testResultHitGetData()
@@ -392,6 +688,40 @@ class SearchTest extends TestCase
         $arbitraryID = 668689;
         $resultHit->setId($arbitraryID);
         $this->assertEquals($arbitraryID, $resultHit->getId());
+    }
+
+    public function testGetBody()
+    {
+
+        self::$search->phrase('team of explorers')->get();
+        $body = self::$search->getBody();
+        $this->assertEquals([
+            'index' => 'movies',
+            'query' =>
+                [
+                    'bool' =>
+                        [
+                            'must' =>
+                                [
+                                    0 =>
+                                        [
+                                            'match_phrase' =>
+                                                [
+                                                    '*' => 'team of explorers',
+                                                ],
+                                        ],
+                                ],
+                        ],
+                ],
+        ], $body);
+
+    }
+
+
+    public function testGetClient()
+    {
+        $client = self::$search->getClient();
+        $this->assertInstanceOf('Manticoresearch\Client', $client);
     }
 
 }
