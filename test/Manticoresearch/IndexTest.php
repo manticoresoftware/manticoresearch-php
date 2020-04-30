@@ -150,30 +150,8 @@ class IndexTest extends TestCase
         $status = $index->status();
         $this->assertEquals(1, $status['indexed_documents']);
         $keys = array_keys($status);
-        sort($keys);
 
-        $this->assertEquals([
-            'disk_bytes',
-            'disk_chunks',
-            'found_rows_15min',
-            'found_rows_1min',
-            'found_rows_5min',
-            'found_rows_total',
-            'index_type',
-            'indexed_bytes',
-            'indexed_documents',
-            'mem_limit',
-            'query_time_15min',
-            'query_time_1min',
-            'query_time_5min',
-            'query_time_total',
-            'ram_bytes',
-            'ram_bytes_retired',
-            'ram_chunk',
-            'ram_chunks_count',
-            'tid',
-            'tid_saved',
-        ], $keys);
+        $this->assertArrayHasKey('disk_bytes', $status);
     }
 
 
