@@ -323,3 +323,16 @@ Parameters:
 $index->keywords($query, $options);
 $index->suggest('trsting', ['limit' => 5]);
 ```
+
+
+### explainQuery()
+
+Returns transformation tree for a full-text query without running it over the index.
+
+Parameters:
+
+- input query string
+
+```php
+$index->explainQuery($query);
+```

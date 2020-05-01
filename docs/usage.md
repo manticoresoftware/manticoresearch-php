@@ -20,7 +20,7 @@ Table of Contents
 
 * [Percolate searches](percolate.md)
 
-* [Keyword helpers](keywordhelpers.md)
+* [Keyword helpers](queryhelpers.md)
 
 * Administrative operations
 

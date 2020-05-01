@@ -303,6 +303,14 @@ class Client
         $response = $this->request($endpoint, ['responseClass' => 'Manticoresearch\\Response\\SqlToArray']);
         return $response->getResponse();
     }
+    public function explainQuery(array $params = [])
+    {
+        $endpoint = new Endpoints\ExplainQuery();
+        $endpoint->setIndex($params['index']);
+        $endpoint->setBody($params['body']);
+        $response = $this->request($endpoint, ['responseClass' => 'Manticoresearch\\Response\\SqlToArray']);
+        return $response->getResponse();
+    }
 
 
     /*

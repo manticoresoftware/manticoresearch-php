@@ -269,6 +269,13 @@ class IndexTest extends TestCase
         $this->assertEquals(['distance' => 1, 'docs' => 1], $result['testing']);
     }
 
+    public function testIndexExplainQuery()
+    {
+        $index = $this->_getIndex(true);
+        $result = $index->explainQuery('test');
+        $this->assertEquals('AND(KEYWORD(test, querypos=1))', $result['transformed_tree']);
+    }
+
     public function testIndexKeywords()
     {
         $index = $this->_getIndex(true);

@@ -1,5 +1,5 @@
-Keyword helpers
---------------
+Query helpers
+-------------
 
 Available for  Manticore Search 3.4 or above.
 
@@ -47,4 +47,18 @@ error.  To do this, pass in a settings options as below in the body part of an i
              'dict' => 'keywords',
              'min_infix_len' => 2
          ]
-     
+
+## Query explain
+
+Allows to get the the query transformation tree of a query without running it. Useful for testing queries.
+
+`index` is mandatory.
+`body` is mandatory and requires present of `query` - query string expression.
+
+    $params = [
+         'index'=>'movies',
+         'body' =>[
+              'query'=>'("star wars trilogy"/2) | (empire back)'
+         ]
+    ];
+    $response = $client->explainQuery($params);   

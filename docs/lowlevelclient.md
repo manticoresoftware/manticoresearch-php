@@ -28,7 +28,7 @@ Table of Contents
 
 * [Percolate searches](percolate.md)
 
-* [Keyword helpers](keywordhelpers.md)
+* [Query helpers](queryhelpers.md)
 
 * Administrative operations
 

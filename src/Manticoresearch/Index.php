@@ -282,6 +282,18 @@ class Index
 
     }
 
+    public function explainQuery($query)
+    {
+        $params = [
+            'index' => $this->_index,
+            'body' => [
+                'query' => $query,
+            ]
+        ];
+        return $this->_client->explainQuery($params);
+
+    }
+
     public function getClient(): Client
     {
         return $this->_client;
