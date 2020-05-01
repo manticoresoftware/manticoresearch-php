@@ -39,7 +39,7 @@ install:
   - composer install --prefer-dist
 
 script:
-  - if [[ $TRANSPORT ]]; then composer require guzzlehttp/psr7 && composer require && php-http/curl-client && php-http/httplug && composer require ext-curl  ; fi
+  - if [[ $TRANSPORT ]]; then composer require guzzlehttp/psr7 && composer require php-http/curl-client && php-http/httplug && composer require ext-curl  ; fi
   - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit -d memory_limit=4G  test/; fi
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit -d memory_limit=4G --coverage-clover=coverage.xml   test/   ; fi
   - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs --config-set ignore_errors_on_exit 1 && vendor/bin/phpcs --config-set ignore_warnings_on_exit 1 && vendor/bin/phpcs src/ test/ ; fi
