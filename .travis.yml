@@ -13,6 +13,10 @@ matrix:
     - php: 7.4
       env: PHPUNIT_TEST=1
 
+    # Test with alternative transport
+    - php: 7.4
+      env: PHPUNIT_TEST=1 TRANSPORT=PhpHttp
+
 services:
   -  docker
 
