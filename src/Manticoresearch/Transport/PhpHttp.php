@@ -52,7 +52,7 @@ class PhpHttp extends Transport implements TransportInterface
         $method = $request->getMethod();
 
         $headers = $connection->getHeaders();
-        $headers[] = sprintf('Content-Type: %s', $request->getContentType());
+        $headers['Content-Type'] = $request->getContentType();
         $data = $request->getBody();
         if (!empty($data)) {
             if (is_array($data)) {
