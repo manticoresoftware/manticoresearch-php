@@ -36,7 +36,11 @@ class SearchTest extends TestCase
 
     protected static function indexDocuments(): Search
     {
-        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
+        $params = [
+            'host' => $_SERVER['MS_HOST'],
+            'port' => $_SERVER['MS_PORT'],
+            'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
+        ];
 
         $client = new Client($params);
         $client->indices()->drop(['index' => 'movies','body'=>['silent'=>true]]);
@@ -147,7 +151,9 @@ class SearchTest extends TestCase
 
     public function testConstructor()
     {
-        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT'],
+            'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
+        ];
         $client = new Client($params);
         $searchObj = new Search($client);
         $this->assertEquals($client, $searchObj->getClient());

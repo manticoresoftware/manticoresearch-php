@@ -13,7 +13,6 @@ class DocTest extends \PHPUnit\Framework\TestCase
     {
         $client = new Client();
         $params = [
-
             'body' => [
                 'query' => ['match'=>['subject'=>'test']],
                 'tags' => ['test1','test2']

@@ -43,8 +43,8 @@ class ConnectionTest extends TestCase
 
     public function testSetTransportGetTransport()
     {
-        $this->connection->setTransport('http');
-        $this->assertEquals('http', $this->connection->getTransport());
+        $this->connection->setTransport('Http');
+        $this->assertEquals('Http', $this->connection->getTransport());
     }
 
     public function testSetHeadersGetHeaders()

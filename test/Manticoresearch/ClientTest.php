@@ -89,7 +89,8 @@ class ClientTest extends TestCase
                     'curl' => [
                         CURLOPT_FAILONERROR => true
                     ],
-                    'persistent' => true
+                    'persistent' => true,
+                    'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
                 ],
                 [
                     'host' => '123.0.0.2',
@@ -101,7 +102,8 @@ class ClientTest extends TestCase
                         CURLOPT_SSL_VERIFYPEER => true
                     ],
                     'connection_timeout' => 1,
-                    'persistent' => true
+                    'persistent' => true,
+                    'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
                 ],
 
             ]

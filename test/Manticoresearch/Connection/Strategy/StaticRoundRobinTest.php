@@ -14,11 +14,13 @@ class StaticRoundRobinTest extends TestCase
         $client->setHosts([
             [
                 'host' => $_SERVER['MS_HOST'],
-                'port' => $_SERVER['MS_PORT']
+                'port' => $_SERVER['MS_PORT'],
+                'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
             ],
             [
                 'host' => $_SERVER['MS_HOST'],
-                'port' => $_SERVER['MS_PORT']
+                'port' => $_SERVER['MS_PORT'],
+                'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
             ],
 
         ]);

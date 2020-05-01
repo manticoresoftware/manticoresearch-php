@@ -11,7 +11,9 @@ class PopulateHelperTest extends \PHPUnit\Framework\TestCase
 
     public function getClient()
     {
-        $params = ['host' => $_SERVER['MS_HOST'], 'port' => 9308];
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => 9308,
+            'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
+        ];
         $this->client = new Client($params);
         return $this->client;
     }
@@ -84,7 +86,7 @@ class PopulateHelperTest extends \PHPUnit\Framework\TestCase
     {
         return $this->client->nodes()->status();
     }
-    
+
     public function testDummy()
     {
        $a = 1;

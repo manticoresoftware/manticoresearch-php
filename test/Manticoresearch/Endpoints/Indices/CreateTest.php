@@ -10,7 +10,11 @@ class CreateTest  extends \PHPUnit\Framework\TestCase
 {
     public function testCreateTableWithOptions()
     {
-        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
+        $params = [
+            'host' => $_SERVER['MS_HOST'],
+            'port' => $_SERVER['MS_PORT'],
+            'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
+        ];
         $client = new Client($params);
         $params = [
             'index' => 'products',
@@ -42,7 +46,11 @@ class CreateTest  extends \PHPUnit\Framework\TestCase
 
     public function testCreateDistributed()
     {
-        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
+        $params = [
+            'host' => $_SERVER['MS_HOST'],
+            'port' => $_SERVER['MS_PORT'],
+            'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
+        ];
         $client = new Client($params);
         $params = [
             'index' => 'testrt',
@@ -78,7 +86,11 @@ class CreateTest  extends \PHPUnit\Framework\TestCase
 
     public function testNoIndexDrop()
     {
-        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
+        $params = [
+            'host' => $_SERVER['MS_HOST'],
+            'port' => $_SERVER['MS_PORT'],
+            'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
+        ];
         $client = new Client($params);
         $params = [
             'index'=>'noindexname',
