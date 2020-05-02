@@ -13,15 +13,16 @@ class RandomTest extends TestCase
         srand(1000);
 
         $client = new Client(["connectionStrategy"  =>"Random"]);
-
         $client->setHosts([
             [
                 'host' => $_SERVER['MS_HOST'],
-                'port' => (int)($_SERVER['MS_PORT'])
+                'port' => (int)($_SERVER['MS_PORT']),
+                'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
             ],
             [
                 'host' => $_SERVER['MS_HOST'],
-                'port' => 9309
+                'port' => 9309,
+                'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
             ],
 
         ]);
