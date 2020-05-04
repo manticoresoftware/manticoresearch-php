@@ -31,7 +31,7 @@ env:
 
 before_script:
   - composer validate
-  - if [[ $PHPSTAN_TEST ]]; then composer require --no-update phpstan/phpstan:$PHPSTAN_VERSION; fi
+  - if [[ $PHPSTAN_TEST ]]; then composer require --dev phpstan/phpstan:$PHPSTAN_VERSION; fi
 
 install:
   # See https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
