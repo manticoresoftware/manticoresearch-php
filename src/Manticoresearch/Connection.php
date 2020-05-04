@@ -202,13 +202,13 @@ class Connection
     }
 
     /**
-     * @param array $params|self
-     * @return array|static
+     * @param array|Connection $params|self
+     * @return Connection
      */
     public static function create($params)
     {
         if (is_array($params)) {
-            return new static($params);
+            return new Connection($params);
         }
         if ($params instanceof self) {
             return $params;

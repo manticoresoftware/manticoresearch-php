@@ -19,7 +19,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
     protected $_scheme = 'http';
 
     /**
-     * @var object
+     * @var resource
      */
     protected static $_curl;
 
@@ -98,6 +98,8 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
         //hard error
         if ($errorno>0) {
             $error = curl_error($conn);
+
+            /* @phpstan-ignore-next-line */
             self::$_curl = false;
             throw new ConnectionException($error, $request);
         }

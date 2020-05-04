@@ -55,7 +55,7 @@ class Transport
     }
 
     /**
-     * @param $transport
+     * @param string $transport
      * @param Connection $connection
      * @param LoggerInterface $logger
      * @return mixed

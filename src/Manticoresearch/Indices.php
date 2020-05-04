@@ -174,7 +174,7 @@ class Indices
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return array|mixed|string
      */
     public function settings($params)
