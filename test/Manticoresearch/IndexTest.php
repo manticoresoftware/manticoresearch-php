@@ -18,7 +18,11 @@ class IndexTest extends TestCase
 
     protected function _getIndex($keywords = false): Index
     {
-        $params = ['host' => $_SERVER['MS_HOST'],'port'=> $_SERVER['MS_PORT']];
+        $params = [
+            'host' => $_SERVER['MS_HOST'],
+            'port' => $_SERVER['MS_PORT'],
+            'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
+        ];
         $index = new Index(new Client($params));
         $index->setName('testindex');
         $index->drop(true);

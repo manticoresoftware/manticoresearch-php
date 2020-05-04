@@ -2,6 +2,7 @@
 
 namespace Manticoresearch\Endpoints\Cluster;
 
+use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Endpoints\Sql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
@@ -11,7 +12,7 @@ use Manticoresearch\Utils;
  * Class Status
  * @package Manticoresearch\Endpoints\Indices
  */
-class Join extends Sql
+class Join extends EmulateBySql
 {
     use Utils;
     /**

@@ -3,11 +3,12 @@
 
 namespace Manticoresearch\Endpoints\Cluster;
 
+use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Endpoints\Sql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
 
-class Set extends Sql
+class Set extends EmulateBySql
 {
     use Utils;
     /**

@@ -9,7 +9,12 @@ class BulkTest extends \PHPUnit\Framework\TestCase
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
+        $params = [
+            'host' => $_SERVER['MS_HOST'],
+            'port' => $_SERVER['MS_PORT'],
+            'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
+        ];
+
         static::$client = new Client($params);
         $params = [
             'index' => 'bulktest',

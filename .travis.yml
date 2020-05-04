@@ -2,8 +2,20 @@ language: php
 
 matrix:
   include:
+    - php: 7.1
+      env: PHPUNIT_TEST=1
+    - php: 7.2
+      env: PHPUNIT_COVERAGE_TEST=1
+    - php: 7.2
+      env: PHPCS_TEST=1
+    - php: 7.3
+      env: PHPUNIT_TEST=1
+    - php: 7.4
+      env: PHPUNIT_TEST=1
     - php: 7.4
       env: PHPSTAN_TEST=1
+    - php: 7.4
+      env: PHPUNIT_TEST=1 TRANSPORT=PhpHttp
 
 services:
   -  docker
@@ -21,7 +33,8 @@ env:
 
 before_script:
   - composer validate
-  - if [[ $PHPSTAN_TEST ]]; then composer require --dev phpstan/phpstan:$PHPSTAN_VERSION; fi
+  - if [[ $TRANSPORT ]]; then composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle; fi
+  - if [[ $PHPSTAN_TEST ]]; then composer require --dev phpstan/phpstan && composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle; fi
 
 install:
   # See https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
