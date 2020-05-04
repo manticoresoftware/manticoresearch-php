@@ -7,6 +7,7 @@ use Http\Discovery\MessageFactoryDiscovery;
 
 use Manticoresearch\Connection;
 use Manticoresearch\Exceptions\ConnectionException;
+use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Request;
 use Manticoresearch\Response;
 use Manticoresearch\Transport;
@@ -52,7 +53,7 @@ class PhpHttp extends Transport implements TransportInterface
         $method = $request->getMethod();
 
         $headers = $connection->getHeaders();
-        $headers[] = sprintf('Content-Type: %s', $request->getContentType());
+        $headers['Content-Type'] = $request->getContentType();
         $data = $request->getBody();
         if (!empty($data)) {
             if (is_array($data)) {
@@ -72,7 +73,15 @@ class PhpHttp extends Transport implements TransportInterface
         }
         $end = microtime(true);
         $status = $responsePSR->getStatusCode();
-        $response = new Response($responsePSR->getBody(), $status);
+        $responseString = $responsePSR->getBody();
+
+        if (isset($params['responseClass'])) {
+            $responseClass = $params['responseClass'];
+            $response = new $responseClass($responseString, $status);
+        } else {
+            $response = new Response($responseString, $status);
+        }
+
         $time = $end-$start;
         $response->setTime($time);
         $response->setTransportInfo([
@@ -94,6 +103,10 @@ class PhpHttp extends Transport implements TransportInterface
         );
         $this->_logger->debug('Response body:', $response->getResponse());
 
+        if ($response->hasError()) {
+            $this->_logger->error('Response error:', [$response->getError()]);
+            throw new ResponseException($request, $response);
+        }
         return $response;
     }
 }
