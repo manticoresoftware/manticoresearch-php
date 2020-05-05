@@ -1,7 +1,8 @@
 <?php
 
+namespace Manticoresearch\Test\Endpoints;
 
-class SQLTest  extends \PHPUnit\Framework\TestCase
+class SQLTest extends \PHPUnit\Framework\TestCase
 {
     public function testPath()
     {
@@ -15,5 +16,4 @@ class SQLTest  extends \PHPUnit\Framework\TestCase
         $sql->setMode('COOLMODE');
         $this->assertEquals('COOLMODE', $sql->getMode());
     }
-
 }

@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Test;
 
-
 use Manticoresearch\Query;
 use PHPUnit\Framework\TestCase;
 
@@ -68,5 +67,4 @@ class QueryTest extends TestCase
         $this->query->add('x', $subquery);
         $this->assertEquals(['a' => 1, 'x' => ['b' => 2]], $this->query->toArray());
     }
-
 }

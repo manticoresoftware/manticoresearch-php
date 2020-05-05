@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Test;
 
-
 use Manticoresearch\Request;
 use PHPUnit\Framework\TestCase;
 
@@ -22,5 +21,4 @@ class RequestTest extends TestCase
         $request->setMethod('PUT');
         $this->assertEquals('PUT', $request->getMethod());
     }
-
 }

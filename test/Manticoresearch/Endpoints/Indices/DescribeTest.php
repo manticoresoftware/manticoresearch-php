@@ -7,7 +7,7 @@ use Manticoresearch\Endpoints\Indices\Describe;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class DescribeTest  extends \PHPUnit\Framework\TestCase
+class DescribeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Client */
     private static $client;
@@ -60,6 +60,4 @@ class DescribeTest  extends \PHPUnit\Framework\TestCase
         $this->expectException(RuntimeException::class);
         $describe->setBody([]);
     }
-
-
 }

@@ -1,10 +1,9 @@
 <?php
 namespace Manticoresearch\Test\Endpoints;
 
-
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class DebugTest  extends \PHPUnit\Framework\TestCase
+class DebugTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testDebug()
@@ -27,7 +26,5 @@ class DebugTest  extends \PHPUnit\Framework\TestCase
             'systhreads',
             'tasks',
         ], $keys);
-
     }
-
 }

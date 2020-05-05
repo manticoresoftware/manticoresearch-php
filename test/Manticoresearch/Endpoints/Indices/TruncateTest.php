@@ -7,7 +7,7 @@ use Manticoresearch\Endpoints\Indices\Truncate;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class TruncateTest  extends \PHPUnit\Framework\TestCase
+class TruncateTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Client */
     private static $client;
@@ -29,8 +29,7 @@ class TruncateTest  extends \PHPUnit\Framework\TestCase
     {
         $response = self::$client->indices()->truncate(['index' => 'products']);
 
-        $this->assertEquals( ['total'=>0,'error'=>'','warning'=>''],$response);
-
+        $this->assertEquals(['total'=>0,'error'=>'','warning'=>''], $response);
     }
 
     public function testSetGetIndex()
@@ -47,6 +46,4 @@ class TruncateTest  extends \PHPUnit\Framework\TestCase
         $this->expectException(RuntimeException::class);
         $describe->setBody([]);
     }
-
-
 }

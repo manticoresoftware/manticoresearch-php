@@ -42,11 +42,11 @@ class PhpHttp extends Transport implements TransportInterface
      * @return Response
      * @throws \Http\Client\Exception
      */
-    public function execute(Request $request, $params=[])
+    public function execute(Request $request, $params = [])
     {
         $connection = $this->getConnection();
 
-        $url = $this->_connection->getConfig('scheme') . '://' . $connection->getHost() . ':' . $connection->getPort();
+        $url = $this->connection->getConfig('scheme') . '://' . $connection->getHost() . ':' . $connection->getPort();
         $endpoint = $request->getPath();
         $url .= $endpoint;
         $url = $this->setupURI($url, $request->getQuery());
@@ -89,11 +89,11 @@ class PhpHttp extends Transport implements TransportInterface
             'headers' => $headers,
             'body' => $request->getBody()
         ]);
-        $this->_logger->debug('Request body:', [
+        $this->logger->debug('Request body:', [
             'connection' => $connection->getConfig(),
             'payload'=> $request->getBody()
         ]);
-        $this->_logger->info(
+        $this->logger->info(
             'Request:',
             [
                  'url' => $url,
@@ -101,10 +101,10 @@ class PhpHttp extends Transport implements TransportInterface
                 'time' => $time
             ]
         );
-        $this->_logger->debug('Response body:', $response->getResponse());
+        $this->logger->debug('Response body:', $response->getResponse());
 
         if ($response->hasError()) {
-            $this->_logger->error('Response error:', [$response->getError()]);
+            $this->logger->error('Response error:', [$response->getError()]);
             throw new ResponseException($request, $response);
         }
         return $response;

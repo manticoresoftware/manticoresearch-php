@@ -1,10 +1,9 @@
 <?php
 namespace Manticoresearch\Test\Endpoints;
 
-
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class ReloadPluginsTest  extends \PHPUnit\Framework\TestCase
+class ReloadPluginsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @todo How to get this to not error?
@@ -15,6 +14,6 @@ class ReloadPluginsTest  extends \PHPUnit\Framework\TestCase
         $helper = new PopulateHelperTest();
         $client = $helper->getClient();
         $response = $client->nodes()->reloadplugins();
-        $this->assertEquals( ['total'=>0,'error'=>'','warning'=>''],$response);
+        $this->assertEquals(['total'=>0,'error'=>'','warning'=>''], $response);
     }
 }

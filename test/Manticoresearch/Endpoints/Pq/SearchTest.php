@@ -2,7 +2,6 @@
 
 namespace Manticoresearch\Test\Endpoints\Pq;
 
-
 use Manticoresearch\Client;
 use Manticoresearch\Endpoints\Pq\Search;
 use Manticoresearch\Exceptions\RuntimeException;
@@ -56,7 +55,5 @@ class SearchTest extends \PHPUnit\Framework\TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Index name is missing');
         $search->getPath();
-
     }
-
 }

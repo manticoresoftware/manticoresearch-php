@@ -18,25 +18,24 @@ class Join extends EmulateBySql
     /**
      * @var string
      */
-    protected $_cluster;
+    protected $cluster;
 
     public function setBody($params = null)
     {
-        if (isset($this->_cluster)) {
-            if(isset($params['node'])) {
-                $this->_body = ['query' => "JOIN CLUSTER ".$this->_cluster." AT ".$params['node']];
-            }else{
+        if (isset($this->cluster)) {
+            if (isset($params['node'])) {
+                $this->body = ['query' => "JOIN CLUSTER ".$this->cluster." AT ".$params['node']];
+            } else {
                 $options =[];
-                if(isset($params['path'])) {
+                if (isset($params['path'])) {
                     $options[] = "'".$params['path']. "' AS path";
                 }
-                if(isset($params['nodes'])) {
+                if (isset($params['nodes'])) {
                     $options[] = "'".$params['nodes']. "' AS nodes";
                 }
-                $this->_body = ['query' => "JOIN CLUSTER ".$this->_cluster.
+                $this->body = ['query' => "JOIN CLUSTER ".$this->cluster.
                     ((count($options)>0)?" ".implode(',', $options):"")];
             }
-
         }
         throw new RuntimeException('Cluster name is missing.');
     }
@@ -45,7 +44,7 @@ class Join extends EmulateBySql
      */
     public function getCLuster()
     {
-        return $this->_cluster;
+        return $this->cluster;
     }
 
     /**
@@ -53,7 +52,6 @@ class Join extends EmulateBySql
      */
     public function setCluster($cluster)
     {
-        $this->_cluster = $cluster;
+        $this->cluster = $cluster;
     }
-
 }

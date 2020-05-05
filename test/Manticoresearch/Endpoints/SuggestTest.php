@@ -1,13 +1,12 @@
 <?php
 namespace Manticoresearch\Test\Endpoints;
 
-
 use Manticoresearch\Client;
 use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class SuggestTest  extends \PHPUnit\Framework\TestCase
+class SuggestTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Client */
     private static $client;
@@ -32,8 +31,7 @@ class SuggestTest  extends \PHPUnit\Framework\TestCase
             ]
         ];
         $response = self::$client->suggest($params);
-        $this->assertSame('broken',array_keys($response)[0]);
-
+        $this->assertSame('broken', array_keys($response)[0]);
     }
     public function testSuggestBadIndex()
     {
@@ -71,7 +69,6 @@ class SuggestTest  extends \PHPUnit\Framework\TestCase
             $response = $ex->getResponse();
             $this->assertEquals('"no such index productsNOT"', $response->getError());
         }
-
     }
     public function testSuggestGetIndex()
     {

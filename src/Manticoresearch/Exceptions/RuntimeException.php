@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Exceptions;
 
-
 /**
  * Class RuntimeException
  * @package Manticoresearch\Exceptions

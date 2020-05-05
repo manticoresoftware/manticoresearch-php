@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Endpoints\Indices;
 
-
 use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
@@ -18,13 +17,13 @@ class Status extends EmulateBySql
     /**
      * @var string
      */
-    protected $_index;
+    protected $index;
 
     public function setBody($params = null)
     {
-        if (isset($this->_index)) {
-
-            return parent::setBody(['query' => "SHOW INDEX ".$this->_index. " STATUS".(isset($params['pattern'])?" LIKE '".$params['pattern']."'":"")]);
+        if (isset($this->index)) {
+            return parent::setBody(['query' => "SHOW INDEX ".$this->index. " STATUS".
+                (isset($params['pattern'])?" LIKE '".$params['pattern']."'":"")]);
         }
         throw new RuntimeException('Index name is missing.');
     }
@@ -33,7 +32,7 @@ class Status extends EmulateBySql
      */
     public function getIndex()
     {
-        return $this->_index;
+        return $this->index;
     }
 
     /**
@@ -41,7 +40,6 @@ class Status extends EmulateBySql
      */
     public function setIndex($index)
     {
-        $this->_index = $index;
+        $this->index = $index;
     }
-
 }

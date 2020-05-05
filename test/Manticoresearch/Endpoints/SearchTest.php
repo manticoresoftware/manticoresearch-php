@@ -1,10 +1,10 @@
 <?php
 
+namespace Manticoresearch\Test\Endpoints;
 
 use Manticoresearch\Client;
 
-
-class SearchTest  extends \PHPUnit\Framework\TestCase
+class SearchTest extends \PHPUnit\Framework\TestCase
 {
     public function testEmptyBody()
     {
@@ -15,7 +15,7 @@ class SearchTest  extends \PHPUnit\Framework\TestCase
         ];
         $client = new Client($params);
         $this->expectException(\Manticoresearch\Exceptions\ResponseException::class);
-        $client->search(['body'=>'']);
+        $client->search(['body' => '']);
     }
 
     public function testNoArrayParams()
@@ -26,9 +26,10 @@ class SearchTest  extends \PHPUnit\Framework\TestCase
             'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
         ];
         $client = new Client($params);
-        $this->expectException(TypeError::class);
+        $this->expectException(\TypeError::class);
         $client->search('this is not a json');
     }
+
     public function testMissingIndex()
     {
         $params = [
@@ -38,7 +39,7 @@ class SearchTest  extends \PHPUnit\Framework\TestCase
         ];
         $client = new Client($params);
         $this->expectException(\Manticoresearch\Exceptions\ResponseException::class);
-        $client->search( [
+        $client->search([
             'body' => [
 
                 'query' => [
@@ -48,7 +49,6 @@ class SearchTest  extends \PHPUnit\Framework\TestCase
                 ]
             ]
         ]);
-
     }
 
     public function testPath()
@@ -56,5 +56,4 @@ class SearchTest  extends \PHPUnit\Framework\TestCase
         $search = new \Manticoresearch\Endpoints\Search();
         $this->assertEquals('/json/search', $search->getPath());
     }
-
 }

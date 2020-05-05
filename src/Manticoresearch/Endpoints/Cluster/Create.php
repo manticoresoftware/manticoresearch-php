@@ -18,11 +18,11 @@ class Create extends EmulateBySql
     /**
      * @var string
      */
-    protected $_cluster;
+    protected $cluster;
 
     public function setBody($params = null)
     {
-        if (isset($this->_cluster)) {
+        if (isset($this->cluster)) {
             $options = [];
             if (isset($params['path'])) {
                 $options[] = "'" . $params['path'] . "' AS path";
@@ -30,7 +30,7 @@ class Create extends EmulateBySql
             if (isset($params['nodes'])) {
                 $options[] = "'" . $params['nodes'] . "' AS nodes";
             }
-            return parent::setBody(['query' => "CREATE CLUSTER " . $this->_cluster .
+            return parent::setBody(['query' => "CREATE CLUSTER " . $this->cluster .
                 ((count($options) > 0) ? ' ' . implode(',', $options) : '')]);
         }
         throw new RuntimeException('Cluster name is missing.');
@@ -41,7 +41,7 @@ class Create extends EmulateBySql
      */
     public function getCLuster()
     {
-        return $this->_cluster;
+        return $this->cluster;
     }
 
     /**
@@ -49,7 +49,6 @@ class Create extends EmulateBySql
      */
     public function setCluster($cluster)
     {
-        $this->_cluster = $cluster;
+        $this->cluster = $cluster;
     }
-
 }

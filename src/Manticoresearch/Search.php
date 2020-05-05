@@ -24,30 +24,30 @@ class Search
     /**
      * @var Client
      */
-    protected $_client;
+    protected $client;
 
-    protected $_query;
-    protected $_body;
+    protected $query;
+    protected $body;
     /**
      * @var array
      */
-    protected $_params = [];
+    protected $params = [];
 
     public function __construct(Client $client)
     {
-        $this->_client = $client;
-        $this->_query = new BoolQuery();
+        $this->client = $client;
+        $this->query = new BoolQuery();
     }
 
     public function setIndex($index): self
     {
-        $this->_params['index'] = $index;
+        $this->params['index'] = $index;
         return $this;
     }
 
     public function setSource($source): self
     {
-        $this->_params['_source'] = $source;
+        $this->params['_source'] = $source;
         return $this;
     }
 
@@ -58,10 +58,10 @@ class Search
     public function search($queryString): self
     {
         if (is_object($queryString)) {
-            $this->_query = $queryString;
+            $this->query = $queryString;
             return $this;
         }
-        $this->_query->must(new QueryString($queryString));
+        $this->query->must(new QueryString($queryString));
         return $this;
     }
 
@@ -71,7 +71,7 @@ class Search
         if ($fields !== null && is_string($fields)) {
             $f = $fields;
         }
-        $this->_query->must(new Match($keywords, $f));
+        $this->query->must(new Match($keywords, $f));
         return $this;
     }
 
@@ -81,13 +81,13 @@ class Search
         if ($fields !== null && is_string($fields)) {
             $f = $fields;
         }
-        $this->_query->must(new MatchPhrase($string, $f));
+        $this->query->must(new MatchPhrase($string, $f));
         return $this;
     }
 
     public function limit($limit): self
     {
-        $this->_params['limit'] = $limit;
+        $this->params['limit'] = $limit;
         return $this;
     }
 
@@ -98,28 +98,27 @@ class Search
      */
     public function expression($name, $exp): self
     {
-        if (!isset($this->_params['script_fields'])) {
-            $this->_params['script_fields'] = new ScriptFields();
+        if (!isset($this->params['script_fields'])) {
+            $this->params['script_fields'] = new ScriptFields();
         }
-        $this->_params['script_fields']->add($name, $exp);
+        $this->params['script_fields']->add($name, $exp);
         return $this;
     }
 
-    public function highlight($fields = [],$settings=[]): self
+    public function highlight($fields = [], $settings = []): self
     {
 
         if (count($fields) === 0 && count($settings)===0) {
-            $this->_params['highlight'] =  new \stdClass();
+            $this->params['highlight'] =  new \stdClass();
             return $this;
         }
-        $this->_params['highlight'] = [];
+        $this->params['highlight'] = [];
         if (count($fields) > 0) {
-            $this->_params['highlight']['fields'] =$fields;
+            $this->params['highlight']['fields'] =$fields;
         }
-        if(count($settings)>0) {
-            foreach($settings as $name=>$value)
-            {
-                $this->_params['highlight'][$name] =$value;
+        if (count($settings)>0) {
+            foreach ($settings as $name => $value) {
+                $this->params['highlight'][$name] =$value;
             }
         }
         return $this;
@@ -127,14 +126,14 @@ class Search
 
     public function distance($args): self
     {
-        $this->_query->must(new Distance($args));
+        $this->query->must(new Distance($args));
         return $this;
     }
 
     public function filter($attr, $op = '', $values = []): self
     {
         if (is_object($attr)) {
-            $this->_query->must($attr);
+            $this->query->must($attr);
             return $this;
         }
         if (!is_array($values)) {
@@ -143,7 +142,7 @@ class Search
 
         switch ($op) {
             case 'range':
-                $this->_query->must(new Range($attr, [
+                $this->query->must(new Range($attr, [
                     'gte' => $values[0],
                     'lte' => $values[1]
                 ]));
@@ -152,12 +151,12 @@ class Search
             case 'lte':
             case 'gt':
             case 'gte':
-                $this->_query->must(new Range($attr, [
+                $this->query->must(new Range($attr, [
                     $op => $values[0],
                 ]));
                 break;
             case 'equals':
-                $this->_query->must(new Equals($attr, $values[0]));
+                $this->query->must(new Equals($attr, $values[0]));
                 break;
         }
         return $this;
@@ -166,7 +165,7 @@ class Search
     public function orFilter($attr, $op = '', $values = []): self
     {
         if (is_object($attr)) {
-            $this->_query->should($attr);
+            $this->query->should($attr);
             return $this;
         }
         if (!is_array($values)) {
@@ -174,7 +173,7 @@ class Search
         }
         switch ($op) {
             case 'range':
-                $this->_query->should(new Range($attr, [
+                $this->query->should(new Range($attr, [
                     'gte' => $values[0],
                     'lte' => $values[1]
                 ]));
@@ -183,12 +182,12 @@ class Search
             case 'lte':
             case 'gte':
             case 'gt':
-                $this->_query->should(new Range($attr, [
+                $this->query->should(new Range($attr, [
                     $op => $values[0],
                 ]));
                 break;
             case 'equals':
-                $this->_query->should(new Equals($attr, $values[0]));
+                $this->query->should(new Equals($attr, $values[0]));
                 break;
         }
         return $this;
@@ -197,7 +196,7 @@ class Search
     public function notFilter($attr, $op = '', $values = []): self
     {
         if (is_object($attr)) {
-            $this->_query->mustNot($attr);
+            $this->query->mustNot($attr);
             return $this;
         }
         if (!is_array($values)) {
@@ -206,7 +205,7 @@ class Search
 
         switch ($op) {
             case 'range':
-                $this->_query->mustNot(new Range($attr, [
+                $this->query->mustNot(new Range($attr, [
                     'gte' => $values[0],
                     'lte' => $values[1]
                 ]));
@@ -215,12 +214,12 @@ class Search
             case 'lte':
             case 'gte':
             case 'gt':
-                $this->_query->mustNot(new Range($attr, [
+                $this->query->mustNot(new Range($attr, [
                     $op => $values[0],
                 ]));
                 break;
             case 'equals':
-                $this->_query->mustNot(new Equals($attr, $values[0]));
+                $this->query->mustNot(new Equals($attr, $values[0]));
                 break;
         }
         return $this;
@@ -228,13 +227,13 @@ class Search
 
     public function offset($offset): self
     {
-        $this->_params['offset'] = $offset;
+        $this->params['offset'] = $offset;
         return $this;
     }
 
     public function maxMatches($maxmatches): self
     {
-        $this->_params['max_matches'] = $maxmatches;
+        $this->params['max_matches'] = $maxmatches;
         return $this;
     }
 
@@ -242,25 +241,25 @@ class Search
     {
         // reset sorting
         if ($field === false) {
-            $this->_params['sort'] = [];
+            $this->params['sort'] = [];
         }
         //if 1st arg is array means we have a sorting expression
         if (is_array($field)) {
             //is 2nd arg is true we full set the sort with the expr, otherwise just add it
             if (isset($direction) && $direction === true) {
-                $this->_params['sort'] = $field;
+                $this->params['sort'] = $field;
             } else {
-                $this->_params['sort'] [] = $field;
+                $this->params['sort'] [] = $field;
             }
             return $this;
         }
-        if (!isset($this->_params['sort'])) {
-            $this->_params['sort'] = [];
+        if (!isset($this->params['sort'])) {
+            $this->params['sort'] = [];
         }
         if ($mode === null) {
-            $this->_params['sort'] [] = [$field => $direction];
+            $this->params['sort'] [] = [$field => $direction];
         } else {
-            $this->_params['sort'] [] = [$field => ['order' => $direction, 'mode' => $mode]];
+            $this->params['sort'] [] = [$field => ['order' => $direction, 'mode' => $mode]];
         }
 
         return $this;
@@ -268,7 +267,7 @@ class Search
 
     public function profile(): self
     {
-        $this->_params['profile'] = true;
+        $this->params['profile'] = true;
         return $this;
     }
 
@@ -277,23 +276,22 @@ class Search
      */
     public function get()
     {
-        $this->_body = $this->compile();
-        $resp = $this->_client->search(['body' => $this->_body], true);
+        $this->body = $this->compile();
+        $resp = $this->client->search(['body' => $this->body], true);
         return new ResultSet($resp);
-
     }
 
     public function compile()
     {
-        $body = $this->_params;
-        $query = $this->_query->toArray();
+        $body = $this->params;
+        $query = $this->query->toArray();
         if ($query !== null) {
             $body['query'] = $query;
         }
 
-        if (isset($this->_params['script_fields'])) {
-            $body['script_fields'] = $this->_params['script_fields']->toArray();
-            unset($this->_params['script_fields']);
+        if (isset($this->params['script_fields'])) {
+            $body['script_fields'] = $this->params['script_fields']->toArray();
+            unset($this->params['script_fields']);
         }
 
         return $body;
@@ -301,17 +299,17 @@ class Search
 
     public function getBody()
     {
-        return $this->_body;
+        return $this->body;
     }
 
     public function reset()
     {
-        $this->_params = [];
-        $this->_query = new BoolQuery();
+        $this->params = [];
+        $this->query = new BoolQuery();
     }
 
     public function getClient()
     {
-        return $this->_client;
+        return $this->client;
     }
 }

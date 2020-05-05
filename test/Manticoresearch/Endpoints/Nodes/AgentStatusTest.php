@@ -1,11 +1,10 @@
 <?php
 namespace Manticoresearch\Test\Endpoints;
 
-
 use Manticoresearch\Endpoints\Nodes\AgentStatus;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class AgentStatusTest  extends \PHPUnit\Framework\TestCase
+class AgentStatusTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testGetPath()
@@ -37,5 +36,4 @@ class AgentStatusTest  extends \PHPUnit\Framework\TestCase
             'status_stored_periods'
         ], $keys);
     }
-
 }

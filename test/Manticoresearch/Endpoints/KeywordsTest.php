@@ -6,7 +6,7 @@ use Manticoresearch\Endpoints\Keywords;
 use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class KeywordsTest  extends \PHPUnit\Framework\TestCase
+class KeywordsTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Client */
     private static $client;
@@ -33,7 +33,7 @@ class KeywordsTest  extends \PHPUnit\Framework\TestCase
             ]
         ];
         $response = static::$client->keywords($params);
-        $this->assertSame('product',$response['1']['normalized']);
+        $this->assertSame('product', $response['1']['normalized']);
     }
 
     public function testKeywordsBadIndex()
@@ -60,6 +60,4 @@ class KeywordsTest  extends \PHPUnit\Framework\TestCase
         $kw->setIndex('products');
         $this->assertEquals('products', $kw->getIndex());
     }
-
-
 }

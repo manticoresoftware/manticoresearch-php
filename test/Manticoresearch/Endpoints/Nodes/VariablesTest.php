@@ -1,10 +1,9 @@
 <?php
 namespace Manticoresearch\Test\Endpoints;
 
-
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class VariablesTest  extends \PHPUnit\Framework\TestCase
+class VariablesTest extends \PHPUnit\Framework\TestCase
 {
     public function testVariables()
     {
@@ -57,5 +56,4 @@ class VariablesTest  extends \PHPUnit\Framework\TestCase
         ], $keys);
         */
     }
-
 }

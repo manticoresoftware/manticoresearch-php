@@ -17,7 +17,7 @@ class SqlToArray extends Response
             foreach ($response['data'] as $property) {
                 if (count($response['columns']) > 2) {
                     $data[array_shift($property)] = $property;
-                } else if (count($response['columns']) === 2) {
+                } elseif (count($response['columns']) === 2) {
                     $data[$property[$response['columns'][0]]] = $property[$response['columns'][1]];
                 }
             }

@@ -1,11 +1,10 @@
 <?php
 namespace Manticoresearch\Test\Endpoints;
 
-
 use Manticoresearch\Endpoints\Nodes\Threads;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class ThreadsTest  extends \PHPUnit\Framework\TestCase
+class ThreadsTest extends \PHPUnit\Framework\TestCase
 {
     public function testThreads()
     {
@@ -19,7 +18,7 @@ class ThreadsTest  extends \PHPUnit\Framework\TestCase
 
         // get the keys
         $keys = array_keys($response2);
-        $this->assertEquals( [
+        $this->assertEquals([
             'Name',
             'Proto',
             'State',
@@ -38,5 +37,4 @@ class ThreadsTest  extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('mode=raw&query=SHOW THREADS  OPTION red=0,yellow=1', $threads->getBody());
     }
-
 }

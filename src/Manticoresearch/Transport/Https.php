@@ -12,5 +12,5 @@ class Https extends Http
     /**
      * @var string
      */
-    protected $_scheme = 'https';
+    protected $scheme = 'https';
 }

@@ -14,25 +14,25 @@ class Distance extends Query
      */
     public function __construct($args = [])
     {
-        $this->_params['geo_distance'] = [];
-        $this->_params['geo_distance']['distance_type'] = $args['type'] ?? 'adaptive';
+        $this->params['geo_distance'] = [];
+        $this->params['geo_distance']['distance_type'] = $args['type'] ?? 'adaptive';
         if (count($args) > 0) {
             if (!isset($args['location_anchor'])) {
                 throw new RuntimeException('anchors not provided');
             }
-            $this->_params['geo_distance']['location_anchor'] = $args['location_anchor'];
+            $this->params['geo_distance']['location_anchor'] = $args['location_anchor'];
             if (!isset($args['location_source'])) {
                 throw new RuntimeException('source attributes not provided');
             }
             if (is_array($args['location_source'])) {
                 $args['location_source'] = implode(',', $args['location_source']);
             }
-            $this->_params['geo_distance']['location_source'] = $args['location_source'];
+            $this->params['geo_distance']['location_source'] = $args['location_source'];
 
             if (!isset($args['location_distance'])) {
                 throw new RuntimeException('distance not provided');
             }
-            $this->_params['geo_distance']['distance'] = $args['location_distance'];
+            $this->params['geo_distance']['distance'] = $args['location_distance'];
         }
     }
 
@@ -41,7 +41,7 @@ class Distance extends Query
      */
     public function setDistance($distance)
     {
-        $this->_params['geo_distance']['distance'] = $distance;
+        $this->params['geo_distance']['distance'] = $distance;
     }
 
     /**
@@ -52,7 +52,7 @@ class Distance extends Query
         if (is_array($source)) {
             $source = implode(',', $source);
         }
-        $this->_params['geo_distance']['location_source'] = $source;
+        $this->params['geo_distance']['location_source'] = $source;
     }
 
     /**
@@ -63,7 +63,7 @@ class Distance extends Query
      */
     public function setAnchor($lat, $lon)
     {
-        $this->_params['geo_distance']['location_anchor'] = ['lat' => $lat, 'lon' => $lon];
+        $this->params['geo_distance']['location_anchor'] = ['lat' => $lat, 'lon' => $lon];
     }
 
     /**
@@ -71,6 +71,6 @@ class Distance extends Query
      */
     public function setDistanceType($algorithm)
     {
-        $this->_params['geo_distance']['distance_type'] = $algorithm ?? 'adaptive';
+        $this->params['geo_distance']['distance_type'] = $algorithm ?? 'adaptive';
     }
 }

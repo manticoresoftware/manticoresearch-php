@@ -14,16 +14,16 @@ class Set extends EmulateBySql
     /**
      * @var string
      */
-    protected $_cluster;
+    protected $cluster;
 
     public function setBody($params = null)
     {
         if (isset($params['variable'])) {
             return parent::setBody([
-                'query' => "SET CLUSTER" . $this->_cluster . " GLOBAL '" . $params['variable']['name'], "'=" .
-                (is_numeric($params['variable']['value']) ? $params['variable']['value'] : "'" . $params['variable']['value'] . "'")
+                'query' => "SET CLUSTER" . $this->cluster . " GLOBAL '" . $params['variable']['name'], "'=" .
+                (is_numeric($params['variable']['value']) ?
+                    $params['variable']['value'] : "'" . $params['variable']['value'] . "'")
             ]);
-
         }
         throw new RuntimeException('Variable is missing for /cluster/set');
     }
@@ -33,7 +33,7 @@ class Set extends EmulateBySql
      */
     public function getCLuster()
     {
-        return $this->_cluster;
+        return $this->cluster;
     }
 
     /**
@@ -41,6 +41,6 @@ class Set extends EmulateBySql
      */
     public function setCluster($cluster)
     {
-        $this->_cluster = $cluster;
+        $this->cluster = $cluster;
     }
 }

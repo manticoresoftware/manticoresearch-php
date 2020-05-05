@@ -21,8 +21,10 @@ class ConnectionPoolTest extends TestCase
     {
         // change the connection pool strategy
         $this->connectionPool->setStrategy(new Connection\Strategy\RoundRobin());
-        $this->assertEquals('Manticoresearch\Connection\Strategy\RoundRobin',
-            get_class($this->connectionPool->getStrategy()));
+        $this->assertEquals(
+            'Manticoresearch\Connection\Strategy\RoundRobin',
+            get_class($this->connectionPool->getStrategy())
+        );
     }
 
     public function testHasConnection()
@@ -31,7 +33,6 @@ class ConnectionPoolTest extends TestCase
 
         $this->connectionPool = new Connection\ConnectionPool([], new Connection\Strategy\StaticRoundRobin(), -1);
         $this->assertFalse($this->connectionPool->hasConnections());
-
     }
 
     public function testSetConnections()
@@ -66,6 +67,4 @@ class ConnectionPoolTest extends TestCase
         $connection = $this->connectionPool->getConnection();
         $this->assertEquals($connections[0], $connection);
     }
-
-
 }

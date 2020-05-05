@@ -18,5 +18,4 @@ class UtilTest extends TestCase
     {
         $this->assertEquals('thisisastring\xe0\xb8\xa3', self::escape('thisisastringร'));
     }
-
 }

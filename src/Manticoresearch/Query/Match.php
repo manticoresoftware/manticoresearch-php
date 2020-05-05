@@ -9,6 +9,6 @@ class Match extends Query
 {
     public function __construct($keywords, $fields)
     {
-        $this->_params['match'] =[$fields => $keywords];
+        $this->params['match'] =[$fields => $keywords];
     }
 }

@@ -7,7 +7,7 @@ use Manticoresearch\Endpoints\Indices\Alter;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class AlterTest  extends \PHPUnit\Framework\TestCase
+class AlterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Client */
     private static $client;
@@ -41,17 +41,17 @@ class AlterTest  extends \PHPUnit\Framework\TestCase
         $response = self::$client->indices()->alter($params);
     }
 
-        public function testIndexDropColumn()
+    public function testIndexDropColumn()
     {
         $params = [
-            'index' => 'products',
-            'body' => [
-                'operation' => 'drop',
-                'column' => [
-                    'name' => 'price'
-                ]
-
+        'index' => 'products',
+        'body' => [
+            'operation' => 'drop',
+            'column' => [
+                'name' => 'price'
             ]
+
+        ]
         ];
         $response = self::$client->indices()->alter($params);
         $this->assertEquals(['total' => 0, 'error' => '', 'warning' => ''], $response);
@@ -60,19 +60,18 @@ class AlterTest  extends \PHPUnit\Framework\TestCase
         $response = self::$client->indices()->describe(['index' => 'products']);
 
         $expectedResponse = [
-            'id' =>
-                [
-                    'Type' => 'bigint',
-                    'Properties' => '',
-                ],
-            'title' =>
-                [
-                    'Type' => 'field',
-                    'Properties' => 'indexed stored',
-                ]
+        'id' =>
+            [
+                'Type' => 'bigint',
+                'Properties' => '',
+            ],
+        'title' =>
+            [
+                'Type' => 'field',
+                'Properties' => 'indexed stored',
+            ]
         ];
         $this->assertEquals($expectedResponse, $response);
-
     }
 
     public function testIndexAddColumn()
@@ -89,7 +88,7 @@ class AlterTest  extends \PHPUnit\Framework\TestCase
             ]
         ];
         $response = self::$client->indices()->alter($params);
-        $this->assertEquals( ['total'=>0,'error'=>'','warning'=>''],$response);
+        $this->assertEquals(['total'=>0,'error'=>'','warning'=>''], $response);
 
         // check the column has been added using the Describe endpoint
         $response = self::$client->indices()->describe(['index' => 'products']);
@@ -119,7 +118,6 @@ class AlterTest  extends \PHPUnit\Framework\TestCase
                 ]
         ];
         $this->assertEquals($expectedResponse, $response);
-
     }
 
     public function testSetGetIndex()

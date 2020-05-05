@@ -1,10 +1,9 @@
 <?php
 namespace Manticoresearch\Test\Endpoints;
 
-
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class TablesTest  extends \PHPUnit\Framework\TestCase
+class TablesTest extends \PHPUnit\Framework\TestCase
 {
     public function testTables()
     {
@@ -15,12 +14,11 @@ class TablesTest  extends \PHPUnit\Framework\TestCase
         $otherIndexes = [
           'testrt', 'products', 'testrtdist', 'testindex', 'movies', 'bulktest'
         ];
-        foreach($otherIndexes as $index) {
+        foreach ($otherIndexes as $index) {
             $client->indices()->drop([
                     'index' => $index,
                     'body' => ['silent' => true]
-                ]
-            );
+                ]);
         }
 
 
@@ -29,6 +27,6 @@ class TablesTest  extends \PHPUnit\Framework\TestCase
         $helper = new PopulateHelperTest();
         $client = $helper->getClient();
         $response = $client->nodes()->tables();
-        $this->assertEquals( ['products' => 'rt'],$response);
+        $this->assertEquals(['products' => 'rt'], $response);
     }
 }

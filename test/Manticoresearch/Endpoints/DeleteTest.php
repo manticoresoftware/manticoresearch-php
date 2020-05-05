@@ -1,10 +1,11 @@
 <?php
 
+namespace Manticoresearch\Test\Endpoints;
 
 use Manticoresearch\Client;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class DeleteTest  extends \PHPUnit\Framework\TestCase
+class DeleteTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Client */
     private static $client;
@@ -43,7 +44,5 @@ class DeleteTest  extends \PHPUnit\Framework\TestCase
 
         $response = self::$client->delete($doc);
         $helper->search('products', 'broken', 0);
-
     }
-
 }

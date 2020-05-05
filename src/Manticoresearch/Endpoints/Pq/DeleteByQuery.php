@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Endpoints\Pq;
 
-
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Request;
 
@@ -17,7 +16,7 @@ class DeleteByQuery extends Request
     /**
      * @var string
      */
-    protected $_index;
+    protected $index;
 
     /**
      * @return mixed|string
@@ -32,9 +31,8 @@ class DeleteByQuery extends Request
      */
     public function getPath()
     {
-        if (isset($this->_index)) {
-            return "/json/pq/" . $this->_index . "/_search";
-
+        if (isset($this->index)) {
+            return "/json/pq/" . $this->index . "/_search";
         }
         throw new RuntimeException('Index name is missing.');
     }
@@ -44,7 +42,7 @@ class DeleteByQuery extends Request
      */
     public function getIndex()
     {
-        return $this->_index;
+        return $this->index;
     }
 
     /**
@@ -52,7 +50,6 @@ class DeleteByQuery extends Request
      */
     public function setIndex($index)
     {
-        $this->_index = $index;
+        $this->index = $index;
     }
-
 }

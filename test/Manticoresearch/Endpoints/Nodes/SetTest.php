@@ -1,12 +1,11 @@
 <?php
 namespace Manticoresearch\Test\Endpoints;
 
-
 use Manticoresearch\Endpoints\Nodes\Set;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class SetTest  extends \PHPUnit\Framework\TestCase
+class SetTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -25,7 +24,7 @@ class SetTest  extends \PHPUnit\Framework\TestCase
             ]
         ];
         $response = $client->nodes()->set($payload);
-        $this->assertEquals( ['total'=>0,'error'=>'','warning'=>''],$response);
+        $this->assertEquals(['total'=>0,'error'=>'','warning'=>''], $response);
     }
 
     public function testSetBodyNoVariable()

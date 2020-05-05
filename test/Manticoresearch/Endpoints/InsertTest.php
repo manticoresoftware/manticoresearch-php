@@ -1,7 +1,8 @@
 <?php
 
+namespace Manticoresearch\Test\Endpoints;
 
-class InsertTest  extends \PHPUnit\Framework\TestCase
+class InsertTest extends \PHPUnit\Framework\TestCase
 {
     public function testPath()
     {
@@ -23,14 +24,14 @@ class InsertTest  extends \PHPUnit\Framework\TestCase
 
         // insert a product
         $doc = [
-            'index'=>'products',
+            'index' => 'products',
             'id' => 1001,
             'doc' => [
                 'title' => 'Star Trek: Nemesis DVD',
                 'price' => 6.99
             ]
         ];
-        $response = $client->insert(['body' =>$doc]);
+        $response = $client->insert(['body' => $doc]);
 
         // assert inserted
         $this->assertEquals([
@@ -47,8 +48,6 @@ class InsertTest  extends \PHPUnit\Framework\TestCase
         // reinsert, this should fail due to duplicate ID
         $this->expectException(\Manticoresearch\Exceptions\ResponseException::class);
         $this->expectExceptionMessage('{"type":"duplicate id \'1001\'","index":"products"}');
-        $response = $client->insert(['body' =>$doc]);
-
+        $response = $client->insert(['body' => $doc]);
     }
-
 }

@@ -6,7 +6,7 @@ use Manticoresearch\Client;
 use Manticoresearch\Endpoints\Indices\Create;
 use Manticoresearch\Exceptions\RuntimeException;
 
-class CreateTest  extends \PHPUnit\Framework\TestCase
+class CreateTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreateTableWithOptions()
     {
@@ -36,12 +36,12 @@ class CreateTest  extends \PHPUnit\Framework\TestCase
             ]
         ];
         $response = $client->indices()->create($params);
-        $this->assertSame( ['total'=>0,'error'=>'','warning'=>''],$response);
+        $this->assertSame(['total'=>0,'error'=>'','warning'=>''], $response);
         $params = [
             'index'=>'products'
         ];
         $response = $client->indices()->drop($params);
-        $this->assertSame( ['total'=>0,'error'=>'','warning'=>''],$response);
+        $this->assertSame(['total'=>0,'error'=>'','warning'=>''], $response);
     }
 
     public function testCreateDistributed()
@@ -72,12 +72,12 @@ class CreateTest  extends \PHPUnit\Framework\TestCase
             ]
         ];
         $response = $client->indices()->create($params);
-        $this->assertSame( ['total'=>0,'error'=>'','warning'=>''],$response);
+        $this->assertSame(['total'=>0,'error'=>'','warning'=>''], $response);
         $params = [
             'index'=>'testrtdist'
         ];
         $response = $client->indices()->drop($params);
-        $this->assertSame( ['total'=>0,'error'=>'','warning'=>''],$response);
+        $this->assertSame(['total'=>0,'error'=>'','warning'=>''], $response);
     }
 
     public function testNoIndexDrop()
@@ -93,7 +93,7 @@ class CreateTest  extends \PHPUnit\Framework\TestCase
             'body' => ['silent'=>true]
         ];
         $response = $client->indices()->drop($params);
-        $this->assertSame( ['total'=>0,'error'=>'','warning'=>''],$response);
+        $this->assertSame(['total'=>0,'error'=>'','warning'=>''], $response);
     }
 
     public function testSetGetIndex()

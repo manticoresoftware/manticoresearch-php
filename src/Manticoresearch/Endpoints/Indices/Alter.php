@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Endpoints\Indices;
 
-
 use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
@@ -14,22 +13,23 @@ class Alter extends EmulateBySql
     /**
      * @var string
      */
-    protected $_index;
+    protected $index;
 
     public function setBody($params = null)
     {
-        if (isset($this->_index)) {
+        if (isset($this->index)) {
             if (isset($params['operation'])) {
                 if ($params['operation'] === 'add' && isset($params['column'])) {
-                        return parent::setBody(['query' => "ALTER TABLE " . $this->_index . " ADD COLUMN " . $params['column']['name'] . " " . strtoupper($params['column']['type'])]);
+                        return parent::setBody(['query' => "ALTER TABLE " . $this->index . " ADD COLUMN " .
+                            $params['column']['name'] . " " . strtoupper($params['column']['type'])]);
                 }
                 if ($params['operation'] === 'drop') {
-                    return parent::setBody(['query' => "ALTER TABLE " . $this->_index . " DROP COLUMN " . $params['column']['name']]);
+                    return parent::setBody(['query' => "ALTER TABLE " . $this->index . " DROP COLUMN " .
+                        $params['column']['name']]);
                 }
                 //@todo alter setting, once is merged in master
             }
             throw new RuntimeException('Operation is missing.');
-
         }
         throw new RuntimeException('Index name is missing.');
     }
@@ -39,7 +39,7 @@ class Alter extends EmulateBySql
      */
     public function getIndex()
     {
-        return $this->_index;
+        return $this->index;
     }
 
     /**
@@ -47,6 +47,6 @@ class Alter extends EmulateBySql
      */
     public function setIndex($index)
     {
-        $this->_index = $index;
+        $this->index = $index;
     }
 }

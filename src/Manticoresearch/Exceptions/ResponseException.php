@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Exceptions;
 
-
 use Manticoresearch\Request;
 use Manticoresearch\Response;
 use Throwable;
@@ -17,11 +16,11 @@ class ResponseException extends \RuntimeException implements ExceptionInterface
     /**
      * @var Request
      */
-    protected $_request;
+    protected $request;
     /**
      * @var Response
      */
-    protected $_response;
+    protected $response;
 
     /**
      * ResponseException constructor.
@@ -30,8 +29,8 @@ class ResponseException extends \RuntimeException implements ExceptionInterface
      */
     public function __construct(Request $request, Response $response)
     {
-        $this->_request = $request;
-        $this->_response = $response;
+        $this->request = $request;
+        $this->response = $response;
 
         parent::__construct($response->getError());
     }
@@ -41,7 +40,7 @@ class ResponseException extends \RuntimeException implements ExceptionInterface
      */
     public function getRequest() :Request
     {
-        return $this->_request;
+        return $this->request;
     }
 
     /**
@@ -49,7 +48,6 @@ class ResponseException extends \RuntimeException implements ExceptionInterface
      */
     public function getResponse() :Response
     {
-        return $this->_response;
+        return $this->response;
     }
-
 }

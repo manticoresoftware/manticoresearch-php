@@ -1,8 +1,7 @@
 <?php
 namespace Manticoresearch\Test\Endpoints;
 
-
-class ReplaceTest  extends \PHPUnit\Framework\TestCase
+class ReplaceTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testGetPath()
@@ -16,5 +15,4 @@ class ReplaceTest  extends \PHPUnit\Framework\TestCase
         $replace = new \Manticoresearch\Endpoints\Replace();
         $this->assertEquals('POST', $replace->getMethod());
     }
-
 }

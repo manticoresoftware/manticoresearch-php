@@ -1,11 +1,10 @@
 <?php
 namespace Manticoresearch\Test\Endpoints;
 
-
 use Manticoresearch\Endpoints\Nodes\Status;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class StatusTest  extends \PHPUnit\Framework\TestCase
+class StatusTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testGetPath()
@@ -83,5 +82,4 @@ class StatusTest  extends \PHPUnit\Framework\TestCase
 
         ], $keys);
     }
-
 }

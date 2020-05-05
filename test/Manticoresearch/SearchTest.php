@@ -63,23 +63,29 @@ class SearchTest extends TestCase
         $docs = [
             ['insert' => ['index' => 'movies', 'id' => 2, 'doc' =>
                 ['title' => 'Interstellar',
-                    'plot' => 'A team of explorers travel through a wormhole in space in an attempt to ensure humanity\'s survival.',
+                    'plot' => 'A team of explorers travel through a wormhole in space in an attempt to ensure'.
+                        ' humanity\'s survival.',
                     'year' => 2014, 'rating' => 8.5,
-                    'meta' => ['keywords' => ['astronaut', 'relativity', 'nasa'], 'genre' => ['drama', 'scifi', 'thriller']],
+                    'meta' => ['keywords' => ['astronaut', 'relativity', 'nasa'],
+                        'genre' => ['drama', 'scifi', 'thriller']],
                     'lat' => 51.2, 'lon' => 47.5,
                     'advise' => 'PG-13'
                 ]
             ]],
             ['insert' => ['index' => 'movies', 'id' => 3, 'doc' =>
-                ['title' => 'Inception', 'plot' => 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.',
+                ['title' => 'Inception', 'plot' => 'A thief who steals corporate secrets through the use of'.
+                    ' dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.',
                     'year' => 2010, 'rating' => 8.8,
-                    'meta' => ['keywords' => ['dream', 'thief', 'subconscious'], 'genre' => ['action', 'scifi', 'thriller']],
+                    'meta' => ['keywords' => ['dream', 'thief', 'subconscious'],
+                        'genre' => ['action', 'scifi', 'thriller']],
                     'lat' => 51.9, 'lon' => 48.5,
                     'advise' => 'PG-13'
                 ]
             ]],
             ['insert' => ['index' => 'movies', 'id' => 4, 'doc' =>
-                ['title' => '1917 ', 'plot' => ' As a regiment assembles to wage war deep in enemy territory, two soldiers are assigned to race against time and deliver a message that will stop 1,600 men from walking straight into a deadly trap.',
+                ['title' => '1917 ', 'plot' => ' As a regiment assembles to wage war deep in enemy territory, two'.
+                    ' soldiers are assigned to race against time and deliver a message that will stop 1,600 men from'.
+                    ' walking straight into a deadly trap.',
                     'year' => 2018, 'rating' => 8.4,
                     'meta' => ['keywords' => ['death', ' trench'], 'genre' => ['drama', 'war']],
                     'lat' => 51.1, 'lon' => 48.1,
@@ -87,7 +93,9 @@ class SearchTest extends TestCase
                 ]
             ]],
             ['insert' => ['index' => 'movies', 'id' => 5, 'doc' =>
-                ['title' => 'Alien', 'plot' => ' After a space merchant vessel receives an unknown transmission as a distress call, one of the team\'s member is attacked by a mysterious life form and they soon realize that its life cycle has merely begun.',
+                ['title' => 'Alien', 'plot' => ' After a space merchant vessel receives an unknown transmission as a'.
+                    ' distress call, one of the team\'s member is attacked by a mysterious life form and they soon '.
+                    'realize that its life cycle has merely begun.',
                     'year' => 1979, 'rating' => 8.4,
                     'meta' => ['keywords' => ['spaceship', 'monster', 'nasa'], 'genre' => ['scifi', 'horror']],
                     'lat' => 52.2, 'lon' => 48.9,
@@ -95,15 +103,22 @@ class SearchTest extends TestCase
                 ]
             ]],
             ['insert' => ['index' => 'movies', 'id' => 6, 'doc' =>
-                ['title' => 'Aliens', 'plot' => ' Ellen Ripley is rescued by a deep salvage team of explorers after being in hypersleep for 57 years. The moon that the Nostromo visited has been colonized by explorers, but contact is lost. This time, colonial marines have impressive firepower, but will that be enough?',
+                ['title' => 'Aliens', 'plot' => ' Ellen Ripley is rescued by a deep salvage team of explorers after'.
+                    ' being in hypersleep for 57 years. The moon that the Nostromo visited has been colonized by '.
+                    'explorers, but contact is lost. This time, colonial marines have impressive firepower, but will'.
+                    ' that be enough?',
                     'year' => 1986, 'rating' => 8.3,
-                    'meta' => ['keywords' => ['alien', 'monster', 'soldier'], 'genre' => ['scifi', 'action', 'adventure']],
+                    'meta' => ['keywords' => ['alien', 'monster', 'soldier'],
+                        'genre' => ['scifi', 'action', 'adventure']],
                     'lat' => 51.6, 'lon' => 48.0,
                     'advise' => 'R'
                 ]
             ]],
             ['insert' => ['index' => 'movies', 'id' => 10, 'doc' =>
-                ['title' => 'Alien 3', 'plot' => 'After her last encounter, without a team Ellen Ripley team of explorers crash-lands on Fiorina 161, a maximum security prison. When a series of strange and deadly events occur shortly after her arrival, Ripley realizes that she has brought along an unwelcome visitor.',
+                ['title' => 'Alien 3', 'plot' => 'After her last encounter, without a team Ellen Ripley team of '.
+                    'explorers crash-lands on Fiorina 161, a maximum security prison. When a series of strange and '.
+                    'deadly events occur shortly after her arrival, Ripley realizes that she has brought along an '.
+                    'unwelcome visitor.',
                     'year' => 1992, 'rating' => 6.5,
                     'meta' => ['keywords' => ['alien', 'prison', 'android'], 'genre' => ['scifi', 'horror', 'action']],
                     'lat' => 51.8, 'lon' => 48.2,
@@ -125,7 +140,7 @@ class SearchTest extends TestCase
     private function yearsFromResults($results)
     {
         $years = [];
-        while($results->valid()) {
+        while ($results->valid()) {
             $hit = $results->current();
             $data = $hit->getData();
             $years[] = $data['year'];
@@ -134,15 +149,15 @@ class SearchTest extends TestCase
         return $years;
     }
 
-    protected function _getResultSet()
+    protected function getResultSet()
     {
         $result = self::$search->search('"team of explorers"/2')->get();
         return $result;
     }
 
-    protected function _getFirstResultHit()
+    protected function getFirstResultHit()
     {
-        $result = $this->_getResultSet();
+        $result = $this->getResultSet();
         $result->rewind();
         $this->assertEquals(0, $result->key());
         return $result->current();
@@ -281,13 +296,13 @@ class SearchTest extends TestCase
 
     public function testSortMethodAscending()
     {
-        $results = self::$search->sort('year' )->phrase('team of explorers')->get();
+        $results = self::$search->sort('year')->phrase('team of explorers')->get();
         $this->assertEquals([1986,1992,2014], $this->yearsFromResults($results));
     }
 
     public function testSortMethodDescending()
     {
-        $results = self::$search->sort('year', 'desc' )->phrase('team of explorers')->get();
+        $results = self::$search->sort('year', 'desc')->phrase('team of explorers')->get();
         $this->assertEquals([2014,1992,1986], $this->yearsFromResults($results));
     }
 
@@ -545,7 +560,7 @@ class SearchTest extends TestCase
 
     public function testResultSetNextRewind()
     {
-        $result = $this->_getResultSet();
+        $result = $this->getResultSet();
         $this->assertEquals(0, $result->key());
 
         $result->next();
@@ -558,33 +573,33 @@ class SearchTest extends TestCase
 
     public function testResultSetGetTotal()
     {
-        $result = $this->_getResultSet();
+        $result = $this->getResultSet();
         $this->assertEquals(4, $result->getTotal());
     }
 
     public function testResultSetGetTime()
     {
-        $result = $this->_getResultSet();
+        $result = $this->getResultSet();
         $this->assertGreaterThanOrEqual(0, $result->getTime());
     }
 
     public function testResultSetHasNotTimedOut()
     {
-        $result = $this->_getResultSet();
-        $this->assertFalse( $result->hasTimedout());
+        $result = $this->getResultSet();
+        $this->assertFalse($result->hasTimedout());
     }
 
     public function testResultSetGetResponse()
     {
-        $result = $this->_getResultSet();
+        $result = $this->getResultSet();
         $keys = array_keys($result->getResponse()->getResponse());
         sort($keys);
-        $this->assertEquals(['hits', 'timed_out', 'took'], $keys );
+        $this->assertEquals(['hits', 'timed_out', 'took'], $keys);
     }
 
     public function testResultSetGetNullProfile()
     {
-        $result = $this->_getResultSet();
+        $result = $this->getResultSet();
         $this->assertNull($result->getProfile());
     }
 
@@ -594,7 +609,7 @@ class SearchTest extends TestCase
     public function testNonExistentSource()
     {
         $results = self::$search->setSource('source_does_not_exist')->phrase('team of explorers')->get();
-        while($results->valid()) {
+        while ($results->valid()) {
             $hit = $results->current();
             $this->assertEquals([], $hit->getData());
             $results->next();
@@ -612,33 +627,33 @@ class SearchTest extends TestCase
 
     public function testResultHitGetScore()
     {
-        $resultHit = $this->_getFirstResultHit();
+        $resultHit = $this->getFirstResultHit();
         $this->assertEquals(3468, $resultHit->getScore());
     }
 
     public function testResultHitGetID()
     {
-        $resultHit = $this->_getFirstResultHit();
+        $resultHit = $this->getFirstResultHit();
         $this->assertEquals(6, $resultHit->getId());
     }
 
     public function testResultHitGetValue()
     {
-        $resultHit = $this->_getFirstResultHit();
+        $resultHit = $this->getFirstResultHit();
         $this->assertEquals(1986, $resultHit->get('year'));
         $this->assertEquals(1986, $resultHit->__get('year'));
     }
 
     public function testResultHitHasValue()
     {
-        $resultHit = $this->_getFirstResultHit();
+        $resultHit = $this->getFirstResultHit();
         $this->assertTrue($resultHit->has('year'));
         $this->assertTrue($resultHit->__isset('year'));
     }
 
     public function testResultHitDoesNotHaveValue()
     {
-        $resultHit = $this->_getFirstResultHit();
+        $resultHit = $this->getFirstResultHit();
         $this->assertFalse($resultHit->has('nonExistentKey'));
         $this->assertFalse($resultHit->__isset('nonExistentKey'));
         $this->assertEquals([], $resultHit->get('nonExistentKey'));
@@ -652,8 +667,10 @@ class SearchTest extends TestCase
         )->get();
 
         $this->assertEquals(1, $results->count());
-        $this->assertEquals(['plot' => [' is rescued by a deep <i>salvage</i> team of explorers after being']],
-            $results->current()->getHighlight());
+        $this->assertEquals(
+            ['plot' => [' is rescued by a deep <i>salvage</i> team of explorers after being']],
+            $results->current()->getHighlight()
+        );
     }
 
     public function testHighlightParamsMissing()
@@ -668,7 +685,7 @@ class SearchTest extends TestCase
 
     public function testResultHitGetData()
     {
-        $resultHit = $this->_getFirstResultHit();
+        $resultHit = $this->getFirstResultHit();
         $keys = array_keys($resultHit->getData());
         sort($keys);
         $this->assertEquals([
@@ -687,7 +704,7 @@ class SearchTest extends TestCase
 
     public function testSetGetID()
     {
-        $resultHit = $this->_getFirstResultHit();
+        $resultHit = $this->getFirstResultHit();
         $arbitraryID = 668689;
         $resultHit->setId($arbitraryID);
         $this->assertEquals($arbitraryID, $resultHit->getId());
@@ -717,7 +734,6 @@ class SearchTest extends TestCase
                         ],
                 ],
         ], $body);
-
     }
 
 
@@ -726,5 +742,4 @@ class SearchTest extends TestCase
         $client = self::$search->getClient();
         $this->assertInstanceOf('Manticoresearch\Client', $client);
     }
-
 }

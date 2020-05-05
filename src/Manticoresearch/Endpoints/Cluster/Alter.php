@@ -13,27 +13,29 @@ class Alter extends EmulateBySql
     /**
      * @var string
      */
-    protected $_cluster;
+    protected $cluster;
 
     public function setBody($params = null)
     {
-        if (isset($this->_index)) {
+        if (isset($this->index)) {
             if (isset($params['operation'])) {
                 switch ($params['operation']) {
                     case 'add':
                         if (isset($params['index'])) {
-                            return parent::setBody(['query' => "ALTER CLUSTER " . $this->_cluster . " ADD  " . $params['index']]);
+                            return parent::setBody(['query' => "ALTER CLUSTER " .
+                                $this->cluster . " ADD  " . $params['index']]);
                         }
                         throw new RuntimeException('Index name is missing.');
                         break;
                     case 'drop':
                         if (isset($params['index'])) {
-                            return parent::setBody(['query' => "ALTER CLUSTER " . $this->_cluster . " DROP  " . $params['index']]);
+                            return parent::setBody(['query' => "ALTER CLUSTER " .
+                                $this->cluster . " DROP  " . $params['index']]);
                         }
                         throw new RuntimeException('Index name is missing.');
                         break;
                     case 'update':
-                        return parent::setBody(['query' => "ALTER CLUSTER " . $this->_cluster . " UPDATE nodes"]);
+                        return parent::setBody(['query' => "ALTER CLUSTER " .$this->cluster . " UPDATE nodes"]);
                         break;
                 }
                 throw new RuntimeException('Unknown cluster operation');
@@ -48,7 +50,7 @@ class Alter extends EmulateBySql
      */
     public function getCLuster()
     {
-        return $this->_cluster;
+        return $this->cluster;
     }
 
     /**
@@ -56,6 +58,6 @@ class Alter extends EmulateBySql
      */
     public function setCluster($cluster)
     {
-        $this->_cluster = $cluster;
+        $this->cluster = $cluster;
     }
 }

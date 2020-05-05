@@ -11,19 +11,18 @@ class Import extends EmulateBySql
     /**
      * @var string
      */
-    protected $_index;
+    protected $index;
 
     public function setBody($params = null)
     {
-        if (isset($this->_index)) {
+        if (isset($this->index)) {
             if (isset($params['path'])) {
                 return parent::setBody([
                     'query' => 'IMPORT TABLE ' .
-                        $this->_index .
+                        $this->index .
                         ' FROM ' .
                         $params['path']
                 ]);
-
             }
             throw new RuntimeException('Missing import index path in /indices/import');
         }
@@ -35,7 +34,7 @@ class Import extends EmulateBySql
      */
     public function getIndex()
     {
-        return $this->_index;
+        return $this->index;
     }
 
     /**
@@ -43,6 +42,6 @@ class Import extends EmulateBySql
      */
     public function setIndex($index)
     {
-        $this->_index = $index;
+        $this->index = $index;
     }
 }

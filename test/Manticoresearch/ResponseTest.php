@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Test;
 
-
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Response;
 use PHPUnit\Framework\TestCase;
@@ -40,7 +39,5 @@ class ResponseTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         $response->getResponse();
-
     }
-
 }

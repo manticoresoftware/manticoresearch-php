@@ -40,12 +40,12 @@ class Bulk extends Request
     public function setBody($body = null)
     {
         if (is_array($body) || $body instanceof \Traversable) {
-            $this->_body = '';
+            $this->body = '';
             foreach ($body as $b) {
-                $this->_body .= json_encode($b, true) . "\n";
+                $this->body .= json_encode($b, true) . "\n";
             }
         } else {
-            $this->_body = $body;
+            $this->body = $body;
         }
     }
 }

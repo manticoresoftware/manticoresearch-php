@@ -1,12 +1,11 @@
 <?php
 namespace Manticoresearch\Test\Endpoints;
 
-
 use Manticoresearch\Client;
 use Manticoresearch\Endpoints\Update;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class UpdateTest  extends \PHPUnit\Framework\TestCase
+class UpdateTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Client */
     private static $client;

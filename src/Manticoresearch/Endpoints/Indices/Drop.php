@@ -11,14 +11,14 @@ class Drop extends EmulateBySql
     /**
      * @var string
      */
-    protected $_index;
+    protected $index;
 
-    public function setBody( $params = null)
+    public function setBody($params = null)
     {
-        if(isset( $this->_index)) {
+        if (isset($this->index)) {
             return parent::setBody(['query' => "DROP TABLE " .
                 (isset($params['silent']) && $params['silent']===true?' IF EXISTS ':'').
-                $this->_index]);
+                $this->index]);
         }
         throw new RuntimeException('Missing index name in /indices/drop');
     }
@@ -27,7 +27,7 @@ class Drop extends EmulateBySql
      */
     public function getIndex()
     {
-        return $this->_index;
+        return $this->index;
     }
 
     /**
@@ -35,6 +35,6 @@ class Drop extends EmulateBySql
      */
     public function setIndex($index)
     {
-        $this->_index = $index;
+        $this->index = $index;
     }
 }

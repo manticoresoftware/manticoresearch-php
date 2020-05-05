@@ -3,12 +3,10 @@
 
 namespace Manticoresearch\Test;
 
-
 use Manticoresearch\Connection;
 use Manticoresearch\Transport;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-
 
 class TransportTest extends TestCase
 {

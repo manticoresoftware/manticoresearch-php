@@ -11,11 +11,11 @@ class DropPlugin extends EmulateBySql
     /**
      * @var string
      */
-    protected $_index;
+    protected $index;
 
     public function setBody($params = null)
     {
-        if(isset($params['name'])) {
+        if (isset($params['name'])) {
             return parent::setBody(['query' => "DROP PLUGIN " . $params['name']." TYPE".$params['type']]);
         }
         throw new RuntimeException('Missing plugin name in /nodes/dropplugin');

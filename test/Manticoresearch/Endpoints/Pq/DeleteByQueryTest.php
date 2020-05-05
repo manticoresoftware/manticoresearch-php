@@ -2,7 +2,6 @@
 
 namespace Manticoresearch\Test\Endpoints\Pq;
 
-
 use Manticoresearch\Endpoints\Pq\DeleteByQuery;
 use Manticoresearch\Exceptions\RuntimeException;
 
@@ -35,7 +34,5 @@ class DeleteByQueryTest extends \PHPUnit\Framework\TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Index name is missing');
         $dbq->getPath();
-
     }
-
 }

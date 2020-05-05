@@ -23,12 +23,12 @@ class Indices
     /**
      * @var Client
      */
-    protected $_client;
+    protected $client;
 
     /**
      * @var array
      */
-    protected $_params;
+    protected $params;
 
     /**
      * Pq constructor.
@@ -36,8 +36,8 @@ class Indices
      */
     public function __construct($client)
     {
-        $this->_client = $client;
-        $this->_params = ['responseClass' => 'Manticoresearch\\Response\\SqlToArray'];
+        $this->client = $client;
+        $this->params = ['responseClass' => 'Manticoresearch\\Response\\SqlToArray'];
     }
 
     /**
@@ -51,7 +51,7 @@ class Indices
         $endpoint = new Alter();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint, $this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return $response->getResponse();
     }
 
@@ -68,7 +68,7 @@ class Indices
         $endpoint = new Create();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint, $this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return $response->getResponse();
     }
 
@@ -83,7 +83,7 @@ class Indices
         $endpoint = new Describe();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint, $this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return $response->getResponse();
     }
 
@@ -98,7 +98,7 @@ class Indices
         $endpoint = new Drop();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint, $this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return $response->getResponse();
     }
     /**
@@ -112,7 +112,7 @@ class Indices
         $endpoint = new Import();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint, $this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return $response->getResponse();
     }
     /**
@@ -125,7 +125,7 @@ class Indices
         $endpoint = new FlushRamchunk();
         $endpoint->setIndex($index);
         $endpoint->setBody();
-        $response = $this->_client->request($endpoint, $this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return $response->getResponse();
     }
 
@@ -139,7 +139,7 @@ class Indices
         $endpoint = new FlushRtindex();
         $endpoint->setIndex($index);
         $endpoint->setBody();
-        $response = $this->_client->request($endpoint, $this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return $response->getResponse();
     }
 
@@ -154,7 +154,7 @@ class Indices
         $endpoint = new Optimize();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint, $this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return $response->getResponse();
     }
 
@@ -169,7 +169,7 @@ class Indices
         $endpoint = new Status();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint, $this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return $response->getResponse();
     }
 
@@ -184,7 +184,7 @@ class Indices
         $endpoint = new Settings();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint, $this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return $response->getResponse();
     }
 
@@ -199,7 +199,7 @@ class Indices
         $endpoint = new Truncate();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint, $this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return $response->getResponse();
     }
 }

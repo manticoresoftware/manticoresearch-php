@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Test;
 
-
 use Manticoresearch\Client;
 use Manticoresearch\Connection;
 use Manticoresearch\Connection\Strategy\Random;

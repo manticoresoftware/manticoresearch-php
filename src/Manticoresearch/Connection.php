@@ -3,7 +3,6 @@
 
 namespace Manticoresearch;
 
-
 use Manticoresearch\Exceptions\RuntimeException;
 use Psr\Log\LoggerInterface;
 
@@ -20,13 +19,13 @@ class Connection
     /**
      * @var bool
      */
-    protected $_alive;
+    protected $alive;
 /*
  * $params['transport']  = transport class name
  * $params['host']       = hostname
  * $params['port']       = port number
  * $params['timeout']    = connection timeout
- * $params['connect_timeout'] = connection connect timeout
+ * $params['connecttimeout'] = connection connect timeout
  * $params['proxy']       = proxy host:port string
  * $params['username']  = username for http auth
  * $params['password']  = password for http auth
@@ -46,7 +45,7 @@ class Connection
             'scheme' => 'http',
             'port' => '9308',
             'timeout' => 300,
-            'connect_timeout' => 0,
+            'connecttimeout' => 0,
             'proxy' => null,
             'username' => null,
             'password' => null,
@@ -55,7 +54,7 @@ class Connection
             'persistent' => true
         );
         $this->config = array_merge($this->config, $params);
-        $this->_alive = true;
+        $this->alive = true;
     }
 
     /**
@@ -136,7 +135,7 @@ class Connection
      */
     public function setConnectTimeout($connecttimeout): self
     {
-        $this->config['connect_timeout'] = (int)$connecttimeout;
+        $this->config['connecttimeout'] = (int)$connecttimeout;
         return $this;
     }
 
@@ -145,7 +144,7 @@ class Connection
      */
     public function getConnectTimeout()
     {
-        return $this->config['connect_timeout'];
+        return $this->config['connecttimeout'];
     }
 
     /**
@@ -173,7 +172,7 @@ class Connection
      */
     public function getTransportHandler(LoggerInterface $logger)
     {
-        return Transport::create($this->getTransport(), $this,$logger);
+        return Transport::create($this->getTransport(), $this, $logger);
     }
 
     /**
@@ -193,9 +192,9 @@ class Connection
      * @return mixed|null
      *
      */
-    public function getConfig($key =  null)
+    public function getConfig($key = null)
     {
-        if($key === null) {
+        if ($key === null) {
             return $this->config;
         }
         return $this->config[$key] ?? null;
@@ -221,7 +220,7 @@ class Connection
      */
     public function isAlive(): bool
     {
-        return $this->_alive;
+        return $this->alive;
     }
 
     /**
@@ -229,6 +228,6 @@ class Connection
      */
     public function mark(bool $state)
     {
-        $this->_alive = $state;
+        $this->alive = $state;
     }
 }

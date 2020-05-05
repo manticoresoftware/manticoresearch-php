@@ -10,10 +10,11 @@ class Tables extends EmulateBySql
     /**
      * @var string
      */
-    protected $_index;
+    protected $index;
 
     public function setBody($params = null)
     {
-        return parent::setBody(['query' => "SHOW TABLES " . (isset($params['pattern']) ? " LIKE '" . $params['pattern'] . "'" : "")]);
+        return parent::setBody(['query' => "SHOW TABLES " .
+            (isset($params['pattern']) ? " LIKE '" . $params['pattern'] . "'" : "")]);
     }
 }

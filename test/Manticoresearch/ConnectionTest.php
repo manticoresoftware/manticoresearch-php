@@ -74,7 +74,7 @@ class ConnectionTest extends TestCase
         $this->assertEquals([
             'a',
             'b',
-            'connect_timeout',
+            'connecttimeout',
             'curl',
             'headers',
             'host',
@@ -120,5 +120,4 @@ class ConnectionTest extends TestCase
         $newConnection = Connection::create('this is invalid');
         $this->assertEquals($this->connection, $newConnection);
     }
-
 }
