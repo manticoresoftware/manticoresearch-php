@@ -25,7 +25,7 @@ class Connection
  * $params['host']       = hostname
  * $params['port']       = port number
  * $params['timeout']    = connection timeout
- * $params['connecttimeout'] = connection connect timeout
+ * $params['connect_timeout'] = connection connect timeout
  * $params['proxy']       = proxy host:port string
  * $params['username']  = username for http auth
  * $params['password']  = password for http auth
@@ -45,7 +45,7 @@ class Connection
             'scheme' => 'http',
             'port' => '9308',
             'timeout' => 300,
-            'connecttimeout' => 0,
+            'connect_timeout' => 0,
             'proxy' => null,
             'username' => null,
             'password' => null,
@@ -130,12 +130,12 @@ class Connection
     }
 
     /**
-     * @param integer $connecttimeout
+     * @param integer $connect_timeout
      * @return $this
      */
-    public function setConnectTimeout($connecttimeout): self
+    public function setConnectTimeout($connect_timeout): self
     {
-        $this->config['connecttimeout'] = (int)$connecttimeout;
+        $this->config['connect_timeout'] = (int)$connect_timeout;
         return $this;
     }
 
@@ -144,7 +144,7 @@ class Connection
      */
     public function getConnectTimeout()
     {
-        return $this->config['connecttimeout'];
+        return $this->config['connect_timeout'];
     }
 
     /**

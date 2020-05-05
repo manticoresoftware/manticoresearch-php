@@ -74,7 +74,7 @@ class ConnectionTest extends TestCase
         $this->assertEquals([
             'a',
             'b',
-            'connecttimeout',
+            'connect_timeout',
             'curl',
             'headers',
             'host',
