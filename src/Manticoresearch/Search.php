@@ -52,16 +52,16 @@ class Search
     }
 
     /**
-     * @param $string
+     * @param string $queryString
      * @return $this
      */
-    public function search($string): self
+    public function search($queryString): self
     {
-        if (is_object($string)) {
-            $this->_query = $string;
+        if (is_object($queryString)) {
+            $this->_query = $queryString;
             return $this;
         }
-        $this->_query->must(new QueryString($string));
+        $this->_query->must(new QueryString($queryString));
         return $this;
     }
 
@@ -92,8 +92,8 @@ class Search
     }
 
     /**
-     * @param $name
-     * @param $exp
+     * @param string $name
+     * @param string $exp
      * @return $this
      */
     public function expression($name, $exp): self

@@ -15,7 +15,7 @@ class Suggest extends EmulateBySql
     {
         if (isset($this->_index)) {
             $binds =[];
-            $binds[] = "'" . Utils::escape($params['query']) . "'";
+            $binds[] = "'" . self::escape($params['query']) . "'";
             $binds[] = "'" . $this->_index . "'";
             if (count($params['options']) > 0) {
                 foreach ($params['options'] as $name => $value) {

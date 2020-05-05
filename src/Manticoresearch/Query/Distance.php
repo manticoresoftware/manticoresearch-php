@@ -37,7 +37,7 @@ class Distance extends Query
     }
 
     /**
-     * @param $distance the distance and it's units, e.g. 1000m, 200km
+     * @param string $distance the distance and it's units, e.g. 1000m, 200km
      */
     public function setDistance($distance)
     {
@@ -45,7 +45,7 @@ class Distance extends Query
     }
 
     /**
-     * @param $source array|string Either an array or comma separated string of the fields to reference for lat & lon
+     * @param array|string  $source Either an array or comma separated string of the fields to reference for lat & lon
      */
     public function setSource($source)
     {
@@ -58,8 +58,8 @@ class Distance extends Query
     /**
      * Set the location of the anchor, namely the point by which distances will be measured from
      *
-     * @param $lat the latitude of the anchor
-     * @param $lon the longitude of the anchor
+     * @param float $lat the latitude of the anchor
+     * @param float $lon the longitude of the anchor
      */
     public function setAnchor($lat, $lon)
     {
@@ -67,7 +67,7 @@ class Distance extends Query
     }
 
     /**
-     * @param $algorithm the algorithm for distance measurement, either adaptive or haversine
+     * @param string $algorithm the algorithm for distance measurement, either adaptive or haversine
      */
     public function setDistanceType($algorithm)
     {

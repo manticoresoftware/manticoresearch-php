@@ -13,6 +13,8 @@ matrix:
     - php: 7.4
       env: PHPUNIT_TEST=1
     - php: 7.4
+      env: PHPSTAN_TEST=1
+    - php: 7.4
       env: PHPUNIT_TEST=1 TRANSPORT=PhpHttp
 
 services:
@@ -25,11 +27,14 @@ before_install:
   - sudo apt update && sudo apt install php-json zip unzip git
 env:
   global:
+    - PHPSTAN_VERSION=^0.12
     - MS_HOST=127.0.0.1
     - MS_PORT=9308
 
 before_script:
   - composer validate
+  - if [[ $TRANSPORT ]]; then composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle; fi
+  - if [[ $PHPSTAN_TEST ]]; then composer require --dev phpstan/phpstan && composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle; fi
 
 install:
   # See https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
@@ -37,10 +42,10 @@ install:
   - composer install --prefer-dist
 
 script:
-  - if [[ $TRANSPORT ]]; then composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle; fi
   - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit -d memory_limit=4G  test/; fi
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit -d memory_limit=4G --coverage-clover=coverage.xml   test/   ; fi
   - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs --config-set ignore_errors_on_exit 1 && vendor/bin/phpcs --config-set ignore_warnings_on_exit 1 && vendor/bin/phpcs src/ test/ ; fi
+  - if [[ $PHPSTAN_TEST ]]; then vendor/bin/phpstan analyse --level=3 -c test/phpstan.neon src/; fi
 
 after_script:
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then bash <(curl -s https://codecov.io/bash) -f coverage.xml; fi

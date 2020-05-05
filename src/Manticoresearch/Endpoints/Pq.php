@@ -21,7 +21,7 @@ class Pq
 
     /**
      * Pq constructor.
-     * @param $client
+     * @param Client $client
      */
     public function __construct($client)
     {
@@ -29,7 +29,7 @@ class Pq
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function doc($params)
@@ -48,7 +48,7 @@ class Pq
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function search($params)
