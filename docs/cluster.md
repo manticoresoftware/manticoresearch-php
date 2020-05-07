@@ -110,7 +110,7 @@ Set a Galera option to the cluster.
              'body' => [
                  'variable'=> [
                     'name' => 'pc.bootstrap',
-                    'value=>'`'
+                    'value'=>'`'
                  ]
                  
              ]
