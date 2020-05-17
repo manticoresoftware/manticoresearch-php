@@ -207,7 +207,7 @@ class Connection
     public static function create($params)
     {
         if (is_array($params)) {
-            return new Connection($params);
+            return new self($params);
         }
         if ($params instanceof self) {
             return $params;
