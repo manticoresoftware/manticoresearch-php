@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Results;
 
-
 use Manticoresearch\ResultHit;
 
 class PercolateResultDoc
@@ -15,8 +14,7 @@ class PercolateResultDoc
     {
         $this->doc = ['doc'=>$doc['doc']];
         $this->doc['queries'] = [];
-        foreach($doc['queries'] as $query)
-        {
+        foreach ($doc['queries'] as $query) {
             $this->doc['queries'][] = new PercolateResultHit($query);
         }
     }
@@ -35,5 +33,4 @@ class PercolateResultDoc
     {
         return count($this->doc['queries'])>0;
     }
-
 }

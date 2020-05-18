@@ -2,6 +2,7 @@
 
 
 namespace Manticoresearch\Results;
+use Manticoresearch\Response;
 
 class PercolateDocsResultSet implements \Iterator, \Countable
 {
