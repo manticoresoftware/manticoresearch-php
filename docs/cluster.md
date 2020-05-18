@@ -86,7 +86,7 @@ There are 2 syntaxes for `body` :
         $params = [
             'cluster' => 'mycluster',
             'body' => [
-                'node'
+                'node' => 'address:port'
             ]
         ];
         $response = $client->cluster->join($params);
@@ -110,7 +110,7 @@ Set a Galera option to the cluster.
              'body' => [
                  'variable'=> [
                     'name' => 'pc.bootstrap',
-                    'value'=>'`'
+                    'value=>'`'
                  ]
                  
              ]

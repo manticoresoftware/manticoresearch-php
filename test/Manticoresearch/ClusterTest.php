@@ -19,6 +19,7 @@ class ClusterTest extends TestCase
         ];
         //client for node 1
         $client = new Client($params);
+        
         $params = [
             'host' => $_SERVER['MS_HOST'],
             'port' => $_SERVER['MS_PORT2'],
@@ -26,6 +27,7 @@ class ClusterTest extends TestCase
         ];
         //client for node 2
         $client2 = new Client($params);
+
         //create cluster on node 1
         $params = [
             'cluster' => 'testcluster',
@@ -34,6 +36,7 @@ class ClusterTest extends TestCase
         ];
         $result = $client->cluster()->create($params);
         $this->assertEquals('', $result['error']);
+
         //join cluster from node 2
         $params = [
             'cluster' => 'testcluster',
@@ -43,6 +46,7 @@ class ClusterTest extends TestCase
         ];
         $result = $client2->cluster()->join($params);
         $this->assertEquals('', $result['error']);
+
         //create index on node 1
         $params = [
             'index' => 'products',
@@ -64,6 +68,7 @@ class ClusterTest extends TestCase
             ]
         ];
         $client->indices()->create($params);
+
         //add index to cluster
         $params = [
             'cluster' => 'testcluster',
@@ -74,6 +79,7 @@ class ClusterTest extends TestCase
         ];
         $result = $client->cluster()->alter($params);
         $this->assertEquals('', $result['error']);
+
         //add document to index
         $doc = [
             'index' => 'products',
@@ -85,13 +91,14 @@ class ClusterTest extends TestCase
             ]
         ];
         $client->insert(['body' => $doc]);
+
         //add document via Index class
         $index = new Index($client);
         $index->setName('products');
         $index->setCluster('testcluster');
         $index->addDocument(['title'=>'The Dark Knight','price'=>7.5], 2000);
 
-        //check document replicated on node 2
+        //check if documents replicated on node 2
         $params = [
             'body' => [
                 'index' => 'products',
@@ -102,6 +109,7 @@ class ClusterTest extends TestCase
         ];
         $result = $client2->search($params);
         $this->assertEquals(2, $result['hits']['total']);
+
         //drop index from cluster
         $params = [
             'cluster' => 'testcluster',
@@ -112,6 +120,7 @@ class ClusterTest extends TestCase
         ];
         $result = $client->cluster()->alter($params);
         $this->assertEquals('', $result['error']);
+
         // drop cluster
         $params = [
             'cluster' => 'testcluster',
