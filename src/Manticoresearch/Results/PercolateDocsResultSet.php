@@ -2,6 +2,7 @@
 
 
 namespace Manticoresearch\Results;
+
 use Manticoresearch\Response;
 
 class PercolateDocsResultSet implements \Iterator, \Countable
@@ -41,7 +42,6 @@ class PercolateDocsResultSet implements \Iterator, \Countable
                         if (isset($this->array[$d-1])) {
                             $this->array[$d-1]['queries'][] =$query;
                         }
-
                     }
                 }
             }
