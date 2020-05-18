@@ -18,12 +18,15 @@ class Index
 {
     protected $client;
     protected $index;
+    protected $cluster;
 
     public function __construct(Client $client, $index = null)
     {
         $this->client = $client;
 
         $this->index = $index;
+
+        $this->cluster = null;
     }
 
     public function search($input): Search
@@ -56,6 +59,9 @@ class Index
                 'doc' => $data
             ]
         ];
+        if ($this->cluster !== null) {
+            $params['body']['cluster'] = $this->cluster;
+        }
         return $this->client->insert($params);
     }
 
@@ -65,13 +71,15 @@ class Index
         foreach ($documents as $document) {
             $id = $document['id'];
             unset($document['id']);
-            $toinsert[] = [
-                'insert' => [
-                    'index' => $this->index,
-                    'id' => $id,
-                    'doc' => $document
-                ]
+            $insert = [
+                'index' => $this->index,
+                'id' => $id,
+                'doc' => $document
             ];
+            if ($this->cluster !== null) {
+                $insert['cluster'] = $this->cluster;
+            }
+            $toinsert[] = ['insert' => $insert];
         }
         return $this->client->bulk(['body' => $toinsert]);
     }
@@ -84,6 +92,9 @@ class Index
                 'id' => $id
             ]
         ];
+        if ($this->cluster !== null) {
+            $params['body']['cluster'] = $this->cluster;
+        }
         return $this->client->delete($params);
     }
 
@@ -98,6 +109,9 @@ class Index
                 'query' => $query
             ]
         ];
+        if ($this->cluster !== null) {
+            $params['body']['cluster'] = $this->cluster;
+        }
         return $this->client->delete($params);
     }
 
@@ -110,6 +124,9 @@ class Index
                 'doc' => $data
             ]
         ];
+        if ($this->cluster !== null) {
+            $params['body']['cluster'] = $this->cluster;
+        }
         return $this->client->update($params);
     }
 
@@ -125,6 +142,9 @@ class Index
                 'doc' => $data
             ]
         ];
+        if ($this->cluster !== null) {
+            $params['body']['cluster'] = $this->cluster;
+        }
         return $this->client->update($params);
     }
 
@@ -137,6 +157,9 @@ class Index
                 'doc' => $data
             ]
         ];
+        if ($this->cluster !== null) {
+            $params['body']['cluster'] = $this->cluster;
+        }
         return $this->client->replace($params);
     }
 
@@ -146,13 +169,16 @@ class Index
         foreach ($documents as $document) {
             $id = $document['id'];
             unset($document['id']);
-            $toreplace[] = [
-                'replace' => [
-                    'index' => $this->index,
-                    'id' => $id,
-                    'doc' => $document
-                ]
+            $replace = [
+                'index' => $this->index,
+                'id' => $id,
+                'doc' => $document
+
             ];
+            if ($this->cluster !== null) {
+                $replace['cluster'] = $this->cluster;
+            }
+            $toreplace[] = ['replace' => $replace];
         }
         return $this->client->bulk(['body' => $toreplace]);
     }
@@ -340,4 +366,11 @@ class Index
         $this->index = $index;
         return $this;
     }
+
+    public function setCluster($cluster): self
+    {
+        $this->cluster = $cluster;
+        return $this;
+    }
+
 }

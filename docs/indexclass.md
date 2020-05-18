@@ -22,6 +22,14 @@ Allows setting the index name.
 $index->setName('myindex');
 ```
 
+### setCluster()
+
+Setting the cluster name is required for add/replace/update/delete operations if the index belongs to an
+ active cluster. 
+
+```php
+$index->setCluster('mycluster');
+```
 ### create()
 
 Creates the index, accepts:

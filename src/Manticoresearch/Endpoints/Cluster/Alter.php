@@ -17,7 +17,7 @@ class Alter extends EmulateBySql
 
     public function setBody($params = null)
     {
-        if (isset($this->index)) {
+        if (isset($this->cluster)) {
             if (isset($params['operation'])) {
                 switch ($params['operation']) {
                     case 'add':

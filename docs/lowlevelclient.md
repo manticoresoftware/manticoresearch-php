@@ -139,6 +139,32 @@ $doc = [
 $response = $client->insert($doc);
 ```
 
+If the index is part of a cluster, the `body` must also contain the cluster name:
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'cluster' => 'testcluster',
+        'id' => 3,
+        'doc' => [
+            'gid' => 10,
+            'title' => 'some title here',
+            'content' => 'some content here',
+            'newfield' => 'this is a new field',
+            'unreal' => 'engine',
+            'real' => 8.99,
+            'j' => [
+                'hello' => ['testing', 'json', 'here'],
+                'numbers' => [1, 2, 3],
+                'value' => 10.0
+            ]
+        ]
+    ]
+];
+
+$response = $client->insert($doc);
+```
+
 ### Replace
 
 For complete reference of payload and response see Manticore's [Replace API](https://docs.manticoresearch.com/latest/html/http_reference/json_replace.html)
@@ -155,6 +181,24 @@ All are mandatory.
 $doc = [
     'body' => [
         'index' => 'testrt',
+        'id' => 3,
+        'doc' => [
+            'gid' => 10,
+            'content' => 'updated content here',
+        ]
+    ]
+];
+
+$response = $client->replace($doc);
+```
+
+If the index is part of a cluster, the `body` must also contain the cluster name:
+
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'cluster' => 'testcluster',
         'id' => 3,
         'doc' => [
             'gid' => 10,
@@ -207,6 +251,21 @@ $doc = [
 $response = $client->update($doc);
 ```
 
+If the index is part of a cluster, the `body` must also contain the cluster name:
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'cluster' => 'testcluster',
+        'id' => 3,
+        'doc' => [
+            'gid' => 20,
+        ]
+    ]
+];
+
+$response = $client->update($doc);
+```
 
 ### Delete
 
@@ -223,6 +282,20 @@ All are mandatory.
 $doc = [
     'body' => [
         'index' => 'testrt',
+        'id' => 3
+    ]
+];
+
+$response = $client->delete($doc);
+```
+
+If the index is part of a cluster, the `body` must also contain the cluster name:
+
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'cluster' => 'testcluster',
         'id' => 3
     ]
 ];
