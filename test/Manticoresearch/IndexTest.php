@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class IndexTest extends TestCase
 {
+    protected $index;
 
     protected function getIndex($keywords = false): Index
     {
@@ -21,9 +22,9 @@ class IndexTest extends TestCase
             'port' => $_SERVER['MS_PORT'],
             'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
         ];
-        $index = new Index(new Client($params));
-        $index->setName('testindex');
-        $index->drop(true);
+        $this->index = new Index(new Client($params));
+        $this->index->setName('testindex');
+        $this->index->drop(true);
 
         $options = [];
         if ($keywords === true) {
@@ -36,14 +37,14 @@ class IndexTest extends TestCase
         // for coverage purposes, does not affect functionality as index already dropped silently
         $options['silent'] = true;
 
-        $index->create([
+        $this->index->create([
             'title' => ['type' => 'text'],
             'gid' => ['type' => 'int'],
             'label' => ['type' => 'string'],
             'tags' => ['type' => 'multi'],
             'props' => ['type' => 'json']
         ], $options);
-        return $index;
+        return $this->index;
     }
 
     protected function addDocument($index)
@@ -307,8 +308,8 @@ class IndexTest extends TestCase
         $index->addDocument(
             [
                 'title' => 'Star Trek: Nemesis',
-                'plot' => 'The Enterprise is diverted to the Romulan homeworld Romulus, supposedly because they want'.
-                    ' to negotiate a peace treaty. Captain Picard and his crew discover a serious threat to the '.
+                'plot' => 'The Enterprise is diverted to the Romulan homeworld Romulus, supposedly because they want' .
+                    ' to negotiate a peace treaty. Captain Picard and his crew discover a serious threat to the ' .
                     'Federation once Praetor Shinzon plans to attack Earth.',
                 'year' => 2002,
                 'rating' => 6.4
@@ -316,16 +317,16 @@ class IndexTest extends TestCase
             1
         );
         $index->addDocuments([
-            ['id' => 2, 'title' => 'Interstellar', 'plot' => 'A team of explorers travel through a wormhole in space'.
+            ['id' => 2, 'title' => 'Interstellar', 'plot' => 'A team of explorers travel through a wormhole in space' .
                 ' in an attempt to ensure humanity\'s survival.', 'year' => 2014, 'rating' => 8.5],
-            ['id' => 3, 'title' => 'Inception', 'plot' => 'A thief who steals corporate secrets through the use of'.
+            ['id' => 3, 'title' => 'Inception', 'plot' => 'A thief who steals corporate secrets through the use of' .
                 ' dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.',
                 'year' => 2010, 'rating' => 8.8],
-            ['id' => 4, 'title' => '1917 ', 'plot' => ' As a regiment assembles to wage war deep in enemy territory,'.
-                ' two soldiers are assigned to race against time and deliver a message that will stop 1,600 men from'.
+            ['id' => 4, 'title' => '1917 ', 'plot' => ' As a regiment assembles to wage war deep in enemy territory,' .
+                ' two soldiers are assigned to race against time and deliver a message that will stop 1,600 men from' .
                 ' walking straight into a deadly trap.', 'year' => 2018, 'rating' => 8.4],
             ['id' => 5, 'title' => 'Alien', 'plot' => ' After a space merchant vessel receives an unknown transmission'.
-                ' as a distress call, one of the team\'s member is attacked by a mysterious life form and they soon'.
+                ' as a distress call, one of the team\'s member is attacked by a mysterious life form and they soon' .
                 ' realize that its life cycle has merely begun.', 'year' => 1979, 'rating' => 8.4]
         ]);
 
@@ -379,6 +380,34 @@ class IndexTest extends TestCase
         $this->assertEquals('', $response['error']);
     }
 
+    public function testPercolates()
+    {
+        $this->getIndex();
+        $this->index->setName('pqtest');
+        $this->index->drop(true);
+        $this->index->create(
+            ['title' => ['type' => 'text'], 'gid' => ['type' => 'integer']],
+            ['type' => 'percolate'],
+            true
+        );
+        $this->index->addDocument(['query' => 'find me'], 6);
+        $this->index->addDocument(['query' => 'fast'], 8);
+        $this->index->addDocument(['query' => 'something'], 7);
+        $docs = [
+            ['title' => 'find me fast'],
+            ['title' => 'pick me'],
+            ['title' => 'something else'],
+            ['title' => 'this is false']
+        ];
+        $result = $this->index->percolate($docs);
+        $this->assertEquals(3, $result->count());
+        $result = $this->index->percolateToDocs($docs);
+        $this->assertEquals(4, $result->count());
+        $result->rewind();
+        $doc = $result->current();
+        $this->assertTrue($doc->hasQueries());
+        $this->index->drop();
+    }
 
     public function testGetClient()
     {

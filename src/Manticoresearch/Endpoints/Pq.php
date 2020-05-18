@@ -6,6 +6,7 @@ namespace Manticoresearch\Endpoints;
 use Manticoresearch\Client;
 use Manticoresearch\Endpoints\Pq\DeleteByQuery;
 use Manticoresearch\Endpoints\Pq\Doc;
+use phpDocumentor\Reflection\Types\Object_;
 
 /**
  * Class Pq
@@ -50,7 +51,7 @@ class Pq
      * @param array $params
      * @return mixed
      */
-    public function search($params)
+    public function search($params, $obj = false)
     {
         $index = $params['index'] ?? null;
         $body = $params['body'];
@@ -59,7 +60,11 @@ class Pq
         $endpoint->setQuery($params['query'] ?? null);
         $endpoint->setBody($body);
         $response = $this->client->request($endpoint);
-        return $response->getResponse();
+        if ($obj === true) {
+            return $response;
+        } else {
+            return $response->getResponse();
+        }
     }
 
     /**

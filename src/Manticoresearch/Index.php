@@ -4,6 +4,8 @@
 namespace Manticoresearch;
 
 use Manticoresearch\Exceptions\RuntimeException;
+use Manticoresearch\Query\Percolate;
+use Manticoresearch\Results;
 
 /**
  * Manticore index object
@@ -164,7 +166,7 @@ class Index
                 'settings' => $settings
             ]
         ];
-        if ($silent===true) {
+        if ($silent === true) {
             $params['body']['silent'] = true;
         }
         return $this->client->indices()->create($params);
@@ -234,7 +236,7 @@ class Index
 
     public function alter($operation, $name, $type = null)
     {
-        if ($operation==='add') {
+        if ($operation === 'add') {
             $params = [
                 'index' => $this->index,
                 'body' => [
@@ -242,7 +244,7 @@ class Index
                     'column' => ['name' => $name, 'type' => $type]
                 ]
             ];
-        } elseif ($operation==='drop') {
+        } elseif ($operation === 'drop') {
             $params = [
                 'index' => $this->index,
                 'body' => [
@@ -290,6 +292,38 @@ class Index
         ];
         return $this->client->explainQuery($params);
     }
+
+
+    public function percolate($docs)
+    {
+        $params = ['index' => $this->index, 'body' => []];
+        if ($docs instanceof Percolate) {
+            $params['body']['query'] = $docs->toArray();
+        } else {
+            if (isset($docs[0]) && is_array($docs[0])) {
+                $params['body']['query'] = ['percolate' => ['documents' => $docs]];
+            } else {
+                $params['body']['query'] = ['percolate' => ['document' => $docs]];
+            }
+        }
+        return new Results\PercolateResultSet($this->client->pq()->search($params, true));
+    }
+
+    public function percolateToDocs($docs)
+    {
+        $params = ['index' => $this->index, 'body' => []];
+        if ($docs instanceof Percolate) {
+            $params['body']['query'] = $docs->toArray();
+        } else {
+            if (isset($docs[0]) && is_array($docs[0])) {
+                $params['body']['query'] = ['percolate' => ['documents' => $docs]];
+            } else {
+                $params['body']['query'] = ['percolate' => ['document' => $docs]];
+            }
+        }
+        return new Results\PercolateDocsResultSet($this->client->pq()->search($params, true), $docs);
+    }
+
 
     public function getClient(): Client
     {

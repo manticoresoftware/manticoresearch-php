@@ -336,3 +336,195 @@ Parameters:
 ```php
 $index->explainQuery($query);
 ```
+
+
+### percolate()
+
+Performs a percolate search over a percolate index. This method works only with percolate indexes.
+
+Expects an array  with documents
+```php
+$docs = [
+    ['title' => 'pick me','color'=>'blue'],
+    ['title' => 'find me fast','color'=>'red'], 
+    ['title' => 'something else','color'=>'blue'], 
+    ['title' => 'this is false','color'=>'black']
+];
+$result = $index->percolate($docs);
+```
+
+Returns a [PercolateResultSet](percolateresults.md#percolateresultset-object) object containing stored queries that 
+match on documents at input.  The PercolateResultHit object can be iterated to retrieve the stored queries encapsulated 
+as a [PercolateResultHit](percolateresults.md#percolateresulthit-object) object and the list of indices of documents 
+from input.
+
+Usage example:
+```php
+$docs = [['title' => 'pick me'], ['title' => 'find me fast'], ['title' => 'something else'], ['title' => 'this is false']];
+$result = $index->percolate($docs);
+echo "Number of stored queries with matches:".$result->count();
+foreach ($result as $row) {
+    echo 'Query ID' . $row->getId() . "\n";
+    echo "Stored query:\n";
+    print_r($row->getData());
+    echo "Indices of input docs list:\n";
+    print_r($row->getDocSlots());
+    echo "List of input docs that match:\n";
+    print_r($row->getDocsMatched($docs));
+}
+```
+And response:
+```php
+Number of stored queries with matches: 3
+Query ID6
+Stored query:
+Array
+(
+    [query] => Array
+        (
+            [ql] => find me
+        )
+)
+Indices of input docs list:
+Array
+(
+    [0] => 2
+    [1] => 4
+)
+List of input docs that match:
+Array
+(
+    [0] => Array
+        (
+            [title] => find me fast
+        )
+
+    [1] => Array
+        (
+            [title] => find me slow
+        )
+)
+Query ID7
+Stored query:
+Array
+(
+    [query] => Array
+        (
+            [ql] => something
+        )
+)
+Indices of input docs list:
+Array
+(
+    [0] => 3
+)
+List of input docs that match:
+Array
+(
+    [0] => Array
+        (
+            [title] => something else
+        )
+)
+Query ID8
+Stored query:
+Array
+(
+    [query] => Array
+        (
+            [ql] => fast
+        )
+
+)
+Indices of input docs list:
+Array
+(
+    [0] => 2
+)
+List of input docs that match:
+Array
+(
+    [0] => Array
+        (
+            [title] => find me fast
+        )
+)
+```
+### percolateToDocs()
+
+It performs a percolate query just like [percolate()](#percolate) method but instead of returning an object list
+with stored queries and matched input documents attached, it returns instead an object list with the 
+input documents and the stored queries they match against.
+
+The returned iterator is an [PercolateDocsResultSet](percolateresults.md#percolatedocsresultset-object) object which holds a 
+list of [PercolateResultDoc](percolateresults.md#percolateresultdoc-object) objects. 
+The PercolateResultDoc provides the document by `getData()` method and a list of queries by `getQueries()` method.
+
+`getQueries()` returns an array with [PercolateResultHit](percolateresults.md#percolateresulthit-object) objects.
+
+```php
+$docs = [['title' => 'pick me'], ['title' => 'find me fast'], ['title' => 'something else'], ['title' => 'this is false']];
+$result = $index->percolateToDocs($docs);
+foreach ($result as $row) {
+    echo "Document:\n";
+    print_r($row->getData());
+    echo "Matched queries:\n";
+    foreach($row->getQueries()  as $query) {
+        print_r($query->getData());
+    }
+}
+```
+```
+Document:
+Array
+(
+    [title] => pick me
+)
+Matched queries:
+Document:
+Array
+(
+    [title] => find me fast
+)
+Matched queries:
+Array
+(
+    [query] => Array
+        (
+            [ql] => find me
+        )
+)
+Array
+(
+    [query] => Array
+        (
+            [ql] => fast
+        )
+)
+Document:
+Array
+(
+    [title] => something else
+)
+Matched queries:
+Array
+(
+    [query] => Array
+        (
+            [ql] => something
+        )
+)
+Document:
+Array
+(
+    [title] => find me slow
+)
+Matched queries:
+Array
+(
+    [query] => Array
+        (
+            [ql] => find me
+        )
+)
+```

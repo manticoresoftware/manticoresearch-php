@@ -13,7 +13,7 @@ namespace Manticoresearch;
  */
 class ResultHit
 {
-    private $data;
+    protected $data;
 
     public function __construct($data = [])
     {
@@ -39,6 +39,7 @@ class ResultHit
     {
         return $this->data['highlight'];
     }
+
 
     public function __get(string $key)
     {

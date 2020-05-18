@@ -1,20 +1,11 @@
 <?php
 
 
-namespace Manticoresearch;
+namespace Manticoresearch\Results;
 
-/**
- * Manticore result set
- *  List hits returned by a search
- *  Implements iterator and countable
- * @category ManticoreSearch
- * @package ManticoreSearch
- * @author Adrian Nuta <adrian.nuta@manticoresearch.com>
- * @link https://manticoresearch.com
- * @see \Iterator
- */
-class ResultSet implements \Iterator, \Countable
+class PercolateDocsResultSet implements \Iterator, \Countable
 {
+
     /** @var int The position of the iterator through the result set */
     protected $position = 0;
 
@@ -33,20 +24,26 @@ class ResultSet implements \Iterator, \Countable
 
     protected $profile;
 
-    public function __construct($responseObj)
+    public function __construct($responseObj, $docs)
     {
+
+        foreach ($docs as $doc) {
+            $this->array[] = ['doc' => $doc, 'queries' => []];
+        }
         $this->response = $responseObj;
         $response = $responseObj->getResponse();
         if (isset($response['hits']['hits'])) {
-            $this->array = $response['hits']['hits'];
-            $this->total = $response['hits']['total'];
-        } else {
-            $this->total = 0;
-        }
-        $this->took = $response['took'];
-        $this->timed_out = $response['timed_out'];
-        if (isset($response['profile'])) {
-            $this->profile = $response['profile'];
+            $hits = $response['hits']['hits'];
+            foreach ($hits as $query) {
+                if (isset($query['fields'], $query['fields']['_percolator_document_slot'])) {
+                    foreach ($query['fields']['_percolator_document_slot'] as $d) {
+                        if (isset($this->array[$d-1])) {
+                            $this->array[$d-1]['queries'][] =$query;
+                        }
+
+                    }
+                }
+            }
         }
     }
 
@@ -57,7 +54,7 @@ class ResultSet implements \Iterator, \Countable
 
     public function current()
     {
-        return new ResultHit($this->array[$this->position]);
+        return new PercolateResultDoc($this->array[$this->position]);
     }
 
     public function next()
