@@ -372,5 +372,4 @@ class Index
         $this->cluster = $cluster;
         return $this;
     }
-
 }

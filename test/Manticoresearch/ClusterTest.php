@@ -89,7 +89,7 @@ class ClusterTest extends TestCase
         $index = new Index($client);
         $index->setName('products');
         $index->setCluster('testcluster');
-        $index->addDocument(['title'=>'The Dark Knight','price'=>7.5],2000);
+        $index->addDocument(['title'=>'The Dark Knight','price'=>7.5], 2000);
 
         //check document replicated on node 2
         $params = [
