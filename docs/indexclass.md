@@ -79,6 +79,46 @@ $index->addDocument([
         ], 1);
 ```
 
+### addDocuments()
+
+Add multiple documents in the index.
+Expects an array with documents as arrays.
+
+
+Example:
+
+```php
+$index->addDocuments([
+   [
+   'id' => 1,
+   'title' => 'This is an example document for cooking',
+   'gid' => 1,
+   'label' => 'not used',
+   'tags' => [1, 2, 3],
+   'props' => [
+              'color' => 'blue',
+              'rule' => ['one', 'two']
+             ]
+   ],
+   [
+   'id' => 2,
+   'title' => 'This is another example document for cooking',
+   'gid' => 100,
+   'label' => 'fish',
+   'tags' => [11],
+   'props' => [
+              'color' => 'black',
+              'rule' => ['none']
+             ]
+   ]   
+]);
+```
+Returns an array response of:
+
+- errors - stating whenever an error occured
+- items - response status for each document.
+
+
 ### replaceDocument()
 
 Replace an existing document in the index.
@@ -89,7 +129,7 @@ Expects:
 Example:
 
 ```php
-$index->addDocument([
+$index->replaceDocument([
             'title' => 'find me',
             'gid' => 1,
             'label' => 'not used',
@@ -100,6 +140,45 @@ $index->addDocument([
             ]
         ], 1);
 ```
+
+### replaceDocuments()
+
+Replace multiple documents in the index.
+Expects an array with documents as arrays.
+
+
+Example:
+
+```php
+$index->replaceDocuments([
+   [
+   'id' => 1,
+   'title' => 'This is an example document for cooking',
+   'gid' => 1,
+   'label' => 'not used',
+   'tags' => [1, 2, 3],
+   'props' => [
+              'color' => 'blue',
+              'rule' => ['one', 'two']
+             ]
+   ],
+   [
+   'id' => 2,
+   'title' => 'This is another example document for cooking',
+   'gid' => 100,
+   'label' => 'fish',
+   'tags' => [11],
+   'props' => [
+              'color' => 'black',
+              'rule' => ['none']
+             ]
+   ]   
+]);
+```
+Returns an array response of:
+
+- errors - stating whenever an error occured
+- items - response status for each document.
 
 ### updateDocument()
 
