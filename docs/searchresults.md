@@ -70,6 +70,17 @@ Whenever the query timed out:
 ```php
 $result->hasTimedout();
 ```
+
+Count of elements:
+```php
+$result->count();
+```
+
+Profiling information (if query has profiling enabled):
+```php
+$result->getProfile();
+```
+
  
  ## ResultHit object
  
