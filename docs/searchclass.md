@@ -161,6 +161,17 @@ The highlight excerpts are attached to each hit. They can be retrieved with `get
 
 `getHighlight()`  will contain a list of excerpts  for each field declared for highlighing in the request.
 
+### setSource()
+
+By default all document fields are returned. This method can set which fields should be returned. It accepts several formats:
+
+- setSource('attr*') -  only fields like `attr*` will be returned
+- setSource(['attr1','attr2']) - only fields `attr1` and `attr2` will be returned
+- setSource([
+    'included' => ['attr1','attri*'],
+    'excludes' => ['desc*']
+  ]) -  field `attr1` and fields like `attri*` are included, any field like `desc*` are excluded. If an attribute is found in both lists, the excluding wins
+
 ### profile()
 
 If included, result set will provide query profiling.
