@@ -29,7 +29,7 @@ class DescribeTest extends \PHPUnit\Framework\TestCase
     {
         $response = self::$client->indices()->describe(['index' => 'products']);
 
-        $this->assertEquals([
+        $this->assertEquals(array_keys([
             'id' => [
                 'Type' => 'bigint',
                 'Properties' => ''
@@ -43,7 +43,7 @@ class DescribeTest extends \PHPUnit\Framework\TestCase
                 'Properties' => ''
             ],
 
-        ], $response);
+        ]), array_keys($response));
     }
 
     public function testSetGetIndex()
