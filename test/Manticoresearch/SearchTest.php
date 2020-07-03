@@ -8,6 +8,7 @@ use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\Distance;
 use Manticoresearch\Query\Equals;
+use Manticoresearch\Query\In;
 use Manticoresearch\Query\Match;
 use Manticoresearch\Query\Range;
 use Manticoresearch\ResultSet;
@@ -547,6 +548,15 @@ class SearchTest extends TestCase
         $q->must(new Equals('year', 2014));
         $result = self::$search->search($q)->get();
         $this->assertCount(1, $result);
+    }
+
+    public function testInFilter()
+    {
+        $q = new BoolQuery();
+        $q->must(new Match(['query' => 'team of explorers', 'operator' => 'or'], '*'));
+        $q->must(new In('year', [1992,2014]));
+        $result = self::$search->search($q)->get();
+        $this->assertCount(2, $result);
     }
 
     public function testBoolQueryMutipleFilters2()

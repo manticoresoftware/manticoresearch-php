@@ -6,6 +6,7 @@ namespace Manticoresearch;
 use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\Distance;
 use Manticoresearch\Query\Equals;
+use Manticoresearch\Query\In;
 use Manticoresearch\Query\Match;
 use Manticoresearch\Query\MatchPhrase;
 use Manticoresearch\Query\QueryString;
@@ -155,6 +156,9 @@ class Search
                     $op => $values[0],
                 ]));
                 break;
+            case 'in':
+                $this->query->must(new In($attr, $values));
+                break;
             case 'equals':
                 $this->query->must(new Equals($attr, $values[0]));
                 break;
@@ -185,6 +189,9 @@ class Search
                 $this->query->should(new Range($attr, [
                     $op => $values[0],
                 ]));
+                break;
+            case 'in':
+                $this->query->should(new In($attr, $values));
                 break;
             case 'equals':
                 $this->query->should(new Equals($attr, $values[0]));
@@ -217,6 +224,9 @@ class Search
                 $this->query->mustNot(new Range($attr, [
                     $op => $values[0],
                 ]));
+                break;
+            case  'in':
+                $this->query->mustNot(new In($attr, $values));
                 break;
             case 'equals':
                 $this->query->mustNot(new Equals($attr, $values[0]));
