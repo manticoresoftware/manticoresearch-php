@@ -273,6 +273,18 @@ class Client
     }
 
     /**
+     * Return Index object
+     *
+     * @param string|null $name Name of index
+     *
+     * @return \Manticoresearch\Index
+     */
+    public function index(string $name = null): Index
+    {
+        return new Index($this, $name);
+    }
+
+    /**
      * Endpoint: bulk
      * @param array $params
      * @return array

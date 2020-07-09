@@ -60,12 +60,22 @@ composer require manticoresoftware/manticoresearch-php
 ### Initiate the index:
 
 ```php
-   require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
-   $config = ['host'=>'127.0.0.1','port'=>9308];
-   $client = new \Manticoresearch\Client($config);
-   $index = new \Manticoresearch\Index($client);
-   $index->setName('movies'); 
+$config = ['host'=>'127.0.0.1','port'=>9308];
+$client = new \Manticoresearch\Client($config);
+$index = new \Manticoresearch\Index($client);
+$index->setName('movies'); 
+```
+
+or alternative way
+
+```php
+require_once __DIR__ . '/vendor/autoload.php';
+
+$config = ['host'=>'127.0.0.1','port'=>9308];
+$client = new \Manticoresearch\Client($config);
+$index = $client->index('movies');
 ```
 
 ### Create index:
