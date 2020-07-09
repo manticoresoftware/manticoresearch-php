@@ -16,7 +16,7 @@ class ConnectionPool
     /**
      * @var array
      */
-    protected $_connections;
+    protected $connections;
 
     /**
      * @var SelectorInterface
@@ -29,7 +29,7 @@ class ConnectionPool
 
     public function __construct(array $connections, SelectorInterface $strategy, int $retries)
     {
-        $this->_connections = $connections;
+        $this->connections = $connections;
         $this->strategy = $strategy;
         $this->retries = $retries;
     }
@@ -39,7 +39,7 @@ class ConnectionPool
      */
     public function getConnections(): array
     {
-        return $this->_connections;
+        return $this->connections;
     }
 
     /**
@@ -47,12 +47,12 @@ class ConnectionPool
      */
     public function setConnections(array $connections)
     {
-        $this->_connections = $connections;
+        $this->connections = $connections;
     }
     public function getConnection(): Connection
     {
         $this->retries_attempts++;
-        $connection =   $this->strategy->getConnection($this->_connections);
+        $connection =   $this->strategy->getConnection($this->connections);
         if ($connection->isAlive()) {
             return $connection;
         }

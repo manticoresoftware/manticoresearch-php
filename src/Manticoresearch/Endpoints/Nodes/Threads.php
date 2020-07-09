@@ -10,7 +10,7 @@ class Threads extends EmulateBySql
     /**
      * @var string
      */
-    protected $_index;
+    protected $index;
 
     public function setBody($params = null)
     {
@@ -21,6 +21,7 @@ class Threads extends EmulateBySql
             }
         }
 
-        return parent::setBody(['query' => "SHOW THREADS " . ((count($options)>0)?' OPTION '.implode(",", $options):'')]);
+        return parent::setBody(['query' => "SHOW THREADS " .
+            ((count($options)>0)?' OPTION '.implode(",", $options):'')]);
     }
 }

@@ -16,13 +16,13 @@ class Create extends EmulateBySql
     /**
      * @var string
      */
-    protected $_index;
+    protected $index;
 
     public function setBody($params = null)
     {
-        if (isset($this->_index)) {
+        if (isset($this->index)) {
             $columns = [];
-            if(isset($params['columns'] )) {
+            if (isset($params['columns'])) {
                 foreach ($params['columns'] as $name => $settings) {
                     $column = $name . ' ' . $settings['type'];
                     if (isset($settings['options']) && count($settings['options']) > 0) {
@@ -32,16 +32,15 @@ class Create extends EmulateBySql
                 }
             }
             $options = "";
-            if(isset($params['settings'] )) {
-                foreach($params['settings'] as $name=>$value) {
+            if (isset($params['settings'])) {
+                foreach ($params['settings'] as $name => $value) {
                     $options.=" ".$name." = '".$value."'";
                 }
-
             }
             return parent::setBody(['query' => "CREATE TABLE ".
                 (isset($params['silent']) && $params['silent']===true?' IF NOT EXISTS ':'').
-                $this->_index.
-                (count($columns)>0?"(".implode(",",$columns).")":" ")
+                $this->index.
+                (count($columns)>0?"(".implode(",", $columns).")":" ")
                 .$options]);
         }
         throw new RuntimeException('Index name is missing.');
@@ -51,7 +50,7 @@ class Create extends EmulateBySql
      */
     public function getIndex()
     {
-        return $this->_index;
+        return $this->index;
     }
 
     /**
@@ -59,7 +58,6 @@ class Create extends EmulateBySql
      */
     public function setIndex($index)
     {
-        $this->_index = $index;
+        $this->index = $index;
     }
-
 }

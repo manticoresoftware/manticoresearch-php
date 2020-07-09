@@ -9,21 +9,21 @@ class BoolQuery extends Query
 {
     public function must($args):self
     {
-        $this->_params['must'][]= $args;
+        $this->params['must'][]= $args;
         return $this;
     }
     public function mustNot($args):self
     {
-        $this->_params['must_not'][]= $args;
+        $this->params['must_not'][]= $args;
         return $this;
     }
     public function should($args):self
     {
-        $this->_params['should'][]= $args;
+        $this->params['should'][]= $args;
         return $this;
     }
     public function toArray()
     {
-        return parent::_toArray(['bool'=>$this->_params]);
+        return $this->convertArray(['bool' => $this->params]);
     }
 }

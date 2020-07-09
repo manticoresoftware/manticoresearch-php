@@ -3,26 +3,27 @@
 
 namespace Manticoresearch\Endpoints\Cluster;
 
+use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Endpoints\Sql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
 
-class Set extends Sql
+class Set extends EmulateBySql
 {
     use Utils;
     /**
      * @var string
      */
-    protected $_cluster;
+    protected $cluster;
 
     public function setBody($params = null)
     {
         if (isset($params['variable'])) {
             return parent::setBody([
-                'query' => "SET CLUSTER" . $this->_cluster . " GLOBAL '" . $params['variable']['name'], "'=" .
-                (is_numeric($params['variable']['value']) ? $params['variable']['value'] : "'" . $params['variable']['value'] . "'")
+                'query' => "SET CLUSTER" . $this->cluster . " GLOBAL '" . $params['variable']['name'], "'=" .
+                (is_numeric($params['variable']['value']) ?
+                    $params['variable']['value'] : "'" . $params['variable']['value'] . "'")
             ]);
-
         }
         throw new RuntimeException('Variable is missing for /cluster/set');
     }
@@ -32,7 +33,7 @@ class Set extends Sql
      */
     public function getCLuster()
     {
-        return $this->_cluster;
+        return $this->cluster;
     }
 
     /**
@@ -40,6 +41,6 @@ class Set extends Sql
      */
     public function setCluster($cluster)
     {
-        $this->_cluster = $cluster;
+        $this->cluster = $cluster;
     }
 }

@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Response;
 
-
 use Manticoresearch\Response;
 
 class Bulk extends Response

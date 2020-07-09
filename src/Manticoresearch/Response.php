@@ -23,35 +23,35 @@ class Response
      * execution time to get the response
      * @var integer|float
      */
-    protected $_time;
+    protected $time;
 
     /**
      * raw response as string
      * @var string
      */
-    protected $_string;
+    protected $string;
 
     /**
      * information about request
      * @var array
      */
-    protected $_transportInfo;
+    protected $transportInfo;
 
-    protected $_status;
+    protected $status;
     /**
      * response as array
      * @var array
      */
-    protected $_response;
+    protected $response;
 
-    public function __construct( $responseString, $status = null)
+    public function __construct($responseString, $status = null)
     {
         if (is_array($responseString)) {
-            $this->_response = $responseString;
+            $this->response = $responseString;
         } else {
-            $this->_string = $responseString;
+            $this->string = $responseString;
         }
-        $this->_status = $status;
+        $this->status = $status;
     }
 
     /*
@@ -60,17 +60,18 @@ class Response
      */
     public function getResponse()
     {
-        if (null === $this->_response) {
-            try {
-                $this->_response = json_decode($this->_string, true);
-            } catch (\Exception $e) {
+        if (null === $this->response) {
+            $this->response = json_decode($this->string, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new RuntimeException('fatal error while trying to decode JSON response');
             }
-            if (empty($this->_response)) {
-                $this->_response = [];
+
+            if (empty($this->response)) {
+                $this->response = [];
             }
         }
-        return $this->_response;
+        return $this->response;
     }
 
     /*
@@ -80,7 +81,8 @@ class Response
     public function hasError()
     {
         $response = $this->getResponse();
-        return (isset($response['error']) && $response['error'] !== '') ||  (isset($response['errors']) && $response['errors'] !== false);
+        return (isset($response['error']) && $response['error'] !== '') ||
+            (isset($response['errors']) && $response['errors'] !== false);
     }
 
     /*
@@ -92,7 +94,7 @@ class Response
         $response = $this->getResponse();
         if (isset($response['error'])) {
             return json_encode($response['error'], true);
-        } elseif   (isset($response['errors'])){
+        } elseif (isset($response['errors'])) {
             return json_encode($response['errors'], true);
         } else {
             return '';
@@ -106,7 +108,7 @@ class Response
      */
     public function setTime($time)
     {
-        $this->_time = $time;
+        $this->time = $time;
         return $this;
     }
 
@@ -116,7 +118,7 @@ class Response
      */
     public function getTime()
     {
-        return $this->_time;
+        return $this->time;
     }
 
     /**
@@ -126,7 +128,7 @@ class Response
      */
     public function setTransportInfo($info)
     {
-        $this->_transportInfo = $info;
+        $this->transportInfo = $info;
         return $this;
     }
 
@@ -136,6 +138,6 @@ class Response
      */
     public function getTransportInfo()
     {
-        return $this->_transportInfo;
+        return $this->transportInfo;
     }
 }

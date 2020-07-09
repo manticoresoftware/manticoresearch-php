@@ -1,0 +1,19 @@
+version: '2'
+services:
+ phpcli:
+   build:
+     context: docker/phpcli
+   working_dir: /var/www
+   environment:
+     - MS_HOST=manticoresearch-manticore
+     - MS_PORT=9308
+   volumes:
+    - .:/var/www
+
+
+ manticoresearch-manticore:
+   image: manticoresearch/manticore
+   expose:
+    - 9306
+    - 9312
+

@@ -16,23 +16,23 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
     /**
      * @var string
      */
-    protected $_scheme = 'http';
+    protected $scheme = 'http';
 
     /**
-     * @var object
+     * @var resource
      */
-    protected static $_curl;
+    protected static $curl;
 
     /**
      * @param Request $request
      * @param array $params
      * @return Response
      */
-    public function execute(Request $request, $params=[])
+    public function execute(Request $request, $params = [])
     {
         $connection = $this->getConnection();
-        $conn = $this->_getCurlConnection($connection->getConfig('persistent'));
-        $url = $this->_scheme.'://'.$connection->getHost().':'.$connection->getPort();
+        $conn = $this->getCurlConnection($connection->getConfig('persistent'));
+        $url = $this->scheme.'://'.$connection->getHost().':'.$connection->getPort();
         $endpoint = $request->getPath();
         $url .= $endpoint;
         $url = $this->setupURI($url, $request->getQuery());
@@ -64,13 +64,17 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 
         if ($connection->getConfig('username') !== null && $connection->getConfig('password') !== null) {
             curl_setopt($conn, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-            curl_setopt($conn, CURLOPT_USERPWD, $connection->getConfig('username').":".$connection->getConfig('password'));
+            curl_setopt(
+                $conn,
+                CURLOPT_USERPWD,
+                $connection->getConfig('username').":".$connection->getConfig('password')
+            );
         }
         if ($connection->getConfig('proxy') !== null) {
             curl_setopt($conn, CURLOPT_PROXY, $connection->getConfig('proxy'));
         }
         if (!empty($connection->getConfig('curl'))) {
-            foreach ($connection->getConfig('curl') as $k=>$v) {
+            foreach ($connection->getConfig('curl') as $k => $v) {
                 curl_setopt($conn, $k, $v);
             }
         }
@@ -98,16 +102,18 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
         //hard error
         if ($errorno>0) {
             $error = curl_error($conn);
-            self::$_curl = false;
+
+            /* @phpstan-ignore-next-line */
+            self::$curl = false;
             throw new ConnectionException($error, $request);
         }
 
 
-        $this->_logger->debug('Request body:', [
+        $this->logger->debug('Request body:', [
                 'connection' => $connection->getConfig(),
                 'payload'=> $request->getBody()
             ]);
-        $this->_logger->info(
+        $this->logger->info(
             'Request:',
             [
                     'url' => $url,
@@ -115,10 +121,10 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
                     'time' => $time
                 ]
         );
-        $this->_logger->debug('Response body:', [json_decode($responseString, true)]);
+        $this->logger->debug('Response body:', [json_decode($responseString, true)]);
         //soft error
         if ($response->hasError()) {
-            $this->_logger->error('Response error:', [$response->getError()]);
+            $this->logger->error('Response error:', [$response->getError()]);
             throw new ResponseException($request, $response);
         }
         return $response;
@@ -128,11 +134,11 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
      * @param bool $persistent
      * @return false|resource
      */
-    protected function _getCurlConnection(bool $persistent=true)
+    protected function getCurlConnection(bool $persistent = true)
     {
-        if (!$persistent || !self::$_curl) {
-            self::$_curl = curl_init();
+        if (!$persistent || !self::$curl) {
+            self::$curl = curl_init();
         }
-        return self::$_curl;
+        return self::$curl;
     }
 }

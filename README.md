@@ -1,11 +1,23 @@
 manticoresearch-php
 ===================
-
 [![Build Status](https://travis-ci.org/manticoresoftware/manticoresearch-php.svg?branch=master)](https://travis-ci.org/manticoresoftware/manticoresearch-php)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/manticoresoftware/manticoresearch-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/manticoresoftware/manticoresearch-php/?branch=master)
+[![codecov.io](https://codecov.io/github/manticoresoftware/manticoresearch-php/coverage.svg)](https://codecov.io/github/manticoresoftware/manticoresearch-php)
 [![Latest Stable Version](https://poser.pugx.org/manticoresoftware/manticoresearch-php/v/stable)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
 [![License](https://poser.pugx.org/manticoresoftware/manticoresearch-php/license)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
 [![Slack][slack-badge]][slack-url]
+
+[![Total Downloads](https://poser.pugx.org/manticoresoftware/manticoresearch-php/downloads)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
+[![Monthly Downloads](https://poser.pugx.org/manticoresoftware/manticoresearch-php/d/monthly)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
+[![Daily Downloads](https://poser.pugx.org/manticoresoftware/manticoresearch-php/d/daily)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
+[![composer.lock](https://poser.pugx.org/manticoresoftware/manticoresearch-php/composerlock)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
+
+[![GitHub Code Size](https://img.shields.io/github/languages/code-size/manticoresoftware/manticoresearch-php)](https://github.com/manticoresoftware/manticoresearch-php)
+[![GitHub Repo Size](https://img.shields.io/github/repo-size/manticoresoftware/manticoresearch-php)](https://github.com/manticoresoftware/manticoresearch-php)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/manticoresoftware/manticoresearch-php)](https://github.com/manticoresoftware/manticoresearch-php)
+[![GitHub Activity](https://img.shields.io/github/commit-activity/m/manticoresoftware/manticoresearch-php)](https://github.com/manticoresoftware/manticoresearch-php)
+[![GitHub Issues](https://img.shields.io/github/issues/manticoresoftware/manticoresearch-php)](https://github.com/manticoresoftware/manticoresearch-php/issues)
+
 
 Official PHP client for Manticore Search.
 
@@ -134,12 +146,22 @@ foreach($results as $doc) {
 
 
 
-### Update a document:
+### Update documents:
+
+By document id:
 
 ```php
 $index->updateDocument(['year'=>2019],4);
 
 ```
+
+By query:
+
+```php
+$index->updateDocument(['year'=>2019],['match'=>['*'=>'team']]);
+
+```
+
 
 ### Get index schema:
 ```php
@@ -150,6 +172,13 @@ $index->describe();
 
 ```php
 $index->drop();
+```
+
+The above will fail if the index does not exist.  To get around this pass a parameter of true, which cause the failure
+to be silent.
+
+```php
+$index->drop(true);
 ```
 
 

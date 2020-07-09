@@ -26,6 +26,6 @@ class ScriptFields extends Query
 
     public function toArray()
     {
-        return $this->_toArray(json_decode(json_encode($this->obj), true));
+        return $this->convertArray(json_decode(json_encode($this->obj), true));
     }
 }

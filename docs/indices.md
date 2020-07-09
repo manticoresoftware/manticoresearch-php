@@ -14,9 +14,14 @@ Create a new index.
 * `settings` - various index settings
 * `silent` -  optional, if set to true, the create will not fail with error if there is already an index with the designated name
 
-`body` require presence of `columns`  array for RT and PQ indexes where keys are the column names. Each column requires a  `type` defined.
-`text` type support 'indexed' and 'stored' options.
-Index settings can be set in `settings` parameter. By default, the index type is Real-Time. For PQ or distributed indexes, the options must contain a `type` property.
+`body` require presence of `columns`  array for RT and PQ indexes where keys are the field names.
+
+Each field is an array that must contain `type` defined.
+`text` type also support `options`, current possible values are `indexed` and `stored`.
+
+Index settings can be set in `settings` parameter.
+
+By default, the index type is Real-Time. For PQ or distributed indexes, the options must contain a `type` property.
  
 
         $params = [
@@ -87,7 +92,7 @@ Expects `index` name.
             'body' => [
                 'operation' => 'add',
                 'column' => [
-                    'name' => 'tag'
+                    'name' => 'tag',
                     'type'=> 'string'
                 ]
                    
@@ -174,7 +179,20 @@ Expects `index` name.
                 'pattern' => 'propertyname'
             ]
         ];
-        $response = $client->indices()->status($params);             
+        $response = $client->indices()->status($params);
+
+Settings
+========
+Return a report with index's current settings.
+
+Expects `index` name.
+
+
+        $params = [
+            'index' => 'testrt',
+        ];
+        $response = $client->indices()->status($params);
+
 Truncate
 ========
 Truncates an index. 

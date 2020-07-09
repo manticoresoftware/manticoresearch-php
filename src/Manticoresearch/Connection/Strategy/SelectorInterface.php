@@ -3,7 +3,6 @@
 
 namespace Manticoresearch\Connection\Strategy;
 
-
 use Manticoresearch\Connection;
 
 /**
@@ -14,7 +13,7 @@ interface SelectorInterface
 {
     /**
      * @param array $connections
-     * @return mixed
+     * @return Connection
      */
     public function getConnection(array $connections):Connection;
 }

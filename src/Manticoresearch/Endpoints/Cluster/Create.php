@@ -2,6 +2,7 @@
 
 namespace Manticoresearch\Endpoints\Cluster;
 
+use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Endpoints\Sql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
@@ -11,17 +12,17 @@ use Manticoresearch\Utils;
  * Class Status
  * @package Manticoresearch\Endpoints\Indices
  */
-class Create extends Sql
+class Create extends EmulateBySql
 {
     use Utils;
     /**
      * @var string
      */
-    protected $_cluster;
+    protected $cluster;
 
     public function setBody($params = null)
     {
-        if (isset($this->_cluster)) {
+        if (isset($this->cluster)) {
             $options = [];
             if (isset($params['path'])) {
                 $options[] = "'" . $params['path'] . "' AS path";
@@ -29,7 +30,7 @@ class Create extends Sql
             if (isset($params['nodes'])) {
                 $options[] = "'" . $params['nodes'] . "' AS nodes";
             }
-            return parent::setBody(['query' => "CREATE CLUSTER " . $this->_cluster .
+            return parent::setBody(['query' => "CREATE CLUSTER " . $this->cluster .
                 ((count($options) > 0) ? ' ' . implode(',', $options) : '')]);
         }
         throw new RuntimeException('Cluster name is missing.');
@@ -40,7 +41,7 @@ class Create extends Sql
      */
     public function getCLuster()
     {
-        return $this->_cluster;
+        return $this->cluster;
     }
 
     /**
@@ -48,7 +49,6 @@ class Create extends Sql
      */
     public function setCluster($cluster)
     {
-        $this->_cluster = $cluster;
+        $this->cluster = $cluster;
     }
-
 }

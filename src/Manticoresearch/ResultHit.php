@@ -13,33 +13,33 @@ namespace Manticoresearch;
  */
 class ResultHit
 {
-    private $_data;
+    protected $data;
 
     public function __construct($data = [])
     {
-        $this->_data = $data;
-
+        $this->data = $data;
     }
 
     public function getId()
     {
-        return $this->_data['_id'];
+        return $this->data['_id'];
     }
 
     public function setId($id)
     {
-        $this->_data['id'] = $id;
+        $this->data['_id'] = $id;
     }
 
     public function getScore()
     {
-        return $this->_data['_score'];
+        return $this->data['_score'];
     }
 
     public function getHighlight()
     {
-        return $this->_data['highlight'];
+        return $this->data['highlight'];
     }
+
 
     public function __get(string $key)
     {
@@ -53,8 +53,8 @@ class ResultHit
 
     public function get($key)
     {
-        if (isset($this->_data['_source'][$key])) {
-            return $this->_data['_source'][$key];
+        if (isset($this->data['_source'][$key])) {
+            return $this->data['_source'][$key];
         }
         return [];
     }
@@ -67,7 +67,6 @@ class ResultHit
 
     public function getData()
     {
-        return $this->_data['_source'];
+        return $this->data['_source'];
     }
-
 }

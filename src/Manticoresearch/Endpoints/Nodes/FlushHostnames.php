@@ -11,11 +11,10 @@ class FlushHostnames extends EmulateBySql
     /**
      * @var string
      */
-    protected $_index;
+    protected $index;
 
     public function setBody($params = null)
     {
         return parent::setBody(['query' => "FLUSH HOSTNAMES"]);
     }
-
 }

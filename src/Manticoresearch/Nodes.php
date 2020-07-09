@@ -3,7 +3,6 @@
 
 namespace Manticoresearch;
 
-
 use Manticoresearch\Endpoints\Nodes\AgentStatus;
 use Manticoresearch\Endpoints\Nodes\CreateFunction;
 use Manticoresearch\Endpoints\Nodes\CreatePlugin;
@@ -28,8 +27,8 @@ class Nodes
     /**
      * @var Client
      */
-    protected $_client;
-    protected $_params;
+    protected $client;
+    protected $params;
 
     /**
      * Nodes namespace
@@ -37,16 +36,16 @@ class Nodes
      */
     public function __construct($client)
     {
-        $this->_client = $client;
-        $this->_params =['responseClass'=>'Manticoresearch\\Response\\SqlToArray'];
+        $this->client = $client;
+        $this->params =['responseClass'=>'Manticoresearch\\Response\\SqlToArray'];
     }
 
-    public function agentstatus($params=[])
+    public function agentstatus($params = [])
     {
         $body = $params['body']??[];
         $endpoint = new AgentStatus();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
     }
 
@@ -55,7 +54,7 @@ class Nodes
         $body = $params['body'];
         $endpoint = new CreateFunction();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
     }
 
@@ -64,7 +63,7 @@ class Nodes
         $body = $params['body'];
         $endpoint = new CreatePlugin();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
     }
 
@@ -73,7 +72,7 @@ class Nodes
         $body = $params['body'];
         $endpoint = new Debug();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
     }
 
@@ -82,7 +81,7 @@ class Nodes
         $body = $params['body'];
         $endpoint = new DropFunction();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
     }
 
@@ -91,61 +90,61 @@ class Nodes
         $body = $params['body'];
         $endpoint = new DropPlugin();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
     }
 
-    public function flushattributes($params=[])
+    public function flushattributes($params = [])
     {
         $body = $params['body']??[];
         $endpoint = new FlushAttributes();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
     }
 
-    public function flushhostnames($params=[])
+    public function flushhostnames($params = [])
     {
         $body = $params['body']??[];
         $endpoint = new FlushHostnames();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
     }
 
-    public function flushlogs($params=[])
+    public function flushlogs($params = [])
     {
         $body = $params['body']??[];
         $endpoint = new FlushLogs();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
     }
 
-    public function plugins($params=[])
+    public function plugins($params = [])
     {
         $body = $params['body']??[];
         $endpoint = new Plugins();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
     }
 
-    public function reloadindexes($params=[])
+    public function reloadindexes($params = [])
     {
         $body = $params['body']??[];
         $endpoint = new ReloadIndexes();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
     }
 
-    public function reloadplugins($params=[])
+    public function reloadplugins($params = [])
     {
         $body = $params['body']??[];
         $endpoint = new ReloadPlugins();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
     }
 
@@ -154,7 +153,7 @@ class Nodes
         $body = $params['body'];
         $endpoint = new Set();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
     }
 
@@ -162,40 +161,39 @@ class Nodes
      * @param array $params
      * @return mixed
      */
-    public function status($params=[])
+    public function status($params = [])
     {
         $body = $params['body']??[];
         $endpoint = new Status();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
-
     }
 
-    public function tables($params=[])
+    public function tables($params = [])
     {
         $body = $params['body']??[];
         $endpoint = new Tables();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
     }
 
-    public function threads($params=[])
+    public function threads($params = [])
     {
         $body = $params['body']??[];
         $endpoint = new Threads();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
     }
 
-    public function variables($params=[])
+    public function variables($params = [])
     {
         $body = $params['body']??[];
         $endpoint = new Variables();
         $endpoint->setBody($body);
-        $response = $this->_client->request($endpoint,$this->_params);
+        $response = $this->client->request($endpoint, $this->params);
         return  $response->getResponse();
     }
 }

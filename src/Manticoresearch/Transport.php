@@ -3,7 +3,6 @@
 
 namespace Manticoresearch;
 
-
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -16,12 +15,12 @@ class Transport
     /**
      * @var Connection
      */
-    protected $_connection;
+    protected $connection;
 
     /**
      * @var LoggerInterface|NullLogger
      */
-    protected $_logger;
+    protected $logger;
 
     /**
      * Transport constructor.
@@ -31,9 +30,9 @@ class Transport
     public function __construct(Connection $connection = null, LoggerInterface $logger = null)
     {
         if ($connection) {
-            $this->_connection = $connection;
+            $this->connection = $connection;
         }
-        $this->_logger = $logger ?? new NullLogger();
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
@@ -41,7 +40,7 @@ class Transport
      */
     public function getConnection()
     {
-        return $this->_connection;
+        return $this->connection;
     }
 
     /**
@@ -50,12 +49,12 @@ class Transport
      */
     public function setConnection(Connection $connection): Transport
     {
-        $this->_connection = $connection;
+        $this->connection = $connection;
         return $this;
     }
 
     /**
-     * @param $transport
+     * @param string $transport
      * @param Connection $connection
      * @param LoggerInterface $logger
      * @return mixed

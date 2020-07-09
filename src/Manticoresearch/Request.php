@@ -12,25 +12,25 @@ class Request
     /**
      * @var string
      */
-    protected $_path;
+    protected $path;
     /**
      * @var string
      */
-    protected $_method;
+    protected $method;
     /**
      * @var array|string
      */
-    protected $_body;
+    protected $body;
     /**
      * @var string
      */
-    protected $_query;
+    protected $query;
     /**
      * @var string
      */
-    protected $_content_type;
+    protected $content_type;
 
-    public function __construct($params=[])
+    public function __construct($params = [])
     {
         if (count($params)>0) {
             $this->setBody($params['body'] ?? []);
@@ -44,7 +44,7 @@ class Request
      */
     public function getPath()
     {
-        return $this->_path;
+        return $this->path;
     }
 
     /**
@@ -52,7 +52,7 @@ class Request
      */
     public function setPath($path)
     {
-        $this->_path = $path;
+        $this->path = $path;
     }
 
     /**
@@ -60,7 +60,7 @@ class Request
      */
     public function getBody()
     {
-        return $this->_body;
+        return $this->body;
     }
 
     /**
@@ -69,7 +69,7 @@ class Request
 
     public function setBody($body = null)
     {
-        $this->_body = $body;
+        $this->body = $body;
         return $this;
     }
 
@@ -78,7 +78,7 @@ class Request
      */
     public function getMethod()
     {
-        return $this->_method;
+        return $this->method;
     }
 
     /**
@@ -86,7 +86,7 @@ class Request
      */
     public function setMethod($method)
     {
-        $this->_method = $method;
+        $this->method = $method;
     }
 
     /**
@@ -94,7 +94,7 @@ class Request
      */
     public function getContentType()
     {
-        return $this->_content_type;
+        return $this->content_type;
     }
 
     /**
@@ -102,7 +102,7 @@ class Request
      */
     public function setContentType($content_type)
     {
-        $this->_content_type = $content_type;
+        $this->content_type = $content_type;
     }
 
     /**
@@ -110,7 +110,7 @@ class Request
      */
     public function getQuery()
     {
-        return $this->_query;
+        return $this->query;
     }
 
     /**
@@ -118,7 +118,7 @@ class Request
      */
     public function setQuery($query)
     {
-        $this->_query = $query;
+        $this->query = $query;
     }
     /*
      * #return string

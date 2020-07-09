@@ -3,11 +3,11 @@
 
 namespace Manticoresearch\Test;
 
-
 use Manticoresearch\Client;
+use Manticoresearch\Connection;
 use Manticoresearch\Connection\Strategy\Random;
-use Manticoresearch\Connection\Strategy\RoundRobin;
 use Manticoresearch\Exceptions\ConnectionException;
+use Manticoresearch\Test\Helper\PopulateHelperTest;
 use PHPUnit\Framework\TestCase;
 
 class ClientTest extends TestCase
@@ -18,10 +18,50 @@ class ClientTest extends TestCase
         $this->assertCount(1, $client->getConnections());
     }
 
+    public function testObjectStrategy()
+    {
+        $client = new Client(["connectionStrategy"  => new Connection\Strategy\RoundRobin()]);
+        $this->assertCount(1, $client->getConnections());
+    }
+
+    public function testClassnameStrategy()
+    {
+        $client = new Client(["connectionStrategy"  => 'Connection\Strategy\RoundRobin']);
+        $this->assertCount(1, $client->getConnections());
+    }
+
+    public function testCluster()
+    {
+        $client = new Client();
+        $this->assertInstanceOf('Manticoresearch\Cluster', $client->cluster());
+    }
+
+    public function testCreationWithConnection()
+    {
+        $params = [
+            'host' => $_SERVER['MS_HOST'],
+            'port' => $_SERVER['MS_PORT'],
+            'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
+        ];
+        $connection = new Connection($params);
+        $params = ['connections' => $connection];
+        $client = new Client($params);
+        $this->assertCount(1, $client->getConnections());
+    }
+
+    public function testCreationWithConnectionSingularArray()
+    {
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
+        $connection = new Connection($params);
+        $params = ['connections' => [$connection]];
+        $client = new Client($params);
+        $this->assertCount(1, $client->getConnections());
+    }
+
     public function testStrategyConfig()
     {
         $params = ['connectionStrategy' => 'Random'];
-        $client = new Client($params);
+        $client = Client::create($params); //new Client($params);
         $strategy = $client->getConnectionPool()->getStrategy();
         $this->assertInstanceOf(Random::class, $strategy);
     }
@@ -72,5 +112,25 @@ class ClientTest extends TestCase
         $client =  new Client($params);
         $this->expectException(ConnectionException::class);
         $client->search(['body'=>'']);
+    }
+
+    public function testGetLastResponse()
+    {
+        $helper = new PopulateHelperTest();
+        $helper->populateForKeywords();
+        $client = $helper->getClient();
+
+        $payload = [
+            'body' => [
+                'index' => 'products',
+                'query' => [
+                    'match' => ['*' => 'broken'],
+                ],
+            ]
+        ];
+
+        $result = $client->search($payload);
+        $lastResponse = $client->getLastResponse()->getResponse();
+        $this->assertEquals($result, $lastResponse);
     }
 }

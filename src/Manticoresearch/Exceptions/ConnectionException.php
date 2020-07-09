@@ -4,7 +4,6 @@
 namespace Manticoresearch\Exceptions;
 
 use Manticoresearch\Request;
-use Throwable;
 
 /**
  * Class ConnectionException
@@ -15,16 +14,16 @@ class ConnectionException extends \RuntimeException implements ExceptionInterfac
     /**
      * @var Request
      */
-    protected $_request;
+    protected $request;
 
     /**
      * ConnectionException constructor.
      * @param string $message
      * @param Request|null $request
      */
-    public function __construct($message = '', Request $request=null)
+    public function __construct($message = '', Request $request = null)
     {
-        $this->_request = $request;
+        $this->request = $request;
         parent::__construct($message);
     }
 
@@ -33,6 +32,6 @@ class ConnectionException extends \RuntimeException implements ExceptionInterfac
      */
     public function getRequest()
     {
-        return $this->_request;
+        return $this->request;
     }
 }

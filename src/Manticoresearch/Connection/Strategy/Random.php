@@ -12,13 +12,11 @@ class Random implements SelectorInterface
 {
     /**
      * @param array $connections
-     * @return mixed
+     * @return Connection
      */
     public function getConnection(array $connections):Connection
     {
         shuffle($connections);
         return $connections[0];
-
     }
-
 }

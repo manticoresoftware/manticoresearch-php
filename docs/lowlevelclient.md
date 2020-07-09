@@ -28,7 +28,7 @@ Table of Contents
 
 * [Percolate searches](percolate.md)
 
-* [Keyword helpers](keywordhelpers.md)
+* [Query helpers](queryhelpers.md)
 
 * Administrative operations
 
@@ -139,6 +139,32 @@ $doc = [
 $response = $client->insert($doc);
 ```
 
+If the index is part of a cluster, the `body` must also contain the cluster name:
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'cluster' => 'testcluster',
+        'id' => 3,
+        'doc' => [
+            'gid' => 10,
+            'title' => 'some title here',
+            'content' => 'some content here',
+            'newfield' => 'this is a new field',
+            'unreal' => 'engine',
+            'real' => 8.99,
+            'j' => [
+                'hello' => ['testing', 'json', 'here'],
+                'numbers' => [1, 2, 3],
+                'value' => 10.0
+            ]
+        ]
+    ]
+];
+
+$response = $client->insert($doc);
+```
+
 ### Replace
 
 For complete reference of payload and response see Manticore's [Replace API](https://docs.manticoresearch.com/latest/html/http_reference/json_replace.html)
@@ -166,6 +192,24 @@ $doc = [
 $response = $client->replace($doc);
 ```
 
+If the index is part of a cluster, the `body` must also contain the cluster name:
+
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'cluster' => 'testcluster',
+        'id' => 3,
+        'doc' => [
+            'gid' => 10,
+            'content' => 'updated content here',
+        ]
+    ]
+];
+
+$response = $client->replace($doc);
+```
+
 ### Update
 
 For complete reference of payload and response see Manticore's [Update API](https://docs.manticoresearch.com/latest/html/http_reference/json_update.html)
@@ -174,13 +218,45 @@ For complete reference of payload and response see Manticore's [Update API](http
 
 - index name
 - document as array of properties
-- id as document id
+- id as document id or query array
 
-All are mandatory.
+If id is used, only one document can be updated:
 ```
 $doc = [
     'body' => [
         'index' => 'testrt',
+        'id' => 3,
+        'doc' => [
+            'gid' => 20,
+        ]
+    ]
+];
+
+$response = $client->update($doc);
+```
+
+With query it's possible to update multiple documents at a time:
+
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'query' => ['match'=>['*' =>'find me']],
+        'doc' => [
+            'gid' => 20,
+        ]
+    ]
+];
+
+$response = $client->update($doc);
+```
+
+If the index is part of a cluster, the `body` must also contain the cluster name:
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'cluster' => 'testcluster',
         'id' => 3,
         'doc' => [
             'gid' => 20,
@@ -206,6 +282,20 @@ All are mandatory.
 $doc = [
     'body' => [
         'index' => 'testrt',
+        'id' => 3
+    ]
+];
+
+$response = $client->delete($doc);
+```
+
+If the index is part of a cluster, the `body` must also contain the cluster name:
+
+```
+$doc = [
+    'body' => [
+        'index' => 'testrt',
+        'cluster' => 'testcluster',
         'id' => 3
     ]
 ];

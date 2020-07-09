@@ -2,6 +2,7 @@
 
 namespace Manticoresearch\Endpoints\Cluster;
 
+use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Endpoints\Sql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
@@ -11,31 +12,30 @@ use Manticoresearch\Utils;
  * Class Status
  * @package Manticoresearch\Endpoints\Indices
  */
-class Join extends Sql
+class Join extends EmulateBySql
 {
     use Utils;
     /**
      * @var string
      */
-    protected $_cluster;
+    protected $cluster;
 
     public function setBody($params = null)
     {
-        if (isset($this->_cluster)) {
-            if(isset($params['node'])) {
-                $this->_body = ['query' => "JOIN CLUSTER ".$this->_cluster." AT ".$params['node']];
-            }else{
+        if (isset($this->cluster)) {
+            if (isset($params['node'])) {
+                return parent::setBody(['query' => "JOIN CLUSTER ".$this->cluster." AT '".$params['node']."'"]);
+            } else {
                 $options =[];
-                if(isset($params['path'])) {
+                if (isset($params['path'])) {
                     $options[] = "'".$params['path']. "' AS path";
                 }
-                if(isset($params['nodes'])) {
+                if (isset($params['nodes'])) {
                     $options[] = "'".$params['nodes']. "' AS nodes";
                 }
-                $this->_body = ['query' => "JOIN CLUSTER ".$this->_cluster.
-                    ((count($options)>0)?" ".implode(',', $options):"")];
+                return parent::setBody(['query' => "JOIN CLUSTER ".$this->cluster.
+                    ((count($options)>0)?" ".implode(',', $options):"")]);
             }
-
         }
         throw new RuntimeException('Cluster name is missing.');
     }
@@ -44,7 +44,7 @@ class Join extends Sql
      */
     public function getCLuster()
     {
-        return $this->_cluster;
+        return $this->cluster;
     }
 
     /**
@@ -52,7 +52,6 @@ class Join extends Sql
      */
     public function setCluster($cluster)
     {
-        $this->_cluster = $cluster;
+        $this->cluster = $cluster;
     }
-
 }

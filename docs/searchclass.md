@@ -82,6 +82,7 @@ notFilter() executes a negation of the operator.
 
 ```php
 $search->filter('year', 'lte', 2000);
+$search->filter('year', 'range', [1960,1992]);
 ```
 
 The functions can also accept a single parameter as a filter class like Range(),  Equals() or Distance()
@@ -136,6 +137,40 @@ $search->sort([
                ]
            ]);
 ````
+### highlight()
+
+Enables highlighting.
+
+The function can accept two parameters and none is mandatory.
+
+- fields - array with field names from which to extract the texts for highlighting. If missing, all `text` fields will be used
+- settings - array with settings of highlighting. For more details check HTTP API [Text highlighting](https://docs.manticoresearch.com/latest/html/http_reference/json_search.html#text-highlighting) 
+
+```php
+$search->highlight();
+```
+
+```php
+$search->highlight(
+    ['title'],
+    ['pre_tags' => '<i>','post_tags'=>'</i>']
+);
+```
+
+The highlight excerpts are attached to each hit. They can be retrieved with `getHighlight()` function of [ResultHit](searchresults.md#resulthit-object).
+
+`getHighlight()`  will contain a list of excerpts  for each field declared for highlighing in the request.
+
+### setSource()
+
+By default all document fields are returned. This method can set which fields should be returned. It accepts several formats:
+
+- setSource('attr*') -  only fields like `attr*` will be returned
+- setSource(['attr1','attr2']) - only fields `attr1` and `attr2` will be returned
+- setSource([
+    'included' => ['attr1','attri*'],
+    'excludes' => ['desc*']
+  ]) -  field `attr1` and fields like `attri*` are included, any field like `desc*` are excluded. If an attribute is found in both lists, the excluding wins
 
 ### profile()
 

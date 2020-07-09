@@ -18,7 +18,7 @@ interface TransportInterface
      * @param array $params
      * @return mixed
      */
-    public function execute(Request $request, $params=[]);
+    public function execute(Request $request, $params = []);
 
     /**
      * @return mixed

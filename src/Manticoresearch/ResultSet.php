@@ -15,85 +15,96 @@ namespace Manticoresearch;
  */
 class ResultSet implements \Iterator, \Countable
 {
-    private $_position = 0;
-    private $_response;
-    private $_array = [];
-    private $_total = 0;
-    private $_took;
-    private $_timed_out;
-    private $_profile;
+    /** @var int The position of the iterator through the result set */
+    protected $position = 0;
+
+    /** @var Response */
+    protected $response;
+
+    protected $array = [];
+
+    /** @var int|mixed Total number of results */
+    protected $total = 0;
+
+    protected $took;
+
+    /** @var mixed Did the query time out? */
+    protected $timed_out;
+
+    protected $profile;
 
     public function __construct($responseObj)
     {
-        $this->_response = $responseObj;
+        $this->response = $responseObj;
         $response = $responseObj->getResponse();
         if (isset($response['hits']['hits'])) {
-            $this->_array = $response['hits']['hits'];
-            $this->_total = $response['hits']['total'];
+            $this->array = $response['hits']['hits'];
+            $this->total = $response['hits']['total'];
         } else {
-            $this->_total = 0;
+            $this->total = 0;
         }
-        $this->_took = $response['took'];
-        $this->_timed_out = $response['timed_out'];
+        $this->took = $response['took'];
+        $this->timed_out = $response['timed_out'];
         if (isset($response['profile'])) {
-            $this->_profile = $response['profile'];
+            $this->profile = $response['profile'];
         }
-
     }
 
     public function rewind()
     {
-        $this->_position = 0;
+        $this->position = 0;
     }
 
     public function current()
     {
-        return new ResultHit($this->_array[$this->_position]);
+        return new ResultHit($this->array[$this->position]);
     }
 
     public function next()
     {
-        $this->_position++;
+        $this->position++;
     }
 
     public function valid()
     {
-        return isset($this->_array[$this->_position]);
+        return isset($this->array[$this->position]);
     }
 
     public function key()
     {
-        return $this->_position;
+        return $this->position;
     }
 
     public function getTotal()
     {
-        return $this->_total;
+        return $this->total;
     }
 
     public function getTime()
     {
-        return $this->_took;
+        return $this->took;
     }
 
     public function hasTimedout()
     {
-        return $this->_timed_out;
+        return $this->timed_out;
     }
 
+    /**
+     * @return Response
+     */
     public function getResponse()
     {
-        return $this->_response;
+        return $this->response;
     }
 
     public function count()
     {
-        return count($this->_array);
+        return count($this->array);
     }
 
     public function getProfile()
     {
-        return $this->_profile;
+        return $this->profile;
     }
-
 }

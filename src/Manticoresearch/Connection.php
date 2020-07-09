@@ -3,7 +3,7 @@
 
 namespace Manticoresearch;
 
-
+use Manticoresearch\Exceptions\RuntimeException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -19,7 +19,7 @@ class Connection
     /**
      * @var bool
      */
-    protected $_alive;
+    protected $alive;
 /*
  * $params['transport']  = transport class name
  * $params['host']       = hostname
@@ -54,7 +54,7 @@ class Connection
             'persistent' => true
         );
         $this->config = array_merge($this->config, $params);
-        $this->_alive = true;
+        $this->alive = true;
     }
 
     /**
@@ -130,12 +130,12 @@ class Connection
     }
 
     /**
-     * @param integer $connecttimeout
+     * @param integer $connect_timeout
      * @return $this
      */
-    public function setConnectTimeout($connecttimeout): self
+    public function setConnectTimeout($connect_timeout): self
     {
-        $this->config['connect_timeout'] = (int)$connecttimeout;
+        $this->config['connect_timeout'] = (int)$connect_timeout;
         return $this;
     }
 
@@ -172,7 +172,7 @@ class Connection
      */
     public function getTransportHandler(LoggerInterface $logger)
     {
-        return Transport::create($this->getTransport(), $this,$logger);
+        return Transport::create($this->getTransport(), $this, $logger);
     }
 
     /**
@@ -192,22 +192,22 @@ class Connection
      * @return mixed|null
      *
      */
-    public function getConfig($key =  null)
+    public function getConfig($key = null)
     {
-        if($key === null) {
+        if ($key === null) {
             return $this->config;
         }
         return $this->config[$key] ?? null;
     }
 
     /**
-     * @param array $params|self
-     * @return array|static
+     * @param array|Connection $params|self
+     * @return Connection
      */
     public static function create($params)
     {
         if (is_array($params)) {
-            return new static($params);
+            return new self($params);
         }
         if ($params instanceof self) {
             return $params;
@@ -220,7 +220,7 @@ class Connection
      */
     public function isAlive(): bool
     {
-        return $this->_alive;
+        return $this->alive;
     }
 
     /**
@@ -228,6 +228,6 @@ class Connection
      */
     public function mark(bool $state)
     {
-        $this->_alive = $state;
+        $this->alive = $state;
     }
 }

@@ -13,11 +13,11 @@ class Doc extends \Manticoresearch\Request
     /**
      * @var string
      */
-    protected $_index;
+    protected $index;
     /**
      * @var integer
      */
-    protected $_id;
+    protected $id;
 
     /**
      * @return mixed|string
@@ -32,11 +32,11 @@ class Doc extends \Manticoresearch\Request
      */
     public function getPath()
     {
-        if (isset($this->_index)) {
-            if (isset($this->_id)) {
-                return "/json/pq/" . $this->_index . "/doc/" . $this->_id;
+        if (isset($this->index)) {
+            if (isset($this->id)) {
+                return "/json/pq/" . $this->index . "/doc/" . $this->id;
             } else {
-                return "/json/pq/" . $this->_index . "/doc";
+                return "/json/pq/" . $this->index . "/doc";
             }
         }
         throw new RuntimeException('Index name is missing.');
@@ -47,7 +47,7 @@ class Doc extends \Manticoresearch\Request
      */
     public function getIndex()
     {
-        return $this->_index;
+        return $this->index;
     }
 
     /**
@@ -55,7 +55,7 @@ class Doc extends \Manticoresearch\Request
      */
     public function setIndex($index)
     {
-        $this->_index = $index;
+        $this->index = $index;
     }
 
     /**
@@ -63,7 +63,7 @@ class Doc extends \Manticoresearch\Request
      */
     public function getId()
     {
-        return $this->_id;
+        return $this->id;
     }
 
     /**
@@ -71,7 +71,6 @@ class Doc extends \Manticoresearch\Request
      */
     public function setId($id)
     {
-        $this->_id = $id;
+        $this->id = $id;
     }
-
 }
