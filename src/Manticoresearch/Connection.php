@@ -212,7 +212,7 @@ class Connection
         if ($params instanceof self) {
             return $params;
         }
-        throw new \RuntimeException('connection must receive array of parameters or self');
+        throw new RuntimeException('connection must receive array of parameters or self');
     }
 
     /**
