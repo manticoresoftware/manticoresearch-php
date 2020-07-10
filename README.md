@@ -57,7 +57,7 @@ Install the Manticore Search PHP client using [composer](https://getcomposer.org
 ```bash
 composer require manticoresoftware/manticoresearch-php
 ```
-### Initiate the index:
+### Initiate an index:
 
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
@@ -68,7 +68,7 @@ $index = new \Manticoresearch\Index($client);
 $index->setName('movies'); 
 ```
 
-or alternative way
+or alternatively:
 
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
@@ -78,7 +78,7 @@ $client = new \Manticoresearch\Client($config);
 $index = $client->index('movies');
 ```
 
-### Create index:
+### Create the index:
 
 ```php
 $index->create([
