@@ -17,7 +17,7 @@ Create a new index.
 `body` require presence of `columns`  array for RT and PQ indexes where keys are the field names.
 
 Each field is an array that must contain `type` defined.
-`text` type also support `options`, current possible values are `indexed` and `stored`.
+`text` type also support `options`, with possible values `indexed`, `stored` or `attribute`.
 
 Index settings can be set in `settings` parameter.
 
