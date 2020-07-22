@@ -37,7 +37,12 @@ Requirements
 Requires PHP 7.1 or greater with the native JSON extension. Default transport handler uses the cURL extension.
 
 Minimum Manticore Search version is 2.5.1 with HTTP protocol enabled.
-Some commands which are not yet implemented natively in the HTTP protocol are emulated via `/sql` and require Manticore Search 3.4. 
+
+| Manticore Search  | manticoresearch-php |
+| ----------------- | ------------------- |
+| >= 3.5.0          | 1.4                 |
+| <= 3.4.x          | 1.3                 |
+| >= 2.5.1,<3.4.0   | 1.2                 |
 
 Documentation
 -------------
