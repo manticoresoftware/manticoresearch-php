@@ -51,7 +51,7 @@ Full documentation is available in  [docs](docs) folder.
 
 
 
-Manticore Search server documentation: https://docs.manticoresearch.com/latest/html/.
+Manticore Search server documentation: https://manual.manticoresearch.com/.
 
 
 Getting Started
@@ -63,17 +63,6 @@ Install the Manticore Search PHP client using [composer](https://getcomposer.org
 composer require manticoresoftware/manticoresearch-php
 ```
 ### Initiate an index:
-
-```php
-require_once __DIR__ . '/vendor/autoload.php';
-
-$config = ['host'=>'127.0.0.1','port'=>9308];
-$client = new \Manticoresearch\Client($config);
-$index = new \Manticoresearch\Index($client);
-$index->setName('movies'); 
-```
-
-or alternatively:
 
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
