@@ -752,4 +752,13 @@ class SearchTest extends TestCase
         $client = self::$search->getClient();
         $this->assertInstanceOf('Manticoresearch\Client', $client);
     }
+
+    public function testFacets()
+    {
+        $results = self::$search->filter('year', 'range', [1960,1992])->facet('year')->get();
+        $facets = $results->getFacets();
+        $this->assertCount(1, $facets);
+        $this->assertArrayHasKey('year', $facets);
+        $this->assertCount(3, $facets['year']['buckets']);
+    }
 }

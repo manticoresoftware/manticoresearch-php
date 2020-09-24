@@ -33,6 +33,8 @@ class ResultSet implements \Iterator, \Countable
 
     protected $profile;
 
+    protected $facets;
+
     public function __construct($responseObj)
     {
         $this->response = $responseObj;
@@ -47,6 +49,9 @@ class ResultSet implements \Iterator, \Countable
         $this->timed_out = $response['timed_out'];
         if (isset($response['profile'])) {
             $this->profile = $response['profile'];
+        }
+        if (isset($response['aggregations'])) {
+            $this->facets = $response['aggregations'];
         }
     }
 
@@ -106,5 +111,10 @@ class ResultSet implements \Iterator, \Countable
     public function getProfile()
     {
         return $this->profile;
+    }
+
+    public function getFacets()
+    {
+        return $this->facets;
     }
 }

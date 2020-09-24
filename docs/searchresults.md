@@ -71,16 +71,40 @@ Whenever the query timed out:
 $result->hasTimedout();
 ```
 
-Count of elements:
-```php
-$result->count();
-```
+Facets (aggregations):
 
-Profiling information (if query has profiling enabled):
 ```php
-$result->getProfile();
+$result->getFacets();
 ```
+Returns an associative array with the requested facets, where a facet can be identified by the selected facet alias.
+Each facet is an array containing the faceted values and counts in a `buckets` array:
 
+``` php
+$facets = $results->getFacets();
+$year_facet = $facets['year'];
+print_r($year_facet);
+
+(
+   [buckets] => Array
+                (
+                    [0] => Array
+                        (
+                            [key] => 1992
+                            [doc_count] => 1
+                        )
+                    [1] => Array
+                        (
+                            [key] => 1986
+                            [doc_count] => 1
+                        )
+                    [2] => Array
+                        (
+                            [key] => 1979
+                            [doc_count] => 1
+                        )
+   )
+)
+```
  
  ## ResultHit object
  
