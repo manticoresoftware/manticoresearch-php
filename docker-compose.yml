@@ -12,7 +12,7 @@ services:
 
 
  manticoresearch-manticore:
-   image: manticoresearch/manticore
+   image: manticoresearch/manticore:dev
    expose:
     - 9306
     - 9312

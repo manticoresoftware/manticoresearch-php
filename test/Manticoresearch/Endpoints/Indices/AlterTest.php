@@ -71,7 +71,7 @@ class AlterTest extends \PHPUnit\Framework\TestCase
                 'Properties' => 'indexed stored',
             ]
         ];
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertEquals(array_keys($expectedResponse), array_keys($response));
     }
 
     public function testIndexAddColumn()
@@ -117,7 +117,7 @@ class AlterTest extends \PHPUnit\Framework\TestCase
                     'Properties' => '',
                 ]
         ];
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertEquals(array_keys($expectedResponse), array_keys($response));
     }
 
     public function testSetGetIndex()

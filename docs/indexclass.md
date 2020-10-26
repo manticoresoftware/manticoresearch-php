@@ -39,8 +39,10 @@ Creates the index, accepts:
 - silent - default is false, if true, no error is returned if an index with same name already exists
 
 Each field is an array consisting of:
-- `type` -  the field/attribute type
-- `options` -  an array of options of the field, currently only `text` can have `indexed`,`stored` (default is both)
+- `type` -  the [field/attribute type](https://manual.manticoresearch.com/Creating_an_index/Data_types)
+- `options` -  an array of options of the field, `text` can have `indexed`,`stored` (default is both) and
+ `string` can have `attribute` (default) and `indexed`
+
 
 Example:
 

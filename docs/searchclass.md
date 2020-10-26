@@ -172,6 +172,21 @@ By default all document fields are returned. This method can set which fields sh
     'excludes' => ['desc*']
   ]) -  field `attr1` and fields like `attri*` are included, any field like `desc*` are excluded. If an attribute is found in both lists, the excluding wins
 
+
+### facet()
+Add a facet (aggregation).
+
+```php
+$search->facet($field, $group = null, $limit = null);
+```
+Parameters:
+ * attribute name. Can also be an expression name. Mandatory.
+ * facet alias. If not set, the attribute name will be used.
+ * a limit on the number of facet values to return
+ 
+The facets will be returned in the result set and can be retrieved with [ResultSet:getFacets()](searchresults.md#resultset-object).
+   
+
 ### profile()
 
 If included, result set will provide query profiling.

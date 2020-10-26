@@ -43,6 +43,15 @@ Constructor expects a string with a full-text match expression.
  ```php
 $bool->must(new \Manticoresearch\Query\QueryString('"team of explorers"/2'));
 ```
+## In()
+
+Creates a `in` filter.
+
+Expects two arguments: an attribute or alias name and an array with values
+
+ ```php
+$bool->must(new \Manticoresearch\Query\In('year', [2014,2015,2016]));
+```
 
 ## Equals()
 

@@ -50,8 +50,13 @@ class Index
         return $result->valid() ? $result->current() : null;
     }
 
-    public function addDocument($data, $id = null)
+    public function addDocument($data, $id = 0)
     {
+        if (is_object($data)) {
+            $data = (array) $data;
+        } elseif (is_string($data)) {
+            $data = json_decode($data, true);
+        }
         $params = [
             'body' => [
                 'index' => $this->index,
@@ -59,6 +64,7 @@ class Index
                 'doc' => $data
             ]
         ];
+
         if ($this->cluster !== null) {
             $params['body']['cluster'] = $this->cluster;
         }
@@ -69,8 +75,17 @@ class Index
     {
         $toinsert = [];
         foreach ($documents as $document) {
-            $id = $document['id'];
-            unset($document['id']);
+            if (is_object($document)) {
+                $document = (array) $document;
+            } elseif (is_string($document)) {
+                $document = json_decode($document, true);
+            }
+            if (isset($document['id'])) {
+                $id = $document['id'];
+                unset($document['id']);
+            } else {
+                $id = 0;
+            }
             $insert = [
                 'index' => $this->index,
                 'id' => $id,
@@ -150,6 +165,11 @@ class Index
 
     public function replaceDocument($data, $id)
     {
+        if (is_object($data)) {
+            $data = (array) $data;
+        } elseif (is_string($data)) {
+            $data = json_decode($data, true);
+        }
         $params = [
             'body' => [
                 'index' => $this->index,
@@ -167,6 +187,11 @@ class Index
     {
         $toreplace = [];
         foreach ($documents as $document) {
+            if (is_object($document)) {
+                $document = (array) $document;
+            } elseif (is_string($document)) {
+                $document = json_decode($document, true);
+            }
             $id = $document['id'];
             unset($document['id']);
             $replace = [

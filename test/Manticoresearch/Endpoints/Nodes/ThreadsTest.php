@@ -15,17 +15,7 @@ class ThreadsTest extends \PHPUnit\Framework\TestCase
         // there is only one key returned, but it is always a different number
         $index = array_keys($response);
         $response2 = $response[$index[0]];
-
-        // get the keys
-        $keys = array_keys($response2);
-        $this->assertEquals([
-            'Name',
-            'Proto',
-            'State',
-            'Host',
-            'Time',
-            'Info'
-        ], $keys);
+        $this->assertArrayHasKey('Info', $response2);
     }
 
     public function testSetBody()

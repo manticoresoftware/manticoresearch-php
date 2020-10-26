@@ -21,10 +21,10 @@ services:
   -  docker
 
 before_install:
-  - docker pull manticoresearch/manticore
+  - docker pull manticoresearch/manticore:dev
   - docker network create manticore
-  - docker run --rm --publish 9308:9308 --network manticore --name=manticoresearch-manticore --detach manticoresearch/manticore
-  - docker run --rm --publish 5308:9308 --network manticore --name=manticoresearch-manticore-2 --detach manticoresearch/manticore
+  - docker run --rm --publish 9308:9308 --network manticore --name=manticoresearch-manticore --detach manticoresearch/manticore:dev
+  - docker run --rm --publish 5308:9308 --network manticore --name=manticoresearch-manticore-2 --detach manticoresearch/manticore:dev
   - sudo apt update && sudo apt install php-json zip unzip git
 env:
   global:

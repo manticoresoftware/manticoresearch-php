@@ -8,6 +8,7 @@ use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\Distance;
 use Manticoresearch\Query\Equals;
+use Manticoresearch\Query\In;
 use Manticoresearch\Query\Match;
 use Manticoresearch\Query\Range;
 use Manticoresearch\ResultSet;
@@ -549,6 +550,15 @@ class SearchTest extends TestCase
         $this->assertCount(1, $result);
     }
 
+    public function testInFilter()
+    {
+        $q = new BoolQuery();
+        $q->must(new Match(['query' => 'team of explorers', 'operator' => 'or'], '*'));
+        $q->must(new In('year', [1992,2014]));
+        $result = self::$search->search($q)->get();
+        $this->assertCount(2, $result);
+    }
+
     public function testBoolQueryMutipleFilters2()
     {
         $q = new BoolQuery();
@@ -741,5 +751,14 @@ class SearchTest extends TestCase
     {
         $client = self::$search->getClient();
         $this->assertInstanceOf('Manticoresearch\Client', $client);
+    }
+
+    public function testFacets()
+    {
+        $results = self::$search->filter('year', 'range', [1960,1992])->facet('year')->get();
+        $facets = $results->getFacets();
+        $this->assertCount(1, $facets);
+        $this->assertArrayHasKey('year', $facets);
+        $this->assertCount(3, $facets['year']['buckets']);
     }
 }

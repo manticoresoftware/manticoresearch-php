@@ -204,7 +204,7 @@ Optional `body` can contain formatting of the result by setting `columns` (numbe
                 'format' => 'sphinxql'
             ]
         ];
-        $response = $client->nodes()->tables($params);                    
+        $response = $client->nodes()->threads($params);                    
 Variables
 =========
 
@@ -218,4 +218,4 @@ Optional it can return the value of a single server variable by specifying in `v
                 'variable_name' => 'character_set_client'
             ]
         ];
-        $response = $client->nodes()->tables($params);                                                                                                                            
+        $response = $client->nodes()->variables($params);                                                                                                                            

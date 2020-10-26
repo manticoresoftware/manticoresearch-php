@@ -37,7 +37,12 @@ Requirements
 Requires PHP 7.1 or greater with the native JSON extension. Default transport handler uses the cURL extension.
 
 Minimum Manticore Search version is 2.5.1 with HTTP protocol enabled.
-Some commands which are not yet implemented natively in the HTTP protocol are emulated via `/sql` and require Manticore Search 3.4. 
+
+| Manticore Search  | manticoresearch-php |
+| ----------------- | ------------------- |
+| >= 3.5.0          | 1.4                 |
+| <= 3.4.x          | 1.3                 |
+| >= 2.5.1,<3.4.0   | 1.2                 |
 
 Documentation
 -------------
@@ -46,7 +51,7 @@ Full documentation is available in  [docs](docs) folder.
 
 
 
-Manticore Search server documentation: https://docs.manticoresearch.com/latest/html/.
+Manticore Search server documentation: https://manual.manticoresearch.com/.
 
 
 Getting Started
@@ -57,18 +62,17 @@ Install the Manticore Search PHP client using [composer](https://getcomposer.org
 ```bash
 composer require manticoresoftware/manticoresearch-php
 ```
-### Initiate the index:
+### Initiate an index:
 
 ```php
-   require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
-   $config = ['host'=>'127.0.0.1','port'=>9308];
-   $client = new \Manticoresearch\Client($config);
-   $index = new \Manticoresearch\Index($client);
-   $index->setName('movies'); 
+$config = ['host'=>'127.0.0.1','port'=>9308];
+$client = new \Manticoresearch\Client($config);
+$index = $client->index('movies');
 ```
 
-### Create index:
+### Create the index:
 
 ```php
 $index->create([

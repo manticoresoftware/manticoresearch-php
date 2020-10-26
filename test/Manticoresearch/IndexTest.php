@@ -316,6 +316,7 @@ class IndexTest extends TestCase
             ],
             1
         );
+
         $index->addDocuments([
             ['id' => 2, 'title' => 'Interstellar', 'plot' => 'A team of explorers travel through a wormhole in space' .
                 ' in an attempt to ensure humanity\'s survival.', 'year' => 2014, 'rating' => 8.5],
@@ -376,6 +377,16 @@ class IndexTest extends TestCase
         $results = $index->search('')
             ->get();
         $this->assertCount(0, $results);
+
+        $newdoc ='{"title":"Tenet","plot":"Armed with only one word, Tenet, and fighting for the survival of the '.
+            'entire world, a Protagonist journeys through a twilight world of international espionage on a mission '.
+            'that will unfold in something beyond real time","year":2020,"rating":8.8}';
+        $index->addDocument($newdoc);
+        $index->addDocument(json_decode($newdoc));
+        $results = $index->search('tenet')->get();
+        $this->assertCount(2, $results);
+
+
         $response = $index->drop();
         $this->assertEquals('', $response['error']);
     }

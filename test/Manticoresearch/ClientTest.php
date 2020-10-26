@@ -36,6 +36,23 @@ class ClientTest extends TestCase
         $this->assertInstanceOf('Manticoresearch\Cluster', $client->cluster());
     }
 
+    public function testIndex(): void
+    {
+        $client = new Client();
+        $index = $client->index();
+
+        $this->assertInstanceOf('Manticoresearch\Index', $index);
+    }
+
+    public function testIndexName(): void
+    {
+        $client = new Client();
+        $index = $client->index('video');
+
+        $this->assertInstanceOf('Manticoresearch\Index', $index);
+        $this->assertEquals('video', $index->getName());
+    }
+
     public function testCreationWithConnection()
     {
         $params = [

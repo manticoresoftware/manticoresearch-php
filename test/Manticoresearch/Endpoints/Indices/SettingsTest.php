@@ -29,9 +29,7 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
     {
         $response = self::$client->indices()->settings(['index' => 'products']);
 
-        $expectedSettings = "min_prefix_len = 1\n" .
-                            "min_infix_len = 3\n" .
-                            "charset_table = non_cjk\n";
+        $expectedSettings = "min_infix_len = 3" ;
 
         $this->assertEquals(['settings' => $expectedSettings], $response);
     }
