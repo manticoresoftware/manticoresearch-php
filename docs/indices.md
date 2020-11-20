@@ -17,9 +17,10 @@ Create a new index.
 `body` require presence of `columns`  array for RT and PQ indexes where keys are the field names.
 
 Each field is an array that must contain `type` defined.
-`text` type also support `options`, with possible values `indexed`, `stored` or `attribute`.
+`text` type also support `options`, current possible values are `indexed` and `stored`.
 
-Index settings can be set in `settings` parameter.
+Index settings can be set in `settings` parameter. Some settings can have multiple entries, like `local` for distributed 
+indexes. In this case the value of the setting will be an array of values (see distributed index example below).
 
 By default, the index type is Real-Time. For PQ or distributed indexes, the options must contain a `type` property.
  
@@ -51,8 +52,10 @@ For distributed indexes, the body must have only the `options` array, since they
             'body' => [
                 'options' => [
                     'type' => 'distributed',
-                    'local' => 'index1'
-                    'local' => 'index2`
+                    'local' => [
+                        'index1'
+                        'index2`
+                    ]
                 ]
             ]
         ];

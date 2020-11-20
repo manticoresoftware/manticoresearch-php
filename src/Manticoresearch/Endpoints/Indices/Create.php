@@ -35,6 +35,13 @@ class Create extends EmulateBySql
             if (isset($params['settings'])) {
                 foreach ($params['settings'] as $name => $value) {
                     $options.=" ".$name." = '".$value."'";
+                    if (is_array($value)) {
+                        foreach ($value as $v) {
+                            $options.=" ".$name." = '".$v."'";
+                        }
+                    } else {
+                        $options.=" ".$name." = '".$value."'";
+                    }
                 }
             }
             return parent::setBody(['query' => "CREATE TABLE ".
