@@ -12,8 +12,6 @@ RUN echo 'PS1=$PS1A' >> ~/.bashrc
 RUN echo 'figlet -w 120 manticore unit testing' >> ~/.bashrc
 
 # install composer - see https://medium.com/@c.harrison/speedy-composer-installs-in-docker-builds-41eea6d0172b
-RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && \
-    composer global require hirak/prestissimo --no-plugins --no-scripts
-
+RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer 
 # Prevent the container from exiting
 CMD tail -f /dev/null
