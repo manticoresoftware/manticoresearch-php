@@ -47,6 +47,7 @@ Each field is an array consisting of:
 Example:
 
 ```php
+ $index->setName('mynewindex');
  $index->create([
     'title' => ['type' => 'text'],
     'content' => ['type' => 'text','options'=>['indexed']],
@@ -60,6 +61,19 @@ Example:
 ]);
 ```
 
+If a setting can have multiple values, an array of values will be used, like:
+
+```php
+ $index->setName('mynewindex');
+ $index->create([],
+    ['type' => 'distributed'],
+    ['local' => [
+            'local_index_1',
+            'local_index_2',
+        ]
+    ]
+ );
+````
 ### addDocument()
 
 Inserts a new document in the index.
