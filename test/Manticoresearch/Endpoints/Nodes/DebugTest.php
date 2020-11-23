@@ -12,6 +12,6 @@ class DebugTest extends \PHPUnit\Framework\TestCase
         $client = $helper->getClient();
         $response = $client->nodes()->debug(['body' => []]);
 
-        $this->assertArrayHasKey('sched', $response);
+        $this->assertArrayHasKey('debug sched', $response);
     }
 }
