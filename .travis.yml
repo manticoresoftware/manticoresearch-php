@@ -40,7 +40,6 @@ before_script:
 
 install:
   # See https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
-  - composer global require hirak/prestissimo
   - composer install --prefer-dist
 
 script:
