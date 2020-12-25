@@ -138,7 +138,7 @@ class UnixSocket extends \Manticoresearch\Transport implements TransportInterfac
 	 *
 	 * @return \Swoole\Client|null
 	 */
-	protected function getSocketConnection(bool $persistent = true): ?\Swoole\Client
+	protected function getSocketConnection(bool $persistent = true)
 	{
 		if (!$persistent || !self::$client)
 		{
@@ -162,7 +162,7 @@ class UnixSocket extends \Manticoresearch\Transport implements TransportInterfac
 	 *
 	 * @return string
 	 */
-	public function create_http_request(string $method, string $url, ?string $content = null, array $headers = []): string
+	public function create_http_request(string $method, string $url, ?string $content = null, array $headers = [])
 	{
 		$pack = [];
 
@@ -191,7 +191,7 @@ class UnixSocket extends \Manticoresearch\Transport implements TransportInterfac
 	 *
 	 * @return array
 	 */
-	public function parse_http_response(string $raw_response_string): array
+	public function parse_http_response(string $raw_response_string)
 	{
 		$return = [
 			'http_version' => null,
