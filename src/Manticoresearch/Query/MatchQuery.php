@@ -5,7 +5,7 @@ namespace Manticoresearch\Query;
 
 use Manticoresearch\Query;
 
-class Match extends Query
+class MatchQuery extends Query
 {
     public function __construct($keywords, $fields)
     {
