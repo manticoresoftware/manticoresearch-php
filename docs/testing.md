@@ -8,7 +8,7 @@ the project.
 Create Containers
 ======
 ```bash
-sudo docker-compose exec phpcli /bin/bash
+docker-compose up
 ```
 This may take a few minutes depending on your internet connection.
 
@@ -16,7 +16,7 @@ Attach to Command Line Interface
 ======
 The following will get you a shell on PHP command line container.
 ```bash
-sudo docker-compose exec phpcli /bin/bash
+docker-compose exec phpcli7 /bin/bash
 ```
 
 Running PHPUnit
