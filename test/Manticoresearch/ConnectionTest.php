@@ -11,7 +11,7 @@ class ConnectionTest extends TestCase
     /** @var Connection */
     private $connection;
 
-    public function setUp()
+    public function setUp():void
     {
         parent::setUp();
         $this->connection = new Connection([]);

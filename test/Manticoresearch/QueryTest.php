@@ -11,7 +11,7 @@ class QueryTest extends TestCase
     /** @var Query */
     private $query;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
         $this->query = new Query();

@@ -15,7 +15,7 @@ class AlterTest extends \PHPUnit\Framework\TestCase
     /** @var PopulateHelperTest */
     private static $helper;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 

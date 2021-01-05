@@ -1,15 +1,28 @@
 version: '2'
 services:
- phpcli:
+ phpcli7:
    build:
-     context: docker/phpcli
+     context: docker/phpcli/7
    working_dir: /var/www
    environment:
      - MS_HOST=manticoresearch-manticore
      - MS_PORT=9308
+     - MS_HOST2=manticoresearch-manticore-2
+     - MS_PORT2=9308
    volumes:
     - .:/var/www
 
+ phpcli8:
+   build:
+     context: docker/phpcli/8
+   working_dir: /var/www
+   environment:
+     - MS_HOST=manticoresearch-manticore
+     - MS_PORT=9308
+     - MS_HOST2=manticoresearch-manticore-2
+     - MS_PORT2=9308
+   volumes:
+     - .:/var/www
 
  manticoresearch-manticore:
    image: manticoresearch/manticore:dev
@@ -17,3 +30,8 @@ services:
     - 9306
     - 9312
 
+ manticoresearch-manticore-2:
+   image: manticoresearch/manticore:dev
+   expose:
+     - 9306
+     - 9312

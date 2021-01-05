@@ -19,9 +19,9 @@ class ClusterTest extends TestCase
         ];
         //client for node 1
         $client = new Client($params);
-        
+
         $params = [
-            'host' => $_SERVER['MS_HOST'],
+            'host' => $_SERVER['MS_HOST2'],
             'port' => $_SERVER['MS_PORT2'],
             'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
         ];

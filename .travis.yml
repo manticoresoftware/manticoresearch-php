@@ -4,19 +4,22 @@ matrix:
   include:
     - php: 7.1
       env: PHPUNIT_TEST=1
-    - php: 7.2
-      env: PHPUNIT_COVERAGE_TEST=1
-    - php: 7.2
-      env: PHPCS_TEST=1
     - php: 7.3
       env: PHPUNIT_TEST=1
     - php: 7.4
       env: PHPUNIT_TEST=1
     - php: 7.4
+      env: PHPUNIT_COVERAGE_TEST=1
+    - php: 7.4
+      env: PHPCS_TEST=1
+    - php: 7.4
       env: PHPSTAN_TEST=1
     - php: 7.4
       env: PHPUNIT_TEST=1 TRANSPORT=PhpHttp
-
+    - php: 8.0
+      env: PHPUNIT_TEST=1
+    - php: 8.0
+      env: PHPUNIT_TEST=1 TRANSPORT=PhpHttp
 services:
   -  docker
 
@@ -31,6 +34,7 @@ env:
     - PHPSTAN_VERSION=^0.12
     - MS_HOST=127.0.0.1
     - MS_PORT=9308
+    - MS_HOST2=127.0.0.1
     - MS_PORT2=5308
 
 before_script:
