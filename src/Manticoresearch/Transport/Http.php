@@ -1,4 +1,5 @@
 <?php
+
 namespace Manticoresearch\Transport;
 
 use Manticoresearch\Exceptions\ConnectionException;
@@ -18,10 +19,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
      */
     protected $scheme = 'http';
 
-    /**
-     * @var resource
-     */
-    protected static $curl;
+    protected static $curl = null;
 
     /**
      * @param Request $request
@@ -103,8 +101,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
         if ($errorno>0) {
             $error = curl_error($conn);
 
-            /* @phpstan-ignore-next-line */
-            self::$curl = false;
+            self::$curl = null;
             throw new ConnectionException($error, $request);
         }
 
@@ -130,10 +127,6 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
         return $response;
     }
 
-    /**
-     * @param bool $persistent
-     * @return false|resource
-     */
     protected function getCurlConnection(bool $persistent = true)
     {
         if (!$persistent || !self::$curl) {
