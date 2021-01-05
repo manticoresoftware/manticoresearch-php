@@ -11,7 +11,7 @@ $bool = new \Manticoresearch\Query\BoolQuery();
 
 It supports adding nodes to it via `must()`, `mustNot()` and `should()` methods
 
-## Match()
+## MatchQuery()
 
 Creates a `match` leaf.
 Constructor accepts:
@@ -19,7 +19,7 @@ Constructor accepts:
 - string of fields delimited by comma on which the keywords will be searched
 
  ```php
-$bool->must(new \Manticoresearch\Query\Match(['query' => 'team of explorers', 'operator' => 'and'], 'title,content'));
+$bool->must(new \Manticoresearch\Query\MatchQuery(['query' => 'team of explorers', 'operator' => 'and'], 'title,content'));
 ```
 
 ## MatchPhrase()

@@ -9,7 +9,7 @@ use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\Distance;
 use Manticoresearch\Query\Equals;
 use Manticoresearch\Query\In;
-use Manticoresearch\Query\Match;
+use Manticoresearch\Query\MatchQuery;
 use Manticoresearch\Query\Range;
 use Manticoresearch\ResultSet;
 use Manticoresearch\Search;
@@ -28,7 +28,7 @@ class SearchTest extends TestCase
         self::$search = self::indexDocuments();
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         self::$search->reset();
@@ -528,7 +528,7 @@ class SearchTest extends TestCase
     public function testMatchBoolQueryMust()
     {
         $q = new BoolQuery();
-        $q->must(new Match(['query' => 'team of explorers', 'operator' => 'and'], '*'));
+        $q->must(new MatchQuery(['query' => 'team of explorers', 'operator' => 'and'], '*'));
         $result = self::$search->search($q)->get();
         $this->assertCount(3, $result);
     }
@@ -536,7 +536,7 @@ class SearchTest extends TestCase
     public function testMatchBoolQueryShould()
     {
         $q = new BoolQuery();
-        $q->should(new Match(['query' => 'team of explorers', 'operator' => 'and'], '*'));
+        $q->should(new MatchQuery(['query' => 'team of explorers', 'operator' => 'and'], '*'));
         $result = self::$search->search($q)->get();
         $this->assertCount(3, $result);
     }
@@ -544,7 +544,7 @@ class SearchTest extends TestCase
     public function testBoolQueryMutipleFilters1()
     {
         $q = new BoolQuery();
-        $q->must(new Match(['query' => 'team of explorers', 'operator' => 'or'], '*'));
+        $q->must(new MatchQuery(['query' => 'team of explorers', 'operator' => 'or'], '*'));
         $q->must(new Equals('year', 2014));
         $result = self::$search->search($q)->get();
         $this->assertCount(1, $result);
@@ -553,7 +553,7 @@ class SearchTest extends TestCase
     public function testInFilter()
     {
         $q = new BoolQuery();
-        $q->must(new Match(['query' => 'team of explorers', 'operator' => 'or'], '*'));
+        $q->must(new MatchQuery(['query' => 'team of explorers', 'operator' => 'or'], '*'));
         $q->must(new In('year', [1992,2014]));
         $result = self::$search->search($q)->get();
         $this->assertCount(2, $result);
@@ -562,7 +562,7 @@ class SearchTest extends TestCase
     public function testBoolQueryMutipleFilters2()
     {
         $q = new BoolQuery();
-        $q->must(new Match(['query' => 'team of explorers', 'operator' => 'or'], '*'));
+        $q->must(new MatchQuery(['query' => 'team of explorers', 'operator' => 'or'], '*'));
         $q->must(new Range('year', ['lte' => 2020]));
         $result = self::$search->search($q)->get();
         $this->assertCount(5, $result);
