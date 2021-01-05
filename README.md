@@ -38,12 +38,13 @@ Requires PHP 7.1 or greater with the native JSON extension. Default transport ha
 
 Minimum Manticore Search version is 2.5.1 with HTTP protocol enabled.
 
-| Manticore Search  | manticoresearch-php |
-| ----------------- | ------------------- |
-| >= 3.5.0          | 1.5.x               |
-| >= 3.5.0          | 1.4                 |
-| <= 3.4.x          | 1.3                 |
-| >= 2.5.1,<3.4.0   | 1.2                 |
+| Manticore Search  | manticoresearch-php |     PHP       |
+| ----------------- | ------------------- | ------------- |
+| >= 3.5.2          | 1.6.x               | >= 7.1, >=8.0 |
+| >= 3.5.0          | 1.5.x               | >= 7.1, <8.0  |
+| >= 3.5.0          | 1.4                 | >= 7.1, <8.0  |
+| <= 3.4.x          | 1.3                 | >= 7.1, <8.0  |
+| >= 2.5.1, <3.4.0  | 1.2                 | >= 7.1, <8.0  |
 
 Documentation
 -------------
@@ -58,7 +59,7 @@ Manticore Search server documentation: https://manual.manticoresearch.com/.
 Getting Started
 ---------------
 
-Install the Manticore Search PHP client using [composer](https://getcomposer.org) package manager: 
+Install the Manticore Search PHP client using [composer](https://getcomposer.org) package manager:
 
 ```bash
 composer require manticoresoftware/manticoresearch-php
