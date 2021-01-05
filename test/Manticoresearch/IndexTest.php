@@ -7,7 +7,7 @@ use Manticoresearch\Client;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Index;
 use Manticoresearch\Query\BoolQuery;
-use Manticoresearch\Query\Match;
+use Manticoresearch\Query\MatchQuery;
 use Manticoresearch\Query\Range;
 use PHPUnit\Framework\TestCase;
 
@@ -357,11 +357,11 @@ class IndexTest extends TestCase
         $response = $index->updateDocuments(['year' => 2000], ['match' => ['*' => 'team']]);
         $this->assertEquals(2, $response['updated']);
 
-        $response = $index->updateDocuments(['year' => 2000], new Match('team', '*'));
+        $response = $index->updateDocuments(['year' => 2000], new MatchQuery('team', '*'));
         $this->assertEquals(2, $response['updated']);
 
         $bool = new BoolQuery();
-        $bool->must(new Match('team', '*'));
+        $bool->must(new MatchQuery('team', '*'));
         $bool->must(new Range('rating', ['gte' => 8.5]));
         $response = $index->updateDocuments(['year' => 2000], $bool);
         $this->assertEquals(1, $response['updated']);
