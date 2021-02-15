@@ -34,6 +34,14 @@ class Search
      */
     protected $params = [];
 
+    protected static $replaceOperator = [
+        '=' => 'equals',
+        '>=' => 'gte',
+        '>' => 'gt',
+        '<' => 'lt',
+        '<=' => 'lte',
+    ];
+
     public function __construct(Client $client)
     {
         $this->client = $client;
@@ -131,108 +139,72 @@ class Search
         return $this;
     }
 
-    public function filter($attr, $op = '', $values = []): self
+    protected function getAttrObject($attr, $op, $values)
     {
-        if (is_object($attr)) {
+        $op = static::$replaceOperator[$op] ?? $op;
+
+        switch ($op) {
+            case 'range':
+                $object = new Range($attr, [
+                    'gte' => $values[0],
+                    'lte' => $values[1]
+                ]);
+                break;
+            case 'lt':
+            case 'lte':
+            case 'gt':
+            case 'gte':
+                $object = new Range($attr, [
+                    $op => $values[0],
+                ]);
+                break;
+            case 'in':
+                $object = new In($attr, $values);
+                break;
+            case 'equals':
+                $object = new Equals($attr, $values[0]);
+                break;
+            default:
+                $object = null;
+        }
+
+        return $object;
+    }
+
+    public function filter($attr, $op = null, $values = null, $boolean = "AND"): self
+    {
+        if (!is_object($attr)) {
+            if (is_null($values)) {
+                $values = $op;
+                $op = "equals";
+            }
+
+            if (!is_array($values)) {
+                $values = [$values];
+            }
+
+            $attr = $this->getAttrObject($attr, $op, $values);
+        }
+
+        if ($boolean === "AND") {
             $this->query->must($attr);
-            return $this;
-        }
-        if (!is_array($values)) {
-            $values = [$values];
-        }
-
-        switch ($op) {
-            case 'range':
-                $this->query->must(new Range($attr, [
-                    'gte' => $values[0],
-                    'lte' => $values[1]
-                ]));
-                break;
-            case 'lt':
-            case 'lte':
-            case 'gt':
-            case 'gte':
-                $this->query->must(new Range($attr, [
-                    $op => $values[0],
-                ]));
-                break;
-            case 'in':
-                $this->query->must(new In($attr, $values));
-                break;
-            case 'equals':
-                $this->query->must(new Equals($attr, $values[0]));
-                break;
-        }
-        return $this;
-    }
-
-    public function orFilter($attr, $op = '', $values = []): self
-    {
-        if (is_object($attr)) {
+        } else if($boolean === "OR") {
             $this->query->should($attr);
-            return $this;
+        } else if($boolean === "NOT") {
+            $this->query->mustNot($attr);
         }
-        if (!is_array($values)) {
-            $values = [$values];
-        }
-        switch ($op) {
-            case 'range':
-                $this->query->should(new Range($attr, [
-                    'gte' => $values[0],
-                    'lte' => $values[1]
-                ]));
-                break;
-            case 'lt':
-            case 'lte':
-            case 'gte':
-            case 'gt':
-                $this->query->should(new Range($attr, [
-                    $op => $values[0],
-                ]));
-                break;
-            case 'in':
-                $this->query->should(new In($attr, $values));
-                break;
-            case 'equals':
-                $this->query->should(new Equals($attr, $values[0]));
-                break;
-        }
+
         return $this;
     }
 
-    public function notFilter($attr, $op = '', $values = []): self
+    public function orFilter($attr, $op = null, $values = null): self
     {
-        if (is_object($attr)) {
-            $this->query->mustNot($attr);
-            return $this;
-        }
-        if (!is_array($values)) {
-            $values = [$values];
-        }
+        return $this->filter($attr, $op, $values, 'OR');
+    }
 
-        switch ($op) {
-            case 'range':
-                $this->query->mustNot(new Range($attr, [
-                    'gte' => $values[0],
-                    'lte' => $values[1]
-                ]));
-                break;
-            case 'lt':
-            case 'lte':
-            case 'gte':
-            case 'gt':
-                $this->query->mustNot(new Range($attr, [
-                    $op => $values[0],
-                ]));
-                break;
-            case 'in':
-                $this->query->mustNot(new In($attr, $values));
-                break;
-            case 'equals':
-                $this->query->mustNot(new Equals($attr, $values[0]));
-                break;
-        }
-        return $this;
+    public function notFilter($attr, $op = null, $values = null): self
+    {
+        return $this->filter($attr, $op, $values, 'NOT');
     }
 
     public function offset($offset): self
