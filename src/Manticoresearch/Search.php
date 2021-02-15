@@ -184,6 +184,10 @@ class Search
             }
 
             $attr = $this->getAttrObject($attr, $op, $values);
+
+            if (!$attr) {
+                return $this;
+            }
         }
 
         if ($boolean === "AND") {
