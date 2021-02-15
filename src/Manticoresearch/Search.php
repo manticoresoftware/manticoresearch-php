@@ -22,6 +22,10 @@ use Manticoresearch\Query\ScriptFields;
  */
 class Search
 {
+    const FILTER_AND = "AND";
+    const FILTER_OR = "OR";
+    const FILTER_NOT = "NOT";
+
     /**
      * @var Client
      */
@@ -171,7 +175,7 @@ class Search
         return $object;
     }
 
-    public function filter($attr, $op = null, $values = null, $boolean = "AND"): self
+    public function filter($attr, $op = null, $values = null, $boolean = self::FILTER_AND): self
     {
         if (!is_object($attr)) {
             if (is_null($values)) {
@@ -190,11 +194,11 @@ class Search
             }
         }
 
-        if ($boolean === "AND") {
+        if ($boolean === self::FILTER_AND) {
             $this->query->must($attr);
-        } else if($boolean === "OR") {
+        } else if($boolean === self::FILTER_OR) {
             $this->query->should($attr);
-        } else if($boolean === "NOT") {
+        } else if($boolean === self::FILTER_NOT) {
             $this->query->mustNot($attr);
         }
 
@@ -203,12 +207,12 @@ class Search
 
     public function orFilter($attr, $op = null, $values = null): self
     {
-        return $this->filter($attr, $op, $values, 'OR');
+        return $this->filter($attr, $op, $values, self::FILTER_OR);
     }
 
     public function notFilter($attr, $op = null, $values = null): self
     {
-        return $this->filter($attr, $op, $values, 'NOT');
+        return $this->filter($attr, $op, $values, self::FILTER_NOT);
     }
 
     public function offset($offset): self
