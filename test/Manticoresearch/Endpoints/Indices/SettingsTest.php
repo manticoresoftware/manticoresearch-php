@@ -29,7 +29,7 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
     {
         $response = self::$client->indices()->settings(['index' => 'products']);
 
-        $expectedSettings = "min_infix_len = 3" ;
+        $expectedSettings = "min_infix_len = 3\nrt_mem_limit = 268435456" ;
 
         $this->assertEquals(['settings' => $expectedSettings], $response);
     }
