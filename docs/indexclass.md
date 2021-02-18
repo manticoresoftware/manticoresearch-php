@@ -205,7 +205,7 @@ Expects:
 -  document id
 
 ```php
-$index->addDocument([
+$index->updateDocument([
             'title' => 'find me',
             'gid' => 1,
             'label' => 'not used',
