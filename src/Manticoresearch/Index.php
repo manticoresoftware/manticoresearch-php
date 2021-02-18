@@ -50,6 +50,22 @@ class Index
         return $result->valid() ? $result->current() : null;
     }
 
+    public function getDocumentByIds($ids)
+    {
+        if (!is_array($ids)) {
+            $ids = [$ids];
+        }
+        $params = [
+            'body' => [
+                'index' => $this->index,
+                'query' => [
+                    'in' => ['id' => $ids]
+                ]
+            ]
+        ];
+        return new ResultSet($this->client->search($params, true));
+    }
+
     public function addDocument($data, $id = 0)
     {
         if (is_object($data)) {
