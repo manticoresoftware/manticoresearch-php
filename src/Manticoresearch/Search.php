@@ -196,9 +196,9 @@ class Search
 
         if ($boolean === self::FILTER_AND) {
             $this->query->must($attr);
-        } else if($boolean === self::FILTER_OR) {
+        } elseif ($boolean === self::FILTER_OR) {
             $this->query->should($attr);
-        } else if($boolean === self::FILTER_NOT) {
+        } elseif ($boolean === self::FILTER_NOT) {
             $this->query->mustNot($attr);
         }
 
