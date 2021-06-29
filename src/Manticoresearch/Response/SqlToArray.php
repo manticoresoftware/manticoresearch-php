@@ -18,11 +18,17 @@ class SqlToArray extends Response
             foreach ($response['data'] as $property) {
                 if (isset($property['id'])) {
                     $id = $property['id'];
-                    unset($property['id']);
+                    if (count($property) > 1) unset($property['id']);
+                } else if (isset($property['Field'])) {
+                    $id = $property['Field'];
+                    if (count($property) > 1) unset($property['Field']);
+                } else if (isset($property['Variable_name'])) {
+                    $id = $property['Variable_name'];
+                    if (count($property) > 1) unset($property['Variable_name']);
                 } else {
                     $id++;
                 }
-                $data[$id] = (count($property) == 1) ? array_shift($property):$property;
+                $data[$id] = (count($property) == 1)?array_shift($property):$property;
             }
             if (count($data) > 0) {
                 return $data;
