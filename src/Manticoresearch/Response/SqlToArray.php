@@ -14,6 +14,7 @@ class SqlToArray extends Response
             array_walk($response['columns'], static function (&$value, $key) {
                 $value = array_keys($value)[0];
             });
+            $id = -1;
             foreach ($response['data'] as $property) {
                 if (isset($property['id'])) {
                     $id = $property['id'];
