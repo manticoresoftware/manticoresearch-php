@@ -15,11 +15,11 @@ class SqlToArray extends Response
                 $value = array_keys($value)[0];
             });
             foreach ($response['data'] as $property) {
-                if (count($response['columns']) > 2) {
-                    $data[array_shift($property)] = $property;
-                } elseif (count($response['columns']) === 2) {
-                    $data[$property[$response['columns'][0]]] = $property[$response['columns'][1]];
-                }
+                if (isset($property['id'])) {
+                    $id = $property['id'];
+                    unset($property['id']);
+                } else $id++;
+                $data[$id] = (count($property) == 1)?array_shift($property):$property;
             }
             if (count($data) > 0) {
                 return $data;
