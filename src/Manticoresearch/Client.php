@@ -352,7 +352,7 @@ class Client
                 'request' => $e->getRequest()->toArray()
             ]);
 
-            if (isset($connection)) {
+            if ($connection) {
                 $connection->mark(false);
             }
 
