@@ -179,19 +179,19 @@ class SearchTest extends TestCase
     public function testFilterLTE()
     {
         $results = self::$search->filter('year', 'lte', 1990)->get();
-        $this->assertEquals([1979,1986], $this->yearsFromResults($results));
+        $this->assertEquals([1986,1979], $this->yearsFromResults($results));
     }
 
     public function testFilterLTEAsObject()
     {
         $results = self::$search->filter(new Range('year', ['lte' => 1990]))->get();
-        $this->assertEquals([1979,1986], $this->yearsFromResults($results));
+        $this->assertEquals([1986,1979], $this->yearsFromResults($results));
     }
 
     public function testFilterGTE()
     {
         $results = self::$search->filter('year', 'gte', 1990)->get();
-        $this->assertEquals([2014,2010,2018,1992], $this->yearsFromResults($results));
+        $this->assertEquals([2010,2014,2018,1992], $this->yearsFromResults($results));
     }
 
     public function testFilterEq()
@@ -249,14 +249,14 @@ class SearchTest extends TestCase
     public function testNotFilterRange()
     {
         $results = self::$search->notFilter('year', 'range', [1900,1990])->get();
-        $this->assertEquals([2014,2010,2018,1992], $this->yearsFromResults($results));
+        $this->assertEquals([2010,2014,2018,1992], $this->yearsFromResults($results));
     }
 
     public function testNotFilterRangeAsObject()
     {
         $range = new Range('year', ['gte' => 1900, 'lte' => 1990]);
         $results = self::$search->notFilter($range)->get();
-        $this->assertEquals([2014,2010,2018,1992], $this->yearsFromResults($results));
+        $this->assertEquals([2010,2014,2018,1992], $this->yearsFromResults($results));
     }
 
     public function testOrFilterRange()
@@ -282,7 +282,7 @@ class SearchTest extends TestCase
             orFilter('year', 'lt', 1990)->
             orFilter('year', 'gte', 2000)->
             get();
-        $this->assertEquals([2014,2010,2018,1979,1986], $this->yearsFromResults($results));
+        $this->assertEquals([2010,2014,2018,1986,1979], $this->yearsFromResults($results));
     }
 
     public function testOrFilterEquals()
@@ -291,7 +291,7 @@ class SearchTest extends TestCase
         orFilter('year', 'equals', 1979)->
         orFilter('year', 'equals', 1986)->
         get();
-        $this->assertEquals([1979,1986], $this->yearsFromResults($results));
+        $this->assertEquals([1986,1979], $this->yearsFromResults($results));
     }
 
 
