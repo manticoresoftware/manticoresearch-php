@@ -68,6 +68,14 @@ Set limit and offset for the result set
 $search->limit(24)->offset(12);
 ```
 
+### maxMatches()
+
+Set [max_matches](https://mnt.cr/max_matches) for the search.
+
+```php
+$search->limit(10000)->maxMatches(10000);
+```
+
 ### filter() and notFilter()
 
 Allow adding an attribute filter.
