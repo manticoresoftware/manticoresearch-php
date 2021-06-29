@@ -19,7 +19,7 @@ class SqlToArray extends Response
                     $id = $property['id'];
                     unset($property['id']);
                 } else $id++;
-                $data[$id] = (count($property) == 1)?array_shift($property):$property;
+                $data[$id] = (count($property) == 1) ? array_shift($property):$property;
             }
             if (count($data) > 0) {
                 return $data;
