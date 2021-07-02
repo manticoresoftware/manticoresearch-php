@@ -44,6 +44,13 @@ class Response
      */
     protected $response;
 
+    /**
+     * additional params as array
+     * @var array
+     */
+    protected $params;
+    
+
     public function __construct($responseString, $status = null, $params = [])
     {
         if (is_array($responseString)) {

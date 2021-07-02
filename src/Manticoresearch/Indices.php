@@ -161,7 +161,7 @@ class Indices
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
         $response = $this->client->request(
-            $endpoint, 
+            $endpoint,
             array_merge($this->params, ['responseClassParams' => ['customMapping' => true]])
         );
         return $response->getResponse();
