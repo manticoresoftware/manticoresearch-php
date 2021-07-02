@@ -77,7 +77,8 @@ class PhpHttp extends Transport implements TransportInterface
 
         if (isset($params['responseClass'])) {
             $responseClass = $params['responseClass'];
-            $response = new $responseClass($responseString, $status);
+            $responseClassParams = isset($params['responseClassParams'])?$params['responseClassParams']:[];
+            $response = new $responseClass($responseString, $status, $responseClassParams);
         } else {
             $response = new Response($responseString, $status);
         }

@@ -286,7 +286,7 @@ class IndexTest extends TestCase
         $result = $index->keywords('tasting', []);
 
         // @todo Is this correct functionality
-        $this->assertEquals(['tokenized' => 'tasting', 'normalized' => 'tasting'], $result[1]);
+        $this->assertEquals(['tokenized' => 'tasting', 'normalized' => 'tasting', 'qpos' => '1'], $result[0]);
     }
 
     public function testStart()

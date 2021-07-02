@@ -45,7 +45,7 @@ class Nodes
         $body = $params['body']??[];
         $endpoint = new AgentStatus();
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, $this->params);
+        $response = $this->client->request($endpoint, array_merge($this->params, ['responseClassParams' => ['customMapping' => true]]));
         return  $response->getResponse();
     }
 
@@ -72,7 +72,7 @@ class Nodes
         $body = $params['body'];
         $endpoint = new Debug();
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, $this->params);
+        $response = $this->client->request($endpoint, array_merge($this->params, ['responseClassParams' => ['customMapping' => true]]));
         return  $response->getResponse();
     }
 
@@ -99,7 +99,7 @@ class Nodes
         $body = $params['body']??[];
         $endpoint = new FlushAttributes();
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, $this->params);
+        $response = $this->client->request($endpoint, []);
         return  $response->getResponse();
     }
 
@@ -166,7 +166,7 @@ class Nodes
         $body = $params['body']??[];
         $endpoint = new Status();
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, $this->params);
+        $response = $this->client->request($endpoint, array_merge($this->params, ['responseClassParams' => ['customMapping' => true]]));
         return  $response->getResponse();
     }
 
@@ -175,7 +175,7 @@ class Nodes
         $body = $params['body']??[];
         $endpoint = new Tables();
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, $this->params);
+        $response = $this->client->request($endpoint, array_merge($this->params, ['responseClassParams' => ['customMapping' => true]]));
         return  $response->getResponse();
     }
 
@@ -193,7 +193,7 @@ class Nodes
         $body = $params['body']??[];
         $endpoint = new Variables();
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, $this->params);
+        $response = $this->client->request($endpoint, array_merge($this->params, ['responseClassParams' => ['customMapping' => true]]));
         return  $response->getResponse();
     }
 }
