@@ -7,11 +7,6 @@
     "require": {
         "php": ">=7.1",
         "ext-json": "*",
-        "guzzlehttp/psr7": "1.4.2",
-        "http-interop/http-factory-guzzle": "^1.0",
-        "php-http/curl-client": "^2.2",
-        "php-http/discovery": "^1.14",
-        "php-http/message": "^1.11",
         "psr/log": ">=1.1"
     },
     "suggest": {
