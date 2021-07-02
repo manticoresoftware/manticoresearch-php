@@ -51,7 +51,10 @@ class Indices
         $endpoint = new Alter();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, array_merge($this->params, ['responseClassParams' => ['customMapping' => true]]));
+        $response = $this->client->request(
+            $endpoint, 
+            array_merge($this->params, ['responseClassParams' => ['customMapping' => true]])
+        );
         return $response->getResponse();
     }
 
@@ -83,7 +86,10 @@ class Indices
         $endpoint = new Describe();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, array_merge($this->params, ['responseClassParams' => ['customMapping' => true]]));
+        $response = $this->client->request(
+            $endpoint, 
+            array_merge($this->params, ['responseClassParams' => ['customMapping' => true]])
+        );
         return $response->getResponse();
     }
 

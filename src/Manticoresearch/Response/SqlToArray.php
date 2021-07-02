@@ -19,29 +19,29 @@ class SqlToArray extends Response
                 if (isset($property['id'])) {
                     $id = $property['id'];
                     if (count($property) > 1) unset($property['id']);
-                } else if (isset($this->params['customMapping']) and $this->params['customMapping']) {
+                } elseif (isset($this->params['customMapping']) and $this->params['customMapping']) {
                     if (isset($property['Field'])) {
                         $id = $property['Field'];
                         if (count($property) > 1) unset($property['Field']);
-                    } else if (isset($property['Variable_name'])) {
+                    } elseif (isset($property['Variable_name'])) {
                         $id = $property['Variable_name'];
                         if (count($property) > 1) unset($property['Variable_name']);
-                    } else if (isset($property['Index'])) {
+                    } elseif (isset($property['Index'])) {
                         $id = $property['Index'];
                         if (count($property) > 1) unset($property['Index']);
-                    } else if (isset($property['Counter'])) {
+                    } elseif (isset($property['Counter'])) {
                         $id = $property['Counter'];
                         if (count($property) > 1) unset($property['Counter']);
-                    } else if (isset($property['Key'])) {
+                    } elseif (isset($property['Key'])) {
                         $id = $property['Key'];
                         if (count($property) > 1) unset($property['Key']);
-                    } else if (isset($property['command'])) {
+                    } elseif (isset($property['command'])) {
                         $id = $property['command'];
                         if (count($property) > 1) unset($property['command']);
-                    } else if (isset($property['suggest'])) {
+                    } elseif (isset($property['suggest'])) {
                         $id = $property['suggest'];
                         if (count($property) > 1) unset($property['suggest']);
-                    } else if (isset($property['Variable'])) {
+                    } elseif (isset($property['Variable'])) {
                         $id = $property['Variable'];
                         if (count($property) > 1) unset($property['Variable']);
                     } else {
