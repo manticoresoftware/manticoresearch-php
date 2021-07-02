@@ -205,10 +205,10 @@ class Nodes
         $body = $params['body']??[];
         $endpoint = new Variables();
         $endpoint->setBody($body);
-        return  $response->getResponse()ponse = $this->client->request(
+        $response = $this->client->request(
             $endpoint,
             array_merge($this->params, ['responseClassParams' => ['customMapping' => true]])
         );
-
+        return  $response->getResponse();
     }
 }
