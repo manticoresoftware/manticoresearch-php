@@ -46,7 +46,7 @@ class Nodes
         $endpoint = new AgentStatus();
         $endpoint->setBody($body);
         $response = $this->client->request(
-            $endpoint, 
+            $endpoint,
             array_merge($this->params, ['responseClassParams' => ['customMapping' => true]])
         );
         return  $response->getResponse();
@@ -76,7 +76,7 @@ class Nodes
         $endpoint = new Debug();
         $endpoint->setBody($body);
         $response = $this->client->request(
-            $endpoint, 
+            $endpoint,
             array_merge($this->params, ['responseClassParams' => ['customMapping' => true]])
         );
         return  $response->getResponse();
@@ -173,7 +173,7 @@ class Nodes
         $endpoint = new Status();
         $endpoint->setBody($body);
         $response = $this->client->request(
-            $endpoint, 
+            $endpoint,
             array_merge($this->params, ['responseClassParams' => ['customMapping' => true]])
         );
         return  $response->getResponse();

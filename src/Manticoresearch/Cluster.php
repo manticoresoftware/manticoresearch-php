@@ -35,7 +35,7 @@ class Cluster
         $endpoint->setCluster($cluster);
         $endpoint->setBody($body);
         $response = $this->client->request(
-            $endpoint, 
+            $endpoint,
             array_merge($this->params, ['responseClassParams' => ['customMapping' => true]])
         );
         return  $response->getResponse();

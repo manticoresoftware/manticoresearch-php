@@ -308,9 +308,9 @@ class Client
         $endpoint->setIndex($params['index']);
         $endpoint->setBody($params['body']);
         $response = $this->request(
-            $endpoint, 
+            $endpoint,
             [
-                'responseClass' => 'Manticoresearch\\Response\\SqlToArray', 
+                'responseClass' => 'Manticoresearch\\Response\\SqlToArray',
                 'responseClassParams' => ['customMapping' => true]
             ]
         );
