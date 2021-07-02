@@ -307,7 +307,13 @@ class Client
         $endpoint = new Endpoints\Suggest();
         $endpoint->setIndex($params['index']);
         $endpoint->setBody($params['body']);
-        $response = $this->request($endpoint, ['responseClass' => 'Manticoresearch\\Response\\SqlToArray']);
+        $response = $this->request(
+            $endpoint,
+            [
+                'responseClass' => 'Manticoresearch\\Response\\SqlToArray',
+                'responseClassParams' => ['customMapping' => true]
+            ]
+        );
         return $response->getResponse();
     }
 
@@ -325,7 +331,13 @@ class Client
         $endpoint = new Endpoints\ExplainQuery();
         $endpoint->setIndex($params['index']);
         $endpoint->setBody($params['body']);
-        $response = $this->request($endpoint, ['responseClass' => 'Manticoresearch\\Response\\SqlToArray']);
+        $response = $this->request(
+            $endpoint,
+            [
+                'responseClass' => 'Manticoresearch\\Response\\SqlToArray',
+                'responseClassParams' => ['customMapping' => true]
+            ]
+        );
         return $response->getResponse();
     }
 

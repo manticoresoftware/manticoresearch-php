@@ -34,7 +34,10 @@ class Cluster
         $endpoint = new Alter();
         $endpoint->setCluster($cluster);
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, $this->params);
+        $response = $this->client->request(
+            $endpoint,
+            array_merge($this->params, ['responseClassParams' => ['customMapping' => true]])
+        );
         return  $response->getResponse();
     }
 

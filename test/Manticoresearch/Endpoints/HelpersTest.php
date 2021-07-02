@@ -62,7 +62,7 @@ class HelpersTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $response = static::$client->keywords($params);
-        $this->assertSame('product', $response['1']['normalized']);
+        $this->assertSame('product', $response['0']['normalized']);
     }
 
     public function testSuggest()

@@ -29,8 +29,6 @@ class AgentStatusTest extends \PHPUnit\Framework\TestCase
         $keys = array_keys($response);
         sort($keys);
 
-        var_export($keys, true);
-
         $this->assertEquals([
             'status_period_seconds',
             'status_stored_periods'

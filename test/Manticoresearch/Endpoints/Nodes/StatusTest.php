@@ -24,7 +24,6 @@ class StatusTest extends \PHPUnit\Framework\TestCase
         $helper = new PopulateHelperTest();
         $client = $helper->getClient();
         $response = $client->nodes()->status();
-
         $this->assertArrayHasKey('uptime', $response);
     }
 }

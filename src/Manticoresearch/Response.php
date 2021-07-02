@@ -44,7 +44,14 @@ class Response
      */
     protected $response;
 
-    public function __construct($responseString, $status = null)
+    /**
+     * additional params as array
+     * @var array
+     */
+    protected $params;
+    
+
+    public function __construct($responseString, $status = null, $params = [])
     {
         if (is_array($responseString)) {
             $this->response = $responseString;
@@ -52,6 +59,7 @@ class Response
             $this->string = $responseString;
         }
         $this->status = $status;
+        $this->params = $params;
     }
 
     /*

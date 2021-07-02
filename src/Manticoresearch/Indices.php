@@ -51,7 +51,10 @@ class Indices
         $endpoint = new Alter();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, $this->params);
+        $response = $this->client->request(
+            $endpoint,
+            array_merge($this->params, ['responseClassParams' => ['customMapping' => true]])
+        );
         return $response->getResponse();
     }
 
@@ -83,7 +86,10 @@ class Indices
         $endpoint = new Describe();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, $this->params);
+        $response = $this->client->request(
+            $endpoint,
+            array_merge($this->params, ['responseClassParams' => ['customMapping' => true]])
+        );
         return $response->getResponse();
     }
 
@@ -154,7 +160,10 @@ class Indices
         $endpoint = new Optimize();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, $this->params);
+        $response = $this->client->request(
+            $endpoint,
+            array_merge($this->params, ['responseClassParams' => ['customMapping' => true]])
+        );
         return $response->getResponse();
     }
 
@@ -169,7 +178,10 @@ class Indices
         $endpoint = new Status();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, $this->params);
+        $response = $this->client->request(
+            $endpoint,
+            array_merge($this->params, ['responseClassParams' => ['customMapping' => true]])
+        );
         return $response->getResponse();
     }
 
@@ -184,7 +196,10 @@ class Indices
         $endpoint = new Settings();
         $endpoint->setIndex($index);
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, $this->params);
+        $response = $this->client->request(
+            $endpoint,
+            array_merge($this->params, ['responseClassParams' => ['customMapping' => true]])
+        );
         return $response->getResponse();
     }
 
