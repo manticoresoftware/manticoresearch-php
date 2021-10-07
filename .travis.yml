@@ -39,8 +39,8 @@ env:
 
 before_script:
   - composer validate
-  - if [[ $TRANSPORT ]]; then composer require php-http/discovery php-http/curl-client guzzlehttp/psr7:1.4.2 php-http/message http-interop/http-factory-guzzle; fi
-  - if [[ $PHPSTAN_TEST ]]; then composer require --dev phpstan/phpstan && composer require php-http/discovery php-http/curl-client guzzlehttp/psr7:1.4.2 php-http/message http-interop/http-factory-guzzle; fi
+  - if [[ $TRANSPORT ]]; then composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle; fi
+  - if [[ $PHPSTAN_TEST ]]; then composer require --dev phpstan/phpstan && composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle; fi
 
 install:
   # See https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes

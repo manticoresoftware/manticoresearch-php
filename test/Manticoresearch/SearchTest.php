@@ -137,8 +137,11 @@ class SearchTest extends TestCase
     /**
      * Helper method to return just the years from the results.  This is used to validate filtering and sorting
      * @param ResultSet $results
+     * @param boolean $sort since Manticore 4 we don't implicitly sort by id, so the results can be sorted
+     * randomly especially when there's no other implicit/explicit sorting (e.g. full-text ranking), so it makes
+     * sense to sort explicitly
      */
-    private function yearsFromResults($results)
+    private function yearsFromResults($results, $sort = false)
     {
         $years = [];
         while ($results->valid()) {
@@ -146,6 +149,9 @@ class SearchTest extends TestCase
             $data = $hit->getData();
             $years[] = $data['year'];
             $results->next();
+        }
+        if ($sort != false) {
+            sort($years);
         }
         return $years;
     }
@@ -179,19 +185,19 @@ class SearchTest extends TestCase
     public function testFilterLTE()
     {
         $results = self::$search->filter('year', 'lte', 1990)->get();
-        $this->assertEquals([1986,1979], $this->yearsFromResults($results));
+        $this->assertEquals([1979,1986], $this->yearsFromResults($results, 'sort'));
     }
 
     public function testFilterLTEAsObject()
     {
         $results = self::$search->filter(new Range('year', ['lte' => 1990]))->get();
-        $this->assertEquals([1986,1979], $this->yearsFromResults($results));
+        $this->assertEquals([1979,1986], $this->yearsFromResults($results, 'sort'));
     }
 
     public function testFilterGTE()
     {
-        $results = self::$search->filter('year', 'gte', 1990)->get();
-        $this->assertEquals([2010,2014,2018,1992], $this->yearsFromResults($results));
+        $results = self::$search->filter('year', 'gte', 1990)->sort('id', 'asc')->get();
+        $this->assertEquals([1992,2010,2014,2018], $this->yearsFromResults($results, 'sort'));
     }
 
     public function testFilterEq()
@@ -204,7 +210,7 @@ class SearchTest extends TestCase
     public function testFilterRange()
     {
         $results = self::$search->filter('year', 'range', [1960,1992])->get();
-        $this->assertEquals([1979,1986,1992], $this->yearsFromResults($results));
+        $this->assertEquals([1979,1986,1992], $this->yearsFromResults($results, 'sort'));
     }
 
     /**
@@ -249,14 +255,14 @@ class SearchTest extends TestCase
     public function testNotFilterRange()
     {
         $results = self::$search->notFilter('year', 'range', [1900,1990])->get();
-        $this->assertEquals([2010,2014,2018,1992], $this->yearsFromResults($results));
+        $this->assertEquals([1992,2010,2014,2018], $this->yearsFromResults($results, 'sort'));
     }
 
     public function testNotFilterRangeAsObject()
     {
         $range = new Range('year', ['gte' => 1900, 'lte' => 1990]);
         $results = self::$search->notFilter($range)->get();
-        $this->assertEquals([2010,2014,2018,1992], $this->yearsFromResults($results));
+        $this->assertEquals([1992,2010,2014,2018], $this->yearsFromResults($results, 'sort'));
     }
 
     public function testOrFilterRange()
@@ -282,7 +288,7 @@ class SearchTest extends TestCase
             orFilter('year', 'lt', 1990)->
             orFilter('year', 'gte', 2000)->
             get();
-        $this->assertEquals([2010,2014,2018,1986,1979], $this->yearsFromResults($results));
+        $this->assertEquals([1979,1986,2010,2014,2018], $this->yearsFromResults($results, 'sort'));
     }
 
     public function testOrFilterEquals()
@@ -291,7 +297,7 @@ class SearchTest extends TestCase
         orFilter('year', 'equals', 1979)->
         orFilter('year', 'equals', 1986)->
         get();
-        $this->assertEquals([1986,1979], $this->yearsFromResults($results));
+        $this->assertEquals([1979,1986], $this->yearsFromResults($results, 'sort'));
     }
 
 

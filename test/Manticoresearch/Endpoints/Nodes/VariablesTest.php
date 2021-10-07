@@ -14,6 +14,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
         $keys = array_keys($response);
         sort($keys);
         $this->assertEquals([
+            'auto_optimize',
             'autocommit',
             'character_set_client',
             'character_set_connection',
@@ -22,6 +23,8 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
             'last_insert_id',
             'log_level',
             'max_allowed_packet',
+            'optimize_cutoff',
+            'pseudo_sharding',
             'query_log_format'
         ], $keys);
     }
