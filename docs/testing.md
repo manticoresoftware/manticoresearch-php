@@ -1,40 +1,34 @@
-Testing
------
+# Testing
 Testing is carried out using Docker and Docker Compose in order to guarantee a consistent testing environment.
 
 The following documentation assumes that you are using a shell that currently has a working directory in the root of
 the project.
 
-Build images
-=====
+## Build images
 ```bash
 docker-compose build
 ```
 
 sometimes it makes sense to rebuild them with `--no-cache` to make sure the images are not outdated and still can build fine.
 
-Prepare PHP composer packages
-=====
+## Prepare PHP composer packages
 ```bash
 composer install --prefer-dist
 ```
 
-Create Containers
-======
+## Create Containers
 ```bash
 docker-compose up
 ```
 This may take a few minutes depending on your internet connection.
 
-Attach to Command Line Interface
-======
+## Attach to Command Line Interface
 The following will get you a shell on PHP command line container.
 ```bash
 docker-compose exec phpcli7 /bin/bash
 ```
 
-Running PHPUnit
-======
+## Running PHPUnit
 Simply run PHPUnit
 
 ```bash
@@ -56,8 +50,7 @@ Run this test alone:
 vendor/bin/phpunit -d memory_limit=4G --filter testGetLastResponse test/
 ```
 
-Generating Local Code Coverage
-======
+## Generating Local Code Coverage
 ```bash
 phpdbg -qrr vendor/bin/phpunit --coverage-html report test
 ```
