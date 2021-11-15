@@ -71,6 +71,7 @@ class Distance extends Query
      */
     public function setDistanceType($algorithm)
     {
+        if (!$algorithm) $algorithm = null;
         $this->params['geo_distance']['distance_type'] = $algorithm ?? 'adaptive';
     }
 }
