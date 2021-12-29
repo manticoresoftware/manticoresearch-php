@@ -71,4 +71,4 @@ jobs:
         
       - name: Test
         run: |
-          phpcs --standard=PSR2 src/ test/ | cs2pr
+          phpcs --standard=PSR2 --report=checkstyle src/ test/ | cs2pr
