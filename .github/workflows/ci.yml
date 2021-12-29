@@ -6,37 +6,41 @@ on:
   pull_request:
     branches: [ master ]
 
-services:
-  manticoresearch-manticore:
-    image: manticoresearch/manticore:latest
-    # Map port 8080 on the Docker host to port 80 on the nginx container
-    ports:
-      - 9308:9308
-  manticoresearch-manticore-2:
-    image: manticoresearch/manticore:latest
-    ports:
-      - 5308:9308
 jobs:
-  runs-on: ${{ matrix.os }}
-  strategy:
-    matrix:
-      os: ['ubuntu-latest']
-      php-version: ['7.1', '7.3', '7.4', '8.0', '8.1']
-      phpunit-version: ['latest']
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-      
-    - name: php version {{matrix.php-version}}
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php-versions }}
-        extensions: yaml, zip, curl
+  test: 
+    name: test
+    runs-on: ${{ matrix.os }}
+  
+    strategy:
+      matrix:
+        os: ['ubuntu-latest']
+        php-version: ['7.1', '7.3', '7.4', '8.0', '8.1']
+        phpunit-version: ['latest']
         
-    - name: Install dependencies
-      run: |
-        composer install --prefer-dist
+    services:
+      manticoresearch-manticore:
+        image: manticoresearch/manticore:latest
+        ports:
+          - 9308:9308
+      manticoresearch-manticore-2:
+        image: manticoresearch/manticore:latest
+        ports:
+          - 5308:9308
+        
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: php version {{matrix.php-version}}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: yaml, zip, curl
+        
+      - name: Install dependencies
+        run: |
+          composer install --prefer-dist
 
-    - name: Unit tests
-      run: |
-        vendor/bin/phpunit -d memory_limit=4G  test/
+      - name: Unit tests
+        run: |
+          vendor/bin/phpunit -d memory_limit=4G  test/
