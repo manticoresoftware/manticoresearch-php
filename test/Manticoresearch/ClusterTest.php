@@ -141,4 +141,3 @@ class ClusterTest extends TestCase
         $this->assertEquals('', $result['error']);
     }
 }
-
