@@ -8,7 +8,7 @@ on:
 
 jobs:
   test: 
-    name: unit test and static analysis
+    name: unit test
     runs-on: ${{ matrix.os }}
   
     strategy:
@@ -44,7 +44,7 @@ jobs:
       - name: Composer require
         run: composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle
         
-      - name: Unit test
+      - name: Test
         run: vendor/bin/phpunit -d memory_limit=4G  test/
         env:
           MS_HOST: 127.0.0.1
