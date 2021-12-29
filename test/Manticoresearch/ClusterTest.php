@@ -96,7 +96,11 @@ class ClusterTest extends TestCase
         $index = new Index($client);
         $index->setName('products');
         $index->setCluster('testcluster');
-        $index->addDocument(['title'=>'The Dark Knight','price'=>7.5], 2000);
+        $result = $index->addDocument(['title'=>'The Dark Knight','price'=>7.5], 2000);
+        
+        // workaround against unstable tests. For some reason the replication which
+        // has to be synchronous acts like if it was asynchronous
+        sleep(3);
 
         //check if documents replicated on node 2
         $params = [
@@ -120,6 +124,8 @@ class ClusterTest extends TestCase
         ];
         $result = $client->cluster()->alter($params);
         $this->assertEquals('', $result['error']);
+        
+        sleep(5);
 
         // drop cluster
         $params = [
@@ -128,8 +134,11 @@ class ClusterTest extends TestCase
             ]
         ];
         $result = $client->cluster()->delete($params);
+        $this->assertEquals('', $result['error']);
+
         // drop index on
-        $client->indices()->drop(['index' => 'products']);
+        $result = $client->indices()->drop(['index' => 'products']);
         $this->assertEquals('', $result['error']);
     }
 }
+
