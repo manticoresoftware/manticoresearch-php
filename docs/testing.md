@@ -1,5 +1,6 @@
 # Testing
-Testing is carried out using Docker and Docker Compose in order to guarantee a consistent testing environment.
+
+We use github actions as a CI tool, but you can also run testing manually with help of docker-compose to run Manticore Search in containers and phpunit, phpstan and phpcs ffor tests.
 
 The following documentation assumes that you are using a shell that currently has a working directory in the root of
 the project.
@@ -34,8 +35,6 @@ Simply run PHPUnit
 ```bash
 vendor/bin/phpunit
 ```
-
-It may be also useful and sometimes required to look at what environment variables travis-ci sets before running PHPUnit to make sure your local test will be close to what travis-ci does. You can do it by inspecting recent job log on travis-ci.com. Just take some recent commit, it should have the link.
 
 To test a particular case use `--filter`:
 

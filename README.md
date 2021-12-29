@@ -1,6 +1,6 @@
 manticoresearch-php
 ===================
-[![Build Status](https://travis-ci.org/manticoresoftware/manticoresearch-php.svg?branch=master)](https://travis-ci.org/manticoresoftware/manticoresearch-php)
+![Build Status](https://github.com/manticoresoftware/manticoresearch-php/actions/workflows/ci.yml/badge.svg)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/manticoresoftware/manticoresearch-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/manticoresoftware/manticoresearch-php/?branch=master)
 [![codecov.io](https://codecov.io/github/manticoresoftware/manticoresearch-php/coverage.svg)](https://codecov.io/github/manticoresoftware/manticoresearch-php)
 [![Latest Stable Version](https://poser.pugx.org/manticoresoftware/manticoresearch-php/v/stable)](https://packagist.org/packages/manticoresoftware/manticoresearch-php)
