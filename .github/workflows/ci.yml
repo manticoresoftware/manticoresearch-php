@@ -71,4 +71,4 @@ jobs:
         
       - name: Test
         run: |
-          vendor/bin/phpcs --standard=PSR2 src/ test/          
+          phpcs --standard=PSR2 src/ test/ | cs2pr
