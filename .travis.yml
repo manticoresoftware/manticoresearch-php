@@ -26,8 +26,8 @@ services:
 before_install:
   - docker pull manticoresearch/manticore:latest
   - docker network create manticore
-  - docker run --rm --publish 9308:9308 --network manticore --name=manticoresearch-manticore --detach manticoresearch/manticore:dev
-  - docker run --rm --publish 5308:9308 --network manticore --name=manticoresearch-manticore-2 --detach manticoresearch/manticore:dev
+  - docker run --rm --publish 9308:9308 --network manticore --name=manticoresearch-manticore --detach manticoresearch/manticore:latest
+  - docker run --rm --publish 5308:9308 --network manticore --name=manticoresearch-manticore-2 --detach manticoresearch/manticore:latest
   - curl -s "http://localhost:9308/sql?mode=raw&query=show%20status%20like%20'version'"
   - curl -s "http://localhost:5308/sql?mode=raw&query=show%20status%20like%20'version'"
   - sudo apt update && sudo apt install php-json zip unzip git
