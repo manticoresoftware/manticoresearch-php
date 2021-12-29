@@ -50,11 +50,32 @@ jobs:
           MS_HOST: 127.0.0.1
           MS_PORT: 9308
           MS_HOST2: 127.0.0.1
-          MS_PORT2: 5308
-          
-      - name: Static analysis test
+          MS_PORT2: 5308         
+
+  stan: 
+    name: static analysis
+    runs-on: ubuntu-latest
+       
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Install PHP 8.0
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          tools: phpstan
+
+      - name: Install dependencies
+        run: composer install --prefer-dist
+        
+      - name: Composer require
+        run: composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle
+        
+      - name: Test
         run: phpstan analyse --level=3 src/
-          
+
+
   codestyle: 
     name: codestyle
     runs-on: ubuntu-latest
