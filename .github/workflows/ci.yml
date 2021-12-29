@@ -40,7 +40,10 @@ jobs:
         
       - name: Install dependencies
         run: composer install --prefer-dist
-
+        
+      - name: Composer require
+        run: composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle
+        
       - name: Unit test
         run: vendor/bin/phpunit -d memory_limit=4G  test/
         env:
