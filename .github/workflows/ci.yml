@@ -39,12 +39,10 @@ jobs:
           tools: phpunit,phpstan
         
       - name: Install dependencies
-        run: |
-          composer install --prefer-dist
+        run: composer install --prefer-dist
 
       - name: Unit test
-        run: |
-          vendor/bin/phpunit -d memory_limit=4G  test/
+        run: vendor/bin/phpunit -d memory_limit=4G  test/
         env:
           MS_HOST: 127.0.0.1
           MS_PORT: 9308
@@ -52,8 +50,7 @@ jobs:
           MS_PORT2: 5308
           
       - name: Static analysis test
-        run: |
-          vendor/bin/phpstan analyse --level=3 src/
+        run: phpstan analyse --level=3 src/
           
   codestyle: 
     name: codestyle
@@ -67,8 +64,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.0
-          tools: phpcs, cs2pr
+          tools: phpcs
         
       - name: Test
-        run: |
-          phpcs --standard=PSR2 --report=checkstyle src/ test/ | cs2pr
+        run: phpcs --standard=PSR2 src/ test/
