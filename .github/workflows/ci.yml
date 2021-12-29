@@ -44,3 +44,9 @@ jobs:
       - name: Unit tests
         run: |
           vendor/bin/phpunit -d memory_limit=4G  test/
+        env:
+          MS_HOST: 127.0.0.1
+          MS_PORT: 9308
+          MS_HOST2: 127.0.0.1
+          MS_PORT2: 5308
+          
