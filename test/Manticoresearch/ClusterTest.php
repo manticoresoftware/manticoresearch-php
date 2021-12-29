@@ -120,6 +120,8 @@ class ClusterTest extends TestCase
         ];
         $result = $client->cluster()->alter($params);
         $this->assertEquals('', $result['error']);
+        
+        sleep(5);
 
         // drop cluster
         $params = [
@@ -131,5 +133,7 @@ class ClusterTest extends TestCase
         // drop index on
         $client->indices()->drop(['index' => 'products']);
         $this->assertEquals('', $result['error']);
+        
+        sleep(5);
     }
 }
