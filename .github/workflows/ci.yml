@@ -60,10 +60,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       
-      - name: Install PHP 8.0
+      - name: Install PHP 7.4
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
+          php-version: 7.4
           tools: phpstan
 
       - name: Install dependencies
