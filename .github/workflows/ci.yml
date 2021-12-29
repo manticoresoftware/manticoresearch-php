@@ -36,12 +36,13 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           extensions: yaml, zip, curl
+          tools: phpunit,phpstan
         
       - name: Install dependencies
         run: |
           composer install --prefer-dist
 
-      - name: Unit tests
+      - name: Unit test
         run: |
           vendor/bin/phpunit -d memory_limit=4G  test/
         env:
@@ -49,6 +50,10 @@ jobs:
           MS_PORT: 9308
           MS_HOST2: 127.0.0.1
           MS_PORT2: 5308
+          
+      - name: Static analysis test
+        run: |
+          vendor/bin/phpstan analyse --level=3 src/
           
   codestyle: 
     name: codestyle
@@ -62,7 +67,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.0
+          tools: phpcs
         
-      - name: Unit tests
+      - name: Test
         run: |
           vendor/bin/phpcs --standard=PSR2 src/ test/          
