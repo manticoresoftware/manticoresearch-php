@@ -2,7 +2,7 @@
     "name": "manticoresoftware/manticoresearch-php",
     "description": "PHP Client for Manticore Search",
     "keywords": ["search","client","manticoresearch"],
-    "license": "Apache-2.0",
+    "license": "MIT",
     "type": "library",
     "require": {
         "php": ">=7.1",
@@ -37,8 +37,19 @@
     },
     "authors": [
         {
+            "name": "Manticore Software",
+            "email": "contact@manticoresearch.com",
+            "homepage": "https://manticoresearch.com/"
+        },
+        {
             "name": "Adrian Nuta",
-            "email": "adriannuta@gmail.com"
+            "email": "adriannuta@gmail.com",
+            "role": "Developer"
         }
-    ]
+    ],
+    "support": {
+        "issues": "https://github.com/manticoresoftware/manticoresearch-php/issues",
+        "source": "https://github.com/manticoresoftware/manticoresearch-php/",
+        "chat": "https://slack.manticoresearch.com/"
+    }
 }
