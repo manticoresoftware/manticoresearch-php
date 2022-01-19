@@ -36,7 +36,7 @@ class Sql extends Request
         if ($this->mode === 'raw') {
             $return = ['mode=raw'];
             foreach ($this->body as $k => $v) {
-                $return[]= $k.'='.$v;
+                $return[]= $k.'='.urlencode($v);
             }
             return implode('&', $return);
         } else {
