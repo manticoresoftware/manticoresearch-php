@@ -105,7 +105,7 @@ class Nodes
         $body = $params['body']??[];
         $endpoint = new FlushAttributes();
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, []);
+        $response = $this->client->request($endpoint, ['responseClass'=>'Manticoresearch\\Response\\Sql']);
         return  $response->getResponse();
     }
 

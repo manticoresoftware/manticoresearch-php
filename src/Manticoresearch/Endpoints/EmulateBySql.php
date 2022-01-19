@@ -9,5 +9,6 @@ class EmulateBySql extends Sql
     {
         parent::__construct($params);
         $this->setMode('raw');
+        $this->params = ['responseClass' => 'Manticoresearch\\Response\\Sql'];
     }
 }

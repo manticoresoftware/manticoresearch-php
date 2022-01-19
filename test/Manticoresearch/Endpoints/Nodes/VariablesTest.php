@@ -25,7 +25,8 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
             'max_allowed_packet',
             'optimize_cutoff',
             'pseudo_sharding',
-            'query_log_format'
+            'query_log_format',
+            'session_read_only'
         ], $keys);
     }
 

@@ -25,6 +25,6 @@ class ThreadsTest extends \PHPUnit\Framework\TestCase
         // @todo What are better representative values here
         $threads->setBody(['ignored', 'ignored', 'red', 'yellow']);
 
-        $this->assertEquals('mode=raw&query=SHOW THREADS  OPTION red=0,yellow=1', $threads->getBody());
+        $this->assertEquals('mode=raw&query=SHOW+THREADS++OPTION+red%3D0%2Cyellow%3D1', $threads->getBody());
     }
 }

@@ -104,10 +104,12 @@ class IndexTest extends TestCase
 
         $this->assertEquals([
             'items' => [
-                ['replace' => [
+                ['bulk' => [
                     '_index' => 'testindex',
                     '_id' => 1,
-                    'created' => false,
+                    'created' => 1,
+                    'deleted' => 1,
+                    'updated' => 0,
                     'result' => 'updated',
                     'status' => 200
                 ]]
