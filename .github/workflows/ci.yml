@@ -20,11 +20,11 @@ jobs:
         
     services:
       manticoresearch-manticore:
-        image: manticoresearch/manticore:latest
+        image: manticoresearch/manticore:dev
         ports:
           - 9308:9308
       manticoresearch-manticore-2:
-        image: manticoresearch/manticore:latest
+        image: manticoresearch/manticore:dev
         ports:
           - 5308:9308
         
