@@ -64,7 +64,10 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
             $response = static::$client->suggest($params);
         } catch (ResponseException $ex) {
             $request = $ex->getRequest();
-            $this->assertEquals("mode=raw&query=CALL+SUGGEST%28%27brokn%27%2C%27productsNOT%27%2C5+AS+limit%29", $request->getBody());
+            $this->assertEquals(
+                "mode=raw&query=CALL+SUGGEST%28%27brokn%27%2C%27productsNOT%27%2C5+AS+limit%29",
+                $request->getBody()
+            );
 
             $response = $ex->getResponse();
             $this->assertEquals('"no such index productsNOT"', $response->getError());
