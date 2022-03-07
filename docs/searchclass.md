@@ -83,7 +83,7 @@ Allow adding an attribute filter.
 It can expect 3 parameters for filtering an attribute:
 
 - attribute name. It can also be an alias of an expression;
-- operator. Accepted operators are `range`, `lt`, `lte`, `gt`,  `gte`, `equals`;
+- operator. Accepted operators are `range`, `lt`, `lte`, `gt`,  `gte`, `equals`, `in`;
 - values for filtering. It can an array or single value
 
 notFilter() executes a negation of the operator.
@@ -91,6 +91,7 @@ notFilter() executes a negation of the operator.
 ```php
 $search->filter('year', 'lte', 2000);
 $search->filter('year', 'range', [1960,1992]);
+$search->filter('year', 'in', [1960,1975,1990]);
 ```
 
 The functions can also accept a single parameter as a filter class like Range(),  Equals() or Distance()

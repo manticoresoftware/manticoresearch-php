@@ -213,6 +213,12 @@ class SearchTest extends TestCase
         $this->assertEquals([1979,1986,1992], $this->yearsFromResults($results, 'sort'));
     }
 
+    public function testFilterIn()
+    {
+        $results = self::$search->filter('year', 'in', [1960,1979,1986])->get();
+        $this->assertEquals([1979,1986], $this->yearsFromResults($results, 'sort'));
+    }
+    
     /**
      * Demonstrate that the array of years gets smaller for the same phrase match as the limit is applied
      */
@@ -255,6 +261,12 @@ class SearchTest extends TestCase
     public function testNotFilterRange()
     {
         $results = self::$search->notFilter('year', 'range', [1900,1990])->get();
+        $this->assertEquals([1992,2010,2014,2018], $this->yearsFromResults($results, 'sort'));
+    }
+    
+    public function testNotFilterIn()
+    {
+        $results = self::$search->notFilter('year', 'in', [1960,1979,1986])->get();
         $this->assertEquals([1992,2010,2014,2018], $this->yearsFromResults($results, 'sort'));
     }
 
