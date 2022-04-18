@@ -711,6 +711,15 @@ class SearchTest extends TestCase
         $this->assertCount(2, $results->current()->getHighlight());
     }
 
+    public function testBodyHasOptions()
+    {
+        $body = self::$search
+            ->option('retry_count', 3)->option('field_weights', ['title' => 2, 'plot' => 1])
+            ->compile();
+
+        $this->assertEquals(['retry_count' => 3, 'field_weights' => ['title' => 2, 'plot' => 1]], $body['options']);
+    }
+
     public function testResultHitGetData()
     {
         $resultHit = $this->getFirstResultHit();

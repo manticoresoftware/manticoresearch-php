@@ -272,6 +272,12 @@ class Search
         return $this;
     }
 
+    public function option($name, $value): self
+    {
+        $this->params['options'][$name] = $value;
+        return $this;
+    }
+
     public function profile(): self
     {
         $this->params['profile'] = true;
