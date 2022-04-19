@@ -274,7 +274,12 @@ class Search
 
     public function option($name, $value): self
     {
-        $this->params['options'][$name] = $value;
+        if (is_null($value)) {
+            unset($this->params['options'][$name]);
+        } else {
+            $this->params['options'][$name] = $value;
+        }
+
         return $this;
     }
 

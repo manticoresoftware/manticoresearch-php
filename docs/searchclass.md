@@ -194,7 +194,21 @@ Parameters:
  * a limit on the number of facet values to return
  
 The facets will be returned in the result set and can be retrieved with [ResultSet:getFacets()](searchresults.md#resultset-object).
-   
+
+### option()
+
+Pass options to the search query.
+```php
+    $search->option('cutoff', 1);
+    $search->option('retry_count', 3);
+    $search->option('field_weights', ['title' => 100, 'description' => 200]);
+
+    // chain options
+    $search->option('ranker', 'sph04')->option('retry_delay', 5);
+
+    // unset options by passing null
+    $search->option('ranker', null);
+```
 
 ### profile()
 
