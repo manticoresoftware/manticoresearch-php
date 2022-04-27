@@ -711,6 +711,29 @@ class SearchTest extends TestCase
         $this->assertCount(2, $results->current()->getHighlight());
     }
 
+    public function testBodyHasOptions()
+    {
+        $body = self::$search
+            ->option('retry_count', 3)->option('field_weights', ['title' => 2, 'plot' => 1])
+            ->compile();
+
+        $this->assertEquals(['retry_count' => 3, 'field_weights' => ['title' => 2, 'plot' => 1]], $body['options']);
+    }
+
+    public function testUnsetOption()
+    {
+        self::$search->option('retry_count', 3)->option('retry_delay', 4);
+        self::$search->option('retry_count', null);
+        $body = self::$search->compile();
+
+        $this->assertEquals(['retry_delay' => 4], $body['options']);
+    }
+
+    public function testCutoffOption()
+    {
+        $this->assertCount(2, self::$search->search('')->option('cutoff', 2)->get());
+    }
+
     public function testResultHitGetData()
     {
         $resultHit = $this->getFirstResultHit();
