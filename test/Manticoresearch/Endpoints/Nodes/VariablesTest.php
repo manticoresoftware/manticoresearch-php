@@ -26,6 +26,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
             'optimize_cutoff',
             'pseudo_sharding',
             'query_log_format',
+            'secondary_indexes',
             'session_read_only'
         ], $keys);
     }
