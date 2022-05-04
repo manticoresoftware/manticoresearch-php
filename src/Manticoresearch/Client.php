@@ -79,12 +79,16 @@ class Client
         }
         if (isset($this->config['connectionStrategy'])) {
             if (is_string($this->config['connectionStrategy'])) {
-                $strategyName = '\\Manticoresearch\\Connection\\Strategy\\' . $this->config['connectionStrategy'];
-                if (class_exists($strategyName)) {
+                $strategyName = $this->config['connectionStrategy'];
+                if (strncmp($strategyName, 'Manticoresearch\\', 16) === 0) {
                     $strategy = new $strategyName();
-                } elseif (class_exists($this->config['connectionStrategy'])) {
-                    $strategyName = $this->config['connectionStrategy'];
-                    $strategy = new $strategyName();
+                } else {
+                    $strategyFullName = '\\Manticoresearch\\Connection\\Strategy\\' . $strategyName;
+                    if (class_exists($strategyFullName)) {
+                        $strategy = new $strategyFullName();
+                    } elseif (class_exists($strategyName)) {
+                        $strategy = new $strategyName();
+                    }
                 }
             } elseif ($this->config['connectionStrategy'] instanceof SelectorInterface) {
                 $strategy = $this->config['connectionStrategy'];
