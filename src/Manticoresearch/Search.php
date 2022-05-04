@@ -272,6 +272,17 @@ class Search
         return $this;
     }
 
+    public function option($name, $value): self
+    {
+        if (is_null($value)) {
+            unset($this->params['options'][$name]);
+        } else {
+            $this->params['options'][$name] = $value;
+        }
+
+        return $this;
+    }
+
     public function profile(): self
     {
         $this->params['profile'] = true;
