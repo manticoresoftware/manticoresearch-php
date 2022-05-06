@@ -434,4 +434,47 @@ class IndexTest extends TestCase
         $index = $this->getIndex();
         $this->assertEquals('testindex', $index->getName());
     }
+
+    public function testRawSelectQuery()
+    {
+        $params = [
+            'host' => $_SERVER['MS_HOST'],
+            'port' => $_SERVER['MS_PORT'],
+            'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT']
+        ];
+        $client = new Client($params);
+
+        $index = $this->getIndex();
+
+        $index->setName('test');
+        $index->drop(true);
+        $index->create(
+            [
+                'title' => ['type' => 'text'],
+                'plot' => ['type' => 'text'],
+                'year' => ['type' => 'integer'],
+                'rating' => ['type' => 'float']
+            ],
+            [],
+            true
+        );
+        $index->addDocument(
+            [
+                'title' => 'Star Trek: Nemesis',
+                'plot' => 'The Enterprise is diverted to the Romulan homeworld Romulus, supposedly because they want' .
+                    ' to negotiate a peace treaty. Captain Picard and his crew discover a serious threat to the ' .
+                    'Federation once Praetor Shinzon plans to attack Earth.',
+                'year' => 2002,
+                'rating' => 6.4
+            ],
+            1
+        );
+        $result = $client->sql([
+            'mode' => 'raw',
+            'body' => [
+                'query' => 'select id, year from test where year = 2000'
+            ]
+        ]);
+        $this->assertEquals([], $result);
+    }
 }
