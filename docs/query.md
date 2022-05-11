@@ -9,7 +9,16 @@ Constructor of a the bool node
 $bool = new \Manticoresearch\Query\BoolQuery();
 ```
 
-It supports adding nodes to it via `must()`, `mustNot()` and `should()` methods
+It supports adding nodes to it via `must()`, `mustNot()` and `should()` methods.
+
+Bool queries can be nested, i.e., nodes added to a root `BoolQuery` can, in their turn, contain its own bool queries, thus allowing user to build complex logical expressions.
+
+```php
+$bool2 = new \Manticoresearch\Query\BoolQuery();
+$bool2->should(new \Manticoresearch\Query\('year', 2000));
+$bool2->should(new \Manticoresearch\Query\('year', 2010));
+$bool->must($bool2);
+```
 
 ## MatchQuery()
 
