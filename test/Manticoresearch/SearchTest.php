@@ -573,8 +573,8 @@ class SearchTest extends TestCase
         $q = new BoolQuery();
         $q->must(new Equals('advise', 'R'));
         $q2 = new BoolQuery();
-        $q->should(new Equals('rating', 8.4));
-        $q->should(new Equals('rating', 8.3));
+        $q2->should(new Equals('rating', 8.4));
+        $q2->should(new Equals('rating', 8.3));
         $q->must($q2);
         $result = self::$search->search($q)->get();
         $this->assertCount(2, $result);
