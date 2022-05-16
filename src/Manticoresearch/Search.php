@@ -64,6 +64,17 @@ class Search
         return $this;
     }
 
+    public function trackScores($trackScores): self
+    {
+        if (is_null($trackScores)) {
+            unset($this->params['track_scores']);
+        } else {
+            $this->params['track_scores'] = (bool)$trackScores;
+        }
+
+        return $this;
+    }
+
     /**
      * @param string $queryString
      * @return $this
