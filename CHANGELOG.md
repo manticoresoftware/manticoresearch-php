@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.0](https://github.com/manticoresoftware/manticoresearch-php/releases/tag/2.0.0) (2022-05-18)
+* supports Manticore Search 5.0.0
+* supports http `options` parameter
+* removed `Query\Match` class as deprecated
+* optimized the connection strategy name resolution 
+* unified the response format for `raw` select queries
+* minor changes in tests
+* minor updates of documentation
+
+**Breaking changes:**
+* returns 'sql-over-http' response as an array
+
 ## [1.8.0](https://github.com/manticoresoftware/manticoresearch-php/releases/tag/1.8.0) (2022-01-06)
 * changed license from Apache 2.0 to more permissive MIT for compatibility with GPL licenses
 * switched to Github actions from Travis CI
