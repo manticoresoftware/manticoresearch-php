@@ -42,7 +42,7 @@ Minimum Manticore Search version is 2.5.1 with HTTP protocol enabled.
 
 | Manticore Search  | manticoresearch-php |     PHP       |
 | ----------------- | ------------------- | ------------- |
-| >= 4.2.1          | 2.0.x               | >= 7.1, >=8.0 |
+| >= 4.2.1          | 2.0.x, 2.1.x        | >= 7.1, >=8.0 |
 | >= 4.0.2          | 1.7.x, 1.8.x        | >= 7.1, >=8.0 |
 | >= 3.5.2          | 1.6.x               | >= 7.1, >=8.0 |
 | >= 3.5.0          | 1.5.x               | >= 7.1, <8.0  |
