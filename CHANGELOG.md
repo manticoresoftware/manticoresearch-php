@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.1.0](https://github.com/manticoresoftware/manticoresearch-php/releases/tag/2.1.0) (2022-05-19)
+* added 'trackScores' method to 'Search' class
+* minor update of related tests 
+* updated documentation and changelog
+
 ## [2.0.0](https://github.com/manticoresoftware/manticoresearch-php/releases/tag/2.0.0) (2022-05-18)
 * supports Manticore Search 5.0.0
 * supports http `options` parameter
