@@ -746,6 +746,35 @@ class SearchTest extends TestCase
         $this->assertCount(2, self::$search->search('')->option('cutoff', 2)->get());
     }
 
+    public function testTrackScoresCompiles()
+    {
+        $body = self::$search->trackScores(true)->compile();
+        $this->assertTrue($body['track_scores']);
+
+        $body = self::$search->trackScores(false)->compile();
+        $this->assertFalse($body['track_scores']);
+
+        $body = self::$search->trackScores(null)->compile();
+        $this->assertArrayNotHasKey('track_scores', $body);
+    }
+
+    public function testTrackScores()
+    {
+        // when there are match and sort, but there is no track_scores, the score is equal to 1
+        $result = self::$search->search('space')->sort('year', 'desc')->get();
+        $this->assertCount(2, $result);
+        foreach ($result as $resultHit) {
+            $this->assertEquals(1, $resultHit->getScore());
+        }
+
+        // when there are match, sort and track_scores, the score is greater than 1
+        $result = self::$search->search('space')->trackScores(true)->sort('year', 'desc')->get();
+        $this->assertCount(2, $result);
+        foreach ($result as $resultHit) {
+            $this->assertGreaterThan(1, $resultHit->getScore());
+        }
+    }
+
     public function testResultHitGetData()
     {
         $resultHit = $this->getFirstResultHit();

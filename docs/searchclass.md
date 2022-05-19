@@ -210,6 +210,15 @@ Pass options to the search query.
     $search->option('ranker', null);
 ```
 
+### trackScores()
+You can enable weight calculation by setting the `track_scores` option to `true`.
+
+```php
+    $search->trackScores(true); // enable weight calculation
+    $search->trackScores(false); // disable weight calculation
+    $search->trackScores(null); // unset track_scores option
+```
+
 ### profile()
 
 If included, result set will provide query profiling.
