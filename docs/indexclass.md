@@ -66,8 +66,9 @@ If a setting can have multiple values, an array of values will be used, like:
 ```php
  $index->setName('mynewindex');
  $index->create([],
-    ['type' => 'distributed'],
-    ['local' => [
+    [
+        'type' => 'distributed',
+        'local' => [
             'local_index_1',
             'local_index_2',
         ]
