@@ -80,6 +80,72 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['total'=>0,'error'=>'','warning'=>''], $response);
     }
 
+    public function testCreateDistributedWIthMultipleIndexes()
+    {
+        $localIndexName = 'testrt';
+        $localIndexName2 = 'testrt2';
+        $distributedIndexName = 'testrtdist';
+
+        $params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
+        $client = new Client($params);
+        $params = [
+            'index' => $localIndexName,
+            'body' => [
+                'columns' => [
+                    'title' => [
+                        'type' => 'text',
+                        'options' => ['indexed', 'stored'],
+                    ],
+                ],
+                'silent' => true,
+            ],
+        ];
+        $response = $client->indices()->create($params);
+        $params = [
+            'index' => $localIndexName2,
+            'body' => [
+                'columns' => [
+                    'title' => [
+                        'type' => 'text',
+                        'options' => ['indexed', 'stored'],
+                    ],
+                ],
+                'silent' => true,
+            ],
+        ];
+        $response = $client->indices()->create($params);
+
+        $params = [
+            'index' => $distributedIndexName,
+            'body' => [
+                'settings' => [
+                    'type' => 'distributed',
+                    'local' => [
+                        $localIndexName,
+                        $localIndexName2,
+                    ],
+                ],
+            ],
+        ];
+        $response = $client->indices()->create($params);
+        $this->assertSame(['total' => 0, 'error' => '', 'warning' => ''], $response);
+
+        $response = $client->indices()->drop([
+            'index' => $distributedIndexName,
+        ]);
+        $this->assertSame(['total' => 0, 'error' => '', 'warning' => ''], $response);
+
+        $response = $client->indices()->drop([
+            'index' => $localIndexName,
+        ]);
+        $this->assertSame(['total' => 0, 'error' => '', 'warning' => ''], $response);
+
+        $response = $client->indices()->drop([
+            'index' => $localIndexName2,
+        ]);
+        $this->assertSame(['total' => 0, 'error' => '', 'warning' => ''], $response);
+    }
+
     public function testNoIndexDrop()
     {
         $params = [
