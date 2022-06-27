@@ -34,7 +34,6 @@ class Create extends EmulateBySql
             $options = "";
             if (isset($params['settings'])) {
                 foreach ($params['settings'] as $name => $value) {
-                    $options.=" ".$name." = '".$value."'";
                     if (is_array($value)) {
                         foreach ($value as $v) {
                             $options.=" ".$name." = '".$v."'";
