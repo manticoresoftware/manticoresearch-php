@@ -21,8 +21,6 @@ manticoresearch-php
 
 Official PHP client for Manticore Search.
 
-❗ WARNING: this is a development version of the client. The latest release's readme is https://github.com/manticoresoftware/manticoresearch-php/tree/2.1.2
-
 
 Features
 --------
