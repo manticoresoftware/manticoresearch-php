@@ -73,8 +73,9 @@ class Response
             if (json_last_error() !== JSON_ERROR_NONE) {
                 if (json_last_error() === JSON_ERROR_UTF8) {
                     $this->response = json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $this->string), true);
-                } else
+                } else {
                     throw new RuntimeException('fatal error while trying to decode JSON response');
+                }
             }
 
             if (empty($this->response)) {
