@@ -57,6 +57,7 @@ class Response
             $this->response = $responseString;
         } else {
             $this->string = $responseString;
+            $this->string = preg_replace('/\x03/', ' ', $this->string);
         }
         $this->status = $status;
         $this->params = $params;
