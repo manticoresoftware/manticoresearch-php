@@ -219,6 +219,15 @@ You can enable weight calculation by setting the `track_scores` option to `true`
     $search->trackScores(null); // unset track_scores option
 ```
 
+### stripBadUtf8()
+You can enable removal of bad utf8 characters from the results by setting the `strip_bad_utf8` option to `true`.
+
+```php
+    $search->stripBadUtf8(true); // enable removal of bad utf8 characters
+    $search->stripBadUtf8(false); // disable removal of bad utf8 characters
+    $search->stripBadUtf8(null); // unset strip_bad_utf8 option
+```
+
 ### profile()
 
 If included, result set will provide query profiling.

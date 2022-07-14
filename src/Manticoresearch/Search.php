@@ -75,6 +75,17 @@ class Search
         return $this;
     }
 
+    public function stripBadUtf8($stripBadUtf8): self
+    {
+        if (is_null($stripBadUtf8)) {
+            unset($this->params['strip_bad_utf8']);
+        } else {
+            $this->params['strip_bad_utf8'] = (bool)$stripBadUtf8;
+        }
+        
+        return $this;
+    }
+    
     /**
      * @param string $queryString
      * @return $this

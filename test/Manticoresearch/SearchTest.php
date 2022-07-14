@@ -774,6 +774,18 @@ class SearchTest extends TestCase
             $this->assertGreaterThan(1, $resultHit->getScore());
         }
     }
+    
+    public function testStripBadUtf8Compiles()
+    {
+        $body = self::$search->stripBadUtf8(true)->compile();
+        $this->assertTrue($body['strip_bad_utf8']);
+        
+        $body = self::$search->stripBadUtf8(false)->compile();
+        $this->assertFalse($body['strip_bad_utf8']);
+        
+        $body = self::$search->stripBadUtf8(null)->compile();
+        $this->assertArrayNotHasKey('strip_bad_utf8', $body);
+    }
 
     public function testResultHitGetData()
     {
