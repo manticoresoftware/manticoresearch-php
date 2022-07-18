@@ -89,7 +89,7 @@ class Response
      * check if strip_bad_utf8 as been set to true
      * @return boolean
      */
-    private function stripBadUtf8() 
+    private function stripBadUtf8()
     {
         return !empty($this->transportInfo['body']) && !empty($this->transportInfo['body']['strip_bad_utf8']);
     }
