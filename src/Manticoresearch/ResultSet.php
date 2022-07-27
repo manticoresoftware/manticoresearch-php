@@ -60,7 +60,7 @@ class ResultSet implements \Iterator, \Countable
         $this->position = 0;
     }
 
-    public function current(): mixed
+    public function current(): ResultHit
     {
         return new ResultHit($this->array[$this->position]);
     }

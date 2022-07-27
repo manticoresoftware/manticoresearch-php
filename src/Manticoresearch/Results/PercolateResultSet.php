@@ -7,7 +7,7 @@ use Manticoresearch\ResultSet;
 
 class PercolateResultSet extends ResultSet
 {
-    public function current()
+    public function current(): PercolateResultHit
     {
         return new PercolateResultHit($this->array[$this->position]);
     }
