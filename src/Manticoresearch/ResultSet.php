@@ -55,27 +55,27 @@ class ResultSet implements \Iterator, \Countable
         }
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = 0;
     }
 
-    public function current()
+    public function current(): mixed
     {
         return new ResultHit($this->array[$this->position]);
     }
 
-    public function next()
+    public function next(): void
     {
         $this->position++;
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return isset($this->array[$this->position]);
     }
 
-    public function key()
+    public function key(): mixed
     {
         return $this->position;
     }
@@ -103,7 +103,7 @@ class ResultSet implements \Iterator, \Countable
         return $this->response;
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->array);
     }
