@@ -75,7 +75,7 @@ class ResultSet implements \Iterator, \Countable
         return isset($this->array[$this->position]);
     }
 
-    public function key(): mixed
+    public function key(): int
     {
         return $this->position;
     }
