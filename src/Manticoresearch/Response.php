@@ -70,9 +70,12 @@ class Response
     {
         if (null === $this->response) {
             $this->response = json_decode($this->string, true);
-
             if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new RuntimeException('fatal error while trying to decode JSON response');
+                if (json_last_error() === JSON_ERROR_UTF8 && $this->stripBadUtf8()) {
+                    $this->response = json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $this->string), true);
+                } else {
+                    throw new RuntimeException('fatal error while trying to decode JSON response');
+                }
             }
 
             if (empty($this->response)) {
@@ -80,6 +83,15 @@ class Response
             }
         }
         return $this->response;
+    }
+    
+    /**
+     * check if strip_bad_utf8 as been set to true
+     * @return boolean
+     */
+    private function stripBadUtf8()
+    {
+        return !empty($this->transportInfo['body']) && !empty($this->transportInfo['body']['strip_bad_utf8']);
     }
 
     /*
