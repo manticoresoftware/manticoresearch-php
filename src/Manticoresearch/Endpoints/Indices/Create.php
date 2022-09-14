@@ -24,7 +24,7 @@ class Create extends EmulateBySql
             $columns = [];
             if (isset($params['columns'])) {
                 foreach ($params['columns'] as $name => $settings) {
-                    $column = $name . ' ' . $settings['type'];
+                    $column = '`' . $name . '` ' . $settings['type'];
                     if (isset($settings['options']) && count($settings['options']) > 0) {
                         $column .= ' ' . implode(' ', $settings['options']);
                     }
