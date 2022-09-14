@@ -84,20 +84,6 @@ $bool->must(new \Manticoresearch\Query\Range('year', ['lte' => 2020]));
 ```
 
 
-## ScriptFields()
-
-Creates a `script_fields` expression.
-
-Expects two arguments:
-- expression name
-- a string with an expression in SQL syntax
-
- ```php
-$bool->must(new \Manticoresearch\Query\ScriptFields('cond1', "IF (IN (content_rating,'TV-PG','PG'),2, IF(IN(content_rating,'TV-14','PG-13'),1,0))"));
-```
-
-The expression name can be used in filtering or sorting.
-
 ## Distance()
 
 Creates a `geo_distance` expression.
