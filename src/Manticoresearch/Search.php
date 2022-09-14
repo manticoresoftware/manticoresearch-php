@@ -331,7 +331,6 @@ class Search
 
         if (isset($this->params['script_fields'])) {
             $body['script_fields'] = $this->params['script_fields']->toArray();
-            unset($this->params['script_fields']);
         }
 
         return $body;
