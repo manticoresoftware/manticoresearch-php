@@ -94,18 +94,19 @@ class PhpHttp extends Transport implements TransportInterface
             'connection' => $connection->getConfig(),
             'payload'=> $request->getBody()
         ]);
-        $this->logger->info(
-            'Request:',
-            [
-                 'url' => $url,
-                'status' => $status,
-                'time' => $time
-            ]
-        );
+        $this->logger->info('Request:', [
+            'url' => $url,
+            'status' => $status,
+            'time' => $time,
+        ]);
         $this->logger->debug('Response body:', $response->getResponse());
 
         if ($response->hasError()) {
-            $this->logger->error('Response error:', [$response->getError()]);
+            $this->logger->error('Response:', [
+                'url' => $url,
+                'error' => $response->getError(),
+                'payload' => $request->getBody(),
+            ]);
             throw new ResponseException($request, $response);
         }
         return $response;
