@@ -27,7 +27,9 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
             'pseudo_sharding',
             'query_log_format',
             'secondary_indexes',
-            'session_read_only'
+            'session_read_only',
+            'threads_ex',
+            'threads_ex_effective'
         ], $keys);
     }
 
