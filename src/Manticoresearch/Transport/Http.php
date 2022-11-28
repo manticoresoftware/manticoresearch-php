@@ -108,21 +108,22 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 
 
         $this->logger->debug('Request body:', [
-                'connection' => $connection->getConfig(),
-                'payload'=> $request->getBody()
-            ]);
-        $this->logger->info(
-            'Request:',
-            [
-                    'url' => $url,
-                    'status' => $status,
-                    'time' => $time
-                ]
-        );
+            'connection' => $connection->getConfig(),
+            'payload' => $request->getBody()
+        ]);
+        $this->logger->info('Request:', [
+            'url' => $url,
+            'status' => $status,
+            'time' => $time,
+        ]);
         $this->logger->debug('Response body:', [json_decode($responseString, true)]);
         //soft error
         if ($response->hasError()) {
-            $this->logger->error('Response error:', [$response->getError()]);
+            $this->logger->error('Response:', [
+                'url' => $url,
+                'error' => $response->getError(),
+                'payload' => $request->getBody(),
+            ]);
             throw new ResponseException($request, $response);
         }
         return $response;
