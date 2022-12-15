@@ -197,7 +197,8 @@ The facets will be returned in the result set and can be retrieved with [ResultS
 
 ### option()
 
-Pass options to the search query.
+Pass options to the search query.  
+You can also modify the ranker and set a custom expression. See availabe [built-in rankers](https://manual.manticoresearch.com/Searching/Sorting_and_ranking#Formula-expressions-for-all-the-built-in-rankers)
 ```php
     $search->option('cutoff', 1);
     $search->option('retry_count', 3);
@@ -205,7 +206,9 @@ Pass options to the search query.
 
     // chain options
     $search->option('ranker', 'sph04')->option('retry_delay', 5);
-
+    //set a custom ranker based on field values
+    $search->option('ranker', 'expr(\'sum((4*lcs+2*(min_hit_pos==1)+exact_hit)*user_weight)*1000 + bm25 + IF(IN(field1, "1"), 0, 10000) + IF(IN(field2, "1"), 0, 10000)\')')
+    
     // unset options by passing null
     $search->option('ranker', null);
 ```
