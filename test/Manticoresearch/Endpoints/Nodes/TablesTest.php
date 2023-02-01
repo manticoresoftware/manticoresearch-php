@@ -12,7 +12,7 @@ class TablesTest extends \PHPUnit\Framework\TestCase
 
         // need to remove indexes created by other tests
         $otherIndexes = [
-          'testrt', 'products', 'testrtdist', 'testindex', 'movies', 'bulktest'
+          'testrt', 'products', 'test', 'testrtdist', 'testindex', 'movies', 'bulktest'
         ];
         foreach ($otherIndexes as $index) {
             $client->indices()->drop([

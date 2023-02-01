@@ -45,7 +45,7 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $this->expectException(\Manticoresearch\Exceptions\ResponseException::class);
-        $this->expectExceptionMessage('no such index productsNOT');
+        $this->expectExceptionMessage('no such table productsNOT');
         $response = static::$client->suggest($params);
     }
     public function testResponseExceptionViaSuggest()
@@ -70,7 +70,7 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
             );
 
             $response = $ex->getResponse();
-            $this->assertEquals('"no such index productsNOT"', $response->getError());
+            $this->assertEquals('"no such table productsNOT"', $response->getError());
         }
     }
     public function testSuggestGetIndex()

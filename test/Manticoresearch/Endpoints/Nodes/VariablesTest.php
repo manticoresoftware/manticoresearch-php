@@ -14,6 +14,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
         $keys = array_keys($response);
         sort($keys);
         $this->assertEquals([
+            'accurate_aggregation',
             'auto_optimize',
             'autocommit',
             'character_set_client',
