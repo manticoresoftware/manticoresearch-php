@@ -13,25 +13,47 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
 
         $keys = array_keys($response);
         sort($keys);
-        $this->assertEquals([
-            'accurate_aggregation',
-            'auto_optimize',
-            'autocommit',
-            'character_set_client',
-            'character_set_connection',
-            'collation_connection',
-            'grouping_in_utc',
-            'last_insert_id',
-            'log_level',
-            'max_allowed_packet',
-            'optimize_cutoff',
-            'pseudo_sharding',
-            'query_log_format',
-            'secondary_indexes',
-            'session_read_only',
-            'threads_ex',
-            'threads_ex_effective'
-        ], $keys);
+        // Adding extra try-catch to provide compatibility with previous Manticore versions
+        try {
+            $this->assertEquals([
+                'auto_optimize',
+                'autocommit',
+                'character_set_client',
+                'character_set_connection',
+                'collation_connection',
+                'grouping_in_utc',
+                'last_insert_id',
+                'log_level',
+                'max_allowed_packet',
+                'optimize_cutoff',
+                'pseudo_sharding',
+                'query_log_format',
+                'secondary_indexes',
+                'session_read_only',
+                'threads_ex',
+                'threads_ex_effective'
+            ], $keys);
+        } catch(\PHPUnit\Framework\ExpectationFailedException $e) {
+            $this->assertEquals([
+                'accurate_aggregation',
+                'auto_optimize',
+                'autocommit',
+                'character_set_client',
+                'character_set_connection',
+                'collation_connection',
+                'grouping_in_utc',
+                'last_insert_id',
+                'log_level',
+                'max_allowed_packet',
+                'optimize_cutoff',
+                'pseudo_sharding',
+                'query_log_format',
+                'secondary_indexes',
+                'session_read_only',
+                'threads_ex',
+                'threads_ex_effective'
+            ], $keys);
+        }
     }
 
     public function testVariablesWithPattern()

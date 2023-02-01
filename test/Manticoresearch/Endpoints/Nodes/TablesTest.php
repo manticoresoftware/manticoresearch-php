@@ -27,6 +27,11 @@ class TablesTest extends \PHPUnit\Framework\TestCase
         $helper = new PopulateHelperTest();
         $client = $helper->getClient();
         $response = $client->nodes()->tables();
-        $this->assertEquals(['products' => 'rt'], $response);
+        // Adding extra try-catch to provide compatibility with previous Manticore versions
+        try {
+            $this->assertEquals(['products' => 'rt'], $response);
+        } catch(\Manticoresearch\Exceptions\ResponseException $e) {
+            $this->assertEquals(['test' => 'rt'], $response);
+        }
     }
 }
