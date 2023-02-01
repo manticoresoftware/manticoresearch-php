@@ -47,10 +47,10 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
         // Adding extra try-catch to provide compatibility with previous Manticore versions
         try {
             $response = static::$client->suggest($params);
-        } catch(\Manticoresearch\Exceptions\ResponseException $e) {
+        } catch (\Manticoresearch\Exceptions\ResponseException $e) {
             try {
                 $this->assertEquals('"no such index productsNOT"', $e->getMessage());
-            } catch(\PHPUnit\Framework\ExpectationFailedException $e) {
+            } catch (\PHPUnit\Framework\ExpectationFailedException $e) {
                 $this->expectException(\Manticoresearch\Exceptions\ResponseException::class);
                 $this->expectExceptionMessage('no such table productsNOT');
                 $response = static::$client->suggest($params);
@@ -82,7 +82,7 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
             // Adding extra try-catch to provide compatibility with previous Manticore versions
             try {
                 $this->assertEquals('"no such index productsNOT"', $response->getError());
-            } catch(\PHPUnit\Framework\ExpectationFailedException $e) {
+            } catch (\PHPUnit\Framework\ExpectationFailedException $e) {
                 $this->assertEquals('"no such table productsNOT"', $response->getError());
             }
         }

@@ -33,7 +33,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
                 'threads_ex',
                 'threads_ex_effective'
             ], $keys);
-        } catch(\PHPUnit\Framework\ExpectationFailedException $e) {
+        } catch (\PHPUnit\Framework\ExpectationFailedException $e) {
             $this->assertEquals([
                 'accurate_aggregation',
                 'auto_optimize',

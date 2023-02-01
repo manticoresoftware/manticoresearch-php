@@ -30,7 +30,7 @@ class TablesTest extends \PHPUnit\Framework\TestCase
         // Adding extra try-catch to provide compatibility with previous Manticore versions
         try {
             $this->assertEquals(['products' => 'rt'], $response);
-        } catch(\Manticoresearch\Exceptions\ResponseException $e) {
+        } catch (\Manticoresearch\Exceptions\ResponseException $e) {
             $this->assertEquals(['test' => 'rt'], $response);
         }
     }

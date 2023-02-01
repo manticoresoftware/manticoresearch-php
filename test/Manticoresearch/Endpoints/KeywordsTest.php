@@ -52,16 +52,15 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
         // Adding extra try-catch to provide compatibility with previous Manticore versions
         try {
             $response = static::$client->keywords($params);
-        } catch(ResponseException $e) {
+        } catch (ResponseException $e) {
             try {
                 $this->assertEquals('"no such index productsNOT"', $e->getMessage());
-            } catch(\PHPUnit\Framework\ExpectationFailedException $e) {
+            } catch (\PHPUnit\Framework\ExpectationFailedException $e) {
                 $this->expectException(ResponseException::class);
                 $this->expectExceptionMessage('no such table productsNOT');
                 $response = static::$client->keywords($params);
             }
         }
-        
     }
 
     public function testSetGetIndex()
