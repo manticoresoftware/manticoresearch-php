@@ -361,7 +361,10 @@ class Client
                 'request' => $request->toArray()
             ]);
             $this->initConnections();
-            throw $e;
+            
+            $connection = $this->connectionPool->getConnection();
+            $this->lastResponse = $connection->getTransportHandler($this->logger)->execute($request, $params);
+            
         } catch (ConnectionException $e) {
             $this->logger->warning('Manticore Search Request failed ' . $this->connectionPool->retries_attempts . ':', [
                 'exception' => $e->getMessage(),
