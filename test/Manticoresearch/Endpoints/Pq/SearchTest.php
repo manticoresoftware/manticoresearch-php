@@ -46,7 +46,7 @@ class SearchTest extends \PHPUnit\Framework\TestCase
     {
         $search = new Search();
         $search->setIndex('products');
-        $this->assertEquals('/json/pq/products/_search', $search->getPath());
+        $this->assertEquals('/pq/products/_search', $search->getPath());
     }
 
     public function testGetPathIndexMissing()

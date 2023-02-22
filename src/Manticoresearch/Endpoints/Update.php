@@ -16,7 +16,7 @@ class Update extends Request
      */
     public function getPath()
     {
-        return '/json/update';
+        return '/update';
     }
 
     /**

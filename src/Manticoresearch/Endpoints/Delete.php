@@ -15,7 +15,7 @@ class Delete extends Request
      */
     public function getPath()
     {
-        return '/json/delete';
+        return '/delete';
     }
 
     /**

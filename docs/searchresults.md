@@ -1,6 +1,6 @@
 # Search result objects
 
-Native [Client:search](lowlevelclient.md#search) returns by default an unmodified array representing the response of `/json/search` endpoint, like:
+Native [Client:search](lowlevelclient.md#search) returns by default an unmodified array representing the response of `/search` endpoint, like:
 
 ```json
 {

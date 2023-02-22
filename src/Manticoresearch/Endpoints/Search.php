@@ -16,7 +16,7 @@ class Search extends Request
      */
     public function getPath()
     {
-        return '/json/search';
+        return '/search';
     }
 
     /**

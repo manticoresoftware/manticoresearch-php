@@ -16,7 +16,7 @@ class Insert extends Request
      */
     public function getPath()
     {
-        return '/json/insert';
+        return '/insert';
     }
 
     /**

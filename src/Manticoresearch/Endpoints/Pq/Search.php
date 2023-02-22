@@ -32,7 +32,7 @@ class Search extends Request
     public function getPath()
     {
         if (isset($this->index)) {
-            return "/json/pq/" . $this->index . "/_search";
+            return "/pq/" . $this->index . "/_search";
         }
         throw new RuntimeException('Index name is missing.');
     }

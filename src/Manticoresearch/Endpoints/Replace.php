@@ -16,7 +16,7 @@ class Replace extends Request
      */
     public function getPath()
     {
-        return '/json/replace';
+        return '/replace';
     }
 
     /**
