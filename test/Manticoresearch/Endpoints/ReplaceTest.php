@@ -7,7 +7,7 @@ class ReplaceTest extends \PHPUnit\Framework\TestCase
     public function testGetPath()
     {
         $replace = new \Manticoresearch\Endpoints\Replace();
-        $this->assertEquals('/replace', $replace->getPath());
+        $this->assertEquals('/json/replace', $replace->getPath());
     }
 
     public function testGetMethod()

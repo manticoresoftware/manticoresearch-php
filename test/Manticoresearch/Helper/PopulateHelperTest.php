@@ -83,7 +83,7 @@ class PopulateHelperTest extends \PHPUnit\Framework\TestCase
         return $this->client->indices()->describe(['index'=> $indexName]);
     }
 
-    public function nodeStatus($indexName)
+    public function status($indexName)
     {
         return $this->client->nodes()->status();
     }

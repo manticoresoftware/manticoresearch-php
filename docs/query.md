@@ -87,7 +87,7 @@ $bool->must(new \Manticoresearch\Query\Range('year', ['lte' => 2020]));
 ## Distance()
 
 Creates a `geo_distance` expression.
-Expects an array that follows the syntax defined in `/search` :
+Expects an array that follows the syntax defined in `/json/search` :
 
 - location_anchor containing the pin object
 - location_source containing the attributes with lat/long

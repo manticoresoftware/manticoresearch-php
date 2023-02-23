@@ -15,7 +15,7 @@ class Bulk extends Request
      */
     public function getPath()
     {
-        return '/bulk';
+        return '/json/bulk';
     }
 
     /**

@@ -41,7 +41,7 @@ class DocTest extends \PHPUnit\Framework\TestCase
     {
         $doc = new Doc();
         $doc->setIndex('products');
-        $this->assertEquals('/pq/products/doc', $doc->getPath());
+        $this->assertEquals('/json/pq/products/doc', $doc->getPath());
     }
 
     public function testGetPathWithID()
@@ -49,7 +49,7 @@ class DocTest extends \PHPUnit\Framework\TestCase
         $doc = new Doc();
         $doc->setIndex('products');
         $doc->setId(4);
-        $this->assertEquals('/pq/products/doc/4', $doc->getPath());
+        $this->assertEquals('/json/pq/products/doc/4', $doc->getPath());
     }
 
     public function testMethod()

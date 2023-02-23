@@ -34,9 +34,9 @@ class Doc extends \Manticoresearch\Request
     {
         if (isset($this->index)) {
             if (isset($this->id)) {
-                return "/pq/" . $this->index . "/doc/" . $this->id;
+                return "/json/pq/" . $this->index . "/doc/" . $this->id;
             } else {
-                return "/pq/" . $this->index . "/doc";
+                return "/json/pq/" . $this->index . "/doc";
             }
         }
         throw new RuntimeException('Index name is missing.');

@@ -54,6 +54,6 @@ class SearchTest extends \PHPUnit\Framework\TestCase
     public function testPath()
     {
         $search = new \Manticoresearch\Endpoints\Search();
-        $this->assertEquals('/search', $search->getPath());
+        $this->assertEquals('/json/search', $search->getPath());
     }
 }

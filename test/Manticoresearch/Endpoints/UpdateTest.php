@@ -22,7 +22,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
     public function testGetPath()
     {
         $update = new Update();
-        $this->assertEquals('/update', $update->getPath());
+        $this->assertEquals('/json/update', $update->getPath());
     }
 
     public function testGetMethod()

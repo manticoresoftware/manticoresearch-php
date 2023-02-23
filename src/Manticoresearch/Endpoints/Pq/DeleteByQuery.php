@@ -32,7 +32,7 @@ class DeleteByQuery extends Request
     public function getPath()
     {
         if (isset($this->index)) {
-            return "/pq/" . $this->index . "/_search";
+            return "/json/pq/" . $this->index . "/_search";
         }
         throw new RuntimeException('Index name is missing.');
     }
