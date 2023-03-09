@@ -116,14 +116,14 @@ $response = $search->search('"team of explorers"/2')->filter('year', 'equals', 2
 
 can be rewritten as:
 ```php
-$q = new BoolQuery();
-$q->must(new Match(['query' => 'team of explorers', 'operator' => 'or'], '*'));
-$q->must(new Equals('year', 2014));
+$q = new \Manticoresearch\Query\BoolQuery();
+$q->must(new \Manticoresearch\Query\MatchQuery(['query' => 'team of explorers', 'operator' => 'or'], '*'));
+$q->must(new \Manticoresearch\Query\Equals('year', 2014));
 $response = $search->search($q)->get();
 ```
 
 Both sugar syntaxes can be also be mixed:
 
 ```php
-$response = $search->search('"team of explorers"/2')->filter(new Equals('year', 2014))->get();
+$response = $search->search('"team of explorers"/2')->filter(new \Manticoresearch\Query\Equals('year', 2014))->get();
 ```

@@ -189,7 +189,7 @@ class Index
         $params = [
             'body' => [
                 'index' => $this->index,
-                'id' => $id,
+                'id' => (int)$id,
                 'doc' => $data
             ]
         ];
@@ -208,13 +208,12 @@ class Index
             } elseif (is_string($document)) {
                 $document = json_decode($document, true);
             }
-            $id = $document['id'];
+            $id = (int)$document['id'];
             unset($document['id']);
             $replace = [
                 'index' => $this->index,
                 'id' => $id,
                 'doc' => $document
-
             ];
             if ($this->cluster !== null) {
                 $replace['cluster'] = $this->cluster;
