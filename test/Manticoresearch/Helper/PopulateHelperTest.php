@@ -10,7 +10,7 @@ class PopulateHelperTest extends \PHPUnit\Framework\TestCase
 
     public function __construct()
     {
-        parent::__construct('HelperTest');
+        parent::__construct('testDummy');
     }
 
     public function getClient()
