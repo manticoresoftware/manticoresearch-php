@@ -360,8 +360,10 @@ class Client
                 'exception' => $e->getMessage(),
                 'request' => $request->toArray()
             ]);
+            //make another attempt to send request after the re-init of connection pool
             $this->initConnections();
-            throw $e;
+            $connection = $this->connectionPool->getConnection();
+            $this->lastResponse = $connection->getTransportHandler($this->logger)->execute($request, $params);
         } catch (ConnectionException $e) {
             $this->logger->warning('Manticore Search Request failed ' . $this->connectionPool->retries_attempts . ':', [
                 'exception' => $e->getMessage(),

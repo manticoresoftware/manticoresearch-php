@@ -7,8 +7,8 @@ Index provides all the operations which can be executed on an index.
 
 ```php
 $config = ['host' => '127.0.0.1', 'port' => '9308'];
-$client = new Client($config);
-$index = new Index($client,'myindex');
+$client = new \Manticoresearch\Client($config);
+$index = new \Manticoresearch\Index($client,'myindex');
 ```
 Second argument is not required, the index name can be also set with setName().
 
@@ -244,13 +244,13 @@ $index->updateDocuments(['price'=>100],['match'=>['*'=>'apple']]);
 Example with Query object:
 
 ```php
-$index->updateDocuments(['year'=>2000], new Match('team','*'));
+$index->updateDocuments(['year'=>2000], new \Manticoresearch\Query\MatchQuery('team','*'));
 ```
 
 ```php
 $bool = new BoolQuery();
-$bool->must(new Match('team','*'));
-$bool->must(new Range('rating',['gte'=>8.5]));
+$bool->must(new \Manticoresearch\Query\MatchQuery('team','*'));
+$bool->must(new \Manticoresearch\Query\Range('rating',['gte'=>8.5]));
 $response = $index->updateDocuments(['year'=>2000], $bool);
 ```
 
@@ -297,7 +297,7 @@ $index->deleteDocuments(['match'=>['*'=>'apple']]);
 Example with query as Query object:
 
 ```php
-$index->deleteDocuments( new Match('apple','*'));
+$index->deleteDocuments( new \Manticoresearch\Query\MatchQuery('apple','*'));
 ```
 
 It returns an array with:

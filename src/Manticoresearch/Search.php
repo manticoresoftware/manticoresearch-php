@@ -274,7 +274,11 @@ class Search
         }
         //if 1st arg is array means we have a sorting expression
         if (is_array($field)) {
-            //is 2nd arg is true we full set the sort with the expr, otherwise just add it
+            //if 2nd arg is true we full set the sort with the expr, otherwise just add it
+            //we let passing uppercased directions here as well
+            foreach ($field as $k => $v) {
+                $field[$k] = strtolower($v);
+            }
             if (isset($direction) && $direction === true) {
                 $this->params['sort'] = $field;
             } else {
@@ -285,6 +289,7 @@ class Search
         if (!isset($this->params['sort'])) {
             $this->params['sort'] = [];
         }
+        $direction = strtolower($direction);
         if ($mode === null) {
             $this->params['sort'] [] = [$field => $direction];
         } else {

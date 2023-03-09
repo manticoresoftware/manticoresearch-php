@@ -76,7 +76,7 @@ Set [max_matches](https://mnt.cr/max_matches) for the search.
 $search->limit(10000)->maxMatches(10000);
 ```
 
-### filter() and notFilter()
+### filter(), orFilter() and notFilter()
 
 Allow adding an attribute filter.
 
@@ -84,14 +84,48 @@ It can expect 3 parameters for filtering an attribute:
 
 - attribute name. It can also be an alias of an expression;
 - operator. Accepted operators are `range`, `lt`, `lte`, `gt`,  `gte`, `equals`, `in`;
-- values for filtering. It can an array or single value
+- values for filtering. It can an array or single value. Currently filters support integer, float and string values.
+- filtering condition. It can accept one of `AND`, `OR`, `NOT` values. Set to `AND` by default. 
 
-notFilter() executes a negation of the operator.
+notFilter() executes a negation of the operator. Alternatively, the `NOT` filtering condition can be used.
+
+orFilter() executes logical disjunction in case of multiple filters. Alternatively, the `OR` filtering condition can be used.
 
 ```php
+$search->filter('year', 'equals', 2000);
 $search->filter('year', 'lte', 2000);
 $search->filter('year', 'range', [1960,1992]);
 $search->filter('year', 'in', [1960,1975,1990]);
+```
+
+```php
+$search->filter('year', 'equals', 2000, 'OR');
+$search->filter('year', 'equals', 2002, 'OR');
+
+$search->filter('year', 'range', [1960,1992], 'OR');
+$search->filter('year', 'range', [1995,2000], 'OR');
+
+$search->orFilter('year', 'equals', 2000);
+$search->orFilter('year', 'equals', 2002);
+
+$search->orFilter('year', 'range', [1960,1992]);
+$search->orFilter('year', 'range', [1995,2000]);
+```
+
+```php
+$search->filter('year', 'equals', 2000, 'NOT');
+$search->filter('year', 'lte', 1995, 'NOT');
+
+$search->notFilter('year', 'equals', 2000);
+$search->notFilter('year', 'lte', 1995);
+
+```
+
+
+Note that the `equals` operator can be omitted and filter function can be called only with the `value` parameter as in the example below:
+
+```php
+$search->filter('year', 2000);
 ```
 
 The functions can also accept a single parameter as a filter class like Range(),  Equals() or Distance()
@@ -99,7 +133,6 @@ The functions can also accept a single parameter as a filter class like Range(),
 ```php
 $search->filter(new Range('year', ['lte' => 2020]));
 ```
-
 
 ### sort()
 
