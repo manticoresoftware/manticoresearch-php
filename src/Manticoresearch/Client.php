@@ -360,7 +360,7 @@ class Client
                 'exception' => $e->getMessage(),
                 'request' => $request->toArray()
             ]);
-            //make another attempt to send request after the re-init of connection pool 
+            //make another attempt to send request after the re-init of connection pool
             $this->initConnections();
             $connection = $this->connectionPool->getConnection();
             $this->lastResponse = $connection->getTransportHandler($this->logger)->execute($request, $params);
