@@ -114,7 +114,10 @@ class IndexTest extends TestCase
                     'status' => 200
                 ]]
             ],
-            'errors' => false
+            'errors' => false,
+            'current_line' => 2,
+            'skipped_lines' => 0,
+            'error' => ''
         ], $response);
     }
 
