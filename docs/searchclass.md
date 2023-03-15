@@ -141,7 +141,7 @@ Adds a sorting rule. The sort rules will be used as they are added.
 It can accept two parameters:
 
 - attribute or alias name
-- direction of sorting; can be `asc' or `desc`
+- direction of sorting; can be `asc` or `desc`
 
 If the attribute is a MVA, a third parameter can be used to set which value to choose from the list
 - mode can be `min` or `max`
@@ -179,6 +179,15 @@ $search->sort([
                ]
            ]);
 ````
+
+Method `sort` can be chained. For example: 
+
+```php
+$search->sort('name','asc')->sort('tags', 'desc')->sort('year', 'asc');
+```
+
+Note that the maximum number of attributes to sort by is equal to 5.
+
 ### highlight()
 
 Enables highlighting.
