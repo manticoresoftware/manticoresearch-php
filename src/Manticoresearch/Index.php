@@ -73,6 +73,9 @@ class Index
         } elseif (is_string($data)) {
             $data = json_decode($data, true);
         }
+        if (is_string($id)) {
+            $id = (int)$id;
+        }
         $params = [
             'body' => [
                 'index' => $this->index,

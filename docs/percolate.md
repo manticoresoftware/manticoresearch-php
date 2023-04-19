@@ -2,13 +2,13 @@
 
 ## Percolate operations
 
-For complete reference of payloads and responses see Manticore's [PQ API](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html)
+For complete reference of payloads and responses see Manticore's [PQ API](https://manual.manticoresearch.com/Data_creation_and_modification/Adding_documents_to_a_table/Adding_rules_to_a_percolate_table)
 
 Operations with the percolate indexes have their own namespace. The following methods are available:
 
 ## Inserting stored query
 
-For [storing](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html#store-query) queries the `index` parameter is mandatory. 
+For [storing](https://manual.manticoresearch.com/Data_creation_and_modification/Adding_documents_to_a_table/Adding_rules_to_a_percolate_table) queries the `index` parameter is mandatory. 
 
 `index` is mandatory. 
 
@@ -43,7 +43,7 @@ $response = $client->pq()->doc($params);
 
 ## Percolate search
 
-For [searching](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html#search-matching-document) the `index` parameter is mandatory.
+For [searching](https://manual.manticoresearch.com/Searching/Percolate_query#Performing-a-percolate-query-with-CALL-PQ) the `index` parameter is mandatory.
 
 `index` is mandatory. 
 
@@ -67,7 +67,7 @@ $response = $client->pq()->search($params);
 
 ## List stored queries
 
-For [listing](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html#list-stored-queries) stored queries the `index` parameter is mandatory.
+For [listing](https://manual.manticoresearch.com/Searching/Percolate_query#Performing-a-percolate-query-with-CALL-PQ) stored queries the `index` parameter is mandatory.
 
 `index` is mandatory. 
 
@@ -82,7 +82,7 @@ $response = $client->pq()->search($params);
 
 ## Delete stored queries
 
-For [deleting](https://docs.manticoresearch.com/latest/html/http_reference/json_pq.html#delete-stored-queries) stored queries the `index` parameter is mandatory.
+For [deleting](https://manual.manticoresearch.com/Searching/Percolate_query#Performing-a-percolate-query-with-CALL-PQ) stored queries the `index` parameter is mandatory.
 
 `index` is mandatory. 
 

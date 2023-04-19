@@ -402,7 +402,7 @@ Returns tokenization for an input string.
 Parameters:
 
 - input string
-- options. For more information about the available options check https://docs.manticoresearch.com/latest/html/sphinxql_reference/call_keywords_syntax.html
+- options. For more information about the available options check https://manual.manticoresearch.com/Searching/Autocomplete#CALL-KEYWORDS
 
 
 ```php
@@ -421,7 +421,7 @@ Returns suggestions for a give keyword.
 Parameters:
 
 - the keyword
-- options. For more information about the available options check https://docs.manticoresearch.com/latest/html/sphinxql_reference/call_qsuggest_syntax.html
+- options. For more information about the available options check https://manual.manticoresearch.com/Searching/Spell_correction#CALL-QSUGGEST,-CALL-SUGGEST
 
 ```php
 $index->keywords($query, $options);

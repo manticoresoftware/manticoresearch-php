@@ -33,7 +33,7 @@ The get() method will return the results as a [ResultSet](searchresults.md#resul
 
 It can accept a string a full-text match string or a [BoolQuery](query.md#boolquery) object. 
 
-The full Manticore query syntax (https://docs.manticoresearch.com/latest/html/searching/extended_query_syntax.html) is supported.
+The full Manticore query syntax (https://manual.manticoresearch.com/Searching/Full_text_matching/Operators) is supported.
 
 ```php
 $search->search('find me')->get();
@@ -195,7 +195,7 @@ Enables highlighting.
 The function can accept two parameters and none is mandatory.
 
 - fields - array with field names from which to extract the texts for highlighting. If missing, all `text` fields will be used
-- settings - array with settings of highlighting. For more details check HTTP API [Text highlighting](https://docs.manticoresearch.com/latest/html/http_reference/json_search.html#text-highlighting) 
+- settings - array with settings of highlighting. For more details check HTTP API [Text highlighting](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON) 
 
 ```php
 $search->highlight();

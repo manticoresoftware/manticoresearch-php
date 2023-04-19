@@ -59,7 +59,7 @@ Responses are returned as arrays reflection of the response object received from
 
 
 ### Search
-For complete reference of payload and response see Manticore's [Search API](https://docs.manticoresearch.com/latest/html/http_reference/json_search.html)
+For complete reference of payload and response see Manticore's [Search API](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON)
 
 `body` properties:
 - index name (mandatory)
@@ -105,7 +105,7 @@ Response will be a JSON containing
 
 ### Insert
 
-For complete reference of payload and response see Manticore's [Insert API](https://docs.manticoresearch.com/latest/html/http_reference/json_insert.html)
+For complete reference of payload and response see Manticore's [Insert API](https://manual.manticoresearch.com/Data_creation_and_modification/Adding_documents_to_a_table/Adding_documents_to_a_real-time_table#Adding-documents-to-a-real-time-index)
 
 `body` properties consist of:
 
@@ -167,7 +167,7 @@ $response = $client->insert($doc);
 
 ### Replace
 
-For complete reference of payload and response see Manticore's [Replace API](https://docs.manticoresearch.com/latest/html/http_reference/json_replace.html)
+For complete reference of payload and response see Manticore's [Replace API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/REPLACE)
 
 `body` properties consist of:
 
@@ -212,7 +212,7 @@ $response = $client->replace($doc);
 
 ### Update
 
-For complete reference of payload and response see Manticore's [Update API](https://docs.manticoresearch.com/latest/html/http_reference/json_update.html)
+For complete reference of payload and response see Manticore's [Update API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/UPDATE)
 
 `body` properties consist of:
 
@@ -269,7 +269,7 @@ $response = $client->update($doc);
 
 ### Delete
 
-For complete reference of payload and response see Manticore's [Delete API](https://docs.manticoresearch.com/latest/html/http_reference/json_delete.html)
+For complete reference of payload and response see Manticore's [Delete API](https://manual.manticoresearch.com/Data_creation_and_modification/Deleting_documents)
 
 `body` properties consist of:
 
@@ -305,7 +305,7 @@ $response = $client->delete($doc);
 
 ### Bulk
 
-For complete reference of payload and response see Manticore's [Bulk API](https://docs.manticoresearch.com/latest/html/http_reference/json_bulk.html)
+For complete reference of payload and response see Manticore's [Bulk API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/UPDATE#Bulk-updates)
 
 Bulk allows to send in one request several operations of data manipulation (inserts,replaces, updates or deletes).
 

@@ -9,7 +9,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * See https://docs.manticoresearch.com/latest/html/sphinxql_reference/set_syntax.html
+     * See https://manual.manticoresearch.com/Server_settings/Setting_variables_online#SET
      */
     public function testSet()
     {
