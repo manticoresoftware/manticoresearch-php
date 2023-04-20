@@ -38,6 +38,7 @@ class Index
 
     public function getDocumentById($id)
     {
+        self::checkDocumentId($id);
         $params = [
             'body' => [
                 'index' => $this->index,
@@ -55,6 +56,7 @@ class Index
         if (!is_array($ids)) {
             $ids = [$ids];
         }
+        array_walk($ids, 'self::checkDocumentId');
         $params = [
             'body' => [
                 'index' => $this->index,
@@ -68,13 +70,11 @@ class Index
 
     public function addDocument($data, $id = 0)
     {
+        self::checkDocumentId($id);
         if (is_object($data)) {
             $data = (array) $data;
         } elseif (is_string($data)) {
             $data = json_decode($data, true);
-        }
-        if (is_string($id)) {
-            $id = (int)$id;
         }
         $params = [
             'body' => [
@@ -101,6 +101,7 @@ class Index
             }
             if (isset($document['id'])) {
                 $id = $document['id'];
+                self::checkDocumentId($id);
                 unset($document['id']);
             } else {
                 $id = 0;
@@ -120,6 +121,7 @@ class Index
 
     public function deleteDocument($id)
     {
+        self::checkDocumentId($id);
         $params = [
             'body' => [
                 'index' => $this->index,
@@ -151,6 +153,7 @@ class Index
 
     public function updateDocument($data, $id)
     {
+        self::checkDocumentId($id);
         $params = [
             'body' => [
                 'index' => $this->index,
@@ -184,6 +187,7 @@ class Index
 
     public function replaceDocument($data, $id)
     {
+        self::checkDocumentId($id);
         if (is_object($data)) {
             $data = (array) $data;
         } elseif (is_string($data)) {
@@ -192,7 +196,7 @@ class Index
         $params = [
             'body' => [
                 'index' => $this->index,
-                'id' => (int)$id,
+                'id' => $id,
                 'doc' => $data
             ]
         ];
@@ -211,7 +215,7 @@ class Index
             } elseif (is_string($document)) {
                 $document = json_decode($document, true);
             }
-            $id = (int)$document['id'];
+            self::checkDocumentId($id);
             unset($document['id']);
             $replace = [
                 'index' => $this->index,
@@ -414,5 +418,15 @@ class Index
     {
         $this->cluster = $cluster;
         return $this;
+    }
+
+    protected static function checkDocumentId(&$id)
+    {
+        if (is_string($id)) {
+            if (!is_numeric($id)) {
+                throw new RuntimeException('Incorrect document id passed');
+            }
+            $id = (int)$id;    
+        }
     }
 }
