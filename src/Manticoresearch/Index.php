@@ -422,11 +422,9 @@ class Index
 
     protected static function checkDocumentId(&$id)
     {
-        if (is_string($id)) {
-            if (!is_numeric($id)) {
-                throw new RuntimeException('Incorrect document id passed');
-            }
-            $id = (int)$id;    
+        if (is_string($id) && !is_numeric($id)) {
+            throw new RuntimeException('Incorrect document id passed');
         }
+        $id = (int)$id;
     }
 }
