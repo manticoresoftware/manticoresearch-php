@@ -215,6 +215,7 @@ class Index
             } elseif (is_string($document)) {
                 $document = json_decode($document, true);
             }
+            $id = $document['id'];
             self::checkDocumentId($id);
             unset($document['id']);
             $replace = [
