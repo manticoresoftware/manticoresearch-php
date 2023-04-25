@@ -1,13 +1,13 @@
 Low-level client calls
 ======================
 
-The [Search](searchclass.md) and [Index](indexclass.md) classes are build on top of low-level  Client class methods,
+The [Search](searchclass.md) and [Index](indexclass.md) classes are built on top of the low-level Client class methods,
 providing an easier way to construct the queries. 
-Those familiar with the HTTP API syntax or wanting the ultimate speed can simply just use the Client class. 
+Those familiar with the HTTP API syntax or wanting the ultimate speed can simply use the Client class.
 
-The methods of Client class reflect as much as possible the same request payloads / responses of the Manticore Search HTTP API.
+The methods of the Client class reflect, as much as possible, the same request payloads/responses of the Manticore Search HTTP API.
 
-Beside operations on an index, there are also provided methods for performing tasks on the search server or search cluster.
+Besides operations on an index, there are also provided methods for performing tasks on the search server or search cluster.
 
 Table of Contents
 -----------------
@@ -41,36 +41,35 @@ Table of Contents
 
 ### Requests
 
-Each request array can have one of the 
+Each request array can have one of the following:
 
-* body - it's content goes as the payload of the HTTP request 
-* index/cluster  - index/cluster name
+* body - its content goes as the payload of the HTTP request
+* index/cluster - index/cluster name
 * id - document id
 * query - endpoint URL parameters (not to be confused with `query` found in the payload of some responses)
 
 Depending on the request, some of the parameters are mandatory.
 
-On the body payload there is no check regarding the validity of it's structure before sending the request.
+There is no check regarding the validity of the body payload's structure before sending the request.
 
 
 ### Responses 
 
-Responses are returned as arrays reflection of the response object received from the API endpoint. 
-
+Responses are returned as arrays, reflecting the response object received from the API endpoint.
 
 ### Search
-For complete reference of payload and response see Manticore's [Search API](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON)
+For a complete reference of payload and response, see Manticore's [Search API](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON).
 
 `body` properties:
 - index name (mandatory)
-- query  tree expression (mandatory)
+- query tree expression (mandatory)
 - sort array
 - script fields with expressions
 - highlight parameters
 - limit of result set
 - offset of result set
 - _source - list of fields that will appear in the result set
-- profile - when enabled it returns profiling of the search query
+- profile - when enabled, it returns profiling of the search query
 
 A simple search example:
 ```php
@@ -95,22 +94,22 @@ $params = [
 $response = $client->search($params);
 ```
 
-Response will be a JSON containing
+The response will be a JSON containing:
 
 - took - query time
-- timed_out - boolean, true if query timed out
+- timed_out - boolean, true if the query timed out
 - hits - array with matches
 - profile - optional, if profiling is set
 
 
 ### Insert
 
-For complete reference of payload and response see Manticore's [Insert API](https://manual.manticoresearch.com/Data_creation_and_modification/Adding_documents_to_a_table/Adding_documents_to_a_real-time_table#Adding-documents-to-a-real-time-index)
+For a complete reference of payload and response, see Manticore's [Insert API](https://manual.manticoresearch.com/Data_creation_and_modification/Adding_documents_to_a_table/Adding_documents_to_a_real-time_table#Adding-documents-to-a-real-time-index).
 
 `body` properties consist of:
 
 - index name
-- document as array of properties
+- document as an array of properties
 - id as document id
 
 All are mandatory.
@@ -167,12 +166,12 @@ $response = $client->insert($doc);
 
 ### Replace
 
-For complete reference of payload and response see Manticore's [Replace API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/REPLACE)
+For a complete reference of payload and response, see Manticore's [Replace API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/REPLACE).
 
 `body` properties consist of:
 
 - index name
-- document as array of properties
+- document as an array of properties
 - id as document id
 
 All are mandatory.
@@ -212,12 +211,12 @@ $response = $client->replace($doc);
 
 ### Update
 
-For complete reference of payload and response see Manticore's [Update API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/UPDATE)
+For a complete reference of payload and response, see Manticore's [Update API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/UPDATE).
 
 `body` properties consist of:
 
 - index name
-- document as array of properties
+- document as an array of properties
 - id as document id or query array
 
 If id is used, only one document can be updated:
@@ -235,7 +234,7 @@ $doc = [
 $response = $client->update($doc);
 ```
 
-With query it's possible to update multiple documents at a time:
+With a query, it's possible to update multiple documents at a time:
 
 ```
 $doc = [
@@ -269,14 +268,14 @@ $response = $client->update($doc);
 
 ### Delete
 
-For complete reference of payload and response see Manticore's [Delete API](https://manual.manticoresearch.com/Data_creation_and_modification/Deleting_documents)
+For a complete reference of payload and response, refer to Manticore's [Delete API](https://manual.manticoresearch.com/Data_creation_and_modification/Deleting_documents).
 
-`body` properties consist of:
+The `body` properties include:
 
 - index name
-- id as document id
+- id as the document id
 
-All are mandatory.
+Both properties are required.
 
 ```
 $doc = [
@@ -289,7 +288,7 @@ $doc = [
 $response = $client->delete($doc);
 ```
 
-If the index is part of a cluster, the `body` must also contain the cluster name:
+If the index is a part of a cluster, the `body` should also include the cluster name:
 
 ```
 $doc = [
@@ -305,9 +304,9 @@ $response = $client->delete($doc);
 
 ### Bulk
 
-For complete reference of payload and response see Manticore's [Bulk API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/UPDATE#Bulk-updates)
+For a complete reference of payload and response, refer to Manticore's [Bulk API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/UPDATE#Bulk-updates).
 
-Bulk allows to send in one request several operations of data manipulation (inserts,replaces, updates or deletes).
+Bulk enables sending multiple data manipulation operations (inserts, replaces, updates, or deletes) in a single request.
 
 ```php
 $doc = [
@@ -337,3 +336,4 @@ $doc = [
 $response = $client->bulk($doc);
 ```
 
+<!-- proofread -->
