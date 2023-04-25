@@ -1,14 +1,15 @@
 Query helpers
 -------------
 
-Available for  Manticore Search 3.4 or above.
+Available for Manticore Search 3.4 or above.
 
 ## Keywords Analysis
 
-Return the tokenized versions of words from an input string.
+Returns the tokenized versions of words from an input string.
 `index` is mandatory.
-`body` is mandatory and requires present of `query` - a string with one or more words.
-Optional settings can be passed via `options` array.For complete list of options check [Manticore docs] (https://manual.manticoresearch.com/Searching/Autocomplete#CALL-KEYWORDS).
+`body` is mandatory and requires the presence of `query` - a string with one or more words.
+Optional settings can be passed via the `options` array. For a complete list of options, check [Manticore docs](https://manual.manticoresearch.com/Searching/Autocomplete#CALL-KEYWORDS).
+
 
         $params = [
             'index' => 'testrt',
@@ -26,8 +27,8 @@ Optional settings can be passed via `options` array.For complete list of options
 
 Returns suggestions for an input word (usually a misspelled word). Note that suggestions work only with indexes with infixing enabled (`min_infix_len`>1).
 `index` is mandatory.
-`body` is mandatory and requires present of `query` - a string with one or more words.
-Optional settings can be passed via `options` array. For complete list of options check [Manticore docs] (https://manual.manticoresearch.com/Searching/Spell_correction#CALL-QSUGGEST,-CALL-SUGGEST).
+`body` is mandatory and requires the presence of `query` - a string with one or more words.
+Optional settings can be passed via the `options` array. For a complete list of options, check [Manticore docs](https://manual.manticoresearch.com/Searching/Spell_correction#CALL-QSUGGEST,-CALL-SUGGEST).
 
         $params = [
             'index' => 'testrt',
@@ -40,8 +41,7 @@ Optional settings can be passed via `options` array. For complete list of option
          ];
         $response = $client->suggest($params);
 
-Note that the index must be created as a keyword dictionary with a minimum infix length, otherwise Manticore will return 
-error.  To do this, pass in a settings options as below in the body part of an index creation request.
+Note that the index must be created as a keyword dictionary with a minimum infix length, otherwise Manticore will return an error. To do this, pass in settings options as below in the body part of an index creation request.
 
     'settings' => [
              'dict' => 'keywords',
@@ -50,10 +50,10 @@ error.  To do this, pass in a settings options as below in the body part of an i
 
 ## Query explain
 
-Allows to get the the query transformation tree of a query without running it. Useful for testing queries.
+Allows you to get the query transformation tree of a query without running it. This is useful for testing queries.
 
 `index` is mandatory.
-`body` is mandatory and requires present of `query` - query string expression.
+`body` is mandatory and requires the presence of `query` - a query string expression.
 
     $params = [
          'index'=>'movies',
@@ -62,3 +62,4 @@ Allows to get the the query transformation tree of a query without running it. U
          ]
     ];
     $response = $client->explainQuery($params);   
+<!-- proofread -->
