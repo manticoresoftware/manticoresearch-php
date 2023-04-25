@@ -10,13 +10,13 @@ $config = ['host' => '127.0.0.1', 'port' => '9308'];
 $client = new \Manticoresearch\Client($config);
 $index = new \Manticoresearch\Index($client,'myindex');
 ```
-Second argument is not required, the index name can be also set with setName().
+The second argument is not required; the index name can also be set with setName().
 
 
 
 ### setName()
 
-Allows setting the index name. 
+Allows setting the index name.
 
 ```php
 $index->setName('myindex');
@@ -24,24 +24,22 @@ $index->setName('myindex');
 
 ### setCluster()
 
-Setting the cluster name is required for add/replace/update/delete operations if the index belongs to an
- active cluster. 
+Setting the cluster name is required for add/replace/update/delete operations if the index belongs to an active cluster.
 
 ```php
 $index->setCluster('mycluster');
 ```
 ### create()
 
-Creates the index, accepts:
+Creates the index and accepts:
 
-- fields - array of the fields where key is the field name
-- settings - optional list of index settings
-- silent - default is false, if true, no error is returned if an index with same name already exists
+- fields - an array of fields where the key is the field name
+- settings - an optional list of index settings
+- silent - default is false; if true, no error is returned if an index with the same name already exists
 
 Each field is an array consisting of:
-- `type` -  the [field/attribute type](https://manual.manticoresearch.com/Creating_an_index/Data_types)
-- `options` -  an array of options of the field, `text` can have `indexed`,`stored` (default is both) and
- `string` can have `attribute` (default) and `indexed`
+- `type` - the [field/attribute type](https://manual.manticoresearch.com/Creating_an_index/Data_types)
+- `options` - an array of options for the field; `text` can have `indexed`, `stored` (default is both), and `string` can have `attribute` (default) and `indexed`
 
 
 Example:
@@ -77,10 +75,10 @@ If a setting can have multiple values, an array of values will be used, like:
 ````
 ### addDocument()
 
-Inserts a new document in the index.
+Inserts a new document into the index.
 Expects:
-- array of values
-- document id
+- an array of values
+- a document ID
 Example:
 
 ```php
@@ -98,7 +96,7 @@ $index->addDocument([
 
 ### addDocuments()
 
-Add multiple documents in the index.
+Add multiple documents to the index.
 Expects an array with documents as arrays.
 
 
@@ -130,9 +128,9 @@ $index->addDocuments([
    ]   
 ]);
 ```
-Returns an array response of:
+Returns an array response with:
 
-- errors - stating whenever an error occured
+- errors - stating whether an error occurred
 - items - response status for each document.
 
 
@@ -140,8 +138,8 @@ Returns an array response of:
 
 Replace an existing document in the index.
 Expects:
-- array of values
-- document id
+- an array of values
+- a document ID
 
 Example:
 
@@ -192,18 +190,18 @@ $index->replaceDocuments([
    ]   
 ]);
 ```
-Returns an array response of:
+Returns an array response with:
 
-- errors - stating whenever an error occured
+- errors - stating whether an error occurred
 - items - response status for each document.
 
 ### updateDocument()
 
-Update attributes for a given document by Id.
+Update attributes for a given document by ID.
 
 Expects:
--  array with key pairs of attribute names and values
--  document id
+- an array with key pairs of attribute names and values
+- a document ID
 
 ```php
 $index->updateDocument([
@@ -220,9 +218,9 @@ $index->updateDocument([
 
 It returns an array with:
 
-- _index as index name
-- _id as the id updated
-- result whenever update was successful ('updated') or not ('noop')
+- _index as the index name
+- _id as the updated ID
+- result indicating whether the update was successful ('updated') or not ('noop')
 
 ```json
 {"_index":"test","_id":4,"result":"updated"}
@@ -232,8 +230,8 @@ It returns an array with:
 It can update multiple documents that match a condition.
 
 Expects:
--  array with key pairs of attribute names and values
--  query expression - can be either as array or as [Query](query.md) object
+- an array with key pairs of attribute names and values
+- a query expression - can be either as an array or as a [Query](query.md) object
 
 Example with array:
 
@@ -241,7 +239,7 @@ Example with array:
 $index->updateDocuments(['price'=>100],['match'=>['*'=>'apple']]);
 ```
 
-Example with Query object:
+Example using a Query object:
 
 ```php
 $index->updateDocuments(['year'=>2000], new \Manticoresearch\Query\MatchQuery('team','*'));
@@ -256,8 +254,8 @@ $response = $index->updateDocuments(['year'=>2000], $bool);
 
 It returns an array with:
 
-- _index as index_name
-- updated  as number of documents updated
+- _index as the index_name
+- updated as the number of documents updated
 
 ```json
 {"_index":"test","updated":2}
@@ -265,7 +263,7 @@ It returns an array with:
 
 ### deleteDocument()
 
-Deletes a document. Expects one argument as the document id.
+Deletes a document. Expects one argument as the document ID.
 
 Example:
 
@@ -278,7 +276,7 @@ It returns an array with:
 - _index as index name
 - _id as the document id
 - found - true if document existed
-- result whenever update was successful ('deleted') or not ('not found')
+- result indicating whether the update was successful ('deleted') or not ('not found')
 
 ```json
 {"_index":"test","_id":5,"found":true,"result":"deleted"}
@@ -286,7 +284,7 @@ It returns an array with:
 
 ### deleteDocuments()
 
-Deletes documents using a query expression which can be passed either as array or as [Query](query.md) object.
+Deletes documents using a query expression which can be passed either as an array or as a [Query](query.md) object.
 
 Example with query as array:
 
@@ -303,7 +301,7 @@ $index->deleteDocuments( new \Manticoresearch\Query\MatchQuery('apple','*'));
 It returns an array with:
 
 - _index as index name
-- deleted as number of found documents and deleted
+- deleted as the number of found and deleted documents
 
 ```json
 {"_index":"test","deleted":0}
@@ -311,27 +309,27 @@ It returns an array with:
 
 ### search()
 
-It's a wrapper to a Search::search(). It return a [Search](searchclass.md) object instance.
-It accept either a full-text query string or a [BoolQuery](query.md#boolquery) class.
+It's a wrapper for the Search::search() method. It returns a [Search](searchclass.md) object instance.
+It accepts either a full-text query string or a [BoolQuery](query.md#boolquery) class.
 It returns a [ResultSet](searchresults.md#resultset-object) object.
 
 ```php
  $result = $index->search('find')->get();
 ```
-Note that on every call a new instance of Search class is created, therefor search conditions are not carried over multiple calls.
+Note that a new instance of the Search class is created with each call, therefore search conditions are not carried over multiple calls.
  
 
 ### drop()
 
 Drop the index.
-If `silent` is true, no error will be returned if the index doesn't exists.
+If `silent` is true, no error will be returned if the index doesn't exist.
 
 ```php
 $index->drop($silent=false);
 ```
 ### describe()
 
-Returns schema of the index
+Returns the schema of the index
 
 ```php
 $index->describe();
@@ -347,7 +345,7 @@ $index->status();
 
 ### truncate()
 
-Empty the index of data.
+Empties the index of data.
 
 ```php
 $index->truncate();
@@ -355,9 +353,9 @@ $index->truncate();
 
 ### optimize()
 
-Performs optimization on index (not available for distributed type).
+Performs optimization on the index (not available for distributed type).
 
-If `sync` is set to true, the command will wait for optimize to finish, otherwise the engine will sent the optimize in background and return success message back.
+If `sync` is set to true, the command will wait for the optimization to finish, otherwise the engine will send the optimization to run in the background and return a success message.
 
 ```php
 $index->optimize($sync=false);
@@ -373,7 +371,7 @@ $index->flush();
 
 ### flushramchunk()
 
-Performs Real-Time index flushing of the RAM chunk to disk. In general this operation is run before doing an optimize.
+Performs Real-Time index flushing of the RAM chunk to disk. In general, this operation is run before performing an optimization.
 
 ```php
 $index->flushramchunk();
@@ -381,12 +379,12 @@ $index->flushramchunk();
 
 ### alter()
 
-Alter index schema. Please note that currently `text` type is not supported by this command.
+Alter the index schema. Please note that currently, the `text` type is not supported by this command.
 
 Parameters:
 
-- operation type -  `add` or `drop`
-- name of the attribute 
+- operation type - `add` or `drop`
+- name of the attribute
 - type of the attribute (only for `add`)
 
 
@@ -402,7 +400,7 @@ Returns tokenization for an input string.
 Parameters:
 
 - input string
-- options. For more information about the available options check https://manual.manticoresearch.com/Searching/Autocomplete#CALL-KEYWORDS
+- options. For more information about the available options, check https://manual.manticoresearch.com/Searching/Autocomplete#CALL-KEYWORDS
 
 
 ```php
@@ -416,12 +414,12 @@ $index->alter($operation,$name,$type);
 
 ### suggest()
 
-Returns suggestions for a give keyword.
+Returns suggestions for a given keyword.
 
 Parameters:
 
 - the keyword
-- options. For more information about the available options check https://manual.manticoresearch.com/Searching/Spell_correction#CALL-QSUGGEST,-CALL-SUGGEST
+- options. For more information about the available options, check https://manual.manticoresearch.com/Searching/Spell_correction#CALL-QSUGGEST,-CALL-SUGGEST
 
 ```php
 $index->keywords($query, $options);
@@ -431,7 +429,7 @@ $index->suggest('trsting', ['limit' => 5]);
 
 ### explainQuery()
 
-Returns transformation tree for a full-text query without running it over the index.
+Returns the transformation tree for a full-text query without running it over the index.
 
 Parameters:
 
@@ -446,7 +444,7 @@ $index->explainQuery($query);
 
 Performs a percolate search over a percolate index. This method works only with percolate indexes.
 
-Expects an array  with documents
+Expects an array with documents
 ```php
 $docs = [
     ['title' => 'pick me','color'=>'blue'],
@@ -458,7 +456,7 @@ $result = $index->percolate($docs);
 ```
 
 Returns a [PercolateResultSet](percolateresults.md#percolateresultset-object) object containing stored queries that 
-match on documents at input.  The PercolateResultHit object can be iterated to retrieve the stored queries encapsulated 
+match on documents at input. The PercolateResultHit object can be iterated to retrieve the stored queries encapsulated 
 as a [PercolateResultHit](percolateresults.md#percolateresulthit-object) object and the list of indices of documents 
 from input.
 
@@ -556,13 +554,13 @@ Array
 ```
 ### percolateToDocs()
 
-It performs a percolate query just like [percolate()](#percolate) method but instead of returning an object list
-with stored queries and matched input documents attached, it returns instead an object list with the 
+It performs a percolate query just like the [percolate()](#percolate) method, but instead of returning an object list
+with stored queries and matched input documents attached, it returns an object list with the 
 input documents and the stored queries they match against.
 
-The returned iterator is an [PercolateDocsResultSet](percolateresults.md#percolatedocsresultset-object) object which holds a 
+The returned iterator is a [PercolateDocsResultSet](percolateresults.md#percolatedocsresultset-object) object which holds a 
 list of [PercolateResultDoc](percolateresults.md#percolateresultdoc-object) objects. 
-The PercolateResultDoc provides the document by `getData()` method and a list of queries by `getQueries()` method.
+The PercolateResultDoc provides the document through the `getData()` method and a list of queries through the `getQueries()` method.
 
 `getQueries()` returns an array with [PercolateResultHit](percolateresults.md#percolateresulthit-object) objects.
 
@@ -632,3 +630,4 @@ Array
         )
 )
 ```
+<!-- proofread -->
