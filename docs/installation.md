@@ -1,8 +1,8 @@
 
 ## Installation via Composer
-We recommend to install the client using [Composer](http://getcomposer.org).
+We recommend installing the client using [Composer](http://getcomposer.org).
 
-Use composer to add manticoresearch-php to your project:
+Use Composer to add manticoresearch-php to your project:
 
 ```
   $ composer require manticoresoftware/manticoresearch-php
@@ -23,7 +23,7 @@ You can also directly add this line in the `require` block of `composer.json`:
 and then use `composer install`.
 
 Composer will download and take care of the autoloading of files.
-To use the client you just have to include the autoload:
+To use the client, you just have to include the autoload:
 
 
 ```
@@ -31,3 +31,4 @@ To use the client you just have to include the autoload:
 
   $client = new \Manticoresearch\Client();
 ```
+<!-- proofread -->
