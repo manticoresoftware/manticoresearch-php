@@ -4,14 +4,14 @@ These can be used to build a query expression.
 
 ## BoolQuery()
 
-Constructor of a the bool node
+Constructor of the bool node:
 ```php
 $bool = new \Manticoresearch\Query\BoolQuery();
 ```
 
-It supports adding nodes to it via `must()`, `mustNot()` and `should()` methods.
+It supports adding nodes to it via `must()`, `mustNot()`, and `should()` methods.
 
-Bool queries can be nested, i.e., nodes added to a root `BoolQuery` can, in their turn, contain its own bool queries, thus allowing user to build complex logical expressions.
+Bool queries can be nested, meaning that nodes added to a root `BoolQuery` can, in turn, contain their own bool queries, allowing users to build complex logical expressions.
 
 ```php
 $bool2 = new \Manticoresearch\Query\BoolQuery();
@@ -24,8 +24,8 @@ $bool->must($bool2);
 
 Creates a `match` leaf.
 Constructor accepts:
-- array of keywords
-- string of fields delimited by comma on which the keywords will be searched
+- an array of keywords
+- a string of fields delimited by a comma on which the keywords will be searched
 
  ```php
 $bool->must(new \Manticoresearch\Query\MatchQuery(['query' => 'team of explorers', 'operator' => 'and'], 'title,content'));
@@ -35,8 +35,8 @@ $bool->must(new \Manticoresearch\Query\MatchQuery(['query' => 'team of explorers
 
 Creates a `match` leaf.
 Constructor accepts:
-- string with a search phrase
-- string of fields delimited by comma on which the keywords will be searched
+- a string containing a search phrase
+- a string of fields delimited by a comma on which the keywords will be searched
 
  ```php
 $bool->must(new \Manticoresearch\Query\MatchPhrase('team of explorers', 'title,content'));
@@ -46,7 +46,7 @@ $bool->must(new \Manticoresearch\Query\MatchPhrase('team of explorers', 'title,c
 ## QueryString()
 
 Creates a `query_string` leaf.
-Constructor expects a string with a full-text match expression.
+The constructor expects a string with a full-text match expression.
 
 
  ```php
@@ -54,9 +54,9 @@ $bool->must(new \Manticoresearch\Query\QueryString('"team of explorers"/2'));
 ```
 ## In()
 
-Creates a `in` filter.
+Creates an `in` filter.
 
-Expects two arguments: an attribute or alias name and an array with values
+Expects two arguments: an attribute or alias name and an array with values.
 
  ```php
 $bool->must(new \Manticoresearch\Query\In('year', [2014,2015,2016]));
@@ -64,9 +64,9 @@ $bool->must(new \Manticoresearch\Query\In('year', [2014,2015,2016]));
 
 ## Equals()
 
-Creates a `equals` filter.
+Creates an `equals` filter.
 
-Expects two arguments: an attribute or alias name and a value
+Expects two arguments: an attribute or alias name and a value.
 
  ```php
 $bool->must(new \Manticoresearch\Query\Equals('year', 2014));
@@ -75,7 +75,7 @@ $bool->must(new \Manticoresearch\Query\Equals('year', 2014));
 
 ## Range()
 
-Creates a `equals` filter.
+Creates an `equals` filter.
 
 Expects two arguments: an attribute or alias name and an array of operator => value pairs.
 
@@ -87,12 +87,12 @@ $bool->must(new \Manticoresearch\Query\Range('year', ['lte' => 2020]));
 ## Distance()
 
 Creates a `geo_distance` expression.
-Expects an array that follows the syntax defined in `/json/search` :
+Expects an array that follows the syntax defined in `/json/search`:
 
 - location_anchor containing the pin object
 - location_source containing the attributes with lat/long
 - distance_type -  can be 'adaptive' (default) or 'haversine'
-- distance - a string with distance in format `XXX uom` , where `uom` can be meters, km, miles, yards, mm, feed, inches or nautical miles
+- distance - a string with distance in format `XXX uom`, where `uom` can be meters, km, miles, yards, mm, feet, inches or nautical miles
 
 The pin location and the lat/long attributes must be in degrees.
 
@@ -127,3 +127,4 @@ Both sugar syntaxes can be also be mixed:
 ```php
 $response = $search->search('"team of explorers"/2')->filter(new \Manticoresearch\Query\Equals('year', 2014))->get();
 ```
+<!-- proofread -->
