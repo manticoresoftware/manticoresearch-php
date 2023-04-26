@@ -1,9 +1,9 @@
 # SQL
 Allows running a SQL command.
-For complete reference of payload and response see Manticore's [SQL API](https://manual.manticoresearch.com/Connecting_to_the_server/HTTP#/sql).
-`body` must have `query` parameter with the desired SQL command to be executed.
- 
-Manticore Search below 3.4 can only execute SELECT commands via `sql`.
+For a complete reference of payload and response, see Manticore's [SQL API](https://manual.manticoresearch.com/Connecting_to_the_server/HTTP#/sql).
+The `body` must have a `query` parameter containing the desired SQL command to be executed.
+
+Manticore Search below version 3.4 can only execute SELECT commands via `sql`.
 
 ```
 $params = [
@@ -14,7 +14,7 @@ $params = [
 
 $response = $client->sql($params);
 ```
-For non-SELECT commands, `mode` must be passed:
+For non-SELECT commands, the `mode` parameter must be passed:
 
 ```
 $params = [
@@ -26,3 +26,4 @@ $params = [
 
 $response = $client->sql($params);
 ```
+<!-- proofread -->
