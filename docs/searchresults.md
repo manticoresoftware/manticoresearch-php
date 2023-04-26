@@ -1,6 +1,6 @@
 # Search result objects
 
-Native [Client:search](lowlevelclient.md#search) returns by default an unmodified array representing the response of `/json/search` endpoint, like:
+The native [Client:search](lowlevelclient.md#search) method returns an unmodified array by default, which represents the response of the `/json/search` endpoint, such as:
 
 ```json
 {
@@ -37,7 +37,7 @@ Native [Client:search](lowlevelclient.md#search) returns by default an unmodifie
 
 ## ResultSet object
 
-[Search:search](searchclass.md#search) returns a `ResultSet` object that implements `Iterator` and `Countable` interfaces.
+[Search:search](searchclass.md#search) returns a `ResultSet` object, which implements both the `Iterator` and `Countable` interfaces.
 
 ```php
 $result = $search->search('...')->get();
@@ -48,11 +48,11 @@ foreach($result as $hit)
    // do something with $hit
 }
 ```   
-To get the count of the documents in the response you can either use `count()` function or  object's `count()` method.
+To obtain the count of documents in the response, you can use either the `count()` function or the object's `count()` method.
 
-Iterating the result set object will provide a `ResultHit` object containing a matched document.
+Iterating through the result set object provides a `ResultHit` object containing a matched document.
 
-The ResultSet object also provides information about the query:
+The ResultSet object also offers information about the query:
 
 Total search matches:
 
@@ -65,7 +65,7 @@ Query time:
 $result->getTime();
 ```
 
-Whenever the query timed out:
+In case the query timed out:
 
 ```php
 $result->hasTimedout();
@@ -76,7 +76,7 @@ Facets (aggregations):
 ```php
 $result->getFacets();
 ```
-Returns an associative array with the requested facets, where a facet can be identified by the selected facet alias.
+This returns an associative array with the requested facets, where a facet can be identified by the chosen facet alias.
 Each facet is an array containing the faceted values and counts in a `buckets` array:
 
 ``` php
@@ -108,9 +108,9 @@ print_r($year_facet);
  
  ## ResultHit object
  
-The `ResultHit` encapsulate a matched document provided in a search result set.
+The `ResultHit` encapsulates a matched document provided in a search result set.
 
-The document id can retrieved with `getId()`
+The document id can be retrieved with `getId()`
 
 ```php
 foreach($result as $hit)
@@ -119,7 +119,7 @@ foreach($result as $hit)
 }
 ```
 
-Any document field/attribute or expressions defined as source can be retrieved directly as object property:
+Any document field/attribute or expressions defined as source can be retrieved directly as an object property:
 
 ```php
 foreach($result as $hit)
@@ -137,7 +137,7 @@ foreach($result as $hit)
 }
 ```
 
-To get the calculated score for each document use `getScore()`:
+To get the calculated score for each document, use `getScore()`:
 
 
 ```php
@@ -155,5 +155,5 @@ foreach($result as $hit)
     $hit->getHighlight();
 }
 ```
-
+<!-- proofread -->
 
