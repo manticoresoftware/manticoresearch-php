@@ -1,6 +1,6 @@
 # Search
 
-This class allow performing search operations.
+This class allows you to perform search operations.
 
 
 ## Initiation
@@ -23,15 +23,15 @@ $search->setIndex('indexname');
 
 ## Performing a search
 
-All methods of Search class can be chained. 
+All methods of the Search class can be chained.
 
-When all the search conditions and options are set, `get()` will be called to process and query the search engine.
+When all the search conditions and options are set, `get()` is called to process and query the search engine.
 
-The get() method will return the results as a [ResultSet](searchresults.md#resultset-object) object.
+The `get()` method returns the results as a [ResultSet](searchresults.md#resultset-object) object.
 
 ### search()
 
-It can accept a string a full-text match string or a [BoolQuery](query.md#boolquery) object. 
+This method accepts either a full-text match string or a [BoolQuery](query.md#boolquery) object.
 
 The full Manticore query syntax (https://manual.manticoresearch.com/Searching/Full_text_matching/Operators) is supported.
 
@@ -39,13 +39,13 @@ The full Manticore query syntax (https://manual.manticoresearch.com/Searching/Fu
 $search->search('find me')->get();
 ```
 
-It returns a [ResultSet](searchresults.md#resultset-object)  object.
+It returns a [ResultSet](searchresults.md#resultset-object) object.
 
 ### match()
 
-Match is a simplified search method. The query string is interpreted as bag of words with OR as default operator.
+Match is a simplified search method. The query string is interpreted as a bag of words with OR as the default operator.
 
-The first parameter can be a query string
+The first parameter can be a query string:
 
 ```php
 $search->match('find me fast');
@@ -62,7 +62,7 @@ $search->match('find me fast','title,long_title');
 
 ### limit() and offset()
 
-Set limit and offset for the result set
+Set limit and offset for the result set:
 
 ```php
 $search->limit(24)->offset(12);
@@ -84,8 +84,8 @@ It can expect 3 parameters for filtering an attribute:
 
 - attribute name. It can also be an alias of an expression;
 - operator. Accepted operators are `range`, `lt`, `lte`, `gt`,  `gte`, `equals`, `in`;
-- values for filtering. It can an array or single value. Currently filters support integer, float and string values.
-- filtering condition. It can accept one of `AND`, `OR`, `NOT` values. Set to `AND` by default. 
+- values for filtering. It can be an array or single value. Currently, filters support integer, float, and string values.
+- filtering condition. It can accept one of `AND`, `OR`, `NOT` values. Set to `AND` by default.
 
 notFilter() executes a negation of the operator. Alternatively, the `NOT` filtering condition can be used.
 
@@ -122,13 +122,13 @@ $search->notFilter('year', 'lte', 1995);
 ```
 
 
-Note that the `equals` operator can be omitted and filter function can be called only with the `value` parameter as in the example below:
+Note that the `equals` operator can be omitted, and the filter function can be called only with the `value` parameter, as shown in the example below:
 
 ```php
 $search->filter('year', 2000);
 ```
 
-The functions can also accept a single parameter as a filter class like Range(),  Equals() or Distance()
+The functions can also accept a single parameter as a filter class like Range(), Equals(), or Distance().
 
 ```php
 $search->filter(new Range('year', ['lte' => 2020]));
@@ -136,14 +136,14 @@ $search->filter(new Range('year', ['lte' => 2020]));
 
 ### sort()
 
-Adds a sorting rule. The sort rules will be used as they are added.
+Adds a sorting rule. The sort rules will be applied in the order they are added.
 
 It can accept two parameters:
 
 - attribute or alias name
 - direction of sorting; can be `asc` or `desc`
 
-If the attribute is a MVA, a third parameter can be used to set which value to choose from the list
+If the attribute is a MVA (multi-valued attribute), a third parameter can be used to set which value to choose from the list:
 - mode can be `min` or `max`
 
 ```php
@@ -151,12 +151,12 @@ $search->sort('name','asc');
 $search->sort('tags','asc','max');
 ```
 
-Sort can also accept the first argument as an array with key-pairs as attribute -> direction:
+Sort can also accept the first argument as an array with key-value pairs as attribute -> direction:
 
 ```php
 $search->sort(['name'=>'asc']);
 ````
-By default, rules are added. If second argument is set, the input array will not be added, but replace an existing rule set
+By default, rules are added. If the second argument is set, the input array will not be added but will replace an existing rule set.
 
 ```php
 $search->sort(['name'=>'desc'],true);
@@ -180,7 +180,7 @@ $search->sort([
            ]);
 ````
 
-Method `sort` can be chained. For example: 
+Method `sort` can be chained. For example:
 
 ```php
 $search->sort('name','asc')->sort('tags', 'desc')->sort('year', 'asc');
@@ -192,10 +192,10 @@ Note that the maximum number of attributes to sort by is equal to 5.
 
 Enables highlighting.
 
-The function can accept two parameters and none is mandatory.
+The function can accept two parameters, and neither is mandatory.
 
-- fields - array with field names from which to extract the texts for highlighting. If missing, all `text` fields will be used
-- settings - array with settings of highlighting. For more details check HTTP API [Text highlighting](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON) 
+- fields - an array with field names from which to extract the texts for highlighting. If missing, all `text` fields will be used.
+- settings - an array with settings for highlighting. For more details, check the HTTP API [Text highlighting](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON).
 
 ```php
 $search->highlight();
@@ -208,39 +208,40 @@ $search->highlight(
 );
 ```
 
-The highlight excerpts are attached to each hit. They can be retrieved with `getHighlight()` function of [ResultHit](searchresults.md#resulthit-object).
+The highlight excerpts are attached to each hit. They can be retrieved with the `getHighlight()` function of the [ResultHit](searchresults.md#resulthit-object).
 
-`getHighlight()`  will contain a list of excerpts  for each field declared for highlighing in the request.
+`getHighlight()` will contain a list of excerpts for each field declared for highlighting in the request.
 
 ### setSource()
 
-By default all document fields are returned. This method can set which fields should be returned. It accepts several formats:
+By default, all document fields are returned. This method can set which fields should be returned. It accepts several formats:
 
-- setSource('attr*') -  only fields like `attr*` will be returned
-- setSource(['attr1','attr2']) - only fields `attr1` and `attr2` will be returned
+- setSource('attr*') - only fields like `attr*` will be returned.
+- setSource(['attr1','attr2']) - only fields `attr1` and `attr2` will be returned.
 - setSource([
     'included' => ['attr1','attri*'],
     'excludes' => ['desc*']
-  ]) -  field `attr1` and fields like `attri*` are included, any field like `desc*` are excluded. If an attribute is found in both lists, the excluding wins
+  ]) - field `attr1` and fields like `attri*` are included, while any field like `desc*` is excluded. If an attribute is found in both lists, the excluding wins.
 
 
 ### facet()
-Add a facet (aggregation).
+The facet() method allows you to add a facet (aggregation) to your search query.
 
 ```php
 $search->facet($field, $group = null, $limit = null);
 ```
 Parameters:
- * attribute name. Can also be an expression name. Mandatory.
- * facet alias. If not set, the attribute name will be used.
- * a limit on the number of facet values to return
- 
-The facets will be returned in the result set and can be retrieved with [ResultSet:getFacets()](searchresults.md#resultset-object).
+ * attribute name - This is a required parameter and can also be an expression name.
+ * facet alias - If not provided, the attribute name will be utilized.
+ * limit - Defines the maximum number of facet values to return.
+
+Facets will be included in the result set and can be accessed using [ResultSet:getFacets()](searchresults.md#resultset-object).
 
 ### option()
 
-Pass options to the search query.  
-You can also modify the ranker and set a custom expression. See availabe [built-in rankers](https://manual.manticoresearch.com/Searching/Sorting_and_ranking#Formula-expressions-for-all-the-built-in-rankers)
+Pass options to the search query.
+You can also customize the ranker by setting a custom expression. Check out the available [built-in rankers](https://manual.manticoresearch.com/Searching/Sorting_and_ranking#Formula-expressions-for-all-the-built-in-rankers).
+
 ```php
     $search->option('cutoff', 1);
     $search->option('retry_count', 3);
@@ -256,7 +257,7 @@ You can also modify the ranker and set a custom expression. See availabe [built-
 ```
 
 ### trackScores()
-You can enable weight calculation by setting the `track_scores` option to `true`.
+Enable weight calculation by setting the `track_scores` option to `true`.
 
 ```php
     $search->trackScores(true); // enable weight calculation
@@ -265,7 +266,7 @@ You can enable weight calculation by setting the `track_scores` option to `true`
 ```
 
 ### stripBadUtf8()
-You can enable removal of bad utf8 characters from the results by setting the `strip_bad_utf8` option to `true`.
+Enable removal of bad UTF-8 characters from the results by setting the `strip_bad_utf8` option to `true`.
 
 ```php
     $search->stripBadUtf8(true); // enable removal of bad utf8 characters
@@ -275,9 +276,11 @@ You can enable removal of bad utf8 characters from the results by setting the `s
 
 ### profile()
 
-If included, result set will provide query profiling.
+Including this will provide query profiling in the result set.
 
 
 ### reset()
 
-It clears all search conditions, including the index name.
+This method clears all search conditions, including the index name.
+
+<!-- proofread -->
