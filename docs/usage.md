@@ -34,26 +34,26 @@ Table of Contents
 
 ### Requests
 
-Each request array can have one of the 
+Each request array can include one of the following:
 
-* body -  the API endpoint POST payload
-* index/cluster  - index/cluster name
+* body - the API endpoint POST payload
+* index/cluster - index/cluster name
 * id - document id
 * query - endpoint parameters
 
-Depending on the request, some of the parameters are mandatory.
+Some  parameters are mandatory, depending on the request.
 
-On the body payload there is no check regarding the validity made before sending the request.
+No validity check is performed on the body payload before sending the request.
 
-### Responses 
+### Responses
 
-Responses are returned as arrays reflection of the response object received from the API endpoint. 
+Responses are returned as arrays reflecting the response object received from the API endpoint.
 
 
 ### Search
-For complete reference of payload and response see Manticore's [Search API](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON)
+For a complete reference of payload and response, see Manticore's [Search API](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON).
 
-`body` requires presence of `index` and `query` parameters. 
+`body` requires the presence of `index` and `query` parameters.
 
 A simple search example:
 ```
@@ -73,9 +73,9 @@ $response = $client->search($params);
 
 ### Insert
 
-For complete reference of payload and response see Manticore's [Insert API](https://manual.manticoresearch.com/Data_creation_and_modification/Adding_documents_to_a_table/Adding_documents_to_a_real-time_table#Adding-documents-to-a-real-time-index)
+For a complete reference of payload and response, see Manticore's [Insert API](https://manual.manticoresearch.com/Data_creation_and_modification/Adding_documents_to_a_table/Adding_documents_to_a_real-time_table#Adding-documents-to-a-real-time-index).
 
-`body` requires presence of `index`, `id` and  `doc` parameters.
+`body` requires the presence of `index`, `id`, and `doc` parameters.
 
 ```
 $doc = [
@@ -103,9 +103,9 @@ $response = $client->insert($doc);
 
 ### Replace
 
-For complete reference of payload and response see Manticore's [Replace API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/REPLACE)
+For a complete reference of payload and response, see Manticore's [Replace API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/REPLACE).
 
-`body` requires presence of `index`, `id` and  `doc` parameters.
+`body` requires the presence of `index`, `id`, and `doc` parameters.
 
 ```
 $doc = [
@@ -124,9 +124,9 @@ $response = $client->replace($doc);
 
 ### Update
 
-For complete reference of payload and response see Manticore's [Update API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/UPDATE)
+For a complete reference of payload and response, see Manticore's [Update API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/UPDATE).
 
-`body` requires presence of `index`, `id` and  `doc` parameters.
+`body` requires the presence of `index`, `id`, and `doc` parameters.
 
 ```
 $doc = [
@@ -144,9 +144,9 @@ $response = $client->update($doc);
 
 ### Delete
 
-For complete reference of payload and response see Manticore's [Delete API](https://manual.manticoresearch.com/Data_creation_and_modification/Deleting_documents)
+For a complete reference of payload and response, see Manticore's [Delete API](https://manual.manticoresearch.com/Data_creation_and_modification/Deleting_documents).
 
-`body` requires presence of `index` and `id`  parameters.
+`body` requires the presence of both `index` and `id` parameters.
 
 ```
 $doc = [
@@ -161,9 +161,9 @@ $response = $client->delete($doc);
 
 ### Bulk
 
-For complete reference of payload and response see Manticore's [Bulk API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/UPDATE#Bulk-updates)
+For a complete reference of payload and response, see Manticore's [Bulk API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/UPDATE#Bulk-updates)
 
-Bulk allows to send in one request several operations of data manipulation (inserts,replaces, updates or deletes).
+Bulk allows sending multiple data manipulation operations (inserts, replaces, updates, or deletes) in one request.
 
 ```
 $doc = [
@@ -192,3 +192,4 @@ $doc = [
 
 $response = $client->bulk($doc);
 ```
+<!-- proofread -->
