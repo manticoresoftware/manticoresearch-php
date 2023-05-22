@@ -1,14 +1,14 @@
 Nodes
 -----
 
-Nodes namespace contains methods for dealing with daemon operations or getting information about current node.
+The node namespace contains methods for handling daemon operations or obtaining information about the current node.
 
 AgentStatus
 ===========
-Prints information about a specific remote agent or of all remote agents.
+Displays information about a specific remote agent or all remote agents.
 
-`body` is optional. If body is not present, it will return information on all defined agents.
-Result can be filtered by asking information for one agent - set by `agent` or filter by an agent property with `pattern.
+`body` is optional. If the body is not provided, it will return information on all defined agents.
+Results can be filtered by requesting information for a single agent - set by `agent`, or filter by an agent property using `pattern`.
 
         $params = [
             'body' => [
@@ -21,13 +21,13 @@ Result can be filtered by asking information for one agent - set by `agent` or f
 CreateFunction
 ==============
 
-Register an UDF.
+Register a UDF.
 
 `body` parameters:
 
 * `name` - name of the function
 * `type` - the return type of the function (INT | INTEGER | BIGINT | FLOAT | STRING)
-* `library` -  name of the library file
+* `library` - name of the library file
 
         $params = [
             'body' => [
@@ -46,8 +46,8 @@ Register a plugin.
 `body` parameters:
 
 * `name` - name of the plugin
-* `type` - can be 'ranker','index_token_filter','query_token_filter'
-* `library` -  name of the library file
+* `type` - can be 'ranker', 'index_token_filter', 'query_token_filter'
+* `library` - name of the library file
 
         $params = [
             'body' => [
@@ -74,7 +74,7 @@ A command that can run some debug commands.
 DropFunction
 ============
 
-De-register an UDF
+Deregister an UDF
 
         $params = [
             'body' => [
@@ -86,7 +86,7 @@ De-register an UDF
 DropPlugin
 ===========
 
-De-register a plugin
+Deregister a plugin
 
         $params = [
             'body' => [
@@ -131,7 +131,7 @@ Flush logs.
 Plugins
 ========
 
-Return list of loaded plugins and functions.
+Return the list of loaded plugins and functions.
 
         $params = [
             'body' => [
@@ -170,7 +170,7 @@ Status
 ======
 Returns information and performance metrics about the current node.
 
-If the node is part of a cluster, it will also provide information about the cluster. 
+If the node is the part of a cluster, it will also provide information about the cluster.
 
 Result can be filtered by setting `pattern` (on status metric names) parameter of `body`.
 
@@ -208,9 +208,9 @@ Optional `body` can contain formatting of the result by setting `columns` (numbe
 Variables
 =========
 
-Return list of server variables
+Return the list of server variables
 
-Optional it can return the value of a single server variable by specifying in `variable_name` parameter of `body`.
+Optionally, it can return the value of a single server variable by specifying the `variable_name` parameter in `body`.
  
 
         $params = [
@@ -219,3 +219,4 @@ Optional it can return the value of a single server variable by specifying in `v
             ]
         ];
         $response = $client->nodes()->variables($params);                                                                                                                            
+<!-- proofread -->

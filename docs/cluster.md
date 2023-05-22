@@ -1,16 +1,16 @@
 Cluster
------
+-------
 
-Nodes namespace contains methods for dealing with cluster operations. Available for  Manticore Search 3.4 or above.
+The Nodes namespace includes methods for handling cluster operations. These are available for Manticore Search 3.4 and higher.
 
 Create
 ======
 Create a new cluster.
-`cluster` is mandatory as the name of the cluster.
+The `cluster` parameter is required, as it specifies the name of the cluster.
 
-`body` is optional and can contain `path` as alternative folder for storing the metadata of replication and `nodes` for list of servers that will join the cluster.
+The `body` parameter is optional and may contain `path` as an alternative folder for storing replication metadata and `nodes` for the list of servers that will join the cluster.
 
- 
+
         $params = [
             'cluster' => 'mycluster',
             'body' => [
@@ -22,15 +22,16 @@ Create a new cluster.
         $response = $client->cluster()->create($params);
 Alter
 ======
-Update a cluster.
-`cluster` is mandatory as the name of the cluster.
+Update a cluster
+----------------
+The `cluster` parameter is required, as it specifies the name of the cluster.
 
 `body` parameters:
-* `operation` -  mandatory, can be
-      * add - add index to cluster
-      * drop - drop index from cluster
-      * update - trigger nodes in the cluster to update the rejoin nodes list in case of a cluster restart
-* `index` - mandatory for add/drop, the index name that is added or dropped from the cluster
+* `operation` - mandatory, can be:
+      * add - add an index to the cluster
+      * drop - remove an index from the cluster
+      * update - trigger nodes in the cluster to update the rejoin nodes list in the event of a cluster restart
+* `index` - mandatory for add/drop operations, specifies the index name that is added or removed from the cluster
 
 
         $params = [
@@ -63,8 +64,9 @@ Update a cluster.
                   
 Delete
 ======
-Delete a cluster.
-`cluster` is mandatory as the name of the cluster.
+Delete a cluster
+----------------
+The `cluster` parameter is required, as it specifies the name of the cluster.
 
         $params = [
             'cluster' => 'mycluster',
@@ -76,11 +78,12 @@ Delete a cluster.
         
 Join
 ====
-Join to a cluster.
-`cluster` is mandatory as the name of the cluster to join.
-There are 2 syntaxes for `body` :
-* simple version where  the address of one of the cluster's nodes is specified by `node`
-* advanced version where alternative `path` for replication metadata must be set and the list of all nodes of the cluster must be set (by `nodes`)
+Join a cluster
+--------------
+The `cluster` parameter is required, as it specifies the name of the cluster to join.
+There are two syntax options for the `body` parameter:
+* Simple version - specify the address of one of the cluster's nodes using the `node` parameter
+* Advanced version - set an alternative `path` for replication metadata and provide the list of all nodes in the cluster using the `nodes` parameter
 
 
         $params = [
@@ -101,8 +104,8 @@ There are 2 syntaxes for `body` :
         ];
         $response = $client->cluster()->join($params);
  
- Set
- ===
+Set
+===
 Set a Galera option to the cluster.
  
          $params = [
@@ -117,3 +120,4 @@ Set a Galera option to the cluster.
          ];
          $response = $client->cluster()->set($params);
   
+<!-- proofread -->

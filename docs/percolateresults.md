@@ -2,50 +2,35 @@
 
 ## PercolateResultSet object
 
-Returned by [percolate()](indexclass.md#percolate) method. It extends [ResultSet](searchresults.md#resultset-object)
-object by using [PercolateResultHit](#percolateresulthit-object) objects as elements instead of 
-[ResultHit](searchresults.md#resulthit-object) objects.
-
-
+Returned by the [percolate()](indexclass.md#percolate) method, the PercolateResultSet object extends the [ResultSet](searchresults.md#resultset-object) by using [PercolateResultHit](#percolateresulthit-object) objects as elements instead of [ResultHit](searchresults.md#resulthit-object) objects.
 
 ## PercolateResultHit object
 
-It extends [ResultHit](searchresults.md#resulthit-object) by providing several additional methods:
+The PercolateResultHit object extends [ResultHit](searchresults.md#resulthit-object) and offers several additional methods:
 
-`getDocSlots()` returns the array that specify the indexes of  documents from the array provided by
- [percolate()](indexclass.md#percolate) that provide match for the current returned query.
- 
- `getDocsMatches($docs)` filters the list of documents at input with the doc slots of the current returned query.
-The document list must preserve exactly the same indexes of the list provided at [percolate()](indexclass.md#percolate).
+- `getDocSlots()` returns an array that specifies the indexes of documents from the array provided by [percolate()](indexclass.md#percolate) that match the current returned query.
+- `getDocsMatches($docs)` filters the input document list with the doc slots of the current returned query. The document list must maintain the same indexes as the list provided at [percolate()](indexclass.md#percolate).
+- `getData()` returns the stored query that is provided.
 
-`getData()` will provide the stored query that is returned.
    
  
  
- ## PercolateDocsResultSet object
+## PercolateDocsResultSet object
  
- Returned by [percolateToDocs()](indexclass.md#percolatetodocs)  method.
- It implements an `Iterator` just like [PercolateResultSet](#percolateresultset-object) but the constructor also 
- requires the input documents list used at input of  [percolateToDocs()](indexclass.md#percolatetodocs) method.
- The iterated elements are [PercolateResultDoc](#percolateresultdoc-object) objects.
+Returned by the [percolateToDocs()](indexclass.md#percolatetodocs) method, this object implements `Iterator`, similar to the [PercolateResultSet](#percolateresultset-object). However, the constructor also requires the input document list used at the input of the [percolateToDocs()](indexclass.md#percolatetodocs) method. The iterated elements are [PercolateResultDoc](#percolateresultdoc-object) objects.
  
- 
- 
- 
- ## PercolateResultDoc object
- 
-It's a simple object that holds a document array and an array with stored matched queries as 
-[PercolateResultHit](#percolateresulthit-object) objects;
- 
- `getData()` method will return the document.
+## PercolateResultDoc object
+
+This is a simple object that holds a document array and an array with matched stored queries as [PercolateResultHit](#percolateresulthit-object) objects.
+
+The `getData()` method returns the document.
  ```php
 foreach($result as $row) {
   $row->getData();
 }
 ```
 
-`getQueries` method return the list of stored queries found to have matches for the document. 
-The list can be empty.
+The `getQueries` method returns the list of stored queries found to have matches for the document. The list can be empty.
 
 ```php
 // $result is PercolateDocsResultSet
@@ -57,10 +42,11 @@ foreach($result as $row) {
   }
 }
 ```
-`hasQueries` informs whenever the list of stored queries is empty or not.
+The `hasQueries` method informs whether the list of stored queries is empty or not.
 
 ```php
 foreach($result as $row) {
   $row->hasQueries();
 }
 ```
+<!-- proofread -->

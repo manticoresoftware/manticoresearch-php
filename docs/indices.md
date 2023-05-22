@@ -1,7 +1,7 @@
 Indices
 -------
 
-Nodes namespace contains methods for operations made on indices or information about them. Available for  Manticore Search 3.4 or above.
+The Nodes namespace contains methods for operations made on indices or information about them. Available for Manticore Search 3.4 or above.
 
 Create
 ======
@@ -12,18 +12,18 @@ Create a new index.
 
 * `columns` - definition of fields for indexes with data
 * `settings` - various index settings
-* `silent` -  optional, if set to true, the create will not fail with error if there is already an index with the designated name
+* `silent` - optional, if set to true, the create will not fail with an error if there is already an index with the designated name
 
-`body` require presence of `columns`  array for RT and PQ indexes where keys are the field names.
+`body` requires the presence of a `columns` array for RT and PQ indexes where keys are the field names.
 
-Each field is an array that must contain `type` defined.
-`text` type also support `options`, current possible values are `indexed` and `stored`.
+Each field is an array that must contain a `type` definition.
+`text` type also supports `options`, with current possible values being `indexed` and `stored`.
 
-Index settings can be set in `settings` parameter. Some settings can have multiple entries, like `local` for distributed 
-indexes. In this case the value of the setting will be an array of values (see distributed index example below).
+Index settings can be set in the `settings` parameter. Some settings can have multiple entries, like `local` for distributed 
+indexes. In this case, the value of the setting will be an array of values (see the distributed index example below).
 
-By default, the index type is Real-Time. For PQ or distributed indexes, the options must contain a `type` property.
- 
+By default, the index type is `Real-Time`. For PQ or distributed indexes, the options must contain a `type` property.
+
 
         $params = [
             'index' => 'testrt',
@@ -45,7 +45,7 @@ By default, the index type is Real-Time. For PQ or distributed indexes, the opti
         ];
         $response = $client->indices()->create($params);
         
-For distributed indexes, the body must have only the `options` array, since they don't have any data (so no `columns`).
+For distributed indexes, the body must contain only the `options` array, as they don't have any data (so no `columns`).
 
         $params = [
             'index' => 'mydistributed',
@@ -66,7 +66,7 @@ Drop
 ===
 Drop an existing index. `index` is mandatory.
 
-`body` can contain optional parameter `silent` - for not failing with error in case the index doesn't exist.
+`body` can contain the optional parameter `silent` - for not failing with an error in case the index doesn't exist.
 
 
         $params = [
@@ -77,16 +77,16 @@ Drop an existing index. `index` is mandatory.
         
 Alter
 ====
-Alter perform changes on indexes. Currently supported only add/drop columns.
-Note that `text` type cannot be used in this call.
+Alter performs changes on indexes. Currently, only adding/dropping columns are supported.
+Note that the `text` type cannot be used in this call.
 
-Expects `index` name.
+Expects the `index` name.
 
-`body` parameters:
+The `body` parameters:
  
-* `operation` -  mandatory, possible values: add,drop
-* `column` -  for add,drop operations the column is an array of
-    * `name` -  column name
+* `operation` - mandatory, possible values: add, drop
+* `column` - for add, drop operations, the column is an array of
+    * `name` - column name
     * `type` - data type
  
 
@@ -117,11 +117,11 @@ Expects `index` name.
 
 Describe
 ========
-Returns structure of an index.
+Returns the structure of an index.
 
-Expects `index` name.
+Expects the `index` name.
 
-`body` is optional. It support `pattern` as a column name for filtering the structure result.
+`body` is optional. It supports `pattern` as a column name for filtering the structure result.
 
         $params = [
             'index' => 'testrt',
@@ -133,9 +133,9 @@ Expects `index` name.
 
 FlushRamchunk
 =============
-Flushed RAM chunk for a RT index.
+Flushes RAM chunk for an RT index.
 
-Expects `index` name.
+Expects the `index` name.
 
         $params = [
             'index' => 'testrt',
@@ -144,8 +144,8 @@ Expects `index` name.
 
 FlushRtindex
 ============
-Flushed the RT index to disk.
-Expects only `index` name.
+Flushes the RT index to disk.
+Expects only the `index` name.
 
         $params = [
             'index' => 'testrt',
@@ -155,11 +155,11 @@ Expects only `index` name.
 Optimize
 ========
 
-Launch optimization on RT index. The command doesn't wait by default for the optimize operation to finish. 
+Launches optimization on the RT index. By default, the command doesn't wait for the optimize operation to finish.
 
-Expects `index` name.
+Expects the `index` name.
 
-`body` is optional. Supports `sync` parameter - if set, the command waits for the optimize to finish.
+`body` is optional. Supports the `sync` parameter - if set, the command waits for the optimization to finish.
 
 
         $params = [
@@ -170,11 +170,11 @@ Expects `index` name.
 
 Status
 ======
-Return statistics about index: documents, size, chunks, as well as query statistics.
+Returns statistics about the index: documents, size, chunks, as well as query statistics.
 
-Expects `index` name. 
+Expects the `index` name.
 
-`body` is optional. It support `pattern` as a property/performance metric to filter upon.
+`body` is optional. It supports `pattern` as a property/performance metric to filter upon.
 
         $params = [
             'index' => 'testrt',
@@ -186,9 +186,9 @@ Expects `index` name.
 
 Settings
 ========
-Return a report with index's current settings.
+Returns a report with the index's current settings.
 
-Expects `index` name.
+Expects the `index` name.
 
 
         $params = [
@@ -198,11 +198,12 @@ Expects `index` name.
 
 Truncate
 ========
-Truncates an index. 
+Truncates an index.
 
-Expects `index` name.
+Expects the `index` name.
  
         $params = [
             'index' => 'testrt'
          ];
         $response = $client->indices()->truncate($params);                                                  
+<!-- proofread -->
