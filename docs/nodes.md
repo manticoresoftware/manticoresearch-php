@@ -1,7 +1,7 @@
 Nodes
 -----
 
-Nodes namespace contains methods for handling daemon operations or obtaining information about the current node.
+The node namespace contains methods for handling daemon operations or obtaining information about the current node.
 
 AgentStatus
 ===========
@@ -131,7 +131,7 @@ Flush logs.
 Plugins
 ========
 
-Return list of loaded plugins and functions.
+Return the list of loaded plugins and functions.
 
         $params = [
             'body' => [
@@ -170,7 +170,7 @@ Status
 ======
 Returns information and performance metrics about the current node.
 
-If the node is part of a cluster, it will also provide information about the cluster.
+If the node is the part of a cluster, it will also provide information about the cluster.
 
 Result can be filtered by setting `pattern` (on status metric names) parameter of `body`.
 
@@ -208,7 +208,7 @@ Optional `body` can contain formatting of the result by setting `columns` (numbe
 Variables
 =========
 
-Return list of server variables
+Return the list of server variables
 
 Optionally, it can return the value of a single server variable by specifying the `variable_name` parameter in `body`.
  

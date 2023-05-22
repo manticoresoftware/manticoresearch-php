@@ -23,7 +23,7 @@ $search->setIndex('indexname');
 
 ## Performing a search
 
-All methods of the Search class can be chained.
+All methods of the `Search` class can be chained.
 
 When all the search conditions and options are set, `get()` is called to process and query the search engine.
 
@@ -43,7 +43,7 @@ It returns a [ResultSet](searchresults.md#resultset-object) object.
 
 ### match()
 
-Match is a simplified search method. The query string is interpreted as a bag of words with OR as the default operator.
+`Match` is a simplified search method. The query string is interpreted as a bag of words with OR as the default operator.
 
 The first parameter can be a query string:
 
@@ -84,12 +84,12 @@ It can expect 3 parameters for filtering an attribute:
 
 - attribute name. It can also be an alias of an expression;
 - operator. Accepted operators are `range`, `lt`, `lte`, `gt`,  `gte`, `equals`, `in`;
-- values for filtering. It can be an array or single value. Currently, filters support integer, float, and string values.
+- values for filtering. It can be an array or a single value. Currently, filters support integer, float, and string values.
 - filtering condition. It can accept one of `AND`, `OR`, `NOT` values. Set to `AND` by default.
 
-notFilter() executes a negation of the operator. Alternatively, the `NOT` filtering condition can be used.
+`notFilter()` executes a negation of the operator. Alternatively, the `NOT` filtering condition can be used.
 
-orFilter() executes logical disjunction in case of multiple filters. Alternatively, the `OR` filtering condition can be used.
+`orFilter()` executes logical disjunction in case of multiple filters. Alternatively, the `OR` filtering condition can be used.
 
 ```php
 $search->filter('year', 'equals', 2000);
@@ -128,7 +128,7 @@ Note that the `equals` operator can be omitted, and the filter function can be c
 $search->filter('year', 2000);
 ```
 
-The functions can also accept a single parameter as a filter class like Range(), Equals(), or Distance().
+The functions can also accept a single parameter as a filter class like `Range()`, `Equals()`, or `Distance()`.
 
 ```php
 $search->filter(new Range('year', ['lte' => 2020]));
@@ -136,7 +136,7 @@ $search->filter(new Range('year', ['lte' => 2020]));
 
 ### sort()
 
-Adds a sorting rule. The sort rules will be applied in the order they are added.
+Adds a sorting rule. The sorting rules will be applied in the order they are added.
 
 It can accept two parameters:
 
@@ -151,12 +151,12 @@ $search->sort('name','asc');
 $search->sort('tags','asc','max');
 ```
 
-Sort can also accept the first argument as an array with key-value pairs as attribute -> direction:
+`Sort` can also accept the first argument as an array with key-value pairs as attribute -> direction:
 
 ```php
 $search->sort(['name'=>'asc']);
 ````
-By default, rules are added. If the second argument is set, the input array will not be added but will replace an existing rule set.
+By default, rules are added to the existing ones. If the second argument is set, the input array will not be added but will replace an existing rule set.
 
 ```php
 $search->sort(['name'=>'desc'],true);
@@ -180,7 +180,7 @@ $search->sort([
            ]);
 ````
 
-Method `sort` can be chained. For example:
+The `sort` method can be chained. For example:
 
 ```php
 $search->sort('name','asc')->sort('tags', 'desc')->sort('year', 'asc');
@@ -194,8 +194,8 @@ Enables highlighting.
 
 The function can accept two parameters, and neither is mandatory.
 
-- fields - an array with field names from which to extract the texts for highlighting. If missing, all `text` fields will be used.
-- settings - an array with settings for highlighting. For more details, check the HTTP API [Text highlighting](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON).
+- `fields` - an array with field names from which to extract the texts for highlighting. If missing, all `text` fields will be used.
+- `settings` - an array with settings for highlighting. For more details, check the HTTP API [Text highlighting](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON).
 
 ```php
 $search->highlight();
@@ -225,7 +225,7 @@ By default, all document fields are returned. This method can set which fields s
 
 
 ### facet()
-The facet() method allows you to add a facet (aggregation) to your search query.
+The `facet()` method allows you to add a facet (aggregation) to your search query.
 
 ```php
 $search->facet($field, $group = null, $limit = null);
@@ -257,26 +257,26 @@ You can also customize the ranker by setting a custom expression. Check out the 
 ```
 
 ### trackScores()
-Enable weight calculation by setting the `track_scores` option to `true`.
+Enables weight calculation by setting the `track_scores` option to `true`.
 
 ```php
-    $search->trackScores(true); // enable weight calculation
-    $search->trackScores(false); // disable weight calculation
-    $search->trackScores(null); // unset track_scores option
+    $search->trackScores(true); // enables weight calculation
+    $search->trackScores(false); // disables weight calculation
+    $search->trackScores(null); // unsets track_scores option
 ```
 
 ### stripBadUtf8()
-Enable removal of bad UTF-8 characters from the results by setting the `strip_bad_utf8` option to `true`.
+Enables the removal of bad UTF-8 characters from the results by setting the `strip_bad_utf8` option to `true`.
 
 ```php
-    $search->stripBadUtf8(true); // enable removal of bad utf8 characters
-    $search->stripBadUtf8(false); // disable removal of bad utf8 characters
-    $search->stripBadUtf8(null); // unset strip_bad_utf8 option
+    $search->stripBadUtf8(true); // enables the removal of bad utf8 characters
+    $search->stripBadUtf8(false); // disables the removal of bad utf8 characters
+    $search->stripBadUtf8(null); // unsets the strip_bad_utf8 option
 ```
 
 ### profile()
 
-Including this will provide query profiling in the result set.
+Provides query profiling in the result set.
 
 
 ### reset()

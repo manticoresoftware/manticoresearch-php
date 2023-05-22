@@ -41,7 +41,7 @@ Each request array can include one of the following:
 * id - document id
 * query - endpoint parameters
 
-Some  parameters are mandatory, depending on the request.
+Some parameters are mandatory, depending on the request.
 
 No validity check is performed on the body payload before sending the request.
 
@@ -53,7 +53,7 @@ Responses are returned as arrays reflecting the response object received from th
 ### Search
 For a complete reference of payload and response, see Manticore's [Search API](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON).
 
-`body` requires the presence of `index` and `query` parameters.
+`body` requires the presence of the `index` and `query` parameters.
 
 A simple search example:
 ```
@@ -75,7 +75,7 @@ $response = $client->search($params);
 
 For a complete reference of payload and response, see Manticore's [Insert API](https://manual.manticoresearch.com/Data_creation_and_modification/Adding_documents_to_a_table/Adding_documents_to_a_real-time_table#Adding-documents-to-a-real-time-index).
 
-`body` requires the presence of `index`, `id`, and `doc` parameters.
+`body` requires the presence of the `index`, `id`, and `doc` parameters.
 
 ```
 $doc = [
@@ -105,7 +105,7 @@ $response = $client->insert($doc);
 
 For a complete reference of payload and response, see Manticore's [Replace API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/REPLACE).
 
-`body` requires the presence of `index`, `id`, and `doc` parameters.
+`body` requires the presence of the `index`, `id`, and `doc` parameters.
 
 ```
 $doc = [
@@ -126,7 +126,7 @@ $response = $client->replace($doc);
 
 For a complete reference of payload and response, see Manticore's [Update API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/UPDATE).
 
-`body` requires the presence of `index`, `id`, and `doc` parameters.
+`body` requires the presence of the `index`, `id`, and `doc` parameters.
 
 ```
 $doc = [

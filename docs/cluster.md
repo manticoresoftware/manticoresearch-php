@@ -104,8 +104,8 @@ There are two syntax options for the `body` parameter:
         ];
         $response = $client->cluster()->join($params);
  
- Set
- ===
+Set
+===
 Set a Galera option to the cluster.
  
          $params = [

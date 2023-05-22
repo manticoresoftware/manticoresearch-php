@@ -1,7 +1,7 @@
 # SQL
 Allows running a SQL command.
 For a complete reference of payload and response, see Manticore's [SQL API](https://manual.manticoresearch.com/Connecting_to_the_server/HTTP#/sql).
-The `body` must have a `query` parameter containing the desired SQL command to be executed.
+`body` must have the `query` parameter containing the desired SQL command.
 
 Manticore Search below version 3.4 can only execute SELECT commands via `sql`.
 

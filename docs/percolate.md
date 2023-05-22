@@ -2,7 +2,7 @@
 
 ## Percolate operations
 
-For complete reference of payloads and responses, see Manticore's [PQ API](https://manual.manticoresearch.com/Data_creation_and_modification/Adding_documents_to_a_table/Adding_rules_to_a_percolate_table).
+For the complete reference of payloads and responses, see Manticore's [PQ API](https://manual.manticoresearch.com/Data_creation_and_modification/Adding_documents_to_a_table/Adding_rules_to_a_percolate_table).
 
 Operations with percolate indexes have their own namespace. The following methods are available:
 
@@ -12,7 +12,7 @@ For [storing](https://manual.manticoresearch.com/Data_creation_and_modification/
 
 `index` is mandatory.
 
-Simple insertion with auto-generated id:
+Simple insertion with an auto-generated id:
 
 ```
 $params = [

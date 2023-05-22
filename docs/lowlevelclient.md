@@ -41,7 +41,7 @@ Table of Contents
 
 ### Requests
 
-Each request array can have one of the following:
+Each request array can have one of the following parameters:
 
 * body - its content goes as the payload of the HTTP request
 * index/cluster - index/cluster name
@@ -68,8 +68,8 @@ For a complete reference of payload and response, see Manticore's [Search API](h
 - highlight parameters
 - limit of result set
 - offset of result set
-- _source - list of fields that will appear in the result set
-- profile - when enabled, it returns profiling of the search query
+- `_source` - list of fields that will appear in the result set
+- `profile` - when enabled, it returns profiling of the search query
 
 A simple search example:
 ```php
@@ -94,12 +94,12 @@ $params = [
 $response = $client->search($params);
 ```
 
-The response will be a JSON containing:
+The response will be a JSON object containing:
 
-- took - query time
-- timed_out - boolean, true if the query timed out
-- hits - array with matches
-- profile - optional, if profiling is set
+- `took` - query time
+- `timed_out` - boolean, true if the query timed out
+- `hits` - array with matches
+- `profile` - optional, if profiling is set
 
 
 ### Insert
@@ -110,7 +110,7 @@ For a complete reference of payload and response, see Manticore's [Insert API](h
 
 - index name
 - document as an array of properties
-- id as document id
+- id as a document id
 
 All are mandatory.
 
@@ -138,7 +138,7 @@ $doc = [
 $response = $client->insert($doc);
 ```
 
-If the index is part of a cluster, the `body` must also contain the cluster name:
+If the index is the part of a cluster, the `body` must also contain the cluster name:
 ```
 $doc = [
     'body' => [
@@ -172,7 +172,7 @@ For a complete reference of payload and response, see Manticore's [Replace API](
 
 - index name
 - document as an array of properties
-- id as document id
+- id as a document id
 
 All are mandatory.
 
@@ -191,7 +191,7 @@ $doc = [
 $response = $client->replace($doc);
 ```
 
-If the index is part of a cluster, the `body` must also contain the cluster name:
+If the index is the part of a cluster, the `body` must also contain the cluster name:
 
 ```
 $doc = [
@@ -217,7 +217,7 @@ For a complete reference of payload and response, see Manticore's [Update API](h
 
 - index name
 - document as an array of properties
-- id as document id or query array
+- id as a document id or a query array
 
 If id is used, only one document can be updated:
 ```
@@ -288,7 +288,7 @@ $doc = [
 $response = $client->delete($doc);
 ```
 
-If the index is a part of a cluster, the `body` should also include the cluster name:
+If the index is the part of a cluster, the `body` should also include the cluster name:
 
 ```
 $doc = [

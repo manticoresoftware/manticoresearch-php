@@ -22,7 +22,7 @@ Each field is an array that must contain a `type` definition.
 Index settings can be set in the `settings` parameter. Some settings can have multiple entries, like `local` for distributed 
 indexes. In this case, the value of the setting will be an array of values (see the distributed index example below).
 
-By default, the index type is Real-Time. For PQ or distributed indexes, the options must contain a `type` property.
+By default, the index type is `Real-Time`. For PQ or distributed indexes, the options must contain a `type` property.
 
 
         $params = [
@@ -80,9 +80,9 @@ Alter
 Alter performs changes on indexes. Currently, only adding/dropping columns are supported.
 Note that the `text` type cannot be used in this call.
 
-Expects `index` name.
+Expects the `index` name.
 
-`body` parameters:
+The `body` parameters:
  
 * `operation` - mandatory, possible values: add, drop
 * `column` - for add, drop operations, the column is an array of
@@ -119,7 +119,7 @@ Describe
 ========
 Returns the structure of an index.
 
-Expects `index` name.
+Expects the `index` name.
 
 `body` is optional. It supports `pattern` as a column name for filtering the structure result.
 
@@ -135,7 +135,7 @@ FlushRamchunk
 =============
 Flushes RAM chunk for an RT index.
 
-Expects `index` name.
+Expects the `index` name.
 
         $params = [
             'index' => 'testrt',
@@ -157,7 +157,7 @@ Optimize
 
 Launches optimization on the RT index. By default, the command doesn't wait for the optimize operation to finish.
 
-Expects `index` name.
+Expects the `index` name.
 
 `body` is optional. Supports the `sync` parameter - if set, the command waits for the optimization to finish.
 
@@ -172,7 +172,7 @@ Status
 ======
 Returns statistics about the index: documents, size, chunks, as well as query statistics.
 
-Expects `index` name.
+Expects the `index` name.
 
 `body` is optional. It supports `pattern` as a property/performance metric to filter upon.
 
@@ -188,7 +188,7 @@ Settings
 ========
 Returns a report with the index's current settings.
 
-Expects `index` name.
+Expects the `index` name.
 
 
         $params = [
@@ -200,7 +200,7 @@ Truncate
 ========
 Truncates an index.
 
-Expects `index` name.
+Expects the `index` name.
  
         $params = [
             'index' => 'testrt'

@@ -50,9 +50,9 @@ foreach($result as $hit)
 ```   
 To obtain the count of documents in the response, you can use either the `count()` function or the object's `count()` method.
 
-Iterating through the result set object provides a `ResultHit` object containing a matched document.
+Iterating through the result set object provides a `ResultHit` object containing the matched document.
 
-The ResultSet object also offers information about the query:
+The `ResultSet` object also offers information about the query:
 
 Total search matches:
 
@@ -65,7 +65,7 @@ Query time:
 $result->getTime();
 ```
 
-In case the query timed out:
+Check if the query timed out:
 
 ```php
 $result->hasTimedout();
@@ -77,7 +77,7 @@ Facets (aggregations):
 $result->getFacets();
 ```
 This returns an associative array with the requested facets, where a facet can be identified by the chosen facet alias.
-Each facet is an array containing the faceted values and counts in a `buckets` array:
+Each facet is an array containing the faceted values and counts in the `buckets` array:
 
 ``` php
 $facets = $results->getFacets();
@@ -108,7 +108,7 @@ print_r($year_facet);
  
  ## ResultHit object
  
-The `ResultHit` encapsulates a matched document provided in a search result set.
+The `ResultHit` encapsulates the matched document provided in the search result set.
 
 The document id can be retrieved with `getId()`
 
@@ -119,7 +119,7 @@ foreach($result as $hit)
 }
 ```
 
-Any document field/attribute or expressions defined as source can be retrieved directly as an object property:
+Any document's field/attribute or expression defined as `source` can be retrieved directly as an object property:
 
 ```php
 foreach($result as $hit)

@@ -9,7 +9,7 @@ The following documentation assumes that you are using a shell with the working 
 docker-compose build
 ```
 
-Sometimes it's a good idea to rebuild the images with `--no-cache` to ensure they are not outdated and can still build correctly.
+Sometimes it's a good idea to rebuild the images with `--no-cache` to ensure they are not outdated and can still be built correctly.
 
 ## Prepare PHP composer packages
 ```bash

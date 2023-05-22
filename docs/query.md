@@ -89,10 +89,10 @@ $bool->must(new \Manticoresearch\Query\Range('year', ['lte' => 2020]));
 Creates a `geo_distance` expression.
 Expects an array that follows the syntax defined in `/json/search`:
 
-- location_anchor containing the pin object
-- location_source containing the attributes with lat/long
-- distance_type -  can be 'adaptive' (default) or 'haversine'
-- distance - a string with distance in format `XXX uom`, where `uom` can be meters, km, miles, yards, mm, feet, inches or nautical miles
+- `location_anchor` containing the pin object
+- `location_source` containing the attributes with lat/long
+- `distance_type` -  can be `adaptive` (default) or `haversine`
+- `distance` - a string with distance in format `XXX uom`, where `uom` can be meters, km, miles, yards, mm, feet, inches or nautical miles
 
 The pin location and the lat/long attributes must be in degrees.
 
@@ -122,7 +122,7 @@ $q->must(new \Manticoresearch\Query\Equals('year', 2014));
 $response = $search->search($q)->get();
 ```
 
-Both sugar syntaxes can be also be mixed:
+Both sugar syntaxes can also be mixed:
 
 ```php
 $response = $search->search('"team of explorers"/2')->filter(new \Manticoresearch\Query\Equals('year', 2014))->get();

@@ -15,11 +15,11 @@ The PercolateResultHit object extends [ResultHit](searchresults.md#resulthit-obj
    
  
  
- ## PercolateDocsResultSet object
+## PercolateDocsResultSet object
  
-Returned by the [percolateToDocs()](indexclass.md#percolatetodocs) method, this object implements an `Iterator`, similar to the [PercolateResultSet](#percolateresultset-object). However, the constructor also requires the input documents list used at the input of the [percolateToDocs()](indexclass.md#percolatetodocs) method. The iterated elements are [PercolateResultDoc](#percolateresultdoc-object) objects.
+Returned by the [percolateToDocs()](indexclass.md#percolatetodocs) method, this object implements `Iterator`, similar to the [PercolateResultSet](#percolateresultset-object). However, the constructor also requires the input document list used at the input of the [percolateToDocs()](indexclass.md#percolatetodocs) method. The iterated elements are [PercolateResultDoc](#percolateresultdoc-object) objects.
  
- ## PercolateResultDoc object
+## PercolateResultDoc object
 
 This is a simple object that holds a document array and an array with matched stored queries as [PercolateResultHit](#percolateresulthit-object) objects.
 

@@ -14,7 +14,7 @@ The [Client()](https://manticoresoftware.github.io/manticoresearch-php/class-Man
 * port - HTTP API port (part of a connection)
 * connections - array of connections
 * connectionStrategy - name of [connection pool strategy](#connection-pool-strategies), default is `StaticRoundRobin`
-* transport - [transport](#transport) class name or object, default `Http` (part of a connection)
+* transport - [transport](#transport) class name or object, default is `Http` (part of a connection)
 * retries - number of [retries](#retries) to perform in case of hard failure
 
 If using a single connection, it can be defined directly in the configuration array like:
@@ -30,7 +30,7 @@ A connection array can contain:
 
 * host - IP or DNS of the server
 * port - HTTP API port
-* transport - transport class name or object, default `Http`
+* transport - transport class name or object, default is `Http`
 
 Additionally, the connection array can include various options for the transport adapter.
 
@@ -54,7 +54,7 @@ Http/Https adapter options:
 * curl - array of CURL settings as option=>value
 * persistent - define whether the connection is persistent or not
 
-Simple example of multiple hosts:
+A simple example of multiple hosts:
 ```
         $params = ['connections'=>
             [
@@ -145,7 +145,7 @@ By default, the number of retries is equal to the number of defined hosts.
 
 If the number of hosts is 10 and retries are set to 5, the query will retry on 5 hosts according to the connection strategy and end with an error after 5 attempts.
 
-Multiple hosts example:
+A multiple hosts example:
 
 ```
         $params = ['connections'=>
@@ -159,7 +159,7 @@ Multiple hosts example:
         $client =  new Client($params);
 ```
 
-Single host example:
+A single host example:
 
 ```
         $params = ['host' => '123.0.0.1', 'port' => '1234', 'retries' => 2];

@@ -3,8 +3,8 @@
 The Manticore Search PHP client supports compatible PSR Loggers.
 There are several levels, including DEBUG, INFO, or ERROR messages being logged.
 
-The logger must be passed at the Client() initialization. 
-In the absence of a defined logger, the NullLogger is used.
+The logger must be passed at the `Client()` initialization. 
+In the absence of a defined logger, the `NullLogger` is used.
 
 ## Using with Monolog
 

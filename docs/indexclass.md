@@ -1,6 +1,6 @@
 # Index Class
 
-It's wrapper on top of the Client that simplifies working with an Index.
+It's a wrapper on top of the Client that simplifies working with an Index.
 
 Index provides all the operations which can be executed on an index.
 
@@ -10,7 +10,7 @@ $config = ['host' => '127.0.0.1', 'port' => '9308'];
 $client = new \Manticoresearch\Client($config);
 $index = new \Manticoresearch\Index($client,'myindex');
 ```
-The second argument is not required; the index name can also be set with setName().
+The second argument is not required; the index name can also be set with `setName()`.
 
 
 
@@ -218,9 +218,9 @@ $index->updateDocument([
 
 It returns an array with:
 
-- _index as the index name
-- _id as the updated ID
-- result indicating whether the update was successful ('updated') or not ('noop')
+- `_index` as the index name 
+- `_id` as the updated ID
+- result indicating whether the update was successful (`updated`) or not (`noop`)
 
 ```json
 {"_index":"test","_id":4,"result":"updated"}
@@ -233,13 +233,13 @@ Expects:
 - an array with key pairs of attribute names and values
 - a query expression - can be either as an array or as a [Query](query.md) object
 
-Example with array:
+An example with array:
 
 ```php
 $index->updateDocuments(['price'=>100],['match'=>['*'=>'apple']]);
 ```
 
-Example using a Query object:
+An example using a Query object:
 
 ```php
 $index->updateDocuments(['year'=>2000], new \Manticoresearch\Query\MatchQuery('team','*'));
@@ -254,7 +254,7 @@ $response = $index->updateDocuments(['year'=>2000], $bool);
 
 It returns an array with:
 
-- _index as the index_name
+- `_index` as the index_name
 - updated as the number of documents updated
 
 ```json
@@ -286,13 +286,13 @@ It returns an array with:
 
 Deletes documents using a query expression which can be passed either as an array or as a [Query](query.md) object.
 
-Example with query as array:
+An example with query as array:
 
 ```php
 $index->deleteDocuments(['match'=>['*'=>'apple']]);
 ```
 
-Example with query as Query object:
+An example with query as Query object:
 
 ```php
 $index->deleteDocuments( new \Manticoresearch\Query\MatchQuery('apple','*'));
@@ -300,8 +300,8 @@ $index->deleteDocuments( new \Manticoresearch\Query\MatchQuery('apple','*'));
 
 It returns an array with:
 
-- _index as index name
-- deleted as the number of found and deleted documents
+- `_index` as index name
+- `deleted` as the number of found and deleted documents
 
 ```json
 {"_index":"test","deleted":0}
