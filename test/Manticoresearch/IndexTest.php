@@ -479,5 +479,8 @@ class IndexTest extends TestCase
             ]
         ]);
         $this->assertEquals([], $result);
+
+        $result = $client->sql('select id, year from test where year = 2000', true);
+        $this->assertEquals([], $result);
     }
 }

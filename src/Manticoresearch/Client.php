@@ -217,6 +217,39 @@ class Client
         return $response->getResponse();
     }
 
+
+    /**
+     * Endpoint: sql
+     * @param mixed $params
+     * @return array
+     * 
+     * $params can be either two parameters (string $query, bool $rawMode = false),
+     * or a single parameter with the following structure (array [ 'mode' => $mode, 'body' => ['query' => $query] ])
+     * The second variant is currently supported to provide compatibility with the older versions of the client
+     */
+    public function sql(...$params)
+    {
+        if (is_string($params[0])) {
+            $params = [
+                'body' => [
+                    'query' => $params[0]
+                ],
+                'mode' => !empty($params[1]) && is_bool($params[1]) ? 'raw' : '',
+            ];
+        } else {
+            $params = $params[0];
+        }
+        $endpoint = new Endpoints\Sql($params);
+        if (isset($params['mode'])) {
+            $endpoint->setMode($params['mode']);
+            $response = $this->request($endpoint, ['responseClass' => 'Manticoresearch\\Response\\SqlToArray']);
+        } else {
+            $response = $this->request($endpoint);
+        }
+        return $response->getResponse();
+    }
+
+
     /**
      * Endpoint: sql
      * @param array $params
