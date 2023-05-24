@@ -249,24 +249,6 @@ class Client
         return $response->getResponse();
     }
 
-
-    /**
-     * Endpoint: sql
-     * @param array $params
-     * @return array
-     */
-    public function sql(array $params = [])
-    {
-        $endpoint = new Endpoints\Sql($params);
-        if (isset($params['mode'])) {
-            $endpoint->setMode($params['mode']);
-            $response = $this->request($endpoint, ['responseClass' => 'Manticoresearch\\Response\\SqlToArray']);
-        } else {
-            $response = $this->request($endpoint);
-        }
-        return $response->getResponse();
-    }
-
     /**
      * Endpoint: delete
      * @param array $params
