@@ -222,7 +222,7 @@ class Client
      * Endpoint: sql
      * @param mixed $params
      * @return array
-     * 
+     *
      * $params can be either two parameters (string $query, bool $rawMode = false),
      * or a single parameter with the following structure (array [ 'mode' => $mode, 'body' => ['query' => $query] ])
      * The second variant is currently supported to provide compatibility with the older versions of the client
