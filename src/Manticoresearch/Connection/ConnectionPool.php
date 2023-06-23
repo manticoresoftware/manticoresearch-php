@@ -59,7 +59,11 @@ class ConnectionPool
         if ($this->retries_attempts < $this->retries) {
             return $connection;
         }
-        throw new NoMoreNodesException('No more retries left');
+        $exMsg = 'After %d retr%s to %d node%s, connection has failed. No more retries left.';
+        $connCount = count($this->connections);
+        throw new NoMoreNodesException(
+            sprintf($exMsg, $this->retries, $this->retries > 1 ? 'ies' : 'y', $connCount, $connCount > 1 ? 's' : '' )
+        );
     }
 
     public function hasConnections(): bool
