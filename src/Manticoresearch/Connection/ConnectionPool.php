@@ -62,7 +62,7 @@ class ConnectionPool
         $exMsg = 'After %d retr%s to %d node%s, connection has failed. No more retries left.';
         $connCount = count($this->connections);
         throw new NoMoreNodesException(
-            sprintf($exMsg, $this->retries, $this->retries > 1 ? 'ies' : 'y', $connCount, $connCount > 1 ? 's' : '' )
+            sprintf($exMsg, $this->retries, $this->retries > 1 ? 'ies' : 'y', $connCount, $connCount > 1 ? 's' : '')
         );
     }
 

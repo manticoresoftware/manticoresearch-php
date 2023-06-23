@@ -41,6 +41,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
                 'character_set_client',
                 'character_set_connection',
                 'collation_connection',
+                'distinct_precision_threshold',
                 'grouping_in_utc',
                 'last_insert_id',
                 'log_level',
@@ -50,6 +51,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
                 'query_log_format',
                 'secondary_indexes',
                 'session_read_only',
+                'thread_stack',
                 'threads_ex',
                 'threads_ex_effective'
             ], $keys);

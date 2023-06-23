@@ -380,7 +380,8 @@ class Client
             throw $e;
         } catch (ConnectionException $e) {
             $this->logger->warning(
-                'Manticore Search Request failed on attempt ' . $this->connectionPool->retries_attempts . ':', [
+                'Manticore Search Request failed on attempt ' . $this->connectionPool->retries_attempts . ':',
+                [
                     'exception' => $e->getMessage(),
                     'request' => $e->getRequest()->toArray()
                 ]
