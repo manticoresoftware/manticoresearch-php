@@ -188,7 +188,8 @@ class Search
                 $object = new In($attr, $values);
                 break;
             case 'equals':
-                $object = new Equals($attr, $values[0]);
+            	$value = is_bool($values[0]) ? (int)$values[0] : $values[0];
+                $object = new Equals($attr, $value);
                 break;
             default:
                 $object = null;
@@ -277,7 +278,9 @@ class Search
             //if 2nd arg is true we full set the sort with the expr, otherwise just add it
             //we let passing uppercased directions here as well
             foreach ($field as $k => $v) {
-                $field[$k] = strtolower($v);
+            	if (is_string($v)) {
+                	$field[$k] = strtolower($v);
+            	}
             }
             if (isset($direction) && $direction === true) {
                 $this->params['sort'] = $field;
