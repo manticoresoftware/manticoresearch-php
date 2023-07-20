@@ -45,8 +45,8 @@ class ResultSet implements \Iterator, \Countable
         } else {
             $this->total = 0;
         }
-        $this->took = $response['took'];
-        $this->timed_out = $response['timed_out'];
+        $this->took = $response['took'] ?? 0;
+        $this->timed_out = $response['timed_out'] ?? false;
         if (isset($response['profile'])) {
             $this->profile = $response['profile'];
         }
