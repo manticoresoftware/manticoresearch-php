@@ -87,7 +87,7 @@ class Search
     }
     
     /**
-     * @param string $queryString
+     * @param string|BoolQuery $queryString
      * @return $this
      */
     public function search($queryString): self
