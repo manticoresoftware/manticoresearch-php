@@ -3,6 +3,7 @@
 
 namespace Manticoresearch;
 
+use Manticoresearch\Query;
 use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\Distance;
 use Manticoresearch\Query\Equals;
@@ -87,7 +88,7 @@ class Search
     }
     
     /**
-     * @param string|BoolQuery $queryString
+     * @param string|Query $queryString
      * @return $this
      */
     public function search($queryString): self
