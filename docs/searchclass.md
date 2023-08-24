@@ -228,12 +228,14 @@ By default, all document fields are returned. This method can set which fields s
 The `facet()` method allows you to add a facet (aggregation) to your search query.
 
 ```php
-$search->facet($field, $group = null, $limit = null);
+$search->facet($field, $group = null, $limit = null, $sortField = null, $sortDirection = 'desc');
 ```
 Parameters:
  * attribute name - This is a required parameter and can also be an expression name.
  * facet alias - If not provided, the attribute name will be utilized.
  * limit - Defines the maximum number of facet values to return.
+ * sortField - Field the facet values will be sorted by. Also, can be set as `COUNT(*)` or `FACET()`. For details, see [Ordering in facet result](https://manual.manticoresearch.com/Searching/Faceted_search#Ordering-in-facet-result).
+ * sortDirection - Direction of sorting, `desc` by default
 
 Facets will be included in the result set and can be accessed using [ResultSet:getFacets()](searchresults.md#resultset-object).
 
