@@ -252,22 +252,22 @@ class Search
 
     public function facet($field, $group = null, $limit = null, $sortField = null, $sortDirection = 'desc') : self
     {
-    	// reset facets
-    	if ($field === false) {
-    		$this->params['aggs'] = [];
-    	}
-    	if ($group === null) {
-    		$group = $field;
-    	}
-    	$terms = ['field'=>$field];
-    	if ($limit !==null) {
-    		$terms['size'] = $limit;
-    	}
-    	$this->params['aggs'][$group] = ['terms' =>$terms];
-    	if ($sortField !== null) {
-    		$this->params['aggs'][$group]['sort'] = [ [$sortField => $sortDirection] ];
-    	}
-    	return $this;
+        // reset facets
+        if ($field === false) {
+            $this->params['aggs'] = [];
+        }
+        if ($group === null) {
+            $group = $field;
+        }
+            $terms = ['field'=>$field];
+        if ($limit !==null) {
+            $terms['size'] = $limit;
+        }
+        $this->params['aggs'][$group] = ['terms' =>$terms];
+        if ($sortField !== null) {
+            $this->params['aggs'][$group]['sort'] = [ [$sortField => $sortDirection] ];
+        }
+        return $this;
     }
 
     public function sort($field, $direction = 'asc', $mode = null): self
