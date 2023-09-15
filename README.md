@@ -21,8 +21,6 @@ manticoresearch-php
 
 Official PHP client for Manticore Search.
 
-❗ WARNING: this is a development version of the client. The latest release's readme is https://github.com/manticoresoftware/manticoresearch-php/tree/3.0.1
-
 
 Features
 --------
@@ -42,6 +40,7 @@ Minimum Manticore Search version is 2.5.1 with HTTP protocol enabled.
 
 | Manticore Search  | manticoresearch-php |     PHP       |
 | ----------------- | ------------------- | ------------- |
+| >= 6.2.0          | 3.1.x               | >= 7.4, >=8.0 |
 | >= 6.2.0          | 3.0.x               | >= 7.4, >=8.0 |
 | >= 6.0.4          | 3.0.x               | >= 7.1, >=8.0 |
 | >= 4.2.1          | 2.0.x, 2.1.x, 2.2.x | >= 7.1, >=8.0 |
