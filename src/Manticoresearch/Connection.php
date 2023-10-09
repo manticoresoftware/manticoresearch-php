@@ -23,6 +23,7 @@ class Connection
 /*
  * $params['transport']  = transport class name
  * $params['host']       = hostname
+ * $params['path']       = path
  * $params['port']       = port number
  * $params['timeout']    = connection timeout
  * $params['connect_timeout'] = connection connect timeout
@@ -43,6 +44,7 @@ class Connection
             'transport' => 'Http',
             'host' => '127.0.0.1',
             'scheme' => 'http',
+            'path' => '',
             'port' => '9308',
             'timeout' => 300,
             'connect_timeout' => 0,
@@ -73,6 +75,24 @@ class Connection
     public function getHost()
     {
         return $this->config['host'];
+    }
+
+    /**
+     * @param string $path
+     * @return $this
+     */
+    public function setPath(string $path): self
+    {
+        $this->config['path'] = $path;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPath()
+    {
+        return $this->config['path'];
     }
 
     /**

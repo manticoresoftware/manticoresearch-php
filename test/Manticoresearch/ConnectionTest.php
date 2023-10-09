@@ -23,6 +23,12 @@ class ConnectionTest extends TestCase
         $this->assertEquals('example.com', $this->connection->getHost());
     }
 
+    public function testSetPathGetPath()
+    {
+        $this->connection->setPath('/example');
+        $this->assertEquals('/example', $this->connection->getPath());
+    }
+
     public function testSetPortGetPort()
     {
         $this->connection->setPort(19308);
@@ -79,6 +85,7 @@ class ConnectionTest extends TestCase
             'headers',
             'host',
             'password',
+            'path',
             'persistent',
             'port',
             'proxy',

@@ -46,7 +46,8 @@ class PhpHttp extends Transport implements TransportInterface
     {
         $connection = $this->getConnection();
 
-        $url = $this->connection->getConfig('scheme') . '://' . $connection->getHost() . ':' . $connection->getPort();
+        $url = $this->connection->getConfig('scheme') . '://' . $connection->getHost() . ':' . $connection->getPort()
+            . $connection->getPath();
         $endpoint = $request->getPath();
         $url .= $endpoint;
         $url = $this->setupURI($url, $request->getQuery());

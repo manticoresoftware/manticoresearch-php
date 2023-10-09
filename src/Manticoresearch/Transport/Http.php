@@ -30,7 +30,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
     {
         $connection = $this->getConnection();
         $conn = $this->getCurlConnection($connection->getConfig('persistent'));
-        $url = $this->scheme.'://'.$connection->getHost().':'.$connection->getPort();
+        $url = $this->scheme . '://' . $connection->getHost() . ':' . $connection->getPort() . $connection->getPath();
         $endpoint = $request->getPath();
         $url .= $endpoint;
         $url = $this->setupURI($url, $request->getQuery());
