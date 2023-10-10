@@ -7,17 +7,17 @@ on:
     branches: [ master ]
 
 jobs:
-  test: 
+  test:
     name: unit test
     runs-on: ${{ matrix.os }}
-  
+
     strategy:
       matrix:
         os: ['ubuntu-latest']
         php-version: ['7.1', '7.3', '7.4', '8.0', '8.1']
         phpunit-version: ['latest']
         transport: ['', 'PhpHttp']
-        
+
     services:
       manticoresearch-manticore:
         image: manticoresearch/manticore:dev
@@ -27,24 +27,24 @@ jobs:
         image: manticoresearch/manticore:dev
         ports:
           - 5308:9308
-        
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      
+
       - name: Install PHP {{matrix.php-version}}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
           extensions: yaml, zip, curl
           tools: phpunit,phpstan
-        
+
       - name: Install dependencies
         run: composer install --prefer-dist
-        
+
       - name: Composer require
         run: composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message php-http/message-factory http-interop/http-factory-guzzle
-        
+
       - name: Test
         run: vendor/bin/phpunit -d memory_limit=4G --stop-on-failure test/
         env:
@@ -54,14 +54,14 @@ jobs:
           MS_PORT2: 5308
           TRANSPORT: ${{ matrix.transport }}
 
-  stan: 
+  stan:
     name: static analysis
     runs-on: ubuntu-latest
-       
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      
+
       - name: Install PHP 7.4
         uses: shivammathur/setup-php@v2
         with:
@@ -70,28 +70,29 @@ jobs:
 
       - name: Install dependencies
         run: composer install --prefer-dist
-        
+
       - name: Composer require
         run: composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle
-        
+
       - name: Test
         run: phpstan analyse --level=3 src/
 
 
-  codestyle: 
+  codestyle:
     name: codestyle
     runs-on: ubuntu-latest
-       
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      
+
       - name: Install PHP 8.0
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.0
-          tools: phpcs
-        
-      - name: Test
-        run: phpcs --standard=PSR2 src/ test/
 
+      - name: Install dependencies
+        run: composer install --prefer-dist
+
+      - name: Run phpcs
+        run: composer phpcs

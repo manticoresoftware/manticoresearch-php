@@ -1,6 +1,5 @@
-
 <?xml version="1.0"?>
 <ruleset name="Manticoresearch-PHP">
-	<rule ref="PSR2">
-	</rule>
+    <rule ref="PSR2">
+    </rule>
 </ruleset>
