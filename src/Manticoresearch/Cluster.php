@@ -15,7 +15,7 @@ class Cluster
      * @var Client
      */
     protected $client;
-    protected $params;
+    protected $params = ['responseClass'=>'Manticoresearch\\Response\\SqlToArray'];
 
     /**
      * Pq constructor.
@@ -24,7 +24,6 @@ class Cluster
     public function __construct($client)
     {
         $this->client = $client;
-        $this->params =['responseClass'=>'Manticoresearch\\Response\\SqlToArray'];
     }
 
     public function alter($params)

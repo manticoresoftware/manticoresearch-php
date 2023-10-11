@@ -18,15 +18,13 @@ class Index
 {
     protected $client;
     protected $index;
-    protected $cluster;
+    protected $cluster = null;
 
     public function __construct(Client $client, $index = null)
     {
         $this->client = $client;
 
         $this->index = $index;
-
-        $this->cluster = null;
     }
 
     public function search($input): Search

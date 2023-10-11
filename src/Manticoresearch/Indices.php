@@ -28,7 +28,7 @@ class Indices
     /**
      * @var array
      */
-    protected $params;
+    protected $params = ['responseClass' => 'Manticoresearch\\Response\\SqlToArray'];
 
     /**
      * Pq constructor.
@@ -37,7 +37,6 @@ class Indices
     public function __construct($client)
     {
         $this->client = $client;
-        $this->params = ['responseClass' => 'Manticoresearch\\Response\\SqlToArray'];
     }
 
     /**
