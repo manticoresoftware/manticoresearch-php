@@ -8,6 +8,7 @@ use Manticoresearch\Endpoints\Cluster\Create;
 use Manticoresearch\Endpoints\Cluster\Delete;
 use Manticoresearch\Endpoints\Cluster\Join;
 use Manticoresearch\Endpoints\Cluster\Set;
+use Manticoresearch\Response\SqlToArray;
 
 class Cluster
 {
@@ -24,7 +25,7 @@ class Cluster
     public function __construct($client)
     {
         $this->client = $client;
-        $this->params =['responseClass'=>'Manticoresearch\\Response\\SqlToArray'];
+        $this->params =['responseClass'=> SqlToArray::class];
     }
 
     public function alter($params)

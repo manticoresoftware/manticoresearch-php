@@ -9,6 +9,7 @@ use Manticoresearch\Index;
 use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\MatchQuery;
 use Manticoresearch\Query\Range;
+use Manticoresearch\ResultHit;
 use PHPUnit\Framework\TestCase;
 
 class IndexTest extends TestCase
@@ -126,7 +127,7 @@ class IndexTest extends TestCase
         $index = $this->getIndex();
         $this->addDocument($index);
         $hit = $index->getDocumentById(1);
-        $this->assertInstanceOf('Manticoresearch\ResultHit', $hit);
+        $this->assertInstanceOf(ResultHit::class, $hit);
     }
 
     public function testClassOfNonExistentHit()
@@ -339,7 +340,7 @@ class IndexTest extends TestCase
         $results = $index->search('space team')->get();
 
         foreach ($results as $hit) {
-            $this->assertInstanceOf('Manticoresearch\ResultHit', $hit);
+            $this->assertInstanceOf(ResultHit::class, $hit);
         }
 
         $results = $index->search('alien')
@@ -350,7 +351,7 @@ class IndexTest extends TestCase
             ->get();
 
         foreach ($results as $hit) {
-            $this->assertInstanceOf('Manticoresearch\ResultHit', $hit);
+            $this->assertInstanceOf(ResultHit::class, $hit);
         }
 
         $response = $index->updateDocument(['year' => 2019], 4);
@@ -428,7 +429,7 @@ class IndexTest extends TestCase
     public function testGetClient()
     {
         $index = $this->getIndex();
-        $this->assertInstanceOf('Manticoresearch\Client', $index->getClient());
+        $this->assertInstanceOf(Client::class, $index->getClient());
     }
 
 

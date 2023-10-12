@@ -16,6 +16,7 @@ use Manticoresearch\Endpoints\Indices\Status;
 use Manticoresearch\Endpoints\Indices\Truncate;
 use Manticoresearch\Endpoints\Sql;
 use Manticoresearch\Exceptions\RuntimeException;
+use Manticoresearch\Response\SqlToArray;
 
 class Indices
 {
@@ -37,7 +38,7 @@ class Indices
     public function __construct($client)
     {
         $this->client = $client;
-        $this->params = ['responseClass' => 'Manticoresearch\\Response\\SqlToArray'];
+        $this->params = ['responseClass' => SqlToArray::class];
     }
 
     /**

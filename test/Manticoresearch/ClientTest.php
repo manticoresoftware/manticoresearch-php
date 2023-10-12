@@ -4,9 +4,11 @@
 namespace Manticoresearch\Test;
 
 use Manticoresearch\Client;
+use Manticoresearch\Cluster;
 use Manticoresearch\Connection;
 use Manticoresearch\Connection\Strategy\Random;
 use Manticoresearch\Exceptions\ConnectionException;
+use Manticoresearch\Index;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 use PHPUnit\Framework\TestCase;
 
@@ -33,7 +35,7 @@ class ClientTest extends TestCase
     public function testCluster()
     {
         $client = new Client();
-        $this->assertInstanceOf('Manticoresearch\Cluster', $client->cluster());
+        $this->assertInstanceOf(Cluster::class, $client->cluster());
     }
 
     public function testIndex(): void
@@ -41,7 +43,7 @@ class ClientTest extends TestCase
         $client = new Client();
         $index = $client->index();
 
-        $this->assertInstanceOf('Manticoresearch\Index', $index);
+        $this->assertInstanceOf(Index::class, $index);
     }
 
     public function testIndexName(): void
@@ -49,7 +51,7 @@ class ClientTest extends TestCase
         $client = new Client();
         $index = $client->index('video');
 
-        $this->assertInstanceOf('Manticoresearch\Index', $index);
+        $this->assertInstanceOf(Index::class, $index);
         $this->assertEquals('video', $index->getName());
     }
 
