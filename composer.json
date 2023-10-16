@@ -51,5 +51,8 @@
         "issues": "https://github.com/manticoresoftware/manticoresearch-php/issues",
         "source": "https://github.com/manticoresoftware/manticoresearch-php/",
         "chat": "https://slack.manticoresearch.com/"
+    },
+    "scripts": {
+        "phpcs": "phpcs --standard=ruleset.xml src/ test/"
     }
 }
