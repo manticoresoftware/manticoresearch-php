@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Endpoints\Indices;
 
 use Manticoresearch\Endpoints\EmulateBySql;
@@ -22,7 +21,7 @@ class Settings extends EmulateBySql
     public function setBody($params = null)
     {
         if (isset($this->index)) {
-            return parent::setBody(['query' => "SHOW INDEX ".$this->index. " SETTINGS"]);
+            return parent::setBody(['query' => "SHOW INDEX " . $this->index . " SETTINGS"]);
         }
         throw new RuntimeException('Index name is missing.');
     }

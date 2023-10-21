@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Test;
 
 use Manticoresearch\Client;
@@ -9,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class ClusterTest extends TestCase
 {
-
     public function testCluster()
     {
         $params = [
@@ -96,8 +94,8 @@ class ClusterTest extends TestCase
         $index = new Index($client);
         $index->setName('products');
         $index->setCluster('testcluster');
-        $result = $index->addDocument(['title'=>'The Dark Knight','price'=>7.5], 2000);
-        
+        $result = $index->addDocument(['title' => 'The Dark Knight','price' => 7.5], 2000);
+
         // workaround against unstable tests. For some reason the replication which
         // has to be synchronous acts like if it was asynchronous
         sleep(3);
@@ -107,7 +105,7 @@ class ClusterTest extends TestCase
             'body' => [
                 'index' => 'products',
                 'query' => [
-                    'range' => ['id' => ['gte'=>500]]
+                    'range' => ['id' => ['gte' => 500]]
                 ]
             ]
         ];
@@ -124,7 +122,7 @@ class ClusterTest extends TestCase
         ];
         $result = $client->cluster()->alter($params);
         $this->assertEquals('', $result['error']);
-        
+
         sleep(5);
 
         // drop cluster

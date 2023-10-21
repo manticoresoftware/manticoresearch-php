@@ -6,7 +6,6 @@ use Manticoresearch\Endpoints\EmulateBySql;
 
 class AgentStatus extends EmulateBySql
 {
-
     public function setBody($params = null)
     {
         return parent::setBody(['query' => 'SHOW AGENT ' .

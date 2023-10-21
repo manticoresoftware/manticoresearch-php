@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch;
 
 /**
@@ -49,7 +48,7 @@ class Response
      * @var array
      */
     protected $params;
-    
+
 
     public function __construct($responseString, $status = null, $params = [])
     {
@@ -84,7 +83,7 @@ class Response
         }
         return $this->response;
     }
-    
+
     /**
      * check if strip_bad_utf8 as been set to true
      * @return boolean

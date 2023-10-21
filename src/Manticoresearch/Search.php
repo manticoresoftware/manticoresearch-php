@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch;
 
 use Manticoresearch\Query\BoolQuery;
@@ -22,9 +21,9 @@ use Manticoresearch\Query\ScriptFields;
  */
 class Search
 {
-    const FILTER_AND = "AND";
-    const FILTER_OR = "OR";
-    const FILTER_NOT = "NOT";
+    public const FILTER_AND = "AND";
+    public const FILTER_OR = "OR";
+    public const FILTER_NOT = "NOT";
 
     /**
      * @var Client
@@ -82,10 +81,10 @@ class Search
         } else {
             $this->params['strip_bad_utf8'] = (bool)$stripBadUtf8;
         }
-        
+
         return $this;
     }
-    
+
     /**
      * @param string|BoolQuery $queryString
      * @return $this
@@ -143,17 +142,17 @@ class Search
     public function highlight($fields = [], $settings = []): self
     {
 
-        if (count($fields) === 0 && count($settings)===0) {
+        if (count($fields) === 0 && count($settings) === 0) {
             $this->params['highlight'] =  new \stdClass();
             return $this;
         }
         $this->params['highlight'] = [];
         if (count($fields) > 0) {
-            $this->params['highlight']['fields'] =$fields;
+            $this->params['highlight']['fields'] = $fields;
         }
-        if (count($settings)>0) {
+        if (count($settings) > 0) {
             foreach ($settings as $name => $value) {
-                $this->params['highlight'][$name] =$value;
+                $this->params['highlight'][$name] = $value;
             }
         }
         return $this;
@@ -250,7 +249,7 @@ class Search
         return $this;
     }
 
-    public function facet($field, $group = null, $limit = null, $sortField = null, $sortDirection = 'desc') : self
+    public function facet($field, $group = null, $limit = null, $sortField = null, $sortDirection = 'desc'): self
     {
         // reset facets
         if ($field === false) {
@@ -259,11 +258,11 @@ class Search
         if ($group === null) {
             $group = $field;
         }
-            $terms = ['field'=>$field];
-        if ($limit !==null) {
+        $terms = ['field' => $field];
+        if ($limit !== null) {
             $terms['size'] = $limit;
         }
-        $this->params['aggs'][$group] = ['terms' =>$terms];
+        $this->params['aggs'][$group] = ['terms' => $terms];
         if ($sortField !== null) {
             $this->params['aggs'][$group]['sort'] = [ [$sortField => $sortDirection] ];
         }

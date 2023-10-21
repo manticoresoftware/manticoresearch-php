@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Endpoints\Indices;
 
 use Manticoresearch\Endpoints\EmulateBySql;
@@ -22,8 +21,8 @@ class Truncate extends EmulateBySql
     public function setBody($params = null)
     {
         if (isset($this->index)) {
-            return parent::setBody(['query' => "TRUNCATE RTINDEX ".$this->index. "".
-                (isset($params['with'])?" WITH'".strtoupper($params['with'])."'":"")]);
+            return parent::setBody(['query' => "TRUNCATE RTINDEX " . $this->index . "" .
+                (isset($params['with']) ? " WITH'" . strtoupper($params['with']) . "'" : "")]);
         }
         throw new RuntimeException('Index name is missing.');
     }

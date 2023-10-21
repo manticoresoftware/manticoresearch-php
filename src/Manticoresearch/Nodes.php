@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch;
 
 use Manticoresearch\Endpoints\Nodes\AgentStatus;
@@ -37,12 +36,12 @@ class Nodes
     public function __construct($client)
     {
         $this->client = $client;
-        $this->params =['responseClass'=>'Manticoresearch\\Response\\SqlToArray'];
+        $this->params = ['responseClass' => 'Manticoresearch\\Response\\SqlToArray'];
     }
 
     public function agentstatus($params = [])
     {
-        $body = $params['body']??[];
+        $body = $params['body'] ?? [];
         $endpoint = new AgentStatus();
         $endpoint->setBody($body);
         $response = $this->client->request(
@@ -102,16 +101,16 @@ class Nodes
 
     public function flushattributes($params = [])
     {
-        $body = $params['body']??[];
+        $body = $params['body'] ?? [];
         $endpoint = new FlushAttributes();
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, ['responseClass'=>'Manticoresearch\\Response\\Sql']);
+        $response = $this->client->request($endpoint, ['responseClass' => 'Manticoresearch\\Response\\Sql']);
         return  $response->getResponse();
     }
 
     public function flushhostnames($params = [])
     {
-        $body = $params['body']??[];
+        $body = $params['body'] ?? [];
         $endpoint = new FlushHostnames();
         $endpoint->setBody($body);
         $response = $this->client->request($endpoint, $this->params);
@@ -120,7 +119,7 @@ class Nodes
 
     public function flushlogs($params = [])
     {
-        $body = $params['body']??[];
+        $body = $params['body'] ?? [];
         $endpoint = new FlushLogs();
         $endpoint->setBody($body);
         $response = $this->client->request($endpoint, $this->params);
@@ -129,7 +128,7 @@ class Nodes
 
     public function plugins($params = [])
     {
-        $body = $params['body']??[];
+        $body = $params['body'] ?? [];
         $endpoint = new Plugins();
         $endpoint->setBody($body);
         $response = $this->client->request($endpoint, $this->params);
@@ -138,7 +137,7 @@ class Nodes
 
     public function reloadindexes($params = [])
     {
-        $body = $params['body']??[];
+        $body = $params['body'] ?? [];
         $endpoint = new ReloadIndexes();
         $endpoint->setBody($body);
         $response = $this->client->request($endpoint, $this->params);
@@ -147,7 +146,7 @@ class Nodes
 
     public function reloadplugins($params = [])
     {
-        $body = $params['body']??[];
+        $body = $params['body'] ?? [];
         $endpoint = new ReloadPlugins();
         $endpoint->setBody($body);
         $response = $this->client->request($endpoint, $this->params);
@@ -169,7 +168,7 @@ class Nodes
      */
     public function status($params = [])
     {
-        $body = $params['body']??[];
+        $body = $params['body'] ?? [];
         $endpoint = new Status();
         $endpoint->setBody($body);
         $response = $this->client->request(
@@ -181,7 +180,7 @@ class Nodes
 
     public function tables($params = [])
     {
-        $body = $params['body']??[];
+        $body = $params['body'] ?? [];
         $endpoint = new Tables();
         $endpoint->setBody($body);
         $response = $this->client->request(
@@ -193,7 +192,7 @@ class Nodes
 
     public function threads($params = [])
     {
-        $body = $params['body']??[];
+        $body = $params['body'] ?? [];
         $endpoint = new Threads();
         $endpoint->setBody($body);
         $response = $this->client->request($endpoint, $this->params);
@@ -202,7 +201,7 @@ class Nodes
 
     public function variables($params = [])
     {
-        $body = $params['body']??[];
+        $body = $params['body'] ?? [];
         $endpoint = new Variables();
         $endpoint->setBody($body);
         $response = $this->client->request(

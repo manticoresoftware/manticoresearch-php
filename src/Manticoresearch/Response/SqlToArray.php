@@ -79,7 +79,7 @@ class SqlToArray extends Response
                 } else {
                     $id++;
                 }
-                $data[$id] = (count($property) == 1)?array_shift($property):$property;
+                $data[$id] = (count($property) == 1) ? array_shift($property) : $property;
             }
             return (count($data) > 0) ? $data : [];
         }

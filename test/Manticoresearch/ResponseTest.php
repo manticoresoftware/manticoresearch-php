@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Test;
 
 use Manticoresearch\Exceptions\RuntimeException;

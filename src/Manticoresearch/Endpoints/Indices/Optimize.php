@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Endpoints\Indices;
 
 use Manticoresearch\Endpoints\EmulateBySql;
@@ -22,8 +21,8 @@ class Optimize extends EmulateBySql
     public function setBody($params = null)
     {
         if (isset($this->index)) {
-            return parent::setBody(['query' => "OPTIMIZE INDEX ".$this->index. "".
-                (isset($params['sync'])?" OPTION sync='".$params['sync']."'":"")]);
+            return parent::setBody(['query' => "OPTIMIZE INDEX " . $this->index . "" .
+                (isset($params['sync']) ? " OPTION sync='" . $params['sync'] . "'" : "")]);
         }
         throw new RuntimeException('Index name is missing.');
     }

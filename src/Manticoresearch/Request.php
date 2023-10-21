@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch;
 
 /**
@@ -32,7 +31,7 @@ class Request
 
     public function __construct($params = [])
     {
-        if (count($params)>0) {
+        if (count($params) > 0) {
             $this->setBody($params['body'] ?? []);
             $this->setQuery($params['query'] ?? []);
             $this->setContentType($params['content_type'] ?? 'application/json');

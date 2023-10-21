@@ -6,7 +6,6 @@ use Manticoresearch\Endpoints\Indices\Import;
 
 class ImportTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testSetGetIndex()
     {
         $describe = new Import();

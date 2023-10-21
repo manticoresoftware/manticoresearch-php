@@ -1,4 +1,5 @@
 <?php
+
 namespace Manticoresearch\Test\Connection\Strategy;
 
 use Manticoresearch\Client;
@@ -12,7 +13,7 @@ class RandomTest extends TestCase
         // seed the random number generator, to obtain consistent results
         srand(1000);
 
-        $client = new Client(["connectionStrategy"  =>"Random"]);
+        $client = new Client(["connectionStrategy"  => "Random"]);
         $client->setHosts([
             [
                 'host' => $_SERVER['MS_HOST'],
@@ -44,7 +45,7 @@ class RandomTest extends TestCase
         $this->assertSame($_SERVER['MS_HOST'], $connection->getHost());
 
         $mConns = [];
-        for ($i=0; $i<10; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $mConns[] = mock::mock(\Manticoresearch\Connection::class)
                 ->shouldReceive('isAlive')->andReturn(true)->getMock();
         }

@@ -14,7 +14,7 @@ class DocTest extends \PHPUnit\Framework\TestCase
         $params = [
 
             'body' => [
-                'query' => ['match'=>['subject'=>'test']],
+                'query' => ['match' => ['subject' => 'test']],
                 'tags' => ['test1','test2']
             ]
         ];

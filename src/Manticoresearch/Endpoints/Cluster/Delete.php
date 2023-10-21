@@ -23,7 +23,7 @@ class Delete extends EmulateBySql
     public function setBody($params = null)
     {
         if (isset($this->cluster)) {
-            return parent::setBody(['query' => "DELETE CLUSTER ".$this->cluster]);
+            return parent::setBody(['query' => "DELETE CLUSTER " . $this->cluster]);
         }
         throw new RuntimeException('Cluster name is missing.');
     }

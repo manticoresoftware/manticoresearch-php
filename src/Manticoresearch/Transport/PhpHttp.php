@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Transport;
 
 use Http\Discovery\MessageFactoryDiscovery;
@@ -78,13 +77,13 @@ class PhpHttp extends Transport implements TransportInterface
 
         if (isset($params['responseClass'])) {
             $responseClass = $params['responseClass'];
-            $responseClassParams = isset($params['responseClassParams'])?$params['responseClassParams']:[];
+            $responseClassParams = isset($params['responseClassParams']) ? $params['responseClassParams'] : [];
             $response = new $responseClass($responseString, $status, $responseClassParams);
         } else {
             $response = new Response($responseString, $status);
         }
 
-        $time = $end-$start;
+        $time = $end - $start;
         $response->setTime($time);
         $response->setTransportInfo([
             'url' => $url,
@@ -93,7 +92,7 @@ class PhpHttp extends Transport implements TransportInterface
         ]);
         $this->logger->debug('Request body:', [
             'connection' => $connection->getConfig(),
-            'payload'=> $request->getBody()
+            'payload' => $request->getBody()
         ]);
         $this->logger->info('Request:', [
             'url' => $url,

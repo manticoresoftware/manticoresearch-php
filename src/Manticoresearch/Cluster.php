@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch;
 
 use Manticoresearch\Endpoints\Cluster\Alter;
@@ -24,7 +23,7 @@ class Cluster
     public function __construct($client)
     {
         $this->client = $client;
-        $this->params =['responseClass'=>'Manticoresearch\\Response\\SqlToArray'];
+        $this->params = ['responseClass' => 'Manticoresearch\\Response\\SqlToArray'];
     }
 
     public function alter($params)

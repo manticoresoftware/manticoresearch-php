@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Endpoints\Nodes;
 
 use Manticoresearch\Endpoints\EmulateBySql;
@@ -16,8 +15,8 @@ class CreatePlugin extends EmulateBySql
     public function setBody($params = null)
     {
         if (isset($params['name'], $params['type']) && $params['library']) {
-            return parent::setBody(['query' => "CREATE PLUGIN " . $params['name'].
-                " TYPE ".strtoupper($params['type']). " SONAME ".$params['library']]);
+            return parent::setBody(['query' => "CREATE PLUGIN " . $params['name'] .
+                " TYPE " . strtoupper($params['type']) . " SONAME " . $params['library']]);
         }
 
         throw new RuntimeException('Incomplete request for /nodes/createplugin');

@@ -1,9 +1,9 @@
 <?php
+
 namespace Manticoresearch\Test\Endpoints;
 
 class ReplaceTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testGetPath()
     {
         $replace = new \Manticoresearch\Endpoints\Replace();

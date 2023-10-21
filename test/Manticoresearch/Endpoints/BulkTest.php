@@ -53,7 +53,7 @@ class BulkTest extends \PHPUnit\Framework\TestCase
     public function testDelete()
     {
         $response = static::$client->search(['body' => ['index' => 'bulktest', 'query' => ['match_all' => '']]]);
-        $response = static:: $client->bulk(['body' => [
+        $response = static::$client->bulk(['body' => [
             ['insert' => ['index' => 'bulktest', 'id' => 4, 'doc' => ['title' => 'test']]],
             ['delete' => ['index' => 'bulktest', 'id' => 2]],
             ['delete' => ['index' => 'bulktest', 'id' => 3]],

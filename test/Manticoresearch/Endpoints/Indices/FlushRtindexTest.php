@@ -29,7 +29,7 @@ class FlushRtindexTest extends \PHPUnit\Framework\TestCase
     {
         $response = self::$client->indices()->flushrtindex(['index' => 'products']);
 
-        $this->assertEquals(['total'=>0,'error'=>'','warning'=>''], $response);
+        $this->assertEquals(['total' => 0,'error' => '','warning' => ''], $response);
     }
 
     public function testSetGetIndex()

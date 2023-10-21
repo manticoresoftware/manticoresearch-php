@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch;
 
 trait Utils

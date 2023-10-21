@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Connection\Strategy;
 
 use Manticoresearch\Connection;
@@ -15,5 +14,5 @@ interface SelectorInterface
      * @param array $connections
      * @return Connection
      */
-    public function getConnection(array $connections):Connection;
+    public function getConnection(array $connections): Connection;
 }

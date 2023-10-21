@@ -1,13 +1,11 @@
 <?php
 
-
 namespace Manticoresearch\Response;
 
 use Manticoresearch\Response;
 
 class Bulk extends Response
 {
-
     /*
      * Check whenever response has error
      * @return bool

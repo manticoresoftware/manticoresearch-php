@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch;
 
 use Psr\Log\LoggerInterface;

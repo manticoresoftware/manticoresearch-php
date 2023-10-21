@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Endpoints;
 
 class EmulateBySql extends Sql

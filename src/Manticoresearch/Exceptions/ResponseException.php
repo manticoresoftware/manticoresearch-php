@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Exceptions;
 
 use Manticoresearch\Request;
@@ -38,7 +37,7 @@ class ResponseException extends \RuntimeException implements ExceptionInterface
     /**
      * @return Request
      */
-    public function getRequest() :Request
+    public function getRequest(): Request
     {
         return $this->request;
     }
@@ -46,7 +45,7 @@ class ResponseException extends \RuntimeException implements ExceptionInterface
     /**
      * @return Response
      */
-    public function getResponse() :Response
+    public function getResponse(): Response
     {
         return $this->response;
     }

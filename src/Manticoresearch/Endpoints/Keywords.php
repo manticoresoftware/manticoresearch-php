@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Endpoints;
 
 use Manticoresearch\Exceptions\RuntimeException;
@@ -14,7 +13,7 @@ class Keywords extends EmulateBySql
     public function setBody($params = null)
     {
         if (isset($this->index)) {
-            $binds =[];
+            $binds = [];
             $binds[] = "'" . self::escape($params['query']) . "'";
             $binds[] = "'" . $this->index . "'";
             if (count($params['options']) > 0) {

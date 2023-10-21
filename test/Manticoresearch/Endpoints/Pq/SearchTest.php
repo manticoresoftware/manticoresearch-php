@@ -16,9 +16,9 @@ class SearchTest extends \PHPUnit\Framework\TestCase
                 'query' => [
                     'percolate' => [
                         'document' => [
-                            'subject'=>'test',
+                            'subject' => 'test',
                             'content' => 'some content',
-                            'catid' =>5
+                            'catid' => 5
                         ]
                     ]
                 ]

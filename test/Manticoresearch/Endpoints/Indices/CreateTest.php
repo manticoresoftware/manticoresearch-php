@@ -36,12 +36,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $response = $client->indices()->create($params);
-        $this->assertSame(['total'=>0,'error'=>'','warning'=>''], $response);
+        $this->assertSame(['total' => 0,'error' => '','warning' => ''], $response);
         $params = [
-            'index'=>'products'
+            'index' => 'products'
         ];
         $response = $client->indices()->drop($params);
-        $this->assertSame(['total'=>0,'error'=>'','warning'=>''], $response);
+        $this->assertSame(['total' => 0,'error' => '','warning' => ''], $response);
     }
 
     public function testCreateDistributed()
@@ -65,19 +65,19 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $params = [
             'index' => 'testrtdist',
             'body' => [
-                'settings' =>[
-                    'type' =>'distributed',
+                'settings' => [
+                    'type' => 'distributed',
                     'local' => 'testrt'
                 ]
             ]
         ];
         $response = $client->indices()->create($params);
-        $this->assertSame(['total'=>0,'error'=>'','warning'=>''], $response);
+        $this->assertSame(['total' => 0,'error' => '','warning' => ''], $response);
         $params = [
-            'index'=>'testrtdist'
+            'index' => 'testrtdist'
         ];
         $response = $client->indices()->drop($params);
-        $this->assertSame(['total'=>0,'error'=>'','warning'=>''], $response);
+        $this->assertSame(['total' => 0,'error' => '','warning' => ''], $response);
     }
 
     public function testCreateDistributedWIthMultipleIndexes()
@@ -155,11 +155,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         ];
         $client = new Client($params);
         $params = [
-            'index'=>'noindexname',
-            'body' => ['silent'=>true]
+            'index' => 'noindexname',
+            'body' => ['silent' => true]
         ];
         $response = $client->indices()->drop($params);
-        $this->assertSame(['total'=>0,'error'=>'','warning'=>''], $response);
+        $this->assertSame(['total' => 0,'error' => '','warning' => ''], $response);
     }
 
     public function testSetGetIndex()

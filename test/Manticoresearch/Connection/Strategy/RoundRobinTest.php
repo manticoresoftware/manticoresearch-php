@@ -1,4 +1,5 @@
 <?php
+
 namespace Manticoresearch\Test\Connection\Strategy;
 
 use Manticoresearch\Client;
@@ -9,7 +10,7 @@ class RoundRobinTest extends TestCase
 {
     public function testSequenceGood()
     {
-        $client = new Client(["connectionStrategy"  =>"RoundRobin"]);
+        $client = new Client(["connectionStrategy"  => "RoundRobin"]);
 
         $client->setHosts([
             [
@@ -33,7 +34,7 @@ class RoundRobinTest extends TestCase
         $this->assertSame(9309, $connection->getPort());
 
         $mConns = [];
-        for ($i=0; $i<10; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $mConns[] = mock::mock(\Manticoresearch\Connection::class)
                 ->shouldReceive('isAlive')->andReturn(true)->getMock();
         }

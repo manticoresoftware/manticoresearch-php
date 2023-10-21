@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Endpoints\Cluster;
 
 use Manticoresearch\Endpoints\EmulateBySql;

@@ -11,7 +11,7 @@ class ConnectionPoolTest extends TestCase
     /** @var Connection\ConnectionPool */
     private $connectionPool;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
         $this->connectionPool = new Connection\ConnectionPool([], new Connection\Strategy\StaticRoundRobin(), 4);

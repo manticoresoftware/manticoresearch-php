@@ -1,4 +1,5 @@
 <?php
+
 namespace Manticoresearch\Test\Endpoints;
 
 use Manticoresearch\Client;
@@ -24,9 +25,9 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
         $params = [
             'index' => 'products',
             'body' => [
-                'query'=>'brokn',
+                'query' => 'brokn',
                 'options' => [
-                    'limit' =>5
+                    'limit' => 5
                 ]
             ]
         ];
@@ -38,9 +39,9 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
         $params = [
             'index' => 'productsNOT',
             'body' => [
-                'query'=>'brokn',
+                'query' => 'brokn',
                 'options' => [
-                    'limit' =>5
+                    'limit' => 5
                 ]
             ]
         ];
@@ -62,9 +63,9 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
         $params = [
             'index' => 'productsNOT',
             'body' => [
-                'query'=>'brokn',
+                'query' => 'brokn',
                 'options' => [
-                    'limit' =>5
+                    'limit' => 5
                 ]
             ]
         ];

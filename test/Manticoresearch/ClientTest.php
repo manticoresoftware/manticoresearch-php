@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Test;
 
 use Manticoresearch\Client;
@@ -88,12 +87,12 @@ class ClientTest extends TestCase
         $params = ['host' => '127.0.0.1', 'port' => 9307];
         $client = new Client($params);
         $this->expectException(ConnectionException::class);
-        $client->search(['body'=>'']);
+        $client->search(['body' => '']);
     }
 
     public function testDouble()
     {
-        $params = ['connections'=>
+        $params = ['connections' =>
             [
                 [
                     'host' => '123.0.0.1',
@@ -116,7 +115,7 @@ class ClientTest extends TestCase
                     'port' => '1235',
                     'timeout' => 5,
                     'transport' => 'Https',
-                    'curl' =>[
+                    'curl' => [
                         CURLOPT_CAPATH => 'path/to/my/ca/folder',
                         CURLOPT_SSL_VERIFYPEER => true
                     ],
@@ -128,7 +127,7 @@ class ClientTest extends TestCase
         ];
         $client =  new Client($params);
         $this->expectException(ConnectionException::class);
-        $client->search(['body'=>'']);
+        $client->search(['body' => '']);
     }
 
     public function testGetLastResponse()

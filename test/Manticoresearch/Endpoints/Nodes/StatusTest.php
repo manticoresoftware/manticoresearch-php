@@ -1,4 +1,5 @@
 <?php
+
 namespace Manticoresearch\Test\Endpoints;
 
 use Manticoresearch\Endpoints\Nodes\Status;
@@ -6,7 +7,6 @@ use Manticoresearch\Test\Helper\PopulateHelperTest;
 
 class StatusTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testGetPath()
     {
         $status = new Status();

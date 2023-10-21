@@ -1,4 +1,5 @@
 <?php
+
 namespace Manticoresearch\Test\Endpoints;
 
 use Manticoresearch\Client;
@@ -25,9 +26,9 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
         $params = [
             'index' => 'products',
             'body' => [
-                'query'=>'product',
+                'query' => 'product',
                 'options' => [
-                    'stats' =>1,
+                    'stats' => 1,
                     'fold_lemmas' => 1
                 ]
             ]
@@ -41,9 +42,9 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
         $params = [
             'index' => 'productsNOT',
             'body' => [
-                'query'=>'product',
+                'query' => 'product',
                 'options' => [
-                    'stats' =>1,
+                    'stats' => 1,
                     'fold_lemmas' => 1
                 ]
             ]

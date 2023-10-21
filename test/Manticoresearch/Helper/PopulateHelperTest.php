@@ -1,4 +1,5 @@
 <?php
+
 namespace Manticoresearch\Test\Helper;
 
 use Manticoresearch\Client;
@@ -54,11 +55,11 @@ class PopulateHelperTest extends \PHPUnit\Framework\TestCase
         ];
         $this->client->indices()->create($params);
         $this->client->replace([
-            'body'=> [
+            'body' => [
                 'index' => 'products',
-                'id'=> 100,
+                'id' => 100,
                 'doc' => [
-                    'title' =>'this product is not broken',
+                    'title' => 'this product is not broken',
                     'price' => 2.99
                 ]
             ]
@@ -85,7 +86,7 @@ class PopulateHelperTest extends \PHPUnit\Framework\TestCase
 
     public function describe($indexName)
     {
-        return $this->client->indices()->describe(['index'=> $indexName]);
+        return $this->client->indices()->describe(['index' => $indexName]);
     }
 
     public function nodeStatus($indexName)

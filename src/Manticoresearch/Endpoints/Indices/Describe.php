@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Endpoints\Indices;
 
 use Manticoresearch\Endpoints\EmulateBySql;
@@ -18,8 +17,8 @@ class Describe extends EmulateBySql
     public function setBody($params = null)
     {
         if (isset($this->index)) {
-            return parent::setBody(['query' => "DESCRIBE ".$this->index. " ".
-                (isset($params['pattern'])?" LIKE '".$params['pattern']."'":"")]);
+            return parent::setBody(['query' => "DESCRIBE " . $this->index . " " .
+                (isset($params['pattern']) ? " LIKE '" . $params['pattern'] . "'" : "")]);
         }
         throw new RuntimeException('Index name is missing.');
     }

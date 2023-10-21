@@ -1,4 +1,5 @@
 <?php
+
 namespace Manticoresearch\Test\Connection\Strategy;
 
 use Manticoresearch\Client;
@@ -9,7 +10,7 @@ class StaticRoundRobinTest extends TestCase
 {
     public function testTwoConnections()
     {
-        $client = new Client(["connectionStrategy"  =>"StaticRoundRobin"]);
+        $client = new Client(["connectionStrategy"  => "StaticRoundRobin"]);
 
         $client->setHosts([
             [
@@ -35,7 +36,7 @@ class StaticRoundRobinTest extends TestCase
     public function testBadFirst()
     {
 
-        $client = new Client(["connectionStrategy"  =>"StaticRoundRobin"]);
+        $client = new Client(["connectionStrategy"  => "StaticRoundRobin"]);
 
         $client->setHosts([
             [
@@ -80,7 +81,7 @@ class StaticRoundRobinTest extends TestCase
     {
 
         $mConns = [];
-        for ($i=0; $i<10; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $mConns[] = mock::mock(\Manticoresearch\Connection::class)
                 ->shouldReceive('isAlive')->andReturn(true)->getMock();
         }

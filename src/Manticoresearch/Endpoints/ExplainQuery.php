@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Endpoints;
 
 use Manticoresearch\Exceptions\RuntimeException;
@@ -18,7 +17,7 @@ class ExplainQuery extends EmulateBySql
     {
         if (isset($this->index)) {
             if (isset($params['query'])) {
-                return parent::setBody(['query' => "EXPLAIN QUERY ".$this->index. '\''.$params['query'].'\'']);
+                return parent::setBody(['query' => "EXPLAIN QUERY " . $this->index . '\'' . $params['query'] . '\'']);
             }
             throw new RuntimeException('Query param is missing.');
         }

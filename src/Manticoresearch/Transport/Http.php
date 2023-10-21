@@ -13,7 +13,6 @@ use Manticoresearch\Response;
  */
 class Http extends \Manticoresearch\Transport implements TransportInterface
 {
-
     /**
      * @var string
      */
@@ -56,7 +55,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
         curl_setopt($conn, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($conn, CURLOPT_HTTPHEADER, $headers);
 
-        if ($connection->getConnectTimeout()>0) {
+        if ($connection->getConnectTimeout() > 0) {
             curl_setopt($conn, CURLOPT_CONNECTTIMEOUT, $connection->getConnectTimeout());
         }
 
@@ -65,7 +64,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
             curl_setopt(
                 $conn,
                 CURLOPT_USERPWD,
-                $connection->getConfig('username').":".$connection->getConfig('password')
+                $connection->getConfig('username') . ":" . $connection->getConfig('password')
             );
         }
         if ($connection->getConfig('proxy') !== null) {
@@ -85,13 +84,13 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
         $status = curl_getinfo($conn, CURLINFO_HTTP_CODE);
         if (isset($params['responseClass'])) {
             $responseClass = $params['responseClass'];
-            $responseClassParams = isset($params['responseClassParams'])?$params['responseClassParams']:[];
+            $responseClassParams = isset($params['responseClassParams']) ? $params['responseClassParams'] : [];
             $response = new $responseClass($responseString, $status, $responseClassParams);
         } else {
             $response = new Response($responseString, $status);
         }
 
-        $time = $end-$start;
+        $time = $end - $start;
         $response->setTime($time);
         $response->setTransportInfo([
                 'url' => $url,
@@ -99,7 +98,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
                 'body' => $request->getBody()
             ]);
         //hard error
-        if ($errorno>0) {
+        if ($errorno > 0) {
             $error = curl_error($conn);
 
             self::$curl = null;

@@ -25,7 +25,7 @@ class ConnectionPool
 
     public $retries;
 
-    public $retries_attempts =0;
+    public $retries_attempts = 0;
 
     public function __construct(array $connections, SelectorInterface $strategy, int $retries)
     {

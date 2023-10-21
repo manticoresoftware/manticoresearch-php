@@ -7,7 +7,6 @@ use Manticoresearch\Exceptions\RuntimeException;
 
 class DeleteByQueryTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testSetGetIndex()
     {
         $dbq = new DeleteByQuery();

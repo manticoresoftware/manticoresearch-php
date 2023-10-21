@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch;
 
 use Manticoresearch\Exceptions\RuntimeException;
@@ -20,20 +19,20 @@ class Connection
      * @var bool
      */
     protected $alive;
-/*
- * $params['transport']  = transport class name
- * $params['host']       = hostname
- * $params['path']       = path
- * $params['port']       = port number
- * $params['timeout']    = connection timeout
- * $params['connect_timeout'] = connection connect timeout
- * $params['proxy']       = proxy host:port string
- * $params['username']  = username for http auth
- * $params['password']  = password for http auth
- * $params['headers']   = array of custom headers
- * $params['curl']      = array of pairs of curl option=>value
- * $params['persistent'] = bool if connection is persistent
- */
+    /*
+     * $params['transport']  = transport class name
+     * $params['host']       = hostname
+     * $params['path']       = path
+     * $params['port']       = port number
+     * $params['timeout']    = connection timeout
+     * $params['connect_timeout'] = connection connect timeout
+     * $params['proxy']       = proxy host:port string
+     * $params['username']  = username for http auth
+     * $params['password']  = password for http auth
+     * $params['headers']   = array of custom headers
+     * $params['curl']      = array of pairs of curl option=>value
+     * $params['persistent'] = bool if connection is persistent
+     */
     /**
      * Connection constructor.
      * @param array $params

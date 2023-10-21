@@ -15,7 +15,7 @@ class AlterTest extends \PHPUnit\Framework\TestCase
     /** @var PopulateHelperTest */
     private static $helper;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -82,13 +82,13 @@ class AlterTest extends \PHPUnit\Framework\TestCase
                 'operation' => 'add',
                 'column' => [
                     'name' => 'tag',
-                    'type'=> 'string'
+                    'type' => 'string'
                 ]
 
             ]
         ];
         $response = self::$client->indices()->alter($params);
-        $this->assertEquals(['total'=>0,'error'=>'','warning'=>''], $response);
+        $this->assertEquals(['total' => 0,'error' => '','warning' => ''], $response);
 
         // check the column has been added using the Describe endpoint
         $response = self::$client->indices()->describe(['index' => 'products']);

@@ -35,7 +35,7 @@ class Alter extends EmulateBySql
                         throw new RuntimeException('Index name is missing.');
                         break;
                     case 'update':
-                        return parent::setBody(['query' => "ALTER CLUSTER " .$this->cluster . " UPDATE nodes"]);
+                        return parent::setBody(['query' => "ALTER CLUSTER " . $this->cluster . " UPDATE nodes"]);
                         break;
                 }
                 throw new RuntimeException('Unknown cluster operation');

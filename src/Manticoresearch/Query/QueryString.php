@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Query;
 
 use Manticoresearch\Query;

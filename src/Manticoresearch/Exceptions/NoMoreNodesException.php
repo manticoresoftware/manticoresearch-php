@@ -1,9 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Exceptions;
 
-class NoMoreNodesException extends ConnectionException
-{
-
-}
+class NoMoreNodesException extends ConnectionException {}

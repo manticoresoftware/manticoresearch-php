@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Results;
 
 use Manticoresearch\ResultHit;

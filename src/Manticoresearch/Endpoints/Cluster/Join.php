@@ -24,17 +24,17 @@ class Join extends EmulateBySql
     {
         if (isset($this->cluster)) {
             if (isset($params['node'])) {
-                return parent::setBody(['query' => "JOIN CLUSTER ".$this->cluster." AT '".$params['node']."'"]);
+                return parent::setBody(['query' => "JOIN CLUSTER " . $this->cluster . " AT '" . $params['node'] . "'"]);
             } else {
-                $options =[];
+                $options = [];
                 if (isset($params['path'])) {
-                    $options[] = "'".$params['path']. "' AS path";
+                    $options[] = "'" . $params['path'] . "' AS path";
                 }
                 if (isset($params['nodes'])) {
-                    $options[] = "'".$params['nodes']. "' AS nodes";
+                    $options[] = "'" . $params['nodes'] . "' AS nodes";
                 }
-                return parent::setBody(['query' => "JOIN CLUSTER ".$this->cluster.
-                    ((count($options)>0)?" ".implode(',', $options):"")]);
+                return parent::setBody(['query' => "JOIN CLUSTER " . $this->cluster .
+                    ((count($options) > 0) ? " " . implode(',', $options) : "")]);
             }
         }
         throw new RuntimeException('Cluster name is missing.');

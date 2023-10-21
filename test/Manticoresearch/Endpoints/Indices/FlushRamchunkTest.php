@@ -29,7 +29,7 @@ class FlushRamchunkTest extends \PHPUnit\Framework\TestCase
     {
         $response = self::$client->indices()->flushramchunk(['index' => 'products']);
 
-        $this->assertEquals(['total'=>0,'error'=>'','warning'=>''], $response);
+        $this->assertEquals(['total' => 0,'error' => '','warning' => ''], $response);
     }
 
     public function testSetGetIndex()

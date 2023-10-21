@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Endpoints\Indices;
 
 use Manticoresearch\Endpoints\EmulateBySql;
@@ -20,8 +19,8 @@ class Alter extends EmulateBySql
         if (isset($this->index)) {
             if (isset($params['operation'])) {
                 if ($params['operation'] === 'add' && isset($params['column'])) {
-                        return parent::setBody(['query' => "ALTER TABLE " . $this->index . " ADD COLUMN " .
-                            $params['column']['name'] . " " . strtoupper($params['column']['type'])]);
+                    return parent::setBody(['query' => "ALTER TABLE " . $this->index . " ADD COLUMN " .
+                        $params['column']['name'] . " " . strtoupper($params['column']['type'])]);
                 }
                 if ($params['operation'] === 'drop') {
                     return parent::setBody(['query' => "ALTER TABLE " . $this->index . " DROP COLUMN " .

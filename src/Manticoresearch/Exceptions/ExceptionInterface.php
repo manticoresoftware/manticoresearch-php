@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Exceptions;
 
 use Throwable;
@@ -9,6 +8,4 @@ use Throwable;
  * Interface ExceptionInterface
  * @package Manticoresearch\Exceptions
  */
-interface ExceptionInterface extends Throwable
-{
-}
+interface ExceptionInterface extends Throwable {}

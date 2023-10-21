@@ -1,11 +1,11 @@
 <?php
+
 namespace Manticoresearch\Test\Endpoints;
 
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
 class DebugTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testDebug()
     {
         $helper = new PopulateHelperTest();

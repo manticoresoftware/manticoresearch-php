@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Test;
 
 use Manticoresearch\Query;
@@ -11,7 +10,7 @@ class QueryTest extends TestCase
     /** @var Query */
     private $query;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
         $this->query = new Query();
@@ -30,7 +29,7 @@ class QueryTest extends TestCase
         $this->assertEquals([
             'a' => 1,
             'b' => 2,
-            'c' =>3,
+            'c' => 3,
         ], $this->query->toArray());
     }
 
@@ -43,7 +42,7 @@ class QueryTest extends TestCase
             'a' => 1,
             'x' => [
                 'b' => 2,
-                'c' =>3,
+                'c' => 3,
             ]
         ], $this->query->toArray());
     }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Endpoints\Nodes;
 
 use Manticoresearch\Endpoints\EmulateBySql;
@@ -19,7 +18,7 @@ class ReloadPlugins extends EmulateBySql
     {
         $this->body = $params;
         if (isset($params['library'])) {
-            return parent::setBody(['query' => "RELOAD PLUGINS FROM SONAME ".$params['library']]);
+            return parent::setBody(['query' => "RELOAD PLUGINS FROM SONAME " . $params['library']]);
         }
         throw new RuntimeException('library name not present in  /nodes/reloadplugins');
     }

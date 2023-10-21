@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Manticoresearch\Endpoints\Pq;
 
 use Manticoresearch\Exceptions\RuntimeException;
@@ -12,7 +11,6 @@ use Manticoresearch\Request;
  */
 class Search extends Request
 {
-
     /**
      * @var string
      */

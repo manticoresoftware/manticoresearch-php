@@ -27,7 +27,7 @@ class Client
     /**
      *
      */
-    const VERSION = '1.0.0';
+    public const VERSION = '1.0.0';
 
     /**
      * @var array
@@ -96,14 +96,14 @@ class Client
                 throw new RuntimeException('Cannot create a strategy based on provided settings!');
             }
         } else {
-            $strategy = new $this->connectionStrategy;
+            $strategy = new $this->connectionStrategy();
         }
         if (!isset($this->config['retries'])) {
             $this->config['retries'] = count($connections);
         }
         $this->connectionPool = new Connection\ConnectionPool(
             $connections,
-            $strategy ?? new $this->connectionStrategy,
+            $strategy ?? new $this->connectionStrategy(),
             $this->config['retries']
         );
     }
