@@ -94,5 +94,5 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist
 
-      - name: Run phpcs
-        run: composer phpcs
+      - name: Run PHP-CS-Fixer
+        run: composer check-cs
