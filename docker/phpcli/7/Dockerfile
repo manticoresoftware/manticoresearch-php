@@ -1,4 +1,4 @@
-FROM php:7.4.15-cli-buster
+FROM php:7.1-cli-buster
 
 RUN apt -y update && apt -y upgrade
 RUN apt -y install figlet git zip unzip
