@@ -37,7 +37,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           extensions: yaml, zip, curl
-          tools: phpunit,phpstan
+          tools: phpunit
 
       - name: Install dependencies
         run: composer install --prefer-dist
@@ -66,7 +66,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 7.4
-          tools: phpstan
 
       - name: Install dependencies
         run: composer install --prefer-dist
@@ -74,8 +73,8 @@ jobs:
       - name: Composer require
         run: composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle
 
-      - name: Test
-        run: phpstan analyse --level=3 src/
+      - name: Run phpstan
+        run: composer phpstan
 
 
   codestyle:
