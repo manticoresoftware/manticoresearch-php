@@ -6,12 +6,11 @@ use Manticoresearch\Test\Helper\PopulateHelperTest;
 class DebugTest extends \PHPUnit\Framework\TestCase
 {
 
-    public function testDebug()
-    {
-        $helper = new PopulateHelperTest();
-        $client = $helper->getClient();
-        $response = $client->nodes()->debug(['body' => []]);
+	public function testDebug() {
+		$helper = new PopulateHelperTest();
+		$client = $helper->getClient();
+		$response = $client->nodes()->debug(['body' => []]);
 
-        $this->assertArrayHasKey('debug sched', $response);
-    }
+		$this->assertArrayHasKey('debug sched', $response);
+	}
 }

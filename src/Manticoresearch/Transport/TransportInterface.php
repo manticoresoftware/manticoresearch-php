@@ -13,21 +13,21 @@ use Manticoresearch\Transport;
  */
 interface TransportInterface
 {
-    /**
-     * @param Request $request
-     * @param array $params
-     * @return mixed
-     */
-    public function execute(Request $request, $params = []);
+	/**
+	 * @param Request $request
+	 * @param array $params
+	 * @return mixed
+	 */
+	public function execute(Request $request, $params = []);
 
-    /**
-     * @return mixed
-     */
-    public function getConnection();
+	/**
+	 * @return mixed
+	 */
+	public function getConnection();
 
-    /**
-     * @param Connection $connection
-     * @return Transport
-     */
-    public function setConnection(Connection $connection): Transport;
+	/**
+	 * @param Connection $connection
+	 * @return Transport
+	 */
+	public function setConnection(Connection $connection): Transport;
 }

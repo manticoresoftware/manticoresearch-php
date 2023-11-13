@@ -9,128 +9,118 @@ namespace Manticoresearch;
  */
 class Request
 {
-    /**
-     * @var string
-     */
-    protected $path;
-    /**
-     * @var string
-     */
-    protected $method;
-    /**
-     * @var array|string
-     */
-    protected $body;
-    /**
-     * @var string
-     */
-    protected $query;
-    /**
-     * @var string
-     */
-    protected $content_type;
+	/**
+	 * @var string
+	 */
+	protected $path;
+	/**
+	 * @var string
+	 */
+	protected $method;
+	/**
+	 * @var array|string
+	 */
+	protected $body;
+	/**
+	 * @var string
+	 */
+	protected $query;
+	/**
+	 * @var string
+	 */
+	protected $content_type; // phpcs:ignore Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
 
-    public function __construct($params = [])
-    {
-        if (count($params)>0) {
-            $this->setBody($params['body'] ?? []);
-            $this->setQuery($params['query'] ?? []);
-            $this->setContentType($params['content_type'] ?? 'application/json');
-        }
-    }
+	public function __construct($params = []) {
+		if (sizeof($params) <= 0) {
+			return;
+		}
 
-    /**
-     * @return mixed
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
+		$this->setBody($params['body'] ?? []);
+		$this->setQuery($params['query'] ?? []);
+		$this->setContentType($params['content_type'] ?? 'application/json');
+	}
 
-    /**
-     * @param mixed $path
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getPath() {
+		return $this->path;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getBody()
-    {
-        return $this->body;
-    }
+	/**
+	 * @param mixed $path
+	 */
+	public function setPath($path) {
+		$this->path = $path;
+	}
 
-    /**
-     * @param mixed $body
-     */
+	/**
+	 * @return mixed
+	 */
+	public function getBody() {
+		return $this->body;
+	}
 
-    public function setBody($body = null)
-    {
-        $this->body = $body;
-        return $this;
-    }
+	/**
+	 * @param mixed $body
+	 */
 
-    /**
-     * @return mixed
-     */
-    public function getMethod()
-    {
-        return $this->method;
-    }
+	public function setBody($body = null) {
+		$this->body = $body;
+		return $this;
+	}
 
-    /**
-     * @param mixed $method
-     */
-    public function setMethod($method)
-    {
-        $this->method = $method;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getMethod() {
+		return $this->method;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getContentType()
-    {
-        return $this->content_type;
-    }
+	/**
+	 * @param mixed $method
+	 */
+	public function setMethod($method) {
+		$this->method = $method;
+	}
 
-    /**
-     * @param mixed $content_type
-     */
-    public function setContentType($content_type)
-    {
-        $this->content_type = $content_type;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getContentType() {
+		return $this->content_type; // phpcs:ignore Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getQuery()
-    {
-        return $this->query;
-    }
+	/**
+	 * @param mixed $contentType
+	 */
+	public function setContentType($contentType) {
+		$this->content_type = $contentType; // phpcs:ignore Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
+	}
 
-    /**
-     * @param mixed $query
-     */
-    public function setQuery($query)
-    {
-        $this->query = $query;
-    }
-    /*
-     * #return string
-     */
-    public function toArray()
-    {
-        return [
-            'path' => $this->getPath(),
-            'method' => $this->getMethod(),
-            'content_type' => $this->getContentType(),
-            'query' => $this->getQuery(),
-            'body' => $this->getBody()
-        ];
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getQuery() {
+		return $this->query;
+	}
+
+	/**
+	 * @param mixed $query
+	 */
+	public function setQuery($query) {
+		$this->query = $query;
+	}
+	/*
+	 * #return string
+	 */
+	public function toArray() {
+		return [
+			'path' => $this->getPath(),
+			'method' => $this->getMethod(),
+			'content_type' => $this->getContentType(),
+			'query' => $this->getQuery(),
+			'body' => $this->getBody(),
+		];
+	}
 }

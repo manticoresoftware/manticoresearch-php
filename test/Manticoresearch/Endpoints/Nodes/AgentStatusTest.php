@@ -7,31 +7,30 @@ use Manticoresearch\Test\Helper\PopulateHelperTest;
 class AgentStatusTest extends \PHPUnit\Framework\TestCase
 {
 
-    public function testGetPath()
-    {
-        $agentStatus = new AgentStatus();
-        $this->assertEquals('/sql', $agentStatus->getPath());
-    }
+	public function testGetPath() {
+		$agentStatus = new AgentStatus();
+		$this->assertEquals('/sql', $agentStatus->getPath());
+	}
 
-    public function testGetMethod()
-    {
-        $agentStatus = new AgentStatus();
-        $this->assertEquals('POST', $agentStatus->getMethod());
-    }
+	public function testGetMethod() {
+		$agentStatus = new AgentStatus();
+		$this->assertEquals('POST', $agentStatus->getMethod());
+	}
 
-    public function testGetStatus()
-    {
-        $helper = new PopulateHelperTest();
-        $client = $helper->getClient();
-        $response = $client->nodes()->agentstatus();
+	public function testGetStatus() {
+		$helper = new PopulateHelperTest();
+		$client = $helper->getClient();
+		$response = $client->nodes()->agentstatus();
 
-        // cannot test values, uptime will never be consistent.  As such use keys instead
-        $keys = array_keys($response);
-        sort($keys);
+		// cannot test values, uptime will never be consistent.  As such use keys instead
+		$keys = array_keys($response);
+		sort($keys);
 
-        $this->assertEquals([
-            'status_period_seconds',
-            'status_stored_periods'
-        ], $keys);
-    }
+		$this->assertEquals(
+			[
+				'status_period_seconds',
+				'status_stored_periods',
+			], $keys
+		);
+	}
 }

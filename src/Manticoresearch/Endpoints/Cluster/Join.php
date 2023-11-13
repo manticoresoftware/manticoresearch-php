@@ -3,7 +3,6 @@
 namespace Manticoresearch\Endpoints\Cluster;
 
 use Manticoresearch\Endpoints\EmulateBySql;
-use Manticoresearch\Endpoints\Sql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
 
@@ -14,44 +13,44 @@ use Manticoresearch\Utils;
  */
 class Join extends EmulateBySql
 {
-    use Utils;
-    /**
-     * @var string
-     */
-    protected $cluster;
+	use Utils;
+	/**
+	 * @var string
+	 */
+	protected $cluster;
 
-    public function setBody($params = null)
-    {
-        if (isset($this->cluster)) {
-            if (isset($params['node'])) {
-                return parent::setBody(['query' => "JOIN CLUSTER ".$this->cluster." AT '".$params['node']."'"]);
-            } else {
-                $options =[];
-                if (isset($params['path'])) {
-                    $options[] = "'".$params['path']. "' AS path";
-                }
-                if (isset($params['nodes'])) {
-                    $options[] = "'".$params['nodes']. "' AS nodes";
-                }
-                return parent::setBody(['query' => "JOIN CLUSTER ".$this->cluster.
-                    ((count($options)>0)?" ".implode(',', $options):"")]);
-            }
-        }
-        throw new RuntimeException('Cluster name is missing.');
-    }
-    /**
-     * @return mixed
-     */
-    public function getCLuster()
-    {
-        return $this->cluster;
-    }
+	public function setBody($params = null) {
+		if (isset($this->cluster)) {
+			if (isset($params['node'])) {
+				return parent::setBody(['query' => 'JOIN CLUSTER '.$this->cluster." AT '".$params['node']."'"]);
+			}
 
-    /**
-     * @param mixed $cluster
-     */
-    public function setCluster($cluster)
-    {
-        $this->cluster = $cluster;
-    }
+			$options = [];
+			if (isset($params['path'])) {
+				$options[] = "'".$params['path']. "' AS path";
+			}
+			if (isset($params['nodes'])) {
+				$options[] = "'".$params['nodes']. "' AS nodes";
+			}
+			return parent::setBody(
+				['query' => 'JOIN CLUSTER '.$this->cluster.
+				((sizeof($options) > 0) ? ' '.implode(',', $options) : ''),
+				]
+			);
+		}
+		throw new RuntimeException('Cluster name is missing.');
+	}
+	/**
+	 * @return mixed
+	 */
+	public function getCLuster() {
+		return $this->cluster;
+	}
+
+	/**
+	 * @param mixed $cluster
+	 */
+	public function setCluster($cluster) {
+		$this->cluster = $cluster;
+	}
 }

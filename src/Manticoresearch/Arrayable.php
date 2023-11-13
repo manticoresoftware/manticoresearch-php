@@ -5,5 +5,5 @@ namespace Manticoresearch;
 
 interface Arrayable
 {
-    public function toArray();
+	public function toArray();
 }

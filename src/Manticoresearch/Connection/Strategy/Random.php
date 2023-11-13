@@ -10,13 +10,12 @@ use Manticoresearch\Connection;
  */
 class Random implements SelectorInterface
 {
-    /**
-     * @param array $connections
-     * @return Connection
-     */
-    public function getConnection(array $connections):Connection
-    {
-        shuffle($connections);
-        return $connections[0];
-    }
+	/**
+	 * @param array $connections
+	 * @return Connection
+	 */
+	public function getConnection(array $connections):Connection {
+		shuffle($connections);
+		return $connections[0];
+	}
 }

@@ -8,18 +8,20 @@ use Manticoresearch\Exceptions\RuntimeException;
 
 class CreatePlugin extends EmulateBySql
 {
-    /**
-     * @var string
-     */
-    protected $index;
+	/**
+	 * @var string
+	 */
+	protected $index;
 
-    public function setBody($params = null)
-    {
-        if (isset($params['name'], $params['type']) && $params['library']) {
-            return parent::setBody(['query' => "CREATE PLUGIN " . $params['name'].
-                " TYPE ".strtoupper($params['type']). " SONAME ".$params['library']]);
-        }
+	public function setBody($params = null) {
+		if (isset($params['name'], $params['type']) && $params['library']) {
+			return parent::setBody(
+				['query' => 'CREATE PLUGIN ' . $params['name'].
+				' TYPE '.strtoupper($params['type']). ' SONAME '.$params['library'],
+				]
+			);
+		}
 
-        throw new RuntimeException('Incomplete request for /nodes/createplugin');
-    }
+		throw new RuntimeException('Incomplete request for /nodes/createplugin');
+	}
 }

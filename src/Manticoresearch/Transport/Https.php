@@ -9,8 +9,8 @@ namespace Manticoresearch\Transport;
  */
 class Https extends Http
 {
-    /**
-     * @var string
-     */
-    protected $scheme = 'https';
+	/**
+	 * @var string
+	 */
+	protected $scheme = 'https';
 }
