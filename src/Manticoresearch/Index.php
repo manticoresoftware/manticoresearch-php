@@ -134,6 +134,21 @@ class Index
         return $this->client->delete($params);
     }
 
+    public function deleteDocumentsByIds(array $ids)
+    {
+        array_walk($ids, 'self::checkDocumentId');
+        $params = [
+            'body' => [
+                'index' => $this->index,
+                'id' => $ids
+            ]
+        ];
+        if ($this->cluster !== null) {
+            $params['body']['cluster'] = $this->cluster;
+        }
+        return $this->client->delete($params);
+    }
+
     public function deleteDocuments($query)
     {
         if ($query instanceof Query) {
