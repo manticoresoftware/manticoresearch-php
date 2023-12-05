@@ -133,7 +133,7 @@ class Client
      */
     public static function create($config): Client
     {
-        return self::createFromArray($config);
+        return static::createFromArray($config);
     }
 
     /**

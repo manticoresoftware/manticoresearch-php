@@ -102,7 +102,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
         if ($errorno>0) {
             $error = curl_error($conn);
 
-            self::$curl = null;
+            static::$curl = null;
             throw new ConnectionException($error, $request);
         }
 
@@ -131,9 +131,9 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 
     protected function getCurlConnection(bool $persistent = true)
     {
-        if (!$persistent || !self::$curl) {
-            self::$curl = curl_init();
+        if (!$persistent || !static::$curl) {
+            static::$curl = curl_init();
         }
-        return self::$curl;
+        return static::$curl;
     }
 }

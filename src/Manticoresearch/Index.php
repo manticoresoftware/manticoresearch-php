@@ -38,7 +38,7 @@ class Index
 
     public function getDocumentById($id)
     {
-        self::checkDocumentId($id);
+        static::checkDocumentId($id);
         $params = [
             'body' => [
                 'index' => $this->index,
@@ -56,7 +56,7 @@ class Index
         if (!is_array($ids)) {
             $ids = [$ids];
         }
-        array_walk($ids, 'self::checkDocumentId');
+        array_walk($ids, 'static::checkDocumentId');
         $params = [
             'body' => [
                 'index' => $this->index,
@@ -70,7 +70,7 @@ class Index
 
     public function addDocument($data, $id = 0)
     {
-        self::checkDocumentId($id);
+        static::checkDocumentId($id);
         if (is_object($data)) {
             $data = (array) $data;
         } elseif (is_string($data)) {
@@ -101,7 +101,7 @@ class Index
             }
             if (isset($document['id'])) {
                 $id = $document['id'];
-                self::checkDocumentId($id);
+                static::checkDocumentId($id);
                 unset($document['id']);
             } else {
                 $id = 0;
@@ -121,7 +121,7 @@ class Index
 
     public function deleteDocument($id)
     {
-        self::checkDocumentId($id);
+        static::checkDocumentId($id);
         $params = [
             'body' => [
                 'index' => $this->index,
@@ -153,7 +153,7 @@ class Index
 
     public function updateDocument($data, $id)
     {
-        self::checkDocumentId($id);
+        static::checkDocumentId($id);
         $params = [
             'body' => [
                 'index' => $this->index,
@@ -187,7 +187,7 @@ class Index
 
     public function replaceDocument($data, $id)
     {
-        self::checkDocumentId($id);
+        static::checkDocumentId($id);
         if (is_object($data)) {
             $data = (array) $data;
         } elseif (is_string($data)) {
@@ -216,7 +216,7 @@ class Index
                 $document = json_decode($document, true);
             }
             $id = $document['id'];
-            self::checkDocumentId($id);
+            static::checkDocumentId($id);
             unset($document['id']);
             $replace = [
                 'index' => $this->index,

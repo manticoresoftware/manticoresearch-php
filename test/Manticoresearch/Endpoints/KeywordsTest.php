@@ -17,7 +17,7 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
 
         $helper = new PopulateHelperTest();
         $helper->populateForKeywords();
-        self::$client = $helper->getClient();
+        static::$client = $helper->getClient();
     }
 
     public function testKeywords()

@@ -16,7 +16,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
 
         $helper = new PopulateHelperTest();
         $helper->populateForKeywords();
-        self::$client = $helper->getClient();
+        static::$client = $helper->getClient();
     }
 
     public function testGetPath()
@@ -47,7 +47,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         ];
-        $result = self::$client->update($partial);
+        $result = static::$client->update($partial);
 
         $search = [
             'body' => [
@@ -57,7 +57,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
                 ],
             ]
         ];
-        $results = self::$client->search($search);
+        $results = static::$client->search($search);
 
         $this->assertEquals(1, $results['hits']['total']);
         $this->assertEquals(4.99, $results['hits']['hits'][0]['_source']['price']);
