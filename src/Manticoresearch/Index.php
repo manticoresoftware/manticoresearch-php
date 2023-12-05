@@ -60,6 +60,7 @@ class Index
         $params = [
             'body' => [
                 'index' => $this->index,
+                'limit' => sizeof($ids),
                 'query' => [
                     'in' => ['id' => $ids]
                 ]
