@@ -21,13 +21,13 @@ class OptimizeTest extends \PHPUnit\Framework\TestCase
 
         $helper = new PopulateHelperTest();
         $helper->populateForKeywords();
-        self::$client = $helper->getClient();
-        self::$helper = $helper;
+        static::$client = $helper->getClient();
+        static::$helper = $helper;
     }
 
     public function testDescribeIndex()
     {
-        $response = self::$client->indices()->optimize(['index' => 'products']);
+        $response = static::$client->indices()->optimize(['index' => 'products']);
 
         $this->assertEquals([
             'total' => 0,

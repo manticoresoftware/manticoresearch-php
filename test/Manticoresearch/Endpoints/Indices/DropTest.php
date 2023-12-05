@@ -21,13 +21,13 @@ class DropTest extends \PHPUnit\Framework\TestCase
 
         $helper = new PopulateHelperTest();
         $helper->populateForKeywords();
-        self::$client = $helper->getClient();
-        self::$helper = $helper;
+        static::$client = $helper->getClient();
+        static::$helper = $helper;
     }
 
     public function testIndexTruncate()
     {
-        $response = self::$client->indices()->truncate(['index' => 'products']);
+        $response = static::$client->indices()->truncate(['index' => 'products']);
 
         $this->assertEquals(['total'=>0,'error'=>'','warning'=>''], $response);
     }
