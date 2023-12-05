@@ -56,7 +56,7 @@ class Index
         if (!is_array($ids)) {
             $ids = [$ids];
         }
-        array_walk($ids, 'static::checkDocumentId');
+        array_walk($ids, [static::class, 'checkDocumentId']);
         $params = [
             'body' => [
                 'index' => $this->index,
