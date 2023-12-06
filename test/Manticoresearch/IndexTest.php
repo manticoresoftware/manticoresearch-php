@@ -121,6 +121,27 @@ class IndexTest extends TestCase
         ], $response);
     }
 
+    public function testDeleteDocumentsByIds()
+    {
+        $index = $this->getIndex();
+
+        $index->addDocuments([
+            ['id' => 1, 'title' => 'First document'],
+            ['id' => 2, 'title' => 'Second document'],
+            ['id' => 3, 'title' => 'Third document'],
+            ['id' => 4, 'title' => 'Fourth document'],
+            ['id' => 5, 'title' => 'Fifth document'],
+        ]);
+
+        $index->deleteDocumentsByIds([2, 4]);
+        $documents = $index->getDocumentByIds([1, 2, 3, 4, 5]);
+        $remainingIds = [];
+        foreach ($documents as $document) {
+            $remainingIds[] = $document->getId();
+        }
+        $this->assertEquals([1, 3, 5], $remainingIds);
+    }
+
     public function testClassOfHit()
     {
         $index = $this->getIndex();

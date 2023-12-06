@@ -282,6 +282,27 @@ It returns an array with:
 {"_index":"test","_id":5,"found":true,"result":"deleted"}
 ```
 
+### deleteDocumentsByIds()
+
+Deletes multiple documents by ID. Expects an array of IDs.
+
+Example:
+
+```php
+$index->deleteDocumentsByIds([100,101]);
+```
+
+It returns an array with:
+
+- `_index` as index name
+- `_id` as the first document id passed
+- `found` as true if at least one document existed
+- `result` as ('deleted') if at least one document was deleted, or ('not found') if no document was found
+
+```json
+{"_index":"test","_id":100,"found":true,"result":"deleted"}
+```
+
 ### deleteDocuments()
 
 Deletes documents using a query expression which can be passed either as an array or as a [Query](query.md) object.
