@@ -141,6 +141,7 @@ class Index
         $params = [
             'body' => [
                 'index' => $this->index,
+                'limit' => sizeof($ids),
                 'id' => $ids
             ]
         ];
