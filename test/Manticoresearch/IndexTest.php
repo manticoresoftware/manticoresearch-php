@@ -395,7 +395,7 @@ class IndexTest extends TestCase
         $response = $index->deleteDocument(4);
         $this->assertEquals(4, $response['_id']);
         
-        $response = $index->deleteDocumentsByIds(10);
+        $response = $index->deleteDocumentsByIds([10]);
         $this->assertEquals('not found', $response['result']);
         
         $response = $index->deleteDocumentsByIds([5,6]);
