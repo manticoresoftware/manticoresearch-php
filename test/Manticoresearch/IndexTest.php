@@ -394,6 +394,12 @@ class IndexTest extends TestCase
 
         $response = $index->deleteDocument(4);
         $this->assertEquals(4, $response['_id']);
+        
+        $response = $index->deleteDocumentsByIds([10]);
+        $this->assertEquals('not found', $response['result']);
+        
+        $response = $index->deleteDocumentsByIds([5,6]);
+        $this->assertEquals(5, $response['_id']);
 
         $response = $index->deleteDocuments(new Range('id', ['gte' => 100]));
         $this->assertEquals(0, $response['deleted']);
