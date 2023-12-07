@@ -56,6 +56,8 @@ class Index
         if (!is_array($ids)) {
             $ids = [$ids];
         }
+        // Deduplicate and order the list
+        $ids = array_values(array_unique($ids));
         array_walk($ids, [static::class, 'checkDocumentId']);
         $params = [
             'body' => [
@@ -136,6 +138,9 @@ class Index
 
     public function deleteDocumentsByIds(array $ids)
     {
+        // Deduplicate and order the list
+        $ids = array_values(array_unique($ids));
+
         array_walk($ids, 'self::checkDocumentId');
         $params = [
             'body' => [
