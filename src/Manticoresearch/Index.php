@@ -452,8 +452,7 @@ class Index
     
     protected static function checkIfList(array &$ids)
     {
-        if ($ids && (array_keys($ids) !== range(0, count($ids) - 1)))
-        {
+        if ($ids && (array_keys($ids) !== range(0, count($ids) - 1))) {
             $ids = array_values(array_unique($ids));
         }
     }
