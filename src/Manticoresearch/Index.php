@@ -57,7 +57,8 @@ class Index
             $ids = [$ids];
         }
         // Deduplicate and order the list
-        $ids = array_values(array_unique($ids));
+        static::checkIfList($ids);
+
         array_walk($ids, [static::class, 'checkDocumentId']);
         $params = [
             'body' => [
@@ -139,7 +140,7 @@ class Index
     public function deleteDocumentsByIds(array $ids)
     {
         // Deduplicate and order the list
-        $ids = array_values(array_unique($ids));
+    	static::checkIfList($ids);
 
         array_walk($ids, 'self::checkDocumentId');
         $params = [
@@ -447,5 +448,11 @@ class Index
             throw new RuntimeException('Incorrect document id passed');
         }
         $id = (int)$id;
+    }
+    
+    protected static function checkIfList(array &$ids) {
+    	if ($ids && (array_keys($ids) !== range(0, count($ids) - 1))) {
+    		$ids = array_values(array_unique($ids)); 
+    	}
     }
 }
