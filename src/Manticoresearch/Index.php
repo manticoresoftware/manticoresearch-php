@@ -140,7 +140,7 @@ class Index
     public function deleteDocumentsByIds(array $ids)
     {
         // Deduplicate and order the list
-    	static::checkIfList($ids);
+        static::checkIfList($ids);
 
         array_walk($ids, 'self::checkDocumentId');
         $params = [
@@ -450,9 +450,11 @@ class Index
         $id = (int)$id;
     }
     
-    protected static function checkIfList(array &$ids) {
-    	if ($ids && (array_keys($ids) !== range(0, count($ids) - 1))) {
-    		$ids = array_values(array_unique($ids)); 
-    	}
+    protected static function checkIfList(array &$ids)
+    {
+        if ($ids && (array_keys($ids) !== range(0, count($ids) - 1)))
+        {
+            $ids = array_values(array_unique($ids));
+        }
     }
 }
