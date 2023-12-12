@@ -361,9 +361,9 @@ class IndexTest extends TestCase
             $index->addDocument(
                 [
                     'title' => 'Star Trek: Nemesis',
-                    'plot' => 'The Enterprise is diverted to the Romulan homeworld Romulus, supposedly because they want' .
-                    ' to negotiate a peace treaty. Captain Picard and his crew discover a serious threat to the ' .
-                    'Federation once Praetor Shinzon plans to attack Earth.',
+                    'plot' => 'The Enterprise is diverted to the Romulan homeworld Romulus, supposedly because they' . 
+                    ' want to negotiate a peace treaty. Captain Picard and his crew discover a serious threat to' .
+                    ' the Federation once Praetor Shinzon plans to attack Earth.',
                     'year' => 2002,
                     'rating' => 6.4
                 ],
@@ -414,6 +414,12 @@ class IndexTest extends TestCase
         
         $response = $index->deleteDocumentsByIds([5,6]);
         $this->assertEquals(5, $response['_id']);
+        
+        $response = $index->deleteDocumentsByIds(range(7, 30));
+        $results = $index->search('')
+            ->get()
+            ->getTotal(); 
+        $this->assertCount(3, $results);
 
         $response = $index->deleteDocuments(new Range('id', ['gte' => 100]));
         $this->assertEquals(0, $response['deleted']);
