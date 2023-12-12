@@ -16,6 +16,8 @@ use Manticoresearch\Results;
  */
 class Index
 {
+	use Utils;
+
     protected $client;
     protected $index;
     protected $cluster;
