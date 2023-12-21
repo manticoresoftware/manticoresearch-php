@@ -101,9 +101,11 @@ class Response
     public function hasError()
     {
         $response = $this->getResponse();
-        if (is_array($response)) foreach ($response as $r) {
-            if (isset($r['error']) && $r['error'] !== '') {
-                return true;
+        if (is_array($response)) {
+            foreach ($response as $r) {
+                if (isset($r['error']) && $r['error'] !== '') {
+                    return true;
+                }
             }
         }
         return (isset($response['error']) && $response['error'] !== '') ||
