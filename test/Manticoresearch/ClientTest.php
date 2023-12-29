@@ -94,17 +94,17 @@ class ClientTest extends TestCase
     public function testConnectionNoMoreRetriesError()
     {
         $params = [
-        	'connections' => [
-        		[
-        			'host' => '127.0.0.1',
-        			'port' => 9418,
-        		],
-        		[
-        			'host' => '127.0.0.2',
-        			'port' => 9428,
-        		],
-        	],
-        	'retries' => 2,
+            'connections' => [
+                [
+                    'host' => '127.0.0.1',
+                    'port' => 9418,
+                ],
+                [
+                    'host' => '127.0.0.2',
+                    'port' => 9428,
+                ],
+            ],
+            'retries' => 2,
         ];
         $exMsg = "After 2 retries to 2 nodes, connection has failed. No more retries left.\n"
             . "Retries made:\n 1. to 127.0.0.1:9418\n 2. to 127.0.0.2:9428\n";
