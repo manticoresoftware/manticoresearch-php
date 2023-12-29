@@ -25,7 +25,9 @@ class ConnectionPool
 
     public $retries;
 
-    public $retries_attempts =0;
+    public $retries_attempts = 0;
+
+    public $retries_info = [];
 
     public function __construct(array $connections, SelectorInterface $strategy, int $retries)
     {
@@ -52,7 +54,13 @@ class ConnectionPool
     public function getConnection(): Connection
     {
         $this->retries_attempts++;
-        $connection =   $this->strategy->getConnection($this->connections);
+        $connection = $this->strategy->getConnection($this->connections);
+        if ($this->retries_attempts <= $this->retries) {
+            $this->retries_info[] = [
+                'host' => $connection->getHost(),
+                'port' => $connection->getPort(),
+            ];
+        }
         if ($connection->isAlive()) {
             return $connection;
         }
@@ -60,6 +68,11 @@ class ConnectionPool
             return $connection;
         }
         $exMsg = 'After %d retr%s to %d node%s, connection has failed. No more retries left.';
+        $exMsg .= "\nRetries made:\n";
+        foreach ($this->retries_info as $i => $info) {
+            $i++;
+            $exMsg .= " $i. to {$info['host']}:{$info['port']}\n";
+        }
         $connCount = count($this->connections);
         throw new NoMoreNodesException(
             sprintf($exMsg, $this->retries, $this->retries > 1 ? 'ies' : 'y', $connCount, $connCount > 1 ? 's' : '')
