@@ -58,7 +58,7 @@ class PhpHttp extends Transport implements TransportInterface
         $data = $request->getBody();
         if (!empty($data)) {
             if (is_array($data)) {
-                $content = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                $content = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION);
             } else {
                 $content = $data;
             }

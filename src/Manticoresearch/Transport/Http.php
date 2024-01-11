@@ -45,7 +45,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
         $headers[] = sprintf('Content-Type: %s', $request->getContentType());
         if (!empty($data)) {
             if (is_array($data)) {
-                $content = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                $content = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION);
             } else {
                 $content = $data;
             }
