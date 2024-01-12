@@ -21,7 +21,7 @@ class TransportTest extends TestCase
     public function testSetUpURI()
     {
         $transport = new Transport();
-        $class = new \ReflectionClass('Manticoresearch\Transport');
+        $class = new \ReflectionClass(Transport::class);
         $method = $class->getMethod('setupURI');
         $method->setAccessible(true);
 

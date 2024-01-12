@@ -31,17 +31,16 @@ class PhpHttp extends Transport implements TransportInterface
 
     public function __construct(Connection $connection = null, LoggerInterface $logger = null)
     {
+        if (!class_exists(HttpClientDiscovery::class) || !class_exists(MessageFactoryDiscovery::class)) {
+            throw new \LogicException('You cannot use the "' . self::class . '" '
+                . 'as the "php-http/discovery" package is not installed. '
+                . 'Try running "composer require php-http/discovery".');
+        }
         $this->client = HttpClientDiscovery::find();
         $this->messageFactory = MessageFactoryDiscovery::find();
         parent::__construct($connection, $logger);
     }
 
-    /**
-     * @param Request $request
-     * @param array $params
-     * @return Response
-     * @throws \Http\Client\Exception
-     */
     public function execute(Request $request, $params = [])
     {
         $connection = $this->getConnection();

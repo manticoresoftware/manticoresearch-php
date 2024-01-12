@@ -21,11 +21,6 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 
     protected static $curl = null;
 
-    /**
-     * @param Request $request
-     * @param array $params
-     * @return Response
-     */
     public function execute(Request $request, $params = [])
     {
         $connection = $this->getConnection();

@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest']
-        php-version: ['7.1', '7.3', '7.4', '8.0', '8.1', '8.2']
+        php-version: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2']
         phpunit-version: ['latest']
         transport: ['', 'PhpHttp']
 
@@ -34,14 +34,14 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install PHP {{matrix.php-version}}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
           extensions: yaml, zip, curl
-          tools: phpunit,phpstan
+          tools: phpunit
 
       - name: Install dependencies
         run: composer install --prefer-dist
@@ -64,13 +64,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install PHP 7.4
         uses: shivammathur/setup-php@v2
         with:
           php-version: 7.4
-          tools: phpstan
 
       - name: Install dependencies
         run: composer install --prefer-dist
@@ -78,8 +77,8 @@ jobs:
       - name: Composer require
         run: composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle
 
-      - name: Test
-        run: phpstan analyse --level=3 src/
+      - name: Run phpstan
+        run: composer phpstan
 
 
   codestyle:
@@ -88,7 +87,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install PHP 8.0
         uses: shivammathur/setup-php@v2
