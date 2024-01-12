@@ -14,17 +14,21 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest']
-        php-version: ['7.1', '7.3', '7.4', '8.0', '8.1']
+        php-version: ['7.1', '7.3', '7.4', '8.0', '8.1', '8.2']
         phpunit-version: ['latest']
         transport: ['', 'PhpHttp']
 
     services:
       manticoresearch-manticore:
         image: manticoresearch/manticore:dev
+        env:
+          EXTRA: 1
         ports:
           - 9308:9308
       manticoresearch-manticore-2:
         image: manticoresearch/manticore:dev
+        env:
+          EXTRA: 1
         ports:
           - 5308:9308
 
