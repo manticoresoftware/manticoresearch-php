@@ -16,7 +16,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 
         $helper = new PopulateHelperTest();
         $helper->populateForKeywords();
-        self::$client = $helper->getClient();
+        static::$client = $helper->getClient();
     }
 
     public function testPath()
@@ -42,7 +42,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $response = self::$client->delete($doc);
+        $response = static::$client->delete($doc);
         $helper->search('products', 'broken', 0);
     }
 }

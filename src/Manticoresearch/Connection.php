@@ -15,11 +15,25 @@ class Connection
     /**
      * @var array
      */
-    protected $config;
+    protected $config = array(
+        'transport' => 'Http',
+        'host' => '127.0.0.1',
+        'scheme' => 'http',
+        'path' => '',
+        'port' => '9308',
+        'timeout' => 300,
+        'connect_timeout' => 0,
+        'proxy' => null,
+        'username' => null,
+        'password' => null,
+        'headers' => [],
+        'curl' => [],
+        'persistent' => true
+    );
     /**
      * @var bool
      */
-    protected $alive;
+    protected $alive = true;
 /*
  * $params['transport']  = transport class name
  * $params['host']       = hostname
@@ -40,23 +54,7 @@ class Connection
      */
     public function __construct(array $params)
     {
-        $this->config = array(
-            'transport' => 'Http',
-            'host' => '127.0.0.1',
-            'scheme' => 'http',
-            'path' => '',
-            'port' => '9308',
-            'timeout' => 300,
-            'connect_timeout' => 0,
-            'proxy' => null,
-            'username' => null,
-            'password' => null,
-            'headers' => [],
-            'curl' => [],
-            'persistent' => true
-        );
         $this->config = array_merge($this->config, $params);
-        $this->alive = true;
     }
 
     /**

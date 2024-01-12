@@ -9,6 +9,7 @@ use Manticoresearch\Index;
 use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\MatchQuery;
 use Manticoresearch\Query\Range;
+use Manticoresearch\ResultHit;
 use PHPUnit\Framework\TestCase;
 
 class IndexTest extends TestCase
@@ -121,12 +122,33 @@ class IndexTest extends TestCase
         ], $response);
     }
 
+    public function testDeleteDocumentsByIds()
+    {
+        $index = $this->getIndex();
+
+        $index->addDocuments([
+            ['id' => 1, 'title' => 'First document'],
+            ['id' => 2, 'title' => 'Second document'],
+            ['id' => 3, 'title' => 'Third document'],
+            ['id' => 4, 'title' => 'Fourth document'],
+            ['id' => 5, 'title' => 'Fifth document'],
+        ]);
+
+        $index->deleteDocumentsByIds([2, 4]);
+        $documents = $index->getDocumentByIds([1, 2, 3, 4, 5]);
+        $remainingIds = [];
+        foreach ($documents as $document) {
+            $remainingIds[] = $document->getId();
+        }
+        $this->assertEquals([1, 3, 5], $remainingIds);
+    }
+
     public function testClassOfHit()
     {
         $index = $this->getIndex();
         $this->addDocument($index);
         $hit = $index->getDocumentById(1);
-        $this->assertInstanceOf('Manticoresearch\ResultHit', $hit);
+        $this->assertInstanceOf(ResultHit::class, $hit);
     }
 
     public function testClassOfNonExistentHit()
@@ -335,11 +357,25 @@ class IndexTest extends TestCase
                 ' as a distress call, one of the team\'s member is attacked by a mysterious life form and they soon' .
                 ' realize that its life cycle has merely begun.', 'year' => 1979, 'rating' => 8.4]
         ]);
+        
+        for ($i = 6; $i <= 30; $i++) {
+            $index->addDocument(
+                [
+                    'title' => 'Star Trek: Nemesis',
+                    'plot' => 'The Enterprise is diverted to the Romulan homeworld Romulus, supposedly because they' .
+                    ' want to negotiate a peace treaty. Captain Picard and his crew discover a serious threat to' .
+                    ' the Federation once Praetor Shinzon plans to attack Earth.',
+                    'year' => 2002,
+                    'rating' => 6.4
+                ],
+                $i
+            );
+        }
 
         $results = $index->search('space team')->get();
 
         foreach ($results as $hit) {
-            $this->assertInstanceOf('Manticoresearch\ResultHit', $hit);
+            $this->assertInstanceOf(ResultHit::class, $hit);
         }
 
         $results = $index->search('alien')
@@ -350,7 +386,7 @@ class IndexTest extends TestCase
             ->get();
 
         foreach ($results as $hit) {
-            $this->assertInstanceOf('Manticoresearch\ResultHit', $hit);
+            $this->assertInstanceOf(ResultHit::class, $hit);
         }
 
         $response = $index->updateDocument(['year' => 2019], 4);
@@ -373,6 +409,19 @@ class IndexTest extends TestCase
 
         $response = $index->deleteDocument(4);
         $this->assertEquals(4, $response['_id']);
+        
+        $response = $index->deleteDocumentsByIds([100]);
+        $this->assertEquals('not found', $response['result']);
+        
+        $response = $index->deleteDocumentsByIds([5,6]);
+        $this->assertEquals(5, $response['_id']);
+        
+        $response = $index->deleteDocumentsByIds(range(7, 30));
+        $this->assertEquals(7, $response['_id']);
+        $docTotal = $index->search('')
+            ->get()
+            ->getTotal();
+        $this->assertEquals(3, $docTotal);
 
         $response = $index->deleteDocuments(new Range('id', ['gte' => 100]));
         $this->assertEquals(0, $response['deleted']);
@@ -428,7 +477,7 @@ class IndexTest extends TestCase
     public function testGetClient()
     {
         $index = $this->getIndex();
-        $this->assertInstanceOf('Manticoresearch\Client', $index->getClient());
+        $this->assertInstanceOf(Client::class, $index->getClient());
     }
 
 

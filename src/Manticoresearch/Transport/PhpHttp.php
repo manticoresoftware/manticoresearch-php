@@ -36,12 +36,6 @@ class PhpHttp extends Transport implements TransportInterface
         parent::__construct($connection, $logger);
     }
 
-    /**
-     * @param Request $request
-     * @param array $params
-     * @return Response
-     * @throws \Http\Client\Exception
-     */
     public function execute(Request $request, $params = [])
     {
         $connection = $this->getConnection();

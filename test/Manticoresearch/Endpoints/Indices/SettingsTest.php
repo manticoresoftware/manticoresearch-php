@@ -21,13 +21,13 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
 
         $helper = new PopulateHelperTest();
         $helper->populateForKeywords();
-        self::$client = $helper->getClient();
-        self::$helper = $helper;
+        static::$client = $helper->getClient();
+        static::$helper = $helper;
     }
 
     public function testSettings()
     {
-        $response = self::$client->indices()->settings(['index' => 'products']);
+        $response = static::$client->indices()->settings(['index' => 'products']);
 
         $expectedSettings = "min_infix_len = 3\nrt_mem_limit = 268435456" ;
 
