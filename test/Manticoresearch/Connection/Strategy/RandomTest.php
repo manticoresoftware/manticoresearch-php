@@ -45,11 +45,11 @@ class RandomTest extends TestCase
 
         $mConns = [];
         for ($i=0; $i<10; $i++) {
-        	$mock = mock::mock(\Manticoresearch\Connection::class);
-        	$mock->shouldReceive('isAlive')->andReturn(true);
-        	$mock->shouldReceive('getHost')->andReturn($_SERVER['MS_HOST']);
-        	$mock->shouldReceive('getPort')->andReturn((int)($_SERVER['MS_PORT']));
-        	$mConns[] = $mock->getMock();
+        	$mConns[] = mock::mock(\Manticoresearch\Connection::class)
+	        	->shouldReceive('isAlive')->andReturn(true)
+	        	->shouldReceive('getHost')->andReturn($_SERVER['MS_HOST'])
+	        	->shouldReceive('getPort')->andReturn((int)($_SERVER['MS_PORT']))
+        		->getMock();
         }
         $connectionPool = new \Manticoresearch\Connection\ConnectionPool(
             $mConns,
