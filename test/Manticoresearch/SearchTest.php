@@ -25,14 +25,14 @@ class SearchTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-        self::$search = self::indexDocuments();
+        static::$search = static::indexDocuments();
     }
 
     protected function setUp(): void
     {
         parent::setUp();
-        self::$search->reset();
-        self::$search->setIndex('movies');
+        static::$search->reset();
+        static::$search->setIndex('movies');
     }
 
     protected static function indexDocuments(): Search
@@ -158,7 +158,7 @@ class SearchTest extends TestCase
 
     protected function getResultSet()
     {
-        $result = self::$search->search('"team of explorers"/2')->get();
+        $result = static::$search->search('"team of explorers"/2')->get();
         return $result;
     }
 
@@ -184,38 +184,38 @@ class SearchTest extends TestCase
 
     public function testFilterLTE()
     {
-        $results = self::$search->filter('year', 'lte', 1990)->get();
+        $results = static::$search->filter('year', 'lte', 1990)->get();
         $this->assertEquals([1979,1986], $this->yearsFromResults($results, 'sort'));
     }
 
     public function testFilterLTEAsObject()
     {
-        $results = self::$search->filter(new Range('year', ['lte' => 1990]))->get();
+        $results = static::$search->filter(new Range('year', ['lte' => 1990]))->get();
         $this->assertEquals([1979,1986], $this->yearsFromResults($results, 'sort'));
     }
 
     public function testFilterGTE()
     {
-        $results = self::$search->filter('year', 'gte', 1990)->sort('id', 'asc')->get();
+        $results = static::$search->filter('year', 'gte', 1990)->sort('id', 'asc')->get();
         $this->assertEquals([1992,2010,2014,2018], $this->yearsFromResults($results, 'sort'));
     }
 
     public function testFilterEq()
     {
 
-        $results = self::$search->filter('year', 'equals', 1979)->get();
+        $results = static::$search->filter('year', 'equals', 1979)->get();
         $this->assertCount(1, $results);
     }
 
     public function testFilterRange()
     {
-        $results = self::$search->filter('year', 'range', [1960,1992])->get();
+        $results = static::$search->filter('year', 'range', [1960,1992])->get();
         $this->assertEquals([1979,1986,1992], $this->yearsFromResults($results, 'sort'));
     }
 
     public function testFilterIn()
     {
-        $results = self::$search->filter('year', 'in', [1960,1979,1986])->get();
+        $results = static::$search->filter('year', 'in', [1960,1979,1986])->get();
         $this->assertEquals([1979,1986], $this->yearsFromResults($results, 'sort'));
     }
 
@@ -224,13 +224,13 @@ class SearchTest extends TestCase
      */
     public function testLimitMethod()
     {
-        $results = self::$search->limit(3)->phrase('team of explorers')->get();
+        $results = static::$search->limit(3)->phrase('team of explorers')->get();
         self::assertCount(3, $results);
 
-        $results = self::$search->limit(2)->phrase('team of explorers')->get();
+        $results = static::$search->limit(2)->phrase('team of explorers')->get();
         self::assertCount(2, $results);
 
-        $results = self::$search->limit(1)->phrase('team of explorers')->get();
+        $results = static::$search->limit(1)->phrase('team of explorers')->get();
         self::assertCount(1, $results);
     }
 
@@ -239,47 +239,47 @@ class SearchTest extends TestCase
      */
     public function testMaxMatchesMethod()
     {
-        $results = self::$search->maxMatches(3)->phrase('team of explorers')->get();
+        $results = static::$search->maxMatches(3)->phrase('team of explorers')->get();
         $this->assertEquals([1986,2014,1992], $this->yearsFromResults($results));
 
-        $results = self::$search->maxMatches(2)->phrase('team of explorers')->get();
+        $results = static::$search->maxMatches(2)->phrase('team of explorers')->get();
         $this->assertEquals([1986,2014], $this->yearsFromResults($results));
 
-        $results = self::$search->maxMatches(1)->phrase('team of explorers')->get();
+        $results = static::$search->maxMatches(1)->phrase('team of explorers')->get();
         $this->assertEquals([1986], $this->yearsFromResults($results));
     }
 
     public function testNotFilterLTE()
     {
-        $results = self::$search->phrase('team of explorers')->notFilter('year', 'lte', 1990)->get();
+        $results = static::$search->phrase('team of explorers')->notFilter('year', 'lte', 1990)->get();
         $this->assertEquals([2014,1992], $this->yearsFromResults($results));
 
-        $results = self::$search->phrase('team of explorers')->notFilter('year', 'lte', 1992)->get();
+        $results = static::$search->phrase('team of explorers')->notFilter('year', 'lte', 1992)->get();
         $this->assertEquals([2014], $this->yearsFromResults($results));
     }
 
     public function testNotFilterRange()
     {
-        $results = self::$search->notFilter('year', 'range', [1900,1990])->get();
+        $results = static::$search->notFilter('year', 'range', [1900,1990])->get();
         $this->assertEquals([1992,2010,2014,2018], $this->yearsFromResults($results, 'sort'));
     }
 
     public function testNotFilterIn()
     {
-        $results = self::$search->notFilter('year', 'in', [1960,1979,1986])->get();
+        $results = static::$search->notFilter('year', 'in', [1960,1979,1986])->get();
         $this->assertEquals([1992,2010,2014,2018], $this->yearsFromResults($results, 'sort'));
     }
 
     public function testNotFilterRangeAsObject()
     {
         $range = new Range('year', ['gte' => 1900, 'lte' => 1990]);
-        $results = self::$search->notFilter($range)->get();
+        $results = static::$search->notFilter($range)->get();
         $this->assertEquals([1992,2010,2014,2018], $this->yearsFromResults($results, 'sort'));
     }
 
     public function testOrFilterRange()
     {
-        $results = self::$search->phrase('team of explorers')->orFilter('year', 'range', [1900,1990])->get();
+        $results = static::$search->phrase('team of explorers')->orFilter('year', 'range', [1900,1990])->get();
         $this->assertEquals([1986], $this->yearsFromResults($results));
     }
 
@@ -287,7 +287,7 @@ class SearchTest extends TestCase
     {
         $range = new Range('year', ['gte' => 1900, 'lte' => 1990]);
 
-        $results = self::$search->phrase('team of explorers')->orFilter($range)->get();
+        $results = static::$search->phrase('team of explorers')->orFilter($range)->get();
         $this->assertEquals([1986], $this->yearsFromResults($results));
     }
 
@@ -296,7 +296,7 @@ class SearchTest extends TestCase
      */
     public function testOrFilterRangeSkip90s()
     {
-        $results = self::$search->
+        $results = static::$search->
             orFilter('year', 'lt', 1990)->
             orFilter('year', 'gte', 2000)->
             get();
@@ -305,7 +305,7 @@ class SearchTest extends TestCase
 
     public function testOrFilterEquals()
     {
-        $results = self::$search->
+        $results = static::$search->
         orFilter('year', 'equals', 1979)->
         orFilter('year', 'equals', 1986)->
         get();
@@ -315,57 +315,57 @@ class SearchTest extends TestCase
 
     public function testSortMethodAscending()
     {
-        $results = self::$search->sort('year')->phrase('team of explorers')->get();
+        $results = static::$search->sort('year')->phrase('team of explorers')->get();
         $this->assertEquals([1986,1992,2014], $this->yearsFromResults($results));
     }
 
     public function testSortMethodDescending()
     {
-        $results = self::$search->sort('year', 'desc')->phrase('team of explorers')->get();
+        $results = static::$search->sort('year', 'desc')->phrase('team of explorers')->get();
         $this->assertEquals([2014,1992,1986], $this->yearsFromResults($results));
     }
 
     public function testOffsetMethod()
     {
-        $results = self::$search->offset(0)->phrase('team of explorers')->get();
+        $results = static::$search->offset(0)->phrase('team of explorers')->get();
         $this->assertEquals([1986,2014,1992], $this->yearsFromResults($results));
 
-        $results = self::$search->offset(1)->phrase('team of explorers')->get();
+        $results = static::$search->offset(1)->phrase('team of explorers')->get();
         $this->assertEquals([2014,1992], $this->yearsFromResults($results));
 
-        $results = self::$search->offset(2)->phrase('team of explorers')->get();
+        $results = static::$search->offset(2)->phrase('team of explorers')->get();
         $this->assertEquals([1992], $this->yearsFromResults($results));
     }
 
     public function testPhraseMethodAllFieldsMatchingPhrase()
     {
-        $results = self::$search->phrase('team of explorers')->get();
+        $results = static::$search->phrase('team of explorers')->get();
         $this->assertCount(3, $results);
     }
 
     public function testPhraseMethodAllFieldsNoMatchingPhrase()
     {
         // search for a non matching phrase
-        $results = self::$search->phrase('team with explorers')->get();
+        $results = static::$search->phrase('team with explorers')->get();
         $this->assertCount(0, $results);
     }
 
     public function testPhraseMethodSpecifiedFieldsTitleOnly()
     {
         // the title fields do not contain the matching text
-        $results = self::$search->phrase('team of explorers', 'title')->get();
+        $results = static::$search->phrase('team of explorers', 'title')->get();
         $this->assertCount(0, $results);
     }
 
     public function testPhraseMethodSpecifiedFieldsPlotOnly()
     {
-        $results = self::$search->phrase('team of explorers', 'plot')->get();
+        $results = static::$search->phrase('team of explorers', 'plot')->get();
         $this->assertCount(3, $results);
     }
 
     public function testPhraseMethodSpecifiedFieldsTitleAndPlot()
     {
-        $results = self::$search->phrase('team of explorers', 'title,plot')->get();
+        $results = static::$search->phrase('team of explorers', 'title,plot')->get();
         $this->assertCount(3, $results);
     }
 
@@ -373,11 +373,11 @@ class SearchTest extends TestCase
     {
         $q = new BoolQuery();
         $q->must(new \Manticoresearch\Query\MatchPhrase('wormhole in space', 'title,plot'));
-        $result = self::$search->search($q)->get();
+        $result = static::$search->search($q)->get();
         $this->assertCount(1, $result);
 
         $q->must(new \Manticoresearch\Query\MatchPhrase('WORMhoLE in space', 'title,plot'));
-        $result = self::$search->search($q)->get();
+        $result = static::$search->search($q)->get();
         $this->assertCount(1, $result);
     }
 
@@ -385,14 +385,14 @@ class SearchTest extends TestCase
     {
         $q = new BoolQuery();
         $q->must(new \Manticoresearch\Query\MatchPhrase('wormhole space', 'title,plot'));
-        $result = self::$search->search($q)->get();
+        $result = static::$search->search($q)->get();
         $this->assertCount(0, $result);
     }
 
 
     public function testSearchDistanceMethod()
     {
-        $result = self::$search->distance([
+        $result = static::$search->distance([
             'location_anchor'=>
                 ['lat'=>52.2, 'lon'=> 48.6],
             'location_source' =>
@@ -415,7 +415,7 @@ class SearchTest extends TestCase
             'location_distance' => '100 km'
         ]));
 
-        $result = self::$search->search($q)->get();
+        $result = static::$search->search($q)->get();
         $this->assertCount(4, $result);
     }
 
@@ -431,7 +431,7 @@ class SearchTest extends TestCase
             'location_distance' => '100 km'
         ]));
 
-        $result = self::$search->search($q)->get();
+        $result = static::$search->search($q)->get();
         $this->assertCount(4, $result);
     }
 
@@ -482,7 +482,7 @@ class SearchTest extends TestCase
         $distanceQuery->setDistanceType('adaptive'); // the default
         $q->must($distanceQuery);
 
-        $result = self::$search->search($q)->get();
+        $result = static::$search->search($q)->get();
 
         $this->assertCount(4, $result);
     }
@@ -490,50 +490,50 @@ class SearchTest extends TestCase
 
     public function testTextSearch()
     {
-        $result = self::$search->search('"team of explorers"/2')->get();
+        $result = static::$search->search('"team of explorers"/2')->get();
         $this->assertCount(4, $result);
     }
 
     public function testTextSearchFilterToAYear()
     {
-        $result = self::$search->search('"team of explorers"/2')->filter('year', 'equals', 2014)->get();
+        $result = static::$search->search('"team of explorers"/2')->filter('year', 'equals', 2014)->get();
         $this->assertCount(1, $result);
     }
 
     public function testMatchAllFieldsOrMatch()
     {
-        $result = self::$search->match('team of explorers')->get();
+        $result = static::$search->match('team of explorers')->get();
         $this->assertCount(5, $result);
     }
 
     public function testMatchTitleOnly()
     {
-        $result = self::$search->match(['query' => 'team of explorers', 'operator' => 'and'], 'title')->get();
+        $result = static::$search->match(['query' => 'team of explorers', 'operator' => 'and'], 'title')->get();
         $this->assertCount(0, $result);
     }
 
     public function testMatchTitleAndPlot()
     {
-        $result = self::$search->match(['query' => 'team of explorers', 'operator' => 'and'], 'title,plot')->get();
+        $result = static::$search->match(['query' => 'team of explorers', 'operator' => 'and'], 'title,plot')->get();
         $this->assertCount(3, $result);
     }
 
     public function testMatchAllFieldsAnd()
     {
-        $result = self::$search->match(['query' => 'team of explorers', 'operator' => 'and'])->get();
+        $result = static::$search->match(['query' => 'team of explorers', 'operator' => 'and'])->get();
         $this->assertCount(3, $result);
     }
 
     public function testMatchFilteredToSingleYear()
     {
-        $result = self::$search->match(['query' => 'team of explorers', 'operator' => 'and'])->
+        $result = static::$search->match(['query' => 'team of explorers', 'operator' => 'and'])->
             filter('year', 'equals', 2014)->get();
         $this->assertCount(1, $result);
     }
 
     public function testComplexSearchWithFilters()
     {
-        $result = self::$search->search('"team of explorers"/2')
+        $result = static::$search->search('"team of explorers"/2')
             ->expression('genre', "in(meta['genre'],'adventure')")
             ->notfilter('genre', 'equals', 1)
             ->filter('year', 'lte', 2000)
@@ -547,7 +547,7 @@ class SearchTest extends TestCase
     {
         $q = new BoolQuery();
         $q->must(new MatchQuery(['query' => 'team of explorers', 'operator' => 'and'], '*'));
-        $result = self::$search->search($q)->get();
+        $result = static::$search->search($q)->get();
         $this->assertCount(3, $result);
     }
 
@@ -555,7 +555,7 @@ class SearchTest extends TestCase
     {
         $q = new BoolQuery();
         $q->should(new MatchQuery(['query' => 'team of explorers', 'operator' => 'and'], '*'));
-        $result = self::$search->search($q)->get();
+        $result = static::$search->search($q)->get();
         $this->assertCount(3, $result);
     }
 
@@ -564,7 +564,7 @@ class SearchTest extends TestCase
         $q = new BoolQuery();
         $q->must(new MatchQuery(['query' => 'team of explorers', 'operator' => 'or'], '*'));
         $q->must(new Equals('year', 2014));
-        $result = self::$search->search($q)->get();
+        $result = static::$search->search($q)->get();
         $this->assertCount(1, $result);
     }
 
@@ -576,7 +576,7 @@ class SearchTest extends TestCase
         $q2->should(new Equals('rating', 8.4));
         $q2->should(new Equals('rating', 8.3));
         $q->must($q2);
-        $result = self::$search->search($q)->get();
+        $result = static::$search->search($q)->get();
         $this->assertCount(2, $result);
     }
 
@@ -585,7 +585,7 @@ class SearchTest extends TestCase
         $q = new BoolQuery();
         $q->must(new MatchQuery(['query' => 'team of explorers', 'operator' => 'or'], '*'));
         $q->must(new In('year', [1992,2014]));
-        $result = self::$search->search($q)->get();
+        $result = static::$search->search($q)->get();
         $this->assertCount(2, $result);
     }
 
@@ -594,7 +594,7 @@ class SearchTest extends TestCase
         $q = new BoolQuery();
         $q->must(new MatchQuery(['query' => 'team of explorers', 'operator' => 'or'], '*'));
         $q->must(new Range('year', ['lte' => 2020]));
-        $result = self::$search->search($q)->get();
+        $result = static::$search->search($q)->get();
         $this->assertCount(5, $result);
     }
 
@@ -648,7 +648,7 @@ class SearchTest extends TestCase
      */
     public function testNonExistentSource()
     {
-        $results = self::$search->setSource('source_does_not_exist')->phrase('team of explorers')->get();
+        $results = static::$search->setSource('source_does_not_exist')->phrase('team of explorers')->get();
         while ($results->valid()) {
             $hit = $results->current();
             $this->assertEquals([], $hit->getData());
@@ -658,7 +658,7 @@ class SearchTest extends TestCase
 
     public function testProfileForSearch()
     {
-        $results = self::$search->profile()->phrase('team of explorers')->get();
+        $results = static::$search->profile()->phrase('team of explorers')->get();
         $profile = $results->getProfile();
         $expected = 'PHRASE( AND(KEYWORD(team, querypos=1)),  AND(KEYWORD(of, querypos=2)),  AND(KEYWORD(explorers, ' .
             'querypos=3)))';
@@ -701,7 +701,7 @@ class SearchTest extends TestCase
 
     public function testGetHighlight()
     {
-        $results = self::$search->match('salvage')->highlight(
+        $results = static::$search->match('salvage')->highlight(
             ['plot'],
             ['pre_tags' => '<i>','post_tags'=>'</i>']
         )->get();
@@ -715,7 +715,7 @@ class SearchTest extends TestCase
 
     public function testHighlightParamsMissing()
     {
-        $results = self::$search->match('salvage')->highlight()->get();
+        $results = static::$search->match('salvage')->highlight()->get();
 
         $this->assertEquals(1, $results->count());
 
@@ -725,7 +725,7 @@ class SearchTest extends TestCase
 
     public function testBodyHasOptions()
     {
-        $body = self::$search
+        $body = static::$search
             ->option('retry_count', 3)->option('field_weights', ['title' => 2, 'plot' => 1])
             ->compile();
 
@@ -734,41 +734,41 @@ class SearchTest extends TestCase
 
     public function testUnsetOption()
     {
-        self::$search->option('retry_count', 3)->option('retry_delay', 4);
-        self::$search->option('retry_count', null);
-        $body = self::$search->compile();
+        static::$search->option('retry_count', 3)->option('retry_delay', 4);
+        static::$search->option('retry_count', null);
+        $body = static::$search->compile();
 
         $this->assertEquals(['retry_delay' => 4], $body['options']);
     }
 
     public function testCutoffOption()
     {
-        $this->assertCount(2, self::$search->search('')->option('cutoff', 2)->get());
+        $this->assertCount(2, static::$search->search('')->option('cutoff', 2)->get());
     }
 
     public function testTrackScoresCompiles()
     {
-        $body = self::$search->trackScores(true)->compile();
+        $body = static::$search->trackScores(true)->compile();
         $this->assertTrue($body['track_scores']);
 
-        $body = self::$search->trackScores(false)->compile();
+        $body = static::$search->trackScores(false)->compile();
         $this->assertFalse($body['track_scores']);
 
-        $body = self::$search->trackScores(null)->compile();
+        $body = static::$search->trackScores(null)->compile();
         $this->assertArrayNotHasKey('track_scores', $body);
     }
 
     public function testTrackScores()
     {
         // when there are match and sort, but there is no track_scores, the score is equal to 1
-        $result = self::$search->search('space')->sort('year', 'desc')->get();
+        $result = static::$search->search('space')->sort('year', 'desc')->get();
         $this->assertCount(2, $result);
         foreach ($result as $resultHit) {
             $this->assertEquals(1, $resultHit->getScore());
         }
 
         // when there are match, sort and track_scores, the score is greater than 1
-        $result = self::$search->search('space')->trackScores(true)->sort('year', 'desc')->get();
+        $result = static::$search->search('space')->trackScores(true)->sort('year', 'desc')->get();
         $this->assertCount(2, $result);
         foreach ($result as $resultHit) {
             $this->assertGreaterThan(1, $resultHit->getScore());
@@ -777,13 +777,13 @@ class SearchTest extends TestCase
 
     public function testStripBadUtf8Compiles()
     {
-        $body = self::$search->stripBadUtf8(true)->compile();
+        $body = static::$search->stripBadUtf8(true)->compile();
         $this->assertTrue($body['strip_bad_utf8']);
-
-        $body = self::$search->stripBadUtf8(false)->compile();
+        
+        $body = static::$search->stripBadUtf8(false)->compile();
         $this->assertFalse($body['strip_bad_utf8']);
-
-        $body = self::$search->stripBadUtf8(null)->compile();
+        
+        $body = static::$search->stripBadUtf8(null)->compile();
         $this->assertArrayNotHasKey('strip_bad_utf8', $body);
     }
 
@@ -817,8 +817,8 @@ class SearchTest extends TestCase
     public function testGetBody()
     {
 
-        self::$search->phrase('team of explorers')->get();
-        $body = self::$search->getBody();
+        static::$search->phrase('team of explorers')->get();
+        $body = static::$search->getBody();
         $this->assertEquals([
             'index' => 'movies',
             'query' =>
@@ -843,13 +843,13 @@ class SearchTest extends TestCase
 
     public function testGetClient()
     {
-        $client = self::$search->getClient();
+        $client = static::$search->getClient();
         $this->assertInstanceOf('Manticoresearch\Client', $client);
     }
 
     public function testFacets()
     {
-        $results = self::$search->filter('year', 'range', [1960,1992])->facet('year')->get();
+        $results = static::$search->filter('year', 'range', [1960,1992])->facet('year')->get();
         $facets = $results->getFacets();
         $this->assertCount(1, $facets);
         $this->assertArrayHasKey('year', $facets);

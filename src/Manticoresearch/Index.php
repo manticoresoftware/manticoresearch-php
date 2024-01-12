@@ -16,6 +16,8 @@ use Manticoresearch\Results;
  */
 class Index
 {
+    use Utils;
+
     protected $client;
     protected $index;
     protected $cluster;
@@ -38,7 +40,7 @@ class Index
 
     public function getDocumentById($id)
     {
-        self::checkDocumentId($id);
+        static::checkDocumentId($id);
         $params = [
             'body' => [
                 'index' => $this->index,
@@ -56,10 +58,14 @@ class Index
         if (!is_array($ids)) {
             $ids = [$ids];
         }
-        array_walk($ids, 'self::checkDocumentId');
+        // Deduplicate and order the list
+        static::checkIfList($ids);
+
+        array_walk($ids, [static::class, 'checkDocumentId']);
         $params = [
             'body' => [
                 'index' => $this->index,
+                'limit' => sizeof($ids),
                 'query' => [
                     'in' => ['id' => $ids]
                 ]
@@ -70,7 +76,7 @@ class Index
 
     public function addDocument($data, $id = 0)
     {
-        self::checkDocumentId($id);
+        static::checkDocumentId($id);
         if (is_object($data)) {
             $data = (array) $data;
         } elseif (is_string($data)) {
@@ -101,7 +107,7 @@ class Index
             }
             if (isset($document['id'])) {
                 $id = $document['id'];
-                self::checkDocumentId($id);
+                static::checkDocumentId($id);
                 unset($document['id']);
             } else {
                 $id = 0;
@@ -121,11 +127,30 @@ class Index
 
     public function deleteDocument($id)
     {
-        self::checkDocumentId($id);
+        static::checkDocumentId($id);
         $params = [
             'body' => [
                 'index' => $this->index,
                 'id' => $id
+            ]
+        ];
+        if ($this->cluster !== null) {
+            $params['body']['cluster'] = $this->cluster;
+        }
+        return $this->client->delete($params);
+    }
+
+    public function deleteDocumentsByIds(array $ids)
+    {
+        // Deduplicate and order the list
+        static::checkIfList($ids);
+
+        array_walk($ids, 'self::checkDocumentId');
+        $params = [
+            'body' => [
+                'index' => $this->index,
+                'limit' => sizeof($ids),
+                'id' => $ids
             ]
         ];
         if ($this->cluster !== null) {
@@ -153,7 +178,7 @@ class Index
 
     public function updateDocument($data, $id)
     {
-        self::checkDocumentId($id);
+        static::checkDocumentId($id);
         $params = [
             'body' => [
                 'index' => $this->index,
@@ -187,7 +212,7 @@ class Index
 
     public function replaceDocument($data, $id)
     {
-        self::checkDocumentId($id);
+        static::checkDocumentId($id);
         if (is_object($data)) {
             $data = (array) $data;
         } elseif (is_string($data)) {
@@ -216,7 +241,7 @@ class Index
                 $document = json_decode($document, true);
             }
             $id = $document['id'];
-            self::checkDocumentId($id);
+            static::checkDocumentId($id);
             unset($document['id']);
             $replace = [
                 'index' => $this->index,
@@ -427,5 +452,12 @@ class Index
             throw new RuntimeException('Incorrect document id passed');
         }
         $id = (int)$id;
+    }
+    
+    protected static function checkIfList(array &$ids)
+    {
+        if ($ids && (array_keys($ids) !== range(0, count($ids) - 1))) {
+            $ids = array_values(array_unique($ids));
+        }
     }
 }

@@ -16,6 +16,6 @@ class UtilTest extends TestCase
      */
     public function testEscapeString()
     {
-        $this->assertEquals('thisisastringร', self::escape('thisisastringร'));
+        $this->assertEquals('thisisastringร', static::escape('thisisastringร'));
     }
 }

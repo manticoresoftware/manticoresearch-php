@@ -21,8 +21,8 @@ class AlterTest extends \PHPUnit\Framework\TestCase
 
         $helper = new PopulateHelperTest();
         $helper->populateForKeywords();
-        self::$client = $helper->getClient();
-        self::$helper = $helper;
+        static::$client = $helper->getClient();
+        static::$helper = $helper;
     }
 
     public function testIndexNoOperation()
@@ -38,7 +38,7 @@ class AlterTest extends \PHPUnit\Framework\TestCase
         ];
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Operation is missing.');
-        $response = self::$client->indices()->alter($params);
+        $response = static::$client->indices()->alter($params);
     }
 
     public function testIndexDropColumn()
@@ -53,11 +53,11 @@ class AlterTest extends \PHPUnit\Framework\TestCase
 
         ]
         ];
-        $response = self::$client->indices()->alter($params);
+        $response = static::$client->indices()->alter($params);
         $this->assertEquals(['total' => 0, 'error' => '', 'warning' => ''], $response);
 
         // check the column has been added using the Describe endpoint
-        $response = self::$client->indices()->describe(['index' => 'products']);
+        $response = static::$client->indices()->describe(['index' => 'products']);
 
         $expectedResponse = [
         'id' =>
@@ -87,11 +87,11 @@ class AlterTest extends \PHPUnit\Framework\TestCase
 
             ]
         ];
-        $response = self::$client->indices()->alter($params);
+        $response = static::$client->indices()->alter($params);
         $this->assertEquals(['total'=>0,'error'=>'','warning'=>''], $response);
 
         // check the column has been added using the Describe endpoint
-        $response = self::$client->indices()->describe(['index' => 'products']);
+        $response = static::$client->indices()->describe(['index' => 'products']);
 
         $expectedResponse = [
             'id' =>

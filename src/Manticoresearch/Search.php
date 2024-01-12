@@ -217,11 +217,11 @@ class Search
             }
         }
 
-        if ($boolean === self::FILTER_AND) {
+        if ($boolean === static::FILTER_AND) {
             $this->query->must($attr);
-        } elseif ($boolean === self::FILTER_OR) {
+        } elseif ($boolean === static::FILTER_OR) {
             $this->query->should($attr);
-        } elseif ($boolean === self::FILTER_NOT) {
+        } elseif ($boolean === static::FILTER_NOT) {
             $this->query->mustNot($attr);
         }
 
@@ -230,12 +230,12 @@ class Search
 
     public function orFilter($attr, $op = null, $values = null): self
     {
-        return $this->filter($attr, $op, $values, self::FILTER_OR);
+        return $this->filter($attr, $op, $values, static::FILTER_OR);
     }
 
     public function notFilter($attr, $op = null, $values = null): self
     {
-        return $this->filter($attr, $op, $values, self::FILTER_NOT);
+        return $this->filter($attr, $op, $values, static::FILTER_NOT);
     }
 
     public function offset($offset): self

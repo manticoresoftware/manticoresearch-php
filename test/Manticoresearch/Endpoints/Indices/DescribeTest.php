@@ -21,13 +21,13 @@ class DescribeTest extends \PHPUnit\Framework\TestCase
 
         $helper = new PopulateHelperTest();
         $helper->populateForKeywords();
-        self::$client = $helper->getClient();
-        self::$helper = $helper;
+        static::$client = $helper->getClient();
+        static::$helper = $helper;
     }
 
     public function testDescribeIndex()
     {
-        $response = self::$client->indices()->describe(['index' => 'products']);
+        $response = static::$client->indices()->describe(['index' => 'products']);
 
         $this->assertEquals(array_keys([
             'id' => [
