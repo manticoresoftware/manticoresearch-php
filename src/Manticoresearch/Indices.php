@@ -29,7 +29,7 @@ class Indices
     /**
      * @var array
      */
-    protected $params;
+    protected $params = ['responseClass' => SqlToArray::class];
 
     /**
      * Pq constructor.
@@ -38,7 +38,6 @@ class Indices
     public function __construct($client)
     {
         $this->client = $client;
-        $this->params = ['responseClass' => SqlToArray::class];
     }
 
     /**

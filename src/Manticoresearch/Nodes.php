@@ -29,7 +29,7 @@ class Nodes
      * @var Client
      */
     protected $client;
-    protected $params;
+    protected $params = ['responseClass' => SqlToArray::class];
 
     /**
      * Nodes namespace
@@ -38,7 +38,6 @@ class Nodes
     public function __construct($client)
     {
         $this->client = $client;
-        $this->params =['responseClass'=> SqlToArray::class];
     }
 
     public function agentstatus($params = [])

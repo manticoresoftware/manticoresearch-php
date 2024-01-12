@@ -35,7 +35,10 @@ class RoundRobinTest extends TestCase
         $mConns = [];
         for ($i=0; $i<10; $i++) {
             $mConns[] = mock::mock(\Manticoresearch\Connection::class)
-                ->shouldReceive('isAlive')->andReturn(true)->getMock();
+                ->shouldReceive('isAlive')->andReturn(true)
+                ->shouldReceive('getHost')->andReturn($_SERVER['MS_HOST'])
+                ->shouldReceive('getPort')->andReturn((int)($_SERVER['MS_PORT']))
+                ->getMock();
         }
         $connectionPool = new \Manticoresearch\Connection\ConnectionPool(
             $mConns,

@@ -4,7 +4,9 @@
 namespace Manticoresearch\Transport;
 
 use Manticoresearch\Connection;
+use Manticoresearch\Exceptions\ExceptionInterface;
 use Manticoresearch\Request;
+use Manticoresearch\Response;
 use Manticoresearch\Transport;
 
 /**
@@ -16,7 +18,8 @@ interface TransportInterface
     /**
      * @param Request $request
      * @param array $params
-     * @return mixed
+     * @return Response
+     * @throws ExceptionInterface
      */
     public function execute(Request $request, $params = []);
 

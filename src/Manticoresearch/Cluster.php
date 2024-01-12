@@ -16,7 +16,7 @@ class Cluster
      * @var Client
      */
     protected $client;
-    protected $params;
+    protected $params = ['responseClass' => SqlToArray::class];
 
     /**
      * Pq constructor.
@@ -25,7 +25,6 @@ class Cluster
     public function __construct($client)
     {
         $this->client = $client;
-        $this->params =['responseClass'=> SqlToArray::class];
     }
 
     public function alter($params)

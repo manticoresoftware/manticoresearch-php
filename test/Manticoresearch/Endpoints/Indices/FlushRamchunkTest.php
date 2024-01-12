@@ -21,13 +21,13 @@ class FlushRamchunkTest extends \PHPUnit\Framework\TestCase
 
         $helper = new PopulateHelperTest();
         $helper->populateForKeywords();
-        self::$client = $helper->getClient();
-        self::$helper = $helper;
+        static::$client = $helper->getClient();
+        static::$helper = $helper;
     }
 
     public function testFlushRamchunkIndex()
     {
-        $response = self::$client->indices()->flushramchunk(['index' => 'products']);
+        $response = static::$client->indices()->flushramchunk(['index' => 'products']);
 
         $this->assertEquals(['total'=>0,'error'=>'','warning'=>''], $response);
     }

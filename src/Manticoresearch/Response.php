@@ -101,6 +101,13 @@ class Response
     public function hasError()
     {
         $response = $this->getResponse();
+        if (is_array($response)) {
+            foreach ($response as $r) {
+                if (isset($r['error']) && $r['error'] !== '') {
+                    return true;
+                }
+            }
+        }
         return (isset($response['error']) && $response['error'] !== '') ||
             (isset($response['errors']) && $response['errors'] !== false);
     }
@@ -116,6 +123,14 @@ class Response
             return json_encode($response['error'], true);
         } elseif (isset($response['errors'])) {
             return json_encode($response['errors'], true);
+        } elseif (is_array($response)) {
+            $errors = "";
+            foreach ($response as $r) {
+                if (isset($r['error']) && $r['error'] !== '') {
+                    $errors .= json_encode($r['error'], true);
+                }
+            }
+            return $errors;
         } else {
             return '';
         }

@@ -15,14 +15,29 @@ class Connection
     /**
      * @var array
      */
-    protected $config;
+    protected $config = array(
+        'transport' => 'Http',
+        'host' => '127.0.0.1',
+        'scheme' => 'http',
+        'path' => '',
+        'port' => '9308',
+        'timeout' => 300,
+        'connect_timeout' => 0,
+        'proxy' => null,
+        'username' => null,
+        'password' => null,
+        'headers' => [],
+        'curl' => [],
+        'persistent' => true
+    );
     /**
      * @var bool
      */
-    protected $alive;
+    protected $alive = true;
 /*
  * $params['transport']  = transport class name
  * $params['host']       = hostname
+ * $params['path']       = path
  * $params['port']       = port number
  * $params['timeout']    = connection timeout
  * $params['connect_timeout'] = connection connect timeout
@@ -39,22 +54,7 @@ class Connection
      */
     public function __construct(array $params)
     {
-        $this->config = array(
-            'transport' => 'Http',
-            'host' => '127.0.0.1',
-            'scheme' => 'http',
-            'port' => '9308',
-            'timeout' => 300,
-            'connect_timeout' => 0,
-            'proxy' => null,
-            'username' => null,
-            'password' => null,
-            'headers' => [],
-            'curl' => [],
-            'persistent' => true
-        );
         $this->config = array_merge($this->config, $params);
-        $this->alive = true;
     }
 
     /**
@@ -73,6 +73,24 @@ class Connection
     public function getHost()
     {
         return $this->config['host'];
+    }
+
+    /**
+     * @param string $path
+     * @return $this
+     */
+    public function setPath(string $path): self
+    {
+        $this->config['path'] = $path;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPath()
+    {
+        return $this->config['path'];
     }
 
     /**

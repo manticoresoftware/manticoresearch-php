@@ -17,7 +17,7 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
 
         $helper = new PopulateHelperTest();
         $helper->populateForKeywords();
-        self::$client = $helper->getClient();
+        static::$client = $helper->getClient();
     }
     public function testSuggest()
     {
@@ -30,7 +30,7 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         ];
-        $response = self::$client->suggest($params);
+        $response = static::$client->suggest($params);
         $this->assertSame('broken', array_keys($response)[0]);
     }
     public function testSuggestBadIndex()

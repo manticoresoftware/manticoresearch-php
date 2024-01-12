@@ -220,11 +220,14 @@ It returns an array with:
 
 - `_index` as the index name 
 - `_id` as the updated ID
-- result indicating whether the update was successful (`updated`) or not (`noop`)
+- result as `updated` if the update was successful or  `noop` otherwise
+
+Example of a return value:
 
 ```json
 {"_index":"test","_id":4,"result":"updated"}
 ```
+
 ### updateDocuments()
 
 It can update multiple documents that match a condition.
@@ -257,6 +260,8 @@ It returns an array with:
 - `_index` as the index_name
 - updated as the number of documents updated
 
+Example of a return value:
+
 ```json
 {"_index":"test","updated":2}
 ```
@@ -276,10 +281,35 @@ It returns an array with:
 - _index as index name
 - _id as the document id
 - found - true if document existed
-- result indicating whether the update was successful ('deleted') or not ('not found')
+- result as `deleted` if the update was successful or `not found` otherwise 
+
+Example of a return value:
 
 ```json
 {"_index":"test","_id":5,"found":true,"result":"deleted"}
+```
+
+### deleteDocumentsByIds()
+
+Deletes multiple documents by ID. Expects an array of IDs.
+
+Example:
+
+```php
+$index->deleteDocumentsByIds([100,101]);
+```
+
+It returns an array with:
+
+- `_index` as index name
+- `_id` as the first document id passed
+- `found` as true if at least one document existed
+- `result` as `deleted` if at least one document was deleted, or `not found` if no document was found
+
+Example of a return value:
+
+```json
+{"_index":"test","_id":100,"found":true,"result":"deleted"}
 ```
 
 ### deleteDocuments()
@@ -302,6 +332,8 @@ It returns an array with:
 
 - `_index` as index name
 - `deleted` as the number of found and deleted documents
+
+Example of a return value:
 
 ```json
 {"_index":"test","deleted":0}
