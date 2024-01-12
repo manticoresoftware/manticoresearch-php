@@ -28,7 +28,7 @@ class Nodes
      * @var Client
      */
     protected $client;
-    protected $params;
+    protected $params = ['responseClass'=>'Manticoresearch\\Response\\SqlToArray'];
 
     /**
      * Nodes namespace
@@ -37,7 +37,6 @@ class Nodes
     public function __construct($client)
     {
         $this->client = $client;
-        $this->params =['responseClass'=>'Manticoresearch\\Response\\SqlToArray'];
     }
 
     public function agentstatus($params = [])
