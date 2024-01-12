@@ -407,7 +407,7 @@ class SearchTest extends TestCase
     {
         $q = new BoolQuery();
 
-        $q->must(new \Manticoresearch\Query\Distance([
+        $q->must(new Distance([
             'location_anchor'=>
                 ['lat'=>52.2, 'lon'=> 48.6],
             'location_source' =>
@@ -423,7 +423,7 @@ class SearchTest extends TestCase
     {
         $q = new BoolQuery();
 
-        $q->must(new \Manticoresearch\Query\Distance([
+        $q->must(new Distance([
             'location_anchor'=>
                 ['lat'=>52.2, 'lon'=> 48.6],
             'location_source' =>
@@ -440,7 +440,7 @@ class SearchTest extends TestCase
         $q = new BoolQuery();
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('source attributes not provided');
-        $q->must(new \Manticoresearch\Query\Distance([
+        $q->must(new Distance([
             'location_anchor'=>
                 ['lat'=>52.2, 'lon'=> 48.6],
             'location_distance' => '100 km'
@@ -452,7 +452,7 @@ class SearchTest extends TestCase
         $q = new BoolQuery();
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('distance not provided');
-        $q->must(new \Manticoresearch\Query\Distance([
+        $q->must(new Distance([
             'location_anchor'=>
                 ['lat'=>52.2, 'lon'=> 48.6],
             'location_source' =>
@@ -465,7 +465,7 @@ class SearchTest extends TestCase
         $q = new BoolQuery();
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('anchors not provided');
-        $q->must(new \Manticoresearch\Query\Distance([
+        $q->must(new Distance([
             'location_source' =>
                 ['lat', 'lon'],
             'location_distance' => '100 km'
@@ -844,7 +844,7 @@ class SearchTest extends TestCase
     public function testGetClient()
     {
         $client = static::$search->getClient();
-        $this->assertInstanceOf('Manticoresearch\Client', $client);
+        $this->assertInstanceOf(Client::class, $client);
     }
 
     public function testFacets()

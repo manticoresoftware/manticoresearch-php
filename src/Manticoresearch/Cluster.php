@@ -8,6 +8,7 @@ use Manticoresearch\Endpoints\Cluster\Create;
 use Manticoresearch\Endpoints\Cluster\Delete;
 use Manticoresearch\Endpoints\Cluster\Join;
 use Manticoresearch\Endpoints\Cluster\Set;
+use Manticoresearch\Response\SqlToArray;
 
 class Cluster
 {
@@ -15,7 +16,7 @@ class Cluster
      * @var Client
      */
     protected $client;
-    protected $params = ['responseClass'=>'Manticoresearch\\Response\\SqlToArray'];
+    protected $params = ['responseClass' => SqlToArray::class];
 
     /**
      * Pq constructor.

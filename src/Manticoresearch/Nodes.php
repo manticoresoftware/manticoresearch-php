@@ -21,6 +21,7 @@ use Manticoresearch\Endpoints\Nodes\Tables;
 use Manticoresearch\Endpoints\Nodes\Threads;
 use Manticoresearch\Endpoints\Nodes\Variables;
 use Manticoresearch\Endpoints\Sql;
+use Manticoresearch\Response\SqlToArray;
 
 class Nodes
 {
@@ -28,7 +29,7 @@ class Nodes
      * @var Client
      */
     protected $client;
-    protected $params = ['responseClass'=>'Manticoresearch\\Response\\SqlToArray'];
+    protected $params = ['responseClass' => SqlToArray::class];
 
     /**
      * Nodes namespace
@@ -104,7 +105,7 @@ class Nodes
         $body = $params['body']??[];
         $endpoint = new FlushAttributes();
         $endpoint->setBody($body);
-        $response = $this->client->request($endpoint, ['responseClass'=>'Manticoresearch\\Response\\Sql']);
+        $response = $this->client->request($endpoint, ['responseClass'=> Response\Sql::class]);
         return  $response->getResponse();
     }
 
