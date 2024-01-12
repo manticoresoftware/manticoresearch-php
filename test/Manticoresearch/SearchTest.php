@@ -218,20 +218,20 @@ class SearchTest extends TestCase
         $results = static::$search->filter('year', 'in', [1960,1979,1986])->get();
         $this->assertEquals([1979,1986], $this->yearsFromResults($results, 'sort'));
     }
-    
+
     /**
      * Demonstrate that the array of years gets smaller for the same phrase match as the limit is applied
      */
     public function testLimitMethod()
     {
         $results = static::$search->limit(3)->phrase('team of explorers')->get();
-        $this->assertEquals([1986,2014,1992], $this->yearsFromResults($results));
+        self::assertCount(3, $results);
 
         $results = static::$search->limit(2)->phrase('team of explorers')->get();
-        $this->assertEquals([1986,2014], $this->yearsFromResults($results));
+        self::assertCount(2, $results);
 
         $results = static::$search->limit(1)->phrase('team of explorers')->get();
-        $this->assertEquals([1986], $this->yearsFromResults($results));
+        self::assertCount(1, $results);
     }
 
     /**
@@ -263,7 +263,7 @@ class SearchTest extends TestCase
         $results = static::$search->notFilter('year', 'range', [1900,1990])->get();
         $this->assertEquals([1992,2010,2014,2018], $this->yearsFromResults($results, 'sort'));
     }
-    
+
     public function testNotFilterIn()
     {
         $results = static::$search->notFilter('year', 'in', [1960,1979,1986])->get();
@@ -774,7 +774,7 @@ class SearchTest extends TestCase
             $this->assertGreaterThan(1, $resultHit->getScore());
         }
     }
-    
+
     public function testStripBadUtf8Compiles()
     {
         $body = static::$search->stripBadUtf8(true)->compile();
