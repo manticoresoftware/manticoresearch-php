@@ -21,13 +21,13 @@ class FlushRtindexTest extends \PHPUnit\Framework\TestCase
 
         $helper = new PopulateHelperTest();
         $helper->populateForKeywords();
-        self::$client = $helper->getClient();
-        self::$helper = $helper;
+        static::$client = $helper->getClient();
+        static::$helper = $helper;
     }
 
     public function testFlushRTIndex()
     {
-        $response = self::$client->indices()->flushrtindex(['index' => 'products']);
+        $response = static::$client->indices()->flushrtindex(['index' => 'products']);
 
         $this->assertEquals(['total'=>0,'error'=>'','warning'=>''], $response);
     }

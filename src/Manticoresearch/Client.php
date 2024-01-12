@@ -12,6 +12,7 @@ use Manticoresearch\Endpoints\Pq;
 use Manticoresearch\Exceptions\ConnectionException;
 use Manticoresearch\Exceptions\NoMoreNodesException;
 use Manticoresearch\Exceptions\RuntimeException;
+use Manticoresearch\Response\SqlToArray;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -133,7 +134,7 @@ class Client
      */
     public static function create($config): Client
     {
-        return self::createFromArray($config);
+        return static::createFromArray($config);
     }
 
     /**
@@ -242,7 +243,7 @@ class Client
         $endpoint = new Endpoints\Sql($params);
         if (isset($params['mode'])) {
             $endpoint->setMode($params['mode']);
-            $response = $this->request($endpoint, ['responseClass' => 'Manticoresearch\\Response\\SqlToArray']);
+            $response = $this->request($endpoint, ['responseClass' => SqlToArray::class]);
         } else {
             $response = $this->request($endpoint);
         }
@@ -329,7 +330,7 @@ class Client
         $response = $this->request(
             $endpoint,
             [
-                'responseClass' => 'Manticoresearch\\Response\\SqlToArray',
+                'responseClass' => SqlToArray::class,
                 'responseClassParams' => ['customMapping' => true]
             ]
         );
@@ -341,7 +342,7 @@ class Client
         $endpoint = new Endpoints\Keywords();
         $endpoint->setIndex($params['index']);
         $endpoint->setBody($params['body']);
-        $response = $this->request($endpoint, ['responseClass' => 'Manticoresearch\\Response\\SqlToArray']);
+        $response = $this->request($endpoint, ['responseClass' => SqlToArray::class]);
         return $response->getResponse();
     }
 
@@ -353,7 +354,7 @@ class Client
         $response = $this->request(
             $endpoint,
             [
-                'responseClass' => 'Manticoresearch\\Response\\SqlToArray',
+                'responseClass' => SqlToArray::class,
                 'responseClassParams' => ['customMapping' => true]
             ]
         );

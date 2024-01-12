@@ -21,13 +21,13 @@ class StatusTest extends \PHPUnit\Framework\TestCase
 
         $helper = new PopulateHelperTest();
         $helper->populateForKeywords();
-        self::$client = $helper->getClient();
-        self::$helper = $helper;
+        static::$client = $helper->getClient();
+        static::$helper = $helper;
     }
 
     public function testIndexStatus()
     {
-        $response = self::$client->indices()->status(['index' => 'products']);
+        $response = static::$client->indices()->status(['index' => 'products']);
         $this->assertArrayHasKey('disk_bytes', $response);
     }
 

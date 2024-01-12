@@ -4,6 +4,7 @@ namespace Manticoresearch\Test\Connection;
 
 use Manticoresearch\Client;
 use Manticoresearch\Connection;
+use Manticoresearch\Connection\Strategy\RoundRobin;
 use PHPUnit\Framework\TestCase;
 
 class ConnectionPoolTest extends TestCase
@@ -20,9 +21,9 @@ class ConnectionPoolTest extends TestCase
     public function testSetGetStrategy()
     {
         // change the connection pool strategy
-        $this->connectionPool->setStrategy(new Connection\Strategy\RoundRobin());
+        $this->connectionPool->setStrategy(new RoundRobin());
         $this->assertEquals(
-            'Manticoresearch\Connection\Strategy\RoundRobin',
+            RoundRobin::class,
             get_class($this->connectionPool->getStrategy())
         );
     }
