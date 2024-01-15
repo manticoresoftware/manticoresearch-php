@@ -75,6 +75,7 @@ class Index
     public function addDocument($data, $id = 0)
     {
         static::checkDocumentId($id);
+        static::checkDocument($data);
         if (is_object($data)) {
             $data = (array) $data;
         } elseif (is_string($data)) {
@@ -106,6 +107,7 @@ class Index
             if (isset($document['id'])) {
                 $id = $document['id'];
                 static::checkDocumentId($id);
+                static::checkDocument($document);
                 unset($document['id']);
             } else {
                 $id = 0;
@@ -177,6 +179,7 @@ class Index
     public function updateDocument($data, $id)
     {
         static::checkDocumentId($id);
+        static::checkDocument($data);
         $params = [
             'body' => [
                 'index' => $this->index,
@@ -211,6 +214,7 @@ class Index
     public function replaceDocument($data, $id)
     {
         static::checkDocumentId($id);
+        static::checkDocument($data);
         if (is_object($data)) {
             $data = (array) $data;
         } elseif (is_string($data)) {
@@ -240,6 +244,7 @@ class Index
             }
             $id = $document['id'];
             static::checkDocumentId($id);
+            static::checkDocument($document);
             unset($document['id']);
             $replace = [
                 'index' => $this->index,
@@ -451,7 +456,29 @@ class Index
         }
         $id = (int)$id;
     }
-    
+
+
+    /**
+     * Validate the document and ensure that there is null passed
+     * or display better error to identify the issue when manticore failed
+     * to insert value that contains null
+     * @param  array    $data
+     * @param  ?int $index
+     * @return void
+     */
+    protected static function checkDocument(array $data, ?int $index = null)
+    {
+        foreach ($data as $key => $value) {
+            if ($value === null) {
+                if ($index !== null) {
+                    $key = "[$index][$key]";
+                }
+                throw new RuntimeException("Error: The key '{$key}' in document has a null value.\n");
+
+            }
+        }
+    }
+
     protected static function checkIfList(array &$ids)
     {
         if ($ids && (array_keys($ids) !== range(0, count($ids) - 1))) {
