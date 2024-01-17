@@ -11,19 +11,17 @@ use Manticoresearch\Request;
  */
 class Update extends Request
 {
-    /**
-     * @return mixed|string
-     */
-    public function getPath()
-    {
-        return '/json/update';
-    }
+	/**
+	 * @return mixed|string
+	 */
+	public function getPath() {
+		return '/json/update';
+	}
 
-    /**
-     * @return mixed|string
-     */
-    public function getMethod()
-    {
-        return 'POST';
-    }
+	/**
+	 * @return mixed|string
+	 */
+	public function getMethod() {
+		return 'POST';
+	}
 }

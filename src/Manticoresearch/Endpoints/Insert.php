@@ -11,19 +11,17 @@ use Manticoresearch\Request;
  */
 class Insert extends Request
 {
-    /**
-     * @return mixed|string
-     */
-    public function getPath()
-    {
-        return '/json/insert';
-    }
+	/**
+	 * @return mixed|string
+	 */
+	public function getPath() {
+		return '/json/insert';
+	}
 
-    /**
-     * @return mixed|string
-     */
-    public function getMethod()
-    {
-        return 'POST';
-    }
+	/**
+	 * @return mixed|string
+	 */
+	public function getMethod() {
+		return 'POST';
+	}
 }

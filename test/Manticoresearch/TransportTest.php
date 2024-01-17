@@ -10,22 +10,20 @@ use Psr\Log\NullLogger;
 
 class TransportTest extends TestCase
 {
-    public function testBadStaticTransportCreate()
-    {
-        $connection = new Connection([]);
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Bad transport');
-        $transport = Transport::create('badtransport', $connection, new NullLogger());
-    }
+	public function testBadStaticTransportCreate() {
+		$connection = new Connection([]);
+		$this->expectException('Exception');
+		$this->expectExceptionMessage('Bad transport');
+		Transport::create('badtransport', $connection, new NullLogger());
+	}
 
-    public function testSetUpURI()
-    {
-        $transport = new Transport();
-        $class = new \ReflectionClass(Transport::class);
-        $method = $class->getMethod('setupURI');
-        $method->setAccessible(true);
+	public function testSetUpURI() {
+		$transport = new Transport();
+		$class = new \ReflectionClass(Transport::class);
+		$method = $class->getMethod('setupURI');
+		$method->setAccessible(true);
 
-        $url = $method->invokeArgs($transport, ['/search', ['a' => 1, 'b' => false]]);
-        $this->assertEquals('/search?a=1&b=false', $url);
-    }
+		$url = $method->invokeArgs($transport, ['/search', ['a' => 1, 'b' => false]]);
+		$this->assertEquals('/search?a=1&b=false', $url);
+	}
 }

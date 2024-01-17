@@ -1,60 +1,67 @@
 {
-    "name": "manticoresoftware/manticoresearch-php",
-    "description": "PHP Client for Manticore Search",
-    "keywords": ["search","client","manticoresearch"],
-    "license": "MIT",
-    "type": "library",
-    "require": {
-        "php": "^7.1|^8.0",
-        "ext-json": "*",
-        "psr/log": "^1.1 || ^2.0 || ^3.0"
-    },
-    "suggest": {
-        "ext-curl": "*",
-        "guzzlehttp/psr7": ">=1.6",
-        "php-http/curl-client": ">=1.7",
-        "php-http/httplug": "^1.1",
-        "php-http/message": "^1.7",
-        "monolog/monolog":"*"
-    },
-    "require-dev": {
-        "mockery/mockery": "*",
-        "phpstan/phpstan": "^1.4",
-        "phpunit/phpunit": ">=7.5 || ^9.6",
-        "squizlabs/php_codesniffer": "^3.7"
-    },
-    "autoload": {
-      "psr-4": {
-          "Manticoresearch\\" : "src/Manticoresearch/"
-      }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Test\\ManticoreSearch\\": "test/Manticoresearch"
+	"name" : "manticoresoftware/manticoresearch-php",
+	"description" : "PHP Client for Manticore Search",
+	"keywords" : [
+		"search",
+		"client",
+		"manticoresearch"
+	],
+	"license" : "MIT",
+	"type" : "library",
+	"require" : {
+		"php" : "^7.1|^8.0",
+		"ext-json" : "*",
+		"psr/log" : "^1.1 || ^2.0 || ^3.0"
+	},
+	"suggest" : {
+		"ext-curl" : "*",
+		"guzzlehttp/psr7" : ">=1.6",
+		"php-http/curl-client" : ">=1.7",
+		"php-http/httplug" : "^1.1",
+		"php-http/message" : "^1.7",
+		"monolog/monolog" : "*"
+	},
+	"require-dev" : {
+		"mockery/mockery" : "*",
+		"phpstan/phpstan" : "^1.4",
+		"phpunit/phpunit" : ">=7.5 || ^9.6",
+		"slevomat/coding-standard": "^7.0",
+		"squizlabs/php_codesniffer" : "^3.7"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"Manticoresearch\\" : "src/Manticoresearch/"
+		}
+	},
+	"autoload-dev" : {
+		"psr-4" : {
+			"Test\\ManticoreSearch\\" : "test/Manticoresearch"
+		}
+	},
+	"config" : {
+		"sort-packages" : true,
+		"allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": false
         }
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "authors": [
-        {
-            "name": "Manticore Software",
-            "email": "contact@manticoresearch.com",
-            "homepage": "https://manticoresearch.com/"
-        },
-        {
-            "name": "Adrian Nuta",
-            "email": "adriannuta@gmail.com",
-            "role": "Developer"
-        }
-    ],
-    "support": {
-        "issues": "https://github.com/manticoresoftware/manticoresearch-php/issues",
-        "source": "https://github.com/manticoresoftware/manticoresearch-php/",
-        "chat": "https://slack.manticoresearch.com/"
-    },
-    "scripts": {
-        "phpcs": "phpcs --standard=ruleset.xml src/ test/",
-        "phpstan": "phpstan"
-    }
+	},
+	"authors" : [{
+			"name" : "Manticore Software",
+			"email" : "contact@manticoresearch.com",
+			"homepage" : "https://manticoresearch.com/"
+		}, {
+			"name" : "Adrian Nuta",
+			"email" : "adriannuta@gmail.com",
+			"role" : "Developer"
+		}
+	],
+	"support" : {
+		"issues" : "https://github.com/manticoresoftware/manticoresearch-php/issues",
+		"source" : "https://github.com/manticoresoftware/manticoresearch-php/",
+		"chat" : "https://slack.manticoresearch.com/"
+	},
+	"scripts" : {
+		"check-cs": "phpcs --standard=ruleset.xml src/ test/",
+        "fix-cs": "phpcbf --standard=ruleset.xml src/ test/",
+		"phpstan" : "phpstan"
+	}
 }

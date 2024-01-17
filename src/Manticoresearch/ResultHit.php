@@ -13,60 +13,50 @@ namespace Manticoresearch;
  */
 class ResultHit
 {
-    protected $data;
+	protected $data;
 
-    public function __construct($data = [])
-    {
-        $this->data = $data;
-    }
+	public function __construct($data = []) {
+		$this->data = $data;
+	}
 
-    public function getId()
-    {
-        return $this->data['_id'];
-    }
+	public function getId() {
+		return $this->data['_id'];
+	}
 
-    public function setId($id)
-    {
-        $this->data['_id'] = $id;
-    }
+	public function setId($id) {
+		$this->data['_id'] = $id;
+	}
 
-    public function getScore()
-    {
-        return $this->data['_score'];
-    }
+	public function getScore() {
+		return $this->data['_score'];
+	}
 
-    public function getHighlight()
-    {
-        return $this->data['highlight'];
-    }
+	public function getHighlight() {
+		return $this->data['highlight'];
+	}
 
 
-    public function __get(string $key)
-    {
-        return $this->get($key);
-    }
+	public function __get(string $key) {
+		return $this->get($key);
+	}
 
-    public function __isset(string $key): bool
-    {
-        return $this->has($key) && null !== $this->get($key);
-    }
+	public function __isset(string $key): bool {
+		return $this->has($key) && null !== $this->get($key);
+	}
 
-    public function get($key)
-    {
-        if (isset($this->data['_source'][$key])) {
-            return $this->data['_source'][$key];
-        }
-        return [];
-    }
+	public function get($key) {
+		if (isset($this->data['_source'][$key])) {
+			return $this->data['_source'][$key];
+		}
+		return [];
+	}
 
 
-    public function has($key)
-    {
-        return isset($this->data['_source'][$key]);
-    }
+	public function has($key) {
+		return isset($this->data['_source'][$key]);
+	}
 
-    public function getData()
-    {
-        return $this->data['_source'];
-    }
+	public function getData() {
+		return $this->data['_source'];
+	}
 }

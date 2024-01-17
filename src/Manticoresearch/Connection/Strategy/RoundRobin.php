@@ -11,19 +11,18 @@ use Manticoresearch\Connection;
  */
 class RoundRobin implements SelectorInterface
 {
-    /**
-     * @var int
-     */
-    private $current = 0;
+	/**
+	 * @var int
+	 */
+	private $current = 0;
 
-    /**
-     * @param array $connections
-     * @return Connection
-     */
-    public function getConnection(array $connections) :Connection
-    {
-        $connection = $connections[$this->current % count($connections)];
-        ++$this->current;
-        return $connection;
-    }
+	/**
+	 * @param array $connections
+	 * @return Connection
+	 */
+	public function getConnection(array $connections) :Connection {
+		$connection = $connections[$this->current % sizeof($connections)];
+		++$this->current;
+		return $connection;
+	}
 }

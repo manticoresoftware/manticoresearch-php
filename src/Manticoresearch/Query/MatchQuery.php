@@ -7,8 +7,7 @@ use Manticoresearch\Query;
 
 class MatchQuery extends Query
 {
-    public function __construct($keywords, $fields)
-    {
-        $this->params['match'] =[$fields => $keywords];
-    }
+	public function __construct($keywords, $fields) {
+		$this->params['match'] = [$fields => $keywords];
+	}
 }

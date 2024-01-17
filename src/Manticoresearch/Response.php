@@ -19,160 +19,157 @@ use Manticoresearch\Exceptions\RuntimeException;
  */
 class Response
 {
-    /**
-     * execution time to get the response
-     * @var integer|float
-     */
-    protected $time;
+	/**
+	 * execution time to get the response
+	 * @var integer|float
+	 */
+	protected $time;
 
-    /**
-     * raw response as string
-     * @var string
-     */
-    protected $string;
+	/**
+	 * raw response as string
+	 * @var string
+	 */
+	protected $string;
 
-    /**
-     * information about request
-     * @var array
-     */
-    protected $transportInfo;
+	/**
+	 * information about request
+	 * @var array
+	 */
+	protected $transportInfo;
 
-    protected $status;
-    /**
-     * response as array
-     * @var array
-     */
-    protected $response;
+	protected $status;
+	/**
+	 * response as array
+	 * @var array
+	 */
+	protected $response;
 
-    /**
-     * additional params as array
-     * @var array
-     */
-    protected $params;
-    
+	/**
+	 * additional params as array
+	 * @var array
+	 */
+	protected $params;
 
-    public function __construct($responseString, $status = null, $params = [])
-    {
-        if (is_array($responseString)) {
-            $this->response = $responseString;
-        } else {
-            $this->string = $responseString;
-        }
-        $this->status = $status;
-        $this->params = $params;
-    }
 
-    /*
-     * Return response
-     * @return array
-     */
-    public function getResponse()
-    {
-        if (null === $this->response) {
-            $this->response = json_decode($this->string, true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                if (json_last_error() === JSON_ERROR_UTF8 && $this->stripBadUtf8()) {
-                    $this->response = json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $this->string), true);
-                } else {
-                    throw new RuntimeException('fatal error while trying to decode JSON response');
-                }
-            }
+	public function __construct($responseString, $status = null, $params = []) {
+		if (is_array($responseString)) {
+			$this->response = $responseString;
+		} else {
+			$this->string = $responseString;
+		}
+		$this->status = $status;
+		$this->params = $params;
+	}
 
-            if (empty($this->response)) {
-                $this->response = [];
-            }
-        }
-        return $this->response;
-    }
-    
-    /**
-     * check if strip_bad_utf8 as been set to true
-     * @return boolean
-     */
-    private function stripBadUtf8()
-    {
-        return !empty($this->transportInfo['body']) && !empty($this->transportInfo['body']['strip_bad_utf8']);
-    }
+	/*
+	 * Return response
+	 * @return array
+	 */
+	public function getResponse() {
+		if (null === $this->response) {
+			$this->response = json_decode($this->string, true);
+			if (json_last_error() !== JSON_ERROR_NONE) {
+				if (json_last_error() !== JSON_ERROR_UTF8 || !$this->stripBadUtf8()) {
+					throw new RuntimeException('fatal error while trying to decode JSON response');
+				}
 
-    /*
-     * Check whenever response has error
-     * @return bool
-     */
-    public function hasError()
-    {
-        $response = $this->getResponse();
-        if (is_array($response)) {
-            foreach ($response as $r) {
-                if (isset($r['error']) && $r['error'] !== '') {
-                    return true;
-                }
-            }
-        }
-        return (isset($response['error']) && $response['error'] !== '') ||
-            (isset($response['errors']) && $response['errors'] !== false);
-    }
+				$this->response = json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $this->string), true);
+			}
 
-    /*
-     * Return error
-     * @return false|string
-     */
-    public function getError()
-    {
-        $response = $this->getResponse();
-        if (isset($response['error'])) {
-            return json_encode($response['error'], true);
-        } elseif (isset($response['errors'])) {
-            return json_encode($response['errors'], true);
-        } elseif (is_array($response)) {
-            $errors = "";
-            foreach ($response as $r) {
-                if (isset($r['error']) && $r['error'] !== '') {
-                    $errors .= json_encode($r['error'], true);
-                }
-            }
-            return $errors;
-        } else {
-            return '';
-        }
-    }
+			if (empty($this->response)) {
+				$this->response = [];
+			}
+		}
+		return $this->response;
+	}
 
-    /*
-     * set execution time
-     * @param int|float $time
-     * @return $this
-     */
-    public function setTime($time)
-    {
-        $this->time = $time;
-        return $this;
-    }
+	/**
+	 * check if strip_bad_utf8 as been set to true
+	 * @return boolean
+	 */
+	private function stripBadUtf8() {
+		return !empty($this->transportInfo['body']) && !empty($this->transportInfo['body']['strip_bad_utf8']);
+	}
 
-    /*
-     * returns execution time
-     * @return mixed
-     */
-    public function getTime()
-    {
-        return $this->time;
-    }
+	/*
+	 * Check whenever response has error
+	 * @return bool
+	 */
+	public function hasError() {
+		$response = $this->getResponse();
+		if (is_array($response)) {
+			foreach ($response as $r) {
+				if (isset($r['error']) && $r['error'] !== '') {
+					return true;
+				}
+			}
+		}
+		return (isset($response['error']) && $response['error'] !== '') ||
+			(isset($response['errors']) && $response['errors'] !== false);
+	}
 
-    /**
-     *  set request info
-     * @param array $info
-     * @return $this
-     */
-    public function setTransportInfo($info)
-    {
-        $this->transportInfo = $info;
-        return $this;
-    }
+	/*
+	 * Return error
+	 * @return false|string
+	 */
+	public function getError() {
+		$response = $this->getResponse();
+		if (isset($response['error'])) {
+			return json_encode($response['error'], true);
+		}
 
-    /**
-     * get request info
-     * @return array
-     */
-    public function getTransportInfo()
-    {
-        return $this->transportInfo;
-    }
+		if (isset($response['errors'])) {
+			return json_encode($response['errors'], true);
+		}
+
+		if (is_array($response)) {
+			$errors = '';
+			foreach ($response as $r) {
+				if (!isset($r['error']) || $r['error'] === '') {
+					continue;
+				}
+
+				$errors .= json_encode($r['error'], true);
+			}
+			return $errors;
+		}
+
+		return '';
+	}
+
+	/*
+	 * set execution time
+	 * @param int|float $time
+	 * @return $this
+	 */
+	public function setTime($time) {
+		$this->time = $time;
+		return $this;
+	}
+
+	/*
+	 * returns execution time
+	 * @return mixed
+	 */
+	public function getTime() {
+		return $this->time;
+	}
+
+	/**
+	 *  set request info
+	 * @param array $info
+	 * @return $this
+	 */
+	public function setTransportInfo($info) {
+		$this->transportInfo = $info;
+		return $this;
+	}
+
+	/**
+	 * get request info
+	 * @return array
+	 */
+	public function getTransportInfo() {
+		return $this->transportInfo;
+	}
 }
