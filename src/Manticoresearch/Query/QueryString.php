@@ -7,8 +7,7 @@ use Manticoresearch\Query;
 
 class QueryString extends Query
 {
-    public function __construct($string)
-    {
-        $this->params['query_string'] = $string;
-    }
+	public function __construct($string) {
+		$this->params['query_string'] = $string;
+	}
 }

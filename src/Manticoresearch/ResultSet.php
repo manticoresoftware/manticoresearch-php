@@ -15,106 +15,96 @@ namespace Manticoresearch;
  */
 class ResultSet implements \Iterator, \Countable
 {
-    /** @var int The position of the iterator through the result set */
-    protected $position = 0;
+	/** @var int The position of the iterator through the result set */
+	protected $position = 0;
 
-    /** @var Response */
-    protected $response;
+	/** @var Response */
+	protected $response;
 
-    protected $array = [];
+	protected $array = [];
 
-    /** @var int|mixed Total number of results */
-    protected $total = 0;
+	/** @var int|mixed Total number of results */
+	protected $total = 0;
 
-    protected $took;
+	protected $took;
 
-    /** @var mixed Did the query time out? */
-    protected $timed_out;
+	/** @var mixed Did the query time out? */
+	protected $timed_out; // phpcs:ignore Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
 
-    protected $profile;
+	protected $profile;
 
-    protected $facets;
+	protected $facets;
 
-    public function __construct($responseObj)
-    {
-        $this->response = $responseObj;
-        $response = $responseObj->getResponse();
-        if (isset($response['hits']['hits'])) {
-            $this->array = $response['hits']['hits'];
-            $this->total = $response['hits']['total'];
-        } else {
-            $this->total = 0;
-        }
-        $this->took = $response['took'] ?? 0;
-        $this->timed_out = $response['timed_out'] ?? false;
-        if (isset($response['profile'])) {
-            $this->profile = $response['profile'];
-        }
-        if (isset($response['aggregations'])) {
-            $this->facets = $response['aggregations'];
-        }
-    }
+	public function __construct($responseObj) {
+		$this->response = $responseObj;
+		$response = $responseObj->getResponse();
+		if (isset($response['hits']['hits'])) {
+			$this->array = $response['hits']['hits'];
+			$this->total = $response['hits']['total'];
+		} else {
+			$this->total = 0;
+		}
+		$this->took = $response['took'] ?? 0;
+		// phpcs:ignore Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
+		$this->timed_out = $response['timed_out'] ?? false;
+		if (isset($response['profile'])) {
+			$this->profile = $response['profile'];
+		}
+		if (!isset($response['aggregations'])) {
+			return;
+		}
 
-    public function rewind(): void
-    {
-        $this->position = 0;
-    }
+		$this->facets = $response['aggregations'];
+	}
 
-    public function current(): ResultHit
-    {
-        return new ResultHit($this->array[$this->position]);
-    }
+	public function rewind(): void {
+		$this->position = 0;
+	}
 
-    public function next(): void
-    {
-        $this->position++;
-    }
+	public function current(): ResultHit {
+		return new ResultHit($this->array[$this->position]);
+	}
 
-    public function valid(): bool
-    {
-        return isset($this->array[$this->position]);
-    }
+	public function next(): void {
+		$this->position++;
+	}
 
-    public function key(): int
-    {
-        return $this->position;
-    }
+	public function valid(): bool {
+		return isset($this->array[$this->position]);
+	}
 
-    public function getTotal()
-    {
-        return $this->total;
-    }
+	public function key(): int {
+		return $this->position;
+	}
 
-    public function getTime()
-    {
-        return $this->took;
-    }
+	public function getTotal() {
+		return $this->total;
+	}
 
-    public function hasTimedout()
-    {
-        return $this->timed_out;
-    }
+	public function getTime() {
+		return $this->took;
+	}
 
-    /**
-     * @return Response
-     */
-    public function getResponse()
-    {
-        return $this->response;
-    }
+	public function hasTimedout() {
+		return $this->timed_out; // phpcs:ignore Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
+	}
 
-    public function count(): int
-    {
-        return count($this->array);
-    }
+	/**
+	 * @return Response
+	 */
+	public function getResponse() {
+		return $this->response;
+	}
 
-    public function getProfile()
-    {
-        return $this->profile;
-    }
+	public function count(): int {
+		return sizeof($this->array);
+	}
 
-    public function getFacets()
-    {
-        return $this->facets;
-    }
+	public function getProfile() {
+		return $this->profile;
+	}
+
+	public function getFacets() {
+		return $this->facets;
+	}
 }

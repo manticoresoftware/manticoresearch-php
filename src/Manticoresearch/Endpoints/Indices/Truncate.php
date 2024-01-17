@@ -13,33 +13,32 @@ use Manticoresearch\Utils;
  */
 class Truncate extends EmulateBySql
 {
-    use Utils;
-    /**
-     * @var string
-     */
-    protected $index;
+	use Utils;
+	/**
+	 * @var string
+	 */
+	protected $index;
 
-    public function setBody($params = null)
-    {
-        if (isset($this->index)) {
-            return parent::setBody(['query' => "TRUNCATE RTINDEX ".$this->index. "".
-                (isset($params['with'])?" WITH'".strtoupper($params['with'])."'":"")]);
-        }
-        throw new RuntimeException('Index name is missing.');
-    }
-    /**
-     * @return mixed
-     */
-    public function getIndex()
-    {
-        return $this->index;
-    }
+	public function setBody($params = null) {
+		if (isset($this->index)) {
+			return parent::setBody(
+				['query' => 'TRUNCATE RTINDEX '.$this->index. ''.
+				(isset($params['with']) ? " WITH'".strtoupper($params['with'])."'" : '')]
+			);
+		}
+		throw new RuntimeException('Index name is missing.');
+	}
+	/**
+	 * @return mixed
+	 */
+	public function getIndex() {
+		return $this->index;
+	}
 
-    /**
-     * @param mixed $index
-     */
-    public function setIndex($index)
-    {
-        $this->index = $index;
-    }
+	/**
+	 * @param mixed $index
+	 */
+	public function setIndex($index) {
+		$this->index = $index;
+	}
 }

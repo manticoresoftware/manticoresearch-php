@@ -97,5 +97,5 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist
 
-      - name: Run phpcs
-        run: composer phpcs
+      - name: Check code style
+        run: composer check-cs

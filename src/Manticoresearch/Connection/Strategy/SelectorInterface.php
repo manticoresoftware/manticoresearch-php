@@ -11,9 +11,9 @@ use Manticoresearch\Connection;
  */
 interface SelectorInterface
 {
-    /**
-     * @param array $connections
-     * @return Connection
-     */
-    public function getConnection(array $connections):Connection;
+	/**
+	 * @param array $connections
+	 * @return Connection
+	 */
+	public function getConnection(array $connections):Connection;
 }

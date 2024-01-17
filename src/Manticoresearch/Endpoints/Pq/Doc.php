@@ -10,67 +10,61 @@ use Manticoresearch\Exceptions\RuntimeException;
  */
 class Doc extends \Manticoresearch\Request
 {
-    /**
-     * @var string
-     */
-    protected $index;
-    /**
-     * @var integer
-     */
-    protected $id;
+	/**
+	 * @var string
+	 */
+	protected $index;
+	/**
+	 * @var integer
+	 */
+	protected $id;
 
-    /**
-     * @return mixed|string
-     */
-    public function getMethod()
-    {
-        return 'POST';
-    }
+	/**
+	 * @return mixed|string
+	 */
+	public function getMethod() {
+		return 'POST';
+	}
 
-    /**
-     * @return mixed|string
-     */
-    public function getPath()
-    {
-        if (isset($this->index)) {
-            if (isset($this->id)) {
-                return "/json/pq/" . $this->index . "/doc/" . $this->id;
-            } else {
-                return "/json/pq/" . $this->index . "/doc";
-            }
-        }
-        throw new RuntimeException('Index name is missing.');
-    }
+	/**
+	 * @return mixed|string
+	 */
+	public function getPath() {
+		if (isset($this->index)) {
+			if (isset($this->id)) {
+				return '/json/pq/' . $this->index . '/doc/' . $this->id;
+			}
 
-    /**
-     * @return mixed
-     */
-    public function getIndex()
-    {
-        return $this->index;
-    }
+			return '/json/pq/' . $this->index . '/doc';
+		}
+		throw new RuntimeException('Index name is missing.');
+	}
 
-    /**
-     * @param mixed $index
-     */
-    public function setIndex($index)
-    {
-        $this->index = $index;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getIndex() {
+		return $this->index;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	/**
+	 * @param mixed $index
+	 */
+	public function setIndex($index) {
+		$this->index = $index;
+	}
 
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getId() {
+		return $this->id;
+	}
+
+	/**
+	 * @param mixed $id
+	 */
+	public function setId($id) {
+		$this->id = $id;
+	}
 }
