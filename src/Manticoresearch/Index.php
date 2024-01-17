@@ -474,7 +474,6 @@ class Index
                     $key = "[$index][$key]";
                 }
                 throw new RuntimeException("Error: The key '{$key}' in document has a null value.\n");
-
             }
         }
     }
