@@ -92,7 +92,7 @@ class Request
 	}
 
 	/**
-	 * @param mixed $content_type
+	 * @param mixed $contentType
 	 */
 	public function setContentType($contentType) {
 		$this->contentType = $contentType;

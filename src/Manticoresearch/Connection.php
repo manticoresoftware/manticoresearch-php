@@ -139,7 +139,7 @@ class Connection
 	}
 
 	/**
-	 * @param integer $connect_timeout
+	 * @param integer $connectTimeout
 	 * @return $this
 	 */
 	public function setConnectTimeout($connectTimeout): self {
