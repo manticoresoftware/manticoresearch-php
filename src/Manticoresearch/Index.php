@@ -75,12 +75,12 @@ class Index
     public function addDocument($data, $id = 0)
     {
         static::checkDocumentId($id);
-        static::checkDocument($data);
         if (is_object($data)) {
             $data = (array) $data;
         } elseif (is_string($data)) {
             $data = json_decode($data, true);
         }
+        static::checkDocument($data);
         $params = [
             'body' => [
                 'index' => $this->index,
