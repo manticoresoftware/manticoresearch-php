@@ -342,7 +342,6 @@ class Client
 	/*
 	 * @return Response
 	 */
-
 	public function request(Request $request, array $params = []): Response {
 		try {
 			$connection = $this->connectionPool->getConnection();
@@ -376,10 +375,9 @@ class Client
 	}
 
 	/*
- *
- * @return Response
- */
-
+	 *
+	 * @return Response
+	 */
 	public function getLastResponse(): Response {
 		return $this->lastResponse;
 	}

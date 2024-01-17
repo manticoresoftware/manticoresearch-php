@@ -53,22 +53,27 @@ class PercolateDocsResultSet implements \Iterator, \Countable
 		}
 	}
 
+	#[\ReturnTypeWillChange]
 	public function rewind() {
 		$this->position = 0;
 	}
 
+	#[\ReturnTypeWillChange]
 	public function current() {
 		return new PercolateResultDoc($this->array[$this->position]);
 	}
 
+	#[\ReturnTypeWillChange]
 	public function next() {
 		$this->position++;
 	}
 
+	#[\ReturnTypeWillChange]
 	public function valid() {
 		return isset($this->array[$this->position]);
 	}
 
+	#[\ReturnTypeWillChange]
 	public function key() {
 		return $this->position;
 	}
@@ -92,6 +97,7 @@ class PercolateDocsResultSet implements \Iterator, \Countable
 		return $this->response;
 	}
 
+	#[\ReturnTypeWillChange]
 	public function count() {
 		return sizeof($this->array);
 	}
