@@ -25,7 +25,7 @@ class KnnQuery extends BoolQuery
 		if (is_array($knnTarget)) {
 			foreach ($knnTarget as $i) {
 				if (!is_numeric($i)) {
-					throw new \RuntimeException("KNN query vector must contain numeric values only");
+					throw new \RuntimeException('KNN query vector must contain numeric values only');
 				}
 			}
 			$this->knnTargetKey = 'query_vector';

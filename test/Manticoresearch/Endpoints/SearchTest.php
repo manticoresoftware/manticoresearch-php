@@ -14,7 +14,7 @@ class SearchTest extends \PHPUnit\Framework\TestCase
 		];
 		$client = new Client($params);
 		$this->expectException(\Manticoresearch\Exceptions\ResponseException::class);
-		$client->search(['body' => '']);
+		print_r($client->search(['body' => '']));
 	}
 
 	public function testNoArrayParams() {
@@ -52,6 +52,6 @@ class SearchTest extends \PHPUnit\Framework\TestCase
 
 	public function testPath() {
 		$search = new \Manticoresearch\Endpoints\Search();
-		$this->assertEquals('/json/search', $search->getPath());
+		$this->assertEquals('/search', $search->getPath());
 	}
 }
