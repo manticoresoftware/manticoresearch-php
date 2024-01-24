@@ -76,6 +76,26 @@ Set [max_matches](https://mnt.cr/max_matches) for the search.
 $search->limit(10000)->maxMatches(10000);
 ```
 
+### knn()
+
+Performs a [knn search](https://mnt.cr/knn) query
+
+```php
+$search->knn('some_float_vector_field', [0.567, 0.322], 100);
+```
+
+or
+
+```php
+$search->knn('some_float_vector_field', 5, 100);
+```
+
+It expects 3 parameters:
+- a name of the `float_vector` type field
+- a float vector or a document id to execute knn search by 
+- a number of most similar documents to return
+
+
 ### filter(), orFilter() and notFilter()
 
 Allow adding an attribute filter.
