@@ -14,7 +14,7 @@ class Delete extends Request
 	 * @return mixed|string
 	 */
 	public function getPath() {
-		return '/json/delete';
+		return '/delete';
 	}
 
 	/**

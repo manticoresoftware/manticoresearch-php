@@ -32,10 +32,10 @@ class Doc extends \Manticoresearch\Request
 	public function getPath() {
 		if (isset($this->index)) {
 			if (isset($this->id)) {
-				return '/json/pq/' . $this->index . '/doc/' . $this->id;
+				return '/pq/' . $this->index . '/doc/' . $this->id;
 			}
 
-			return '/json/pq/' . $this->index . '/doc';
+			return '/pq/' . $this->index . '/doc';
 		}
 		throw new RuntimeException('Index name is missing.');
 	}
