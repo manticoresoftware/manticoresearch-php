@@ -3,6 +3,7 @@
 namespace Manticoresearch\Test\Endpoints;
 
 use Manticoresearch\Client;
+
 //use Manticoresearch\Exceptions\ResponseException;
 
 class BulkTest extends \PHPUnit\Framework\TestCase
