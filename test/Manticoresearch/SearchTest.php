@@ -324,13 +324,13 @@ class SearchTest extends TestCase
 	public function testSortMethodNyMultipleAttributesAscending() {
 		$results = self::$search->filter('rating', 'gte', 8.3)
 			->sort(['rating' => 'asc','year' => 'asc'])->get();
-		$this->assertEquals(['Aliens', 'Alien', '1917', 'Interstellar', 'Inception'], $this->titlesFromResults($results));
+		$this->assertEquals(['Aliens','Alien','1917','Interstellar','Inception'], $this->titlesFromResults($results));
 	}
 
 	public function testSortMethodNyMultipleAttributesDescending() {
 		$results = self::$search->filter('rating', 'gte', 8.3)
 			->sort(['rating' => 'asc','year' => 'desc'])->get();
-		$this->assertEquals(['Aliens', '1917', 'Alien', 'Interstellar', 'Inception'], $this->titlesFromResults($results));
+		$this->assertEquals(['Aliens','1917','Alien','Interstellar','Inception'], $this->titlesFromResults($results));
 	}
 
 	public function testOffsetMethod() {
