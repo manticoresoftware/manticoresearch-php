@@ -152,28 +152,28 @@ class SearchTest extends TestCase
 		return $years;
 	}
 
-    /**
-     * Helper method to return just the titles from the results.  This is used to validate filtering and sorting
-     * @param ResultSet $results
-     * @param boolean $sort since Manticore 4 we don't implicitly sort by id, so the results can be sorted
-     * randomly especially when there's no other implicit/explicit sorting (e.g. full-text ranking), so it makes
-     * sense to sort explicitly
-     */
-    private function titlesFromResults($results, $sort = false): array
-    {
-        $titles = [];
-        while ($results->valid()) {
-            $hit = $results->current();
-            $data = $hit->getData();
-            $titles[] = $data['title'];
-            $results->next();
-        }
-        if ($sort != false) {
-            sort($titles);
-        }
+	/**
+	 * Helper method to return just the titles from the results.  This is used to validate filtering and sorting
+	 * @param ResultSet $results
+	 * @param boolean $sort since Manticore 4 we don't implicitly sort by id, so the results can be sorted
+	 * randomly especially when there's no other implicit/explicit sorting (e.g. full-text ranking), so it makes
+	 * sense to sort explicitly
+	 */
+	private function titlesFromResults($results, $sort = false): array
+	{
+		$titles = [];
+		while ($results->valid()) {
+			$hit = $results->current();
+			$data = $hit->getData();
+			$titles[] = $data['title'];
+			$results->next();
+		}
+		if ($sort != false) {
+			sort($titles);
+		}
 
-        return $titles;
-    }
+		return $titles;
+	}
 
 	protected function getResultSet() {
 		return static::$search->search('"team of explorers"/2')->get();
@@ -322,29 +322,29 @@ class SearchTest extends TestCase
 		$this->assertEquals([2014,1992,1986], $this->yearsFromResults($results));
 	}
 
-    public function testSortMethodNyMultipleAttributesAscending()
-    {
-        $results = self::$search->filter('rating', 'gte', 8.3)->sort(['rating' => 'asc','year' => 'asc'])->get();
-        $this->assertEquals([
-            'Aliens',
-            'Alien',
-            '1917',
-            'Interstellar',
-            'Inception',
-        ], $this->titlesFromResults($results));
-    }
+	public function testSortMethodNyMultipleAttributesAscending()
+	{
+		$results = self::$search->filter('rating', 'gte', 8.3)->sort(['rating' => 'asc','year' => 'asc'])->get();
+		$this->assertEquals([
+			'Aliens',
+			'Alien',
+			'1917',
+			'Interstellar',
+			'Inception',
+		], $this->titlesFromResults($results));
+	}
 
-    public function testSortMethodNyMultipleAttributesDescending()
-    {
-        $results = self::$search->filter('rating', 'gte', 8.3)->sort(['rating' => 'asc','year' => 'desc'])->get();
-        $this->assertEquals([
-            'Aliens',
-            '1917',
-            'Alien',
-            'Interstellar',
-            'Inception',
-        ], $this->titlesFromResults($results));
-    }
+	public function testSortMethodNyMultipleAttributesDescending()
+	{
+		$results = self::$search->filter('rating', 'gte', 8.3)->sort(['rating' => 'asc','year' => 'desc'])->get();
+		$this->assertEquals([
+			'Aliens',
+			'1917',
+			'Alien',
+			'Interstellar',
+			'Inception',
+		], $this->titlesFromResults($results));
+	}
 
 	public function testOffsetMethod() {
 		$results = static::$search->offset(0)->phrase('team of explorers')->get();
