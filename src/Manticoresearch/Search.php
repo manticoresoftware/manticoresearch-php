@@ -264,17 +264,12 @@ class Search
 		if (is_array($field)) {
 			//if 2nd arg is true we full set the sort with the expr, otherwise just add it
 			//we let passing uppercased directions here as well
-			foreach ($field as $k => $v) {
-				if (!is_string($v)) {
-					continue;
-				}
-
-				$field[$k] = strtolower($v);
+			if (empty($this->params['sort']) || (isset($direction) && $direction === true)) {
+				$this->params['sort'] = [];
 			}
-			if (isset($direction) && $direction === true) {
-				$this->params['sort'] = $field;
-			} else {
-				$this->params['sort'] [] = $field;
+
+			foreach ($field as $k => $v) {
+				$this->params['sort'][] = [$k => strtolower($v)];
 			}
 			return $this;
 		}
