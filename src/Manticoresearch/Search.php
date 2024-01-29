@@ -269,11 +269,11 @@ class Search
 			}
 
 			foreach ($field as $k => $v) {
-                if (!is_string($v)) {
-                    continue;
-                }
+				if (!is_string($v)) {
+					continue;
+				}
 
-                $this->params['sort'][] = [$k => strtolower($v)];
+				$this->params['sort'][] = [$k => strtolower($v)];
 			}
 			return $this;
 		}
