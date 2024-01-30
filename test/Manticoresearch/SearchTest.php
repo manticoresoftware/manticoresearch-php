@@ -91,7 +91,7 @@ class SearchTest extends TestCase
 				],
 			]],
 			['insert' => ['index' => 'movies', 'id' => 4, 'doc' =>
-				['title' => '1917 ', 'plot' => ' As a regiment assembles to wage war deep in enemy territory, two'.
+				['title' => '1917', 'plot' => ' As a regiment assembles to wage war deep in enemy territory, two'.
 					' soldiers are assigned to race against time and deliver a message that will stop 1,600 men from'.
 					' walking straight into a deadly trap.',
 					'year' => 2018, 'rating' => 8.4,
@@ -164,6 +164,28 @@ class SearchTest extends TestCase
 			sort($years);
 		}
 		return $years;
+	}
+
+	/**
+	 * Helper method to return just the titles from the results.  This is used to validate filtering and sorting
+	 * @param ResultSet $results
+	 * @param boolean $sort since Manticore 4 we don't implicitly sort by id, so the results can be sorted
+	 * randomly especially when there's no other implicit/explicit sorting (e.g. full-text ranking), so it makes
+	 * sense to sort explicitly
+	 */
+	private function titlesFromResults($results, $sort = false): array {
+		$titles = [];
+		while ($results->valid()) {
+			$hit = $results->current();
+			$data = $hit->getData();
+			$titles[] = $data['title'];
+			$results->next();
+		}
+		if ($sort !== false) {
+			sort($titles);
+		}
+
+		return $titles;
 	}
 
 	protected function getResultSet() {
@@ -311,6 +333,18 @@ class SearchTest extends TestCase
 	public function testSortMethodDescending() {
 		$results = static::$search->sort('year', 'desc')->phrase('team of explorers')->get();
 		$this->assertEquals([2014,1992,1986], $this->yearsFromResults($results));
+	}
+
+	public function testSortMethodNyMultipleAttributesAscending() {
+		$results = self::$search->filter('rating', 'gte', 8.3)
+			->sort(['rating' => 'asc','year' => 'asc'])->get();
+		$this->assertEquals(['Aliens','Alien','1917','Interstellar','Inception'], $this->titlesFromResults($results));
+	}
+
+	public function testSortMethodNyMultipleAttributesDescending() {
+		$results = self::$search->filter('rating', 'gte', 8.3)
+			->sort(['rating' => 'asc','year' => 'desc'])->get();
+		$this->assertEquals(['Aliens','1917','Alien','Interstellar','Inception'], $this->titlesFromResults($results));
 	}
 
 	public function testOffsetMethod() {
