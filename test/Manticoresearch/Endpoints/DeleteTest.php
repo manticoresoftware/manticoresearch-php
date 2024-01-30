@@ -20,7 +20,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 
 	public function testPath() {
 		$insert = new \Manticoresearch\Endpoints\Delete();
-		$this->assertEquals('/json/delete', $insert->getPath());
+		$this->assertEquals('/delete', $insert->getPath());
 	}
 
 	public function testGetMethod() {

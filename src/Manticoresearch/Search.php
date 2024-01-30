@@ -7,6 +7,7 @@ use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\Distance;
 use Manticoresearch\Query\Equals;
 use Manticoresearch\Query\In;
+use Manticoresearch\Query\KnnQuery;
 use Manticoresearch\Query\MatchPhrase;
 use Manticoresearch\Query\MatchQuery;
 use Manticoresearch\Query\QueryString;
@@ -91,6 +92,11 @@ class Search
 			return $this;
 		}
 		$this->query->must(new QueryString($queryString));
+		return $this;
+	}
+
+	public function knn($field, $knnTarget, $docCount): self {
+		$this->query = new KnnQuery($field, $knnTarget, $docCount);
 		return $this;
 	}
 
@@ -319,7 +325,11 @@ class Search
 		$body = $this->params;
 		$query = $this->query->toArray();
 		if ($query !== null) {
-			$body['query'] = $query;
+			if (is_a($this->query, KnnQuery::class)) {
+				$body['knn'] = $query;
+			} else {
+				$body['query'] = $query;
+			}
 		}
 
 		if (isset($this->params['script_fields'])) {

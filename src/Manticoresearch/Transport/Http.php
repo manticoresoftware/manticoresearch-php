@@ -52,7 +52,6 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 		}
 		curl_setopt($conn, CURLOPT_CUSTOMREQUEST, $method);
 		curl_setopt($conn, CURLOPT_HTTPHEADER, $headers);
-
 		if ($connection->getConnectTimeout() > 0) {
 			curl_setopt($conn, CURLOPT_CONNECTTIMEOUT, $connection->getConnectTimeout());
 		}

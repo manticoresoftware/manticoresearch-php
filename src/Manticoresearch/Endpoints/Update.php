@@ -15,7 +15,7 @@ class Update extends Request
 	 * @return mixed|string
 	 */
 	public function getPath() {
-		return '/json/update';
+		return '/update';
 	}
 
 	/**

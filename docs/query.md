@@ -87,7 +87,7 @@ $bool->must(new \Manticoresearch\Query\Range('year', ['lte' => 2020]));
 ## Distance()
 
 Creates a `geo_distance` expression.
-Expects an array that follows the syntax defined in `/json/search`:
+Expects an array that follows the syntax defined in `/search`:
 
 - `location_anchor` containing the pin object
 - `location_source` containing the attributes with lat/long
@@ -127,4 +127,17 @@ Both sugar syntaxes can also be mixed:
 ```php
 $response = $search->search('"team of explorers"/2')->filter(new \Manticoresearch\Query\Equals('year', 2014))->get();
 ```
+
+## KnnQuery()
+
+Constructor of the knn node:
+```php
+$knn1 = new \Manticoresearch\Query\KnnQuery('some_float_vector_field', [0.1, 0.45, 0.3], 5);
+$knn2 = new \Manticoresearch\Query\KnnQuery('some_float_vector_field', 2, 5);
+```
+It accepts:
+- a name of the `float_vector` type field
+- a float vector or a document id to execute knn search by 
+- a number of most similar documents to return
+
 <!-- proofread -->

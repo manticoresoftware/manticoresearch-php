@@ -37,14 +37,14 @@ class DocTest extends \PHPUnit\Framework\TestCase
 	public function testGetPathNoID() {
 		$doc = new Doc();
 		$doc->setIndex('products');
-		$this->assertEquals('/json/pq/products/doc', $doc->getPath());
+		$this->assertEquals('/pq/products/doc', $doc->getPath());
 	}
 
 	public function testGetPathWithID() {
 		$doc = new Doc();
 		$doc->setIndex('products');
 		$doc->setId(4);
-		$this->assertEquals('/json/pq/products/doc/4', $doc->getPath());
+		$this->assertEquals('/pq/products/doc/4', $doc->getPath());
 	}
 
 	public function testMethod() {

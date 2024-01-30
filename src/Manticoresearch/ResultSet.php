@@ -39,7 +39,7 @@ class ResultSet implements \Iterator, \Countable
 		$this->response = $responseObj;
 		$response = $responseObj->getResponse();
 		if (isset($response['hits']['hits'])) {
-			$this->array = $response['hits']['hits'];
+			$this->array = array_values($response['hits']['hits']);
 			$this->total = $response['hits']['total'];
 		} else {
 			$this->total = 0;

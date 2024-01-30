@@ -53,6 +53,14 @@ class SearchTest extends TestCase
 					'lat' => ['type' => 'float'],
 					'lon' => ['type' => 'float'],
 					'advise' => ['type' => 'string'],
+					'kind' => [
+						'type' => 'float_vector',
+						'options' => [
+							"knn_type='hnsw'",
+							"knn_dims='2'",
+							"hnsw_similarity='l2'",
+						],
+					],
 				],
 			],
 		];
@@ -68,6 +76,7 @@ class SearchTest extends TestCase
 						'genre' => ['drama', 'scifi', 'thriller']],
 					'lat' => 51.2, 'lon' => 47.5,
 					'advise' => 'PG-13',
+					'kind' => [0.2,0.3],
 				],
 			]],
 			['insert' => ['index' => 'movies', 'id' => 3, 'doc' =>
@@ -78,6 +87,7 @@ class SearchTest extends TestCase
 						'genre' => ['action', 'scifi', 'thriller']],
 					'lat' => 51.9, 'lon' => 48.5,
 					'advise' => 'PG-13',
+					'kind' => [0.2,0.7],
 				],
 			]],
 			['insert' => ['index' => 'movies', 'id' => 4, 'doc' =>
@@ -88,6 +98,7 @@ class SearchTest extends TestCase
 					'meta' => ['keywords' => ['death', ' trench'], 'genre' => ['drama', 'war']],
 					'lat' => 51.1, 'lon' => 48.1,
 					'advise' => 'PG-13',
+					'kind' => [0.3,0.5],
 				],
 			]],
 			['insert' => ['index' => 'movies', 'id' => 5, 'doc' =>
@@ -98,6 +109,7 @@ class SearchTest extends TestCase
 					'meta' => ['keywords' => ['spaceship', 'monster', 'nasa'], 'genre' => ['scifi', 'horror']],
 					'lat' => 52.2, 'lon' => 48.9,
 					'advise' => 'R',
+					'kind' => [0.5,0.5],
 				],
 			]],
 			['insert' => ['index' => 'movies', 'id' => 6, 'doc' =>
@@ -110,6 +122,7 @@ class SearchTest extends TestCase
 						'genre' => ['scifi', 'action', 'adventure']],
 					'lat' => 51.6, 'lon' => 48.0,
 					'advise' => 'R',
+					'kind' => [0.7,0.2],
 				],
 			]],
 			['insert' => ['index' => 'movies', 'id' => 10, 'doc' =>
@@ -121,6 +134,7 @@ class SearchTest extends TestCase
 					'meta' => ['keywords' => ['alien', 'prison', 'android'], 'genre' => ['scifi', 'horror', 'action']],
 					'lat' => 51.8, 'lon' => 48.2,
 					'advise' => 'R',
+					'kind' => [0.9,0.9],
 				],
 			]],
 		];
@@ -740,14 +754,15 @@ class SearchTest extends TestCase
 		$this->assertEquals(
 			[
 			0 => 'advise',
-			1 => 'language',
-			2 => 'lat',
-			3 => 'lon',
-			4 => 'meta',
-			5 => 'plot',
-			6 => 'rating',
-			7 => 'title',
-			8 => 'year',
+			1 => 'kind',
+			2 => 'language',
+			3 => 'lat',
+			4 => 'lon',
+			5 => 'meta',
+			6 => 'plot',
+			7 => 'rating',
+			8 => 'title',
+			9 => 'year',
 			], $keys
 		);
 	}
@@ -799,5 +814,41 @@ class SearchTest extends TestCase
 		$this->assertCount(1, $facets);
 		$this->assertArrayHasKey('year', $facets);
 		$this->assertCount(3, $facets['year']['buckets']);
+	}
+
+	public function testKnnSearchByDocId() {
+		$results = static::$search->knn('kind', 3, 5)->get();
+		$resultIds = [4,5,2,6,10];
+		$this->assertCount(5, $results);
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+	}
+
+	/*public function testKnnSearchByDocIdWithFilter() {
+		$results = static::$search->knn('kind', 2, 3)->filter('id', 'range', [4,5])->get();
+		$this->assertCount(2, $results);
+		$resultIds = [5,4];
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+	}*/
+
+	public function testKnnSearchByQueryVector() {
+		$results = static::$search->knn('kind', [0.5,0.5], 4)->get();
+		$this->assertCount(6, $results);
+		$resultIds = [5,4,2,3,6,10];
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+	}
+
+	public function testKnnSearchByQueryVectorWithFilter() {
+		$results = static::$search->knn('kind', [0.5,0.5], 4)->filter('id', 'range', [1,4])->get();
+		$this->assertCount(3, $results);
+		$resultIds = [4,2,3];
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
 	}
 }
