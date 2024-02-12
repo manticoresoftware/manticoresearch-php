@@ -54,6 +54,7 @@ class ConnectionPool
 			$this->retriesInfo[] = [
 				'host' => $connection->getHost(),
 				'port' => $connection->getPort(),
+				'reason' => 'unknown',
 			];
 		}
 		if ($connection->isAlive()) {
@@ -66,7 +67,7 @@ class ConnectionPool
 		$exMsg .= "\nRetries made:\n";
 		foreach ($this->retriesInfo as $i => $info) {
 			$i++;
-			$exMsg .= " $i. to {$info['host']}:{$info['port']}\n";
+			$exMsg .= " $i. to {$info['host']}:{$info['port']}, failure reason:{$info['reason']}\n";
 		}
 		$connCount = sizeof($this->connections);
 		throw new NoMoreNodesException(
