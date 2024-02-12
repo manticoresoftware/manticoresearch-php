@@ -99,7 +99,7 @@ class ClientTest extends TestCase
 		];
 		$exMsg = "After 2 retries to 2 nodes, connection has failed. No more retries left.\n"
 			. "Retries made:\n 1. to 127.0.0.1:9418, failure reason: Connection refused\n"
-			. "2. to 127.0.0.2:9428, failure reason: Connection refused\n";
+			. " 2. to 127.0.0.2:9428, failure reason: Connection refused\n";
 		$client = new Client($params);
 		$this->expectException(ConnectionException::class);
 		$this->expectExceptionMessage($exMsg);
