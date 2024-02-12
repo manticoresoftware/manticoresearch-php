@@ -357,10 +357,15 @@ class Client
 			$this->initConnections();
 			throw $e;
 		} catch (ConnectionException $e) {
+			$curRetryCount = sizeof($this->connectionPool->retriesInfo);
+			$exMsg = $e->getMessage();
+			// We rely on the common error message format from Manticore here
+			$exceptionReason = substr($exMsg, strrpos($exMsg, ':') + 1);
+			$this->connectionPool->retriesInfo[$curRetryCount - 1]['reason'] = $exceptionReason;
 			$this->logger->warning(
 				'Manticore Search Request failed on attempt ' . $this->connectionPool->retriesAttempts . ':',
 				[
-					'exception' => $e->getMessage(),
+					'exception' => $exMsg,
 					'request' => $e->getRequest()->toArray(),
 				]
 			);
