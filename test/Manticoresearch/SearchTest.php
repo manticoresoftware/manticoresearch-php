@@ -787,16 +787,16 @@ class SearchTest extends TestCase
 		sort($keys);
 		$this->assertEquals(
 			[
-			0 => 'advise',
-			1 => 'kind',
-			2 => 'language',
-			3 => 'lat',
-			4 => 'lon',
-			5 => 'meta',
-			6 => 'plot',
-			7 => 'rating',
-			8 => 'title',
-			9 => '_year',
+			0 => '_year',
+			1 => 'advise',
+			2 => 'kind',
+			3 => 'language',
+			4 => 'lat',
+			5 => 'lon',
+			6 => 'meta',
+			7 => 'plot',
+			8 => 'rating',
+			9 => 'title',
 			], $keys
 		);
 	}
