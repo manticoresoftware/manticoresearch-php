@@ -81,7 +81,7 @@ Each facet is an array containing the faceted values and counts in the `buckets`
 
 ``` php
 $facets = $results->getFacets();
-$year_facet = $facets['year'];
+$year_facet = $facets['_year'];
 print_r($year_facet);
 
 (

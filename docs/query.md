@@ -15,8 +15,8 @@ Bool queries can be nested, meaning that nodes added to a root `BoolQuery` can, 
 
 ```php
 $bool2 = new \Manticoresearch\Query\BoolQuery();
-$bool2->should(new \Manticoresearch\Query\('year', 2000));
-$bool2->should(new \Manticoresearch\Query\('year', 2010));
+$bool2->should(new \Manticoresearch\Query\('_year', 2000));
+$bool2->should(new \Manticoresearch\Query\('_year', 2010));
 $bool->must($bool2);
 ```
 
@@ -59,7 +59,7 @@ Creates an `in` filter.
 Expects two arguments: an attribute or alias name and an array with values.
 
  ```php
-$bool->must(new \Manticoresearch\Query\In('year', [2014,2015,2016]));
+$bool->must(new \Manticoresearch\Query\In('_year', [2014,2015,2016]));
 ```
 
 ## Equals()
@@ -69,7 +69,7 @@ Creates an `equals` filter.
 Expects two arguments: an attribute or alias name and a value.
 
  ```php
-$bool->must(new \Manticoresearch\Query\Equals('year', 2014));
+$bool->must(new \Manticoresearch\Query\Equals('_year', 2014));
 ```
 
 
@@ -80,7 +80,7 @@ Creates an `equals` filter.
 Expects two arguments: an attribute or alias name and an array of operator => value pairs.
 
  ```php
-$bool->must(new \Manticoresearch\Query\Range('year', ['lte' => 2020]));
+$bool->must(new \Manticoresearch\Query\Range('_year', ['lte' => 2020]));
 ```
 
 
@@ -111,21 +111,21 @@ $bool->must(new \Manticoresearch\Query\Distance([
 
 This code :
 ```php
-$response = $search->search('"team of explorers"/2')->filter('year', 'equals', 2014)->get();
+$response = $search->search('"team of explorers"/2')->filter('_year', 'equals', 2014)->get();
 ```
 
 can be rewritten as:
 ```php
 $q = new \Manticoresearch\Query\BoolQuery();
 $q->must(new \Manticoresearch\Query\MatchQuery(['query' => 'team of explorers', 'operator' => 'or'], '*'));
-$q->must(new \Manticoresearch\Query\Equals('year', 2014));
+$q->must(new \Manticoresearch\Query\Equals('_year', 2014));
 $response = $search->search($q)->get();
 ```
 
 Both sugar syntaxes can also be mixed:
 
 ```php
-$response = $search->search('"team of explorers"/2')->filter(new \Manticoresearch\Query\Equals('year', 2014))->get();
+$response = $search->search('"team of explorers"/2')->filter(new \Manticoresearch\Query\Equals('_year', 2014))->get();
 ```
 
 ## KnnQuery()

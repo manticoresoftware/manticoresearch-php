@@ -245,14 +245,14 @@ $index->updateDocuments(['price'=>100],['match'=>['*'=>'apple']]);
 An example using a Query object:
 
 ```php
-$index->updateDocuments(['year'=>2000], new \Manticoresearch\Query\MatchQuery('team','*'));
+$index->updateDocuments(['_year'=>2000], new \Manticoresearch\Query\MatchQuery('team','*'));
 ```
 
 ```php
 $bool = new BoolQuery();
 $bool->must(new \Manticoresearch\Query\MatchQuery('team','*'));
 $bool->must(new \Manticoresearch\Query\Range('rating',['gte'=>8.5]));
-$response = $index->updateDocuments(['year'=>2000], $bool);
+$response = $index->updateDocuments(['_year'=>2000], $bool);
 ```
 
 It returns an array with:

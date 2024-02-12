@@ -112,32 +112,32 @@ It can expect 3 parameters for filtering an attribute:
 `orFilter()` executes logical disjunction in case of multiple filters. Alternatively, the `OR` filtering condition can be used.
 
 ```php
-$search->filter('year', 'equals', 2000);
-$search->filter('year', 'lte', 2000);
-$search->filter('year', 'range', [1960,1992]);
-$search->filter('year', 'in', [1960,1975,1990]);
+$search->filter('_year', 'equals', 2000);
+$search->filter('_year', 'lte', 2000);
+$search->filter('_year', 'range', [1960,1992]);
+$search->filter('_year', 'in', [1960,1975,1990]);
 ```
 
 ```php
-$search->filter('year', 'equals', 2000, 'OR');
-$search->filter('year', 'equals', 2002, 'OR');
+$search->filter('_year', 'equals', 2000, 'OR');
+$search->filter('_year', 'equals', 2002, 'OR');
 
-$search->filter('year', 'range', [1960,1992], 'OR');
-$search->filter('year', 'range', [1995,2000], 'OR');
+$search->filter('_year', 'range', [1960,1992], 'OR');
+$search->filter('_year', 'range', [1995,2000], 'OR');
 
-$search->orFilter('year', 'equals', 2000);
-$search->orFilter('year', 'equals', 2002);
+$search->orFilter('_year', 'equals', 2000);
+$search->orFilter('_year', 'equals', 2002);
 
-$search->orFilter('year', 'range', [1960,1992]);
-$search->orFilter('year', 'range', [1995,2000]);
+$search->orFilter('_year', 'range', [1960,1992]);
+$search->orFilter('_year', 'range', [1995,2000]);
 ```
 
 ```php
-$search->filter('year', 'equals', 2000, 'NOT');
-$search->filter('year', 'lte', 1995, 'NOT');
+$search->filter('_year', 'equals', 2000, 'NOT');
+$search->filter('_year', 'lte', 1995, 'NOT');
 
-$search->notFilter('year', 'equals', 2000);
-$search->notFilter('year', 'lte', 1995);
+$search->notFilter('_year', 'equals', 2000);
+$search->notFilter('_year', 'lte', 1995);
 
 ```
 
@@ -145,13 +145,13 @@ $search->notFilter('year', 'lte', 1995);
 Note that the `equals` operator can be omitted, and the filter function can be called only with the `value` parameter, as shown in the example below:
 
 ```php
-$search->filter('year', 2000);
+$search->filter('_year', 2000);
 ```
 
 The functions can also accept a single parameter as a filter class like `Range()`, `Equals()`, or `Distance()`.
 
 ```php
-$search->filter(new Range('year', ['lte' => 2020]));
+$search->filter(new Range('_year', ['lte' => 2020]));
 ```
 
 ### sort()
@@ -204,7 +204,7 @@ $search->sort([
 The `sort` method can be chained. For example:
 
 ```php
-$search->sort('name','asc')->sort('tags', 'desc')->sort('year', 'asc');
+$search->sort('name','asc')->sort('tags', 'desc')->sort('_year', 'asc');
 ```
 
 Note that the maximum number of attributes to sort by is equal to 5.
