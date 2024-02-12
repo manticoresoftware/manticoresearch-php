@@ -35,7 +35,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
 					'thread_stack',
 					'threads_ex',
 					'threads_ex_effective',
-					'timezone'
+					'timezone',
 				], $keys
 			);
 		} catch (\PHPUnit\Framework\ExpectationFailedException $e) {
