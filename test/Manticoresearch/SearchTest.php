@@ -859,14 +859,14 @@ class SearchTest extends TestCase
 		}
 	}
 
-	/*public function testKnnSearchByDocIdWithFilter() {
+	public function testKnnSearchByDocIdWithFilter() {
 		$results = static::$search->knn('kind', 2, 3)->filter('id', 'range', [4,5])->get();
 		$this->assertCount(2, $results);
 		$resultIds = [5,4];
 		foreach ($results as $i => $resultHit) {
 			$this->assertEquals($resultIds[$i], $resultHit->getId());
 		}
-	}*/
+	}
 
 	public function testKnnSearchByQueryVector() {
 		$results = static::$search->knn('kind', [0.5,0.5], 4)->get();
