@@ -862,7 +862,7 @@ class SearchTest extends TestCase
 	public function testKnnSearchByDocIdWithFilter() {
 		$results = static::$search->knn('kind', 2, 3)->filter('id', 'range', [4,5])->get();
 		$this->assertCount(2, $results);
-		$resultIds = [5,4];
+		$resultIds = [4,5];
 		foreach ($results as $i => $resultHit) {
 			$this->assertEquals($resultIds[$i], $resultHit->getId());
 		}
