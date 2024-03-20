@@ -347,6 +347,7 @@ class Client
 			$connection = $this->connectionPool->getConnection();
 			$this->lastResponse = $connection->getTransportHandler($this->logger)->execute($request, $params);
 		} catch (NoMoreNodesException $e) {
+			$e->setRequest($request);
 			$this->logger->error(
 				'Manticore Search Request out of retries:', [
 				'exception' => $e->getMessage(),
