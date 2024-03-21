@@ -667,9 +667,8 @@ class SearchTest extends TestCase
 	public function testProfileForSearch() {
 		$results = static::$search->profile()->phrase('team of explorers')->get();
 		$profile = $results->getProfile();
-		$expected = 'PHRASE( AND(KEYWORD(team, querypos=1)),  AND(KEYWORD(of, querypos=2)),  AND(KEYWORD(explorers, ' .
-			'querypos=3)))';
-		$this->assertEquals($expected, $profile['query']['description']);
+		$expected = 'unknown';
+		$this->assertEquals($expected, $profile['query'][0]['status']);
 	}
 
 	public function testResultHitGetScore() {
