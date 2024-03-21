@@ -32,4 +32,8 @@ class ConnectionException extends \RuntimeException implements ExceptionInterfac
 	public function getRequest() {
 		return $this->request;
 	}
+
+	public function setRequest(Request $request): void {
+		$this->request = $request;
+	}
 }
