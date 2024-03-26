@@ -32,8 +32,8 @@ class ResultHit
 	}
 
 	/**
-	 * We have _knn_dist only for vector search results, 
-	 * while for keyword search we can miss it. 
+	 * We have _knn_dist only for vector search results,
+	 * while for keyword search we can miss it.
 	 * So we return null when there is no such field or float
 	 * @return ?float
 	 */
