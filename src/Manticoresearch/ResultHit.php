@@ -31,8 +31,14 @@ class ResultHit
 		return $this->data['_score'];
 	}
 
-	public function getKnnDist() {
-		return $this->data['_knn_dist'] ?? 0;
+	/**
+	 * We have _knn_dist only for vector search results, 
+	 * while for keyword search we can miss it. 
+	 * So we return null when there is no such field or float
+	 * @return ?float
+	 */
+	public function getKnnDist(): ?float {
+		return $this->data['_knn_dist'] ?? null;
 	}
 
 	public function getHighlight() {
