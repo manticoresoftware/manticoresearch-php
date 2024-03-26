@@ -31,6 +31,10 @@ class ResultHit
 		return $this->data['_score'];
 	}
 
+	public function getKnnDist() {
+		return $this->data['_knn_dist'] ?? 0;
+	}
+
 	public function getHighlight() {
 		return $this->data['highlight'];
 	}
