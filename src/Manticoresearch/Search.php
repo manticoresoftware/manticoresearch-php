@@ -94,7 +94,7 @@ class Search
 			} else {
 				$this->query = $queryString;
 			}
-		} else  {
+		} else {
 			$this->query->must(new QueryString($queryString));
 		}
 		return $this;
