@@ -88,15 +88,31 @@ class Search
 	 */
 	public function search($queryString): self {
 		if (is_object($queryString)) {
-			$this->query = $queryString;
-			return $this;
+			// we use the search query as a full-text filter for the existing knn query
+			if (is_a($this->query, KnnQuery::class)) {
+				$this->filter($queryString);
+			} else {
+				$this->query = $queryString;
+			}
+		} else  {
+			$this->query->must(new QueryString($queryString));
 		}
-		$this->query->must(new QueryString($queryString));
 		return $this;
 	}
 
 	public function knn($field, $knnTarget, $docCount): self {
+		$filter = $this->query->toArray();
 		$this->query = new KnnQuery($field, $knnTarget, $docCount);
+		// we use the existing search query as a full-text filter for the knn query
+		if (isset($filter['bool']) && $filter['bool']) {
+			$filter = $filter['bool'];
+			foreach ($filter as $k => $vals) {
+				$op = ($k === 'must_not') ? 'mustNot' : $k;
+				foreach ($vals as $v) {
+					$this->query->$op($v);
+				}
+			}
+		}
 		return $this;
 	}
 

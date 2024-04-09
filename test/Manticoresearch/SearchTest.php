@@ -858,6 +858,22 @@ class SearchTest extends TestCase
 		}
 	}
 
+	public function testKnnSearchByDocIdWithChainedSearch() {
+		$resultIds = [5,10];
+		$results = static::$search->knn('kind', 3, 5)->search('Alien')->get();
+		$this->assertCount(2, $results);
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+		static::$search->reset();
+		static::$search->setIndex('movies');
+		$results = static::$search->search('Alien')->knn('kind', 3, 5)->get();
+		$this->assertCount(2, $results);
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+	}
+
 	public function testKnnSearchByDocIdWithFilter() {
 		$results = static::$search->knn('kind', 2, 3)->filter('id', 'range', [4,5])->get();
 		$this->assertCount(2, $results);
@@ -884,4 +900,5 @@ class SearchTest extends TestCase
 			$this->assertEquals($resultIds[$i], $resultHit->getId());
 		}
 	}
+
 }
