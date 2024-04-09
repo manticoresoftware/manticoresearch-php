@@ -22,7 +22,7 @@ class DeleteByQueryTest extends \PHPUnit\Framework\TestCase
 	public function testGetPath() {
 		$dbq = new DeleteByQuery();
 		$dbq->setIndex('products');
-		$this->assertEquals('/pq/products/_search', $dbq->getPath());
+		$this->assertEquals('/pq/products/_delete_by_query', $dbq->getPath());
 	}
 
 	public function testGetPathIndexMissing() {
