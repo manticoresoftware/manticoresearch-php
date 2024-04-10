@@ -265,7 +265,7 @@ class Search
 		$sortField = null,
 		$sortDirection = 'desc',
 		$multiGroup = null,
-	) : self {
+	): self {
 		if ($group === null) {
 			$group = $field;
 		}
@@ -290,11 +290,11 @@ class Search
 			}
 			$this->params['aggs'][$group] = $facet;
 		}
-		
+
 		return $this;
 	}
 
-	public function multiFacet($group, $limit = null) : self {
+	public function multiFacet($group, $limit = null): self {
 		// reset multi facets
 		if ($group === false) {
 			$this->params['aggs'] = array_filter(
