@@ -258,22 +258,57 @@ class Search
 		return $this;
 	}
 
-	public function facet($field, $group = null, $limit = null, $sortField = null, $sortDirection = 'desc') : self {
-		// reset facets
-		if ($field === false) {
-			$this->params['aggs'] = [];
-		}
+	public function facet(
+		$field,
+		$group = null,
+		$limit = null,
+		$sortField = null,
+		$sortDirection = 'desc',
+		$multiGroup = null,
+	) : self {
 		if ($group === null) {
 			$group = $field;
 		}
-			$terms = ['field' => $field];
+		$terms = ['field' => $field];
 		if ($limit !== null) {
 			$terms['size'] = $limit;
 		}
-		$this->params['aggs'][$group] = ['terms' => $terms];
+		$facet = ['terms' => $terms];
 		if ($sortField !== null) {
-			$this->params['aggs'][$group]['sort'] = [ [$sortField => $sortDirection] ];
+			$facet['sort'] = [ [$sortField => $sortDirection] ];
 		}
+		if ($multiGroup !== null && isset($this->params['aggs'], $this->params['aggs'][$multiGroup])) {
+			// reset facets
+			if ($field === false) {
+				$this->params['aggs'][$multiGroup]['sources'] = [];
+			}
+			$this->params['aggs'][$multiGroup]['composite']['sources'][] = [ $group => $facet ];
+		} else {
+			// reset facets
+			if ($field === false) {
+				$this->params['aggs'] = [];
+			}
+			$this->params['aggs'][$group] = $facet;
+		}
+		
+		return $this;
+	}
+
+	public function multiFacet($group, $limit = null) : self {
+		// reset multi facets
+		if ($group === false) {
+			$this->params['aggs'] = array_filter(
+				$this->params['aggs'],
+				function ($v) {
+					return isset($v['composite']);
+				},
+			);
+		}
+		$this->params['aggs'][$group] = [ 'composite' => [ 'sources' => [] ] ];
+		if ($limit !== null) {
+			$this->params['aggs'][$group]['composite']['size'] = $limit;
+		}
+
 		return $this;
 	}
 
@@ -332,6 +367,7 @@ class Search
 	 */
 	public function get() {
 		$this->body = $this->compile();
+		print_r($this->body);
 		$resp = $this->client->search(['body' => $this->body], true);
 		return new ResultSet($resp);
 	}
