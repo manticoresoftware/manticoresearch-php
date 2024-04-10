@@ -301,7 +301,7 @@ class Search
 				$this->params['aggs'],
 				function ($v) {
 					return isset($v['composite']);
-				},
+				}
 			);
 		}
 		$this->params['aggs'][$group] = [ 'composite' => [ 'sources' => [] ] ];
