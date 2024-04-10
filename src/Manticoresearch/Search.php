@@ -264,7 +264,7 @@ class Search
 		$limit = null,
 		$sortField = null,
 		$sortDirection = 'desc',
-		$multiGroup = null,
+		$multiGroup = null
 	): self {
 		if ($group === null) {
 			$group = $field;
