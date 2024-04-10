@@ -849,6 +849,17 @@ class SearchTest extends TestCase
 		$this->assertCount(3, $facets['_year']['buckets']);
 	}
 
+	public function multiFacets() {
+		$results = static::$search->filter('_year', 'range', [1960,1992])->multiFacet('multi')
+			->facet('_year', null, null, null, 'desc', 'multi')
+			->facet('rating', null, null, null, 'desc', 'multi')
+			->get();
+		$facets = $results->getFacets();
+		$this->assertCount(1, $facets);
+		$this->assertArrayHasKey('_year', $facets);
+		$this->assertCount(3, $facets['_year']['buckets']);
+	}
+
 	public function testKnnSearchByDocId() {
 		$results = static::$search->knn('kind', 3, 5)->get();
 		$resultIds = [4,5,2,6,10];

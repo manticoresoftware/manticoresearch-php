@@ -252,13 +252,27 @@ The `facet()` method allows you to add a facet (aggregation) to your search quer
 $search->facet($field, $group = null, $limit = null, $sortField = null, $sortDirection = 'desc');
 ```
 Parameters:
- * attribute name - This is a required parameter and can also be an expression name.
- * facet alias - If not provided, the attribute name will be utilized.
+ * field - name of the attribute to group by. This is a required parameter and can also be an expression name.
+ * group - Facet name. If not provided, the attribute name will be utilized.
  * limit - Defines the maximum number of facet values to return.
  * sortField - Field the facet values will be sorted by. Also, can be set as `COUNT(*)` or `FACET()`. For details, see [Ordering in facet result](https://manual.manticoresearch.com/Searching/Faceted_search#Ordering-in-facet-result).
  * sortDirection - Direction of sorting, `desc` by default
 
 Facets will be included in the result set and can be accessed using [ResultSet:getFacets()](searchresults.md#resultset-object).
+
+### multiFacet()
+
+The `multiFacet()` method allows you to add a facet (aggregation) composed by multiple fields to your search query.
+
+```php
+$search->multiFacet($group = null, $limit = null);
+```
+Parameters:
+ * group - Facet name. This is a required parameter.
+ * limit - Defines the maximum number of facet values to return.
+
+Multi field facets will be included in the result set and can be accessed using [ResultSet:getFacets()](searchresults.md#resultset-object).
+
 
 ### option()
 
