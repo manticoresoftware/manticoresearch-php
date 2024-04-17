@@ -209,7 +209,7 @@ class Index
 			$data = json_decode($data, true);
 		}
 		if ($isPartialReplace) {
-			return $this->client->partialReplace($data, $this->index, $id);
+			return $this->client->partialReplace($this->index, $id, $data);
 		}
 		$params = [
 			'body' => [

@@ -111,11 +111,11 @@ class IndexTest extends TestCase
 			'_shards' => [
 				'failed' => 0,
 				'successful' => 1,
-				'total' => 1
+				'total' => 1,
 			],
 			'_type' => '_doc',
 			'_version' => 1,
-			'result' => 'updated'
+			'result' => 'updated',
 			], $response
 		);
 	}

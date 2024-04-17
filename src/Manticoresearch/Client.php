@@ -196,14 +196,16 @@ class Client
 
 	/**
 	 * Endpoint: _update
+	 * @param string $index
+	 * @param int $id
 	 * @param array $params
 	 * @return mixed
 	 */
-	public function partialReplace(array $params = [], int $id) {
+	public function partialReplace(string $index, int $id, array $params = []) {
 		$endpoint = new Endpoints\PartialReplace($params);
-		$endpoint->setPath($id);
+		$endpoint->setPathByIndexAndId($index, $id);
 		$response = $this->request($endpoint);
-		
+
 		return $response->getResponse();
 	}
 

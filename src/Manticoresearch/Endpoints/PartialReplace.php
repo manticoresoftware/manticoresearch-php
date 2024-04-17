@@ -20,7 +20,7 @@ class PartialReplace extends Request
 	 * @param string $index
 	 * @param int $id
 	 */
-	public function setPath($index, $id) {
+	public function setPathByIndexAndId($index, $id) {
 		$path = '/' .  $index . '/_update/' . $id;
 		parent::setPath($path);
 	}
