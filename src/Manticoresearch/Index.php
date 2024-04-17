@@ -200,7 +200,7 @@ class Index
 		return $this->client->update($params);
 	}
 
-	public function replaceDocument($data, $id) {
+	public function replaceDocument($data, $id, $isPartialReplace = false) {
 		static::checkDocumentId($id);
 		static::checkDocument($data);
 		if (is_object($data)) {
@@ -210,10 +210,16 @@ class Index
 		}
 		$params = [
 			'body' => [
-				'index' => $this->index,
-				'id' => $id,
 				'doc' => $data,
 			],
+		];
+		if ($isPartialReplace) {
+			return $this->client->partialReplace($this->index, $id, $params);
+		}
+		$params['body'] += [
+			'index' => $this->index,
+			'id' => $id,
+			'doc' => $data,
 		];
 		if ($this->cluster !== null) {
 			$params['body']['cluster'] = $this->cluster;
