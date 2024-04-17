@@ -200,13 +200,16 @@ class Index
 		return $this->client->update($params);
 	}
 
-	public function replaceDocument($data, $id) {
+	public function replaceDocument($data, $id, $isPartialReplace = false) {
 		static::checkDocumentId($id);
 		static::checkDocument($data);
 		if (is_object($data)) {
 			$data = (array)$data;
 		} elseif (is_string($data)) {
 			$data = json_decode($data, true);
+		}
+		if ($isPartialReplace) {
+			return $this->client->partialReplace($data, $this->index, $id);
 		}
 		$params = [
 			'body' => [

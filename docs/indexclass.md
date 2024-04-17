@@ -140,6 +140,7 @@ Replace an existing document in the index.
 Expects:
 - an array of values
 - a document ID
+- to execute a partial replace ( `false|true`, `false` by default )
 
 Example:
 
@@ -155,6 +156,15 @@ $index->replaceDocument([
             ]
         ], 1);
 ```
+
+```php
+$index->replaceDocument([
+            'title' => 'find me',
+            'label' => 'not used'
+        ], 2, true);
+```
+
+
 
 ### replaceDocuments()
 

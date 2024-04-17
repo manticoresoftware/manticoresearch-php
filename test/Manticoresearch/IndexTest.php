@@ -92,6 +92,34 @@ class IndexTest extends TestCase
 		);
 	}
 
+	public function testPartialReplaceDocument() {
+		$index = $this->getIndex();
+		$this->addDocument($index);
+		$response = $index->replaceDocument(
+			[
+				'title' => 'This is an example document for cooking',
+				'label' => 'not used',
+			], 1, true
+		);
+
+		$this->assertEquals(
+			[
+			'_id' => 1,
+			'_index' => 'testindex',
+			'_primary_term' => 1,
+			'_seq_no' => 0,
+			'_shards' => [
+				'failed' => 0,
+				'successful' => 1,
+				'total' => 1
+			],
+			'_type' => '_doc',
+			'_version' => 1,
+			'result' => 'updated'
+			], $response
+		);
+	}
+
 	public function testReplaceDocuments() {
 		$index = $this->getIndex();
 		$this->addDocument($index);
