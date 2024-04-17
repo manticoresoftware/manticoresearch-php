@@ -17,10 +17,12 @@ class PartialReplace extends Request
 	protected $index;
 
 	/**
-	 * @return mixed|string
+	 * @param string $index
+	 * @param int $id
 	 */
 	public function setPath($index, $id) {
-		$this->path = '/' .  $index . '/_update/' . $id;
+		$path = '/' .  $index . '/_update/' . $id;
+		parent::setPath($path);
 	}
 
 	/**
