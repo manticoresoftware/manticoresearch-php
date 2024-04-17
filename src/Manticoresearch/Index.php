@@ -208,15 +208,18 @@ class Index
 		} elseif (is_string($data)) {
 			$data = json_decode($data, true);
 		}
-		if ($isPartialReplace) {
-			return $this->client->partialReplace($this->index, $id, $data);
-		}
 		$params = [
 			'body' => [
-				'index' => $this->index,
-				'id' => $id,
 				'doc' => $data,
 			],
+		];
+		if ($isPartialReplace) {
+			return $this->client->partialReplace($this->index, $id, $params);
+		}
+		$params['body'] += [
+			'index' => $this->index,
+			'id' => $id,
+			'doc' => $data,
 		];
 		if ($this->cluster !== null) {
 			$params['body']['cluster'] = $this->cluster;
