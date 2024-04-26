@@ -1,5 +1,10 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
+
 namespace Manticoresearch\Transport;
 
 use Manticoresearch\Exceptions\ConnectionException;
@@ -57,7 +62,6 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 		}
 
 		if ($connection->getConfig('username') !== null && $connection->getConfig('password') !== null) {
-			curl_setopt($conn, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
 			curl_setopt(
 				$conn,
 				CURLOPT_USERPWD,

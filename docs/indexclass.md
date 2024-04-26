@@ -133,6 +133,26 @@ Returns an array response with:
 - errors - stating whether an error occurred
 - items - response status for each document.
 
+### getDocumentById()
+
+Get an existing document by its ID.
+Expects:
+- a document ID
+Example:
+
+```php
+$index->getDocumentById(1);
+```
+
+### getDocumentByIds()
+Get multiple documents by their IDs.
+Expects:
+- an array of document IDs
+Example:
+
+```php
+$index->getDocumentByIds([1,3,5]);
+```
 
 ### replaceDocument()
 
