@@ -371,7 +371,8 @@ class Client
 	public function request(Request $request, array $params = []): Response {
 		try {
 			$connection = $this->connectionPool->getConnection();
-			$this->lastResponse = $connection->getTransportHandler($this->logger, [$this->id])->execute($request, $params);
+			$this->lastResponse = $connection->getTransportHandler($this->logger, [$this->id])
+				->execute($request, $params);
 		} catch (NoMoreNodesException $e) {
 			$e->setRequest($request);
 			$this->logger->error(
