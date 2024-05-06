@@ -371,7 +371,6 @@ class Search
 	 */
 	public function get() {
 		$this->body = $this->compile();
-		print_r($this->body);
 		$resp = $this->client->search(['body' => $this->body], true);
 		return new ResultSet($resp);
 	}
