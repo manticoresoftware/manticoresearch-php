@@ -9,6 +9,7 @@ namespace Manticoresearch\Test;
 
 use Manticoresearch\Connection;
 use Manticoresearch\Transport;
+use Manticoresearch\Transport\Http;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -19,6 +20,12 @@ class TransportTest extends TestCase
 		$this->expectException('Exception');
 		$this->expectExceptionMessage('Bad transport');
 		Transport::create('badtransport', $connection, new NullLogger());
+	}
+
+	public function testStaticTransportCreateWithClientParams() {
+		$connection = new Connection([]);
+		$httpTransport = Transport::create('Http', $connection, new NullLogger(), ['xyz']);
+		$this->assertInstanceOf(Http::class, $httpTransport);
 	}
 
 	public function testSetUpURI() {

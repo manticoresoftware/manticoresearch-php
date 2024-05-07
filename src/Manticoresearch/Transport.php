@@ -58,14 +58,20 @@ class Transport
 	 * @param string $transport
 	 * @param Connection $connection
 	 * @param LoggerInterface $logger
+	 * @param array<mixed> $clientParams
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	public static function create($transport, Connection $connection, LoggerInterface $logger) {
+	public static function create(
+		string $transport,
+		Connection $connection,
+		LoggerInterface $logger,
+		array $clientParams = []
+	) {
 		if (is_string($transport)) {
 			$className = "Manticoresearch\\Transport\\$transport";
 			if (class_exists($className)) {
-				$transport = new $className($connection, $logger);
+				$transport = new $className($connection, $logger, ...$clientParams);
 			}
 		}
 		if (!($transport instanceof self)) {

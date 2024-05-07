@@ -7,10 +7,12 @@
 
 namespace Manticoresearch\Transport;
 
+use Manticoresearch\Connection;
 use Manticoresearch\Exceptions\ConnectionException;
 use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Request;
 use Manticoresearch\Response;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Http
@@ -24,7 +26,27 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 	 */
 	protected $scheme = 'http';
 
+	/**
+	 * @var string
+	 */
+	protected $clientId;
+
 	protected static $curl = null;
+
+	/**
+	 * HTTP Transport constructor.
+	 * @param Connection|null $connection
+	 * @param LoggerInterface|null $logger
+	 * @param string|null $clientId
+	 */
+	public function __construct(
+		Connection $connection = null,
+		LoggerInterface $logger = null,
+		string $clientId = null
+	) {
+		parent::__construct($connection, $logger);
+		$this->clientId = $clientId;
+	}
 
 	public function execute(Request $request, $params = []) {
 		$connection = $this->getConnection();
@@ -138,9 +160,13 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 	}
 
 	protected function getCurlConnection(bool $persistent = true) {
-		if (!$persistent || !static::$curl) {
-			static::$curl = curl_init();
+		if (!$persistent || ($this->clientId === null) || (static::$curl === null)
+			|| !isset(static::$curl[$this->clientId])) {
+			if (static::$curl === null) {
+				static::$curl = [];
+			}
+			static::$curl[$this->clientId] = curl_init();
 		}
-		return static::$curl;
+		return static::$curl[$this->clientId];
 	}
 }

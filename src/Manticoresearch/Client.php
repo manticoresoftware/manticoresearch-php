@@ -36,6 +36,11 @@ class Client
 	const VERSION = '1.0.0';
 
 	/**
+	 * @var string
+	 */
+	protected $id;
+
+	/**
 	 * @var array
 	 */
 	protected $config = [];
@@ -61,6 +66,7 @@ class Client
 	 * $config['connectionStrategy'] = class name of pool strategy
 	 */
 	public function __construct($config = [], LoggerInterface $logger = null) {
+		$this->id = uniqid('', true);
 		$this->setConfig($config);
 		$this->logger = $logger ?? new NullLogger();
 		$this->initConnections();
@@ -365,7 +371,8 @@ class Client
 	public function request(Request $request, array $params = []): Response {
 		try {
 			$connection = $this->connectionPool->getConnection();
-			$this->lastResponse = $connection->getTransportHandler($this->logger)->execute($request, $params);
+			$this->lastResponse = $connection->getTransportHandler($this->logger, [$this->id])
+				->execute($request, $params);
 		} catch (NoMoreNodesException $e) {
 			$e->setRequest($request);
 			$this->logger->error(

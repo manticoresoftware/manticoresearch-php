@@ -176,11 +176,12 @@ class Connection
 
 	/**
 	 * @param LoggerInterface $logger
+	 * @param array<mixed> $clientParams
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	public function getTransportHandler(LoggerInterface $logger) {
-		return Transport::create($this->getTransport(), $this, $logger);
+	public function getTransportHandler(LoggerInterface $logger, array $clientParams = []) {
+		return Transport::create($this->getTransport(), $this, $logger, $clientParams);
 	}
 
 	/**
