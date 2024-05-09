@@ -9,8 +9,8 @@
 	"license" : "MIT",
 	"type" : "library",
 	"require" : {
-		"php" : "^7.1|^8.0",
-		"php-http/discovery": "^1.14",
+		"php" : "^7.4|^8.0",
+		"php-http/discovery" : "^1.14",
 		"ext-json" : "*",
 		"psr/log" : "^1.1 || ^2.0 || ^3.0"
 	},
