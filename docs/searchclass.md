@@ -78,7 +78,7 @@ $search->limit(10000)->maxMatches(10000);
 
 ### knn()
 
-Performs a [knn search](https://manual.manticoresearch.com/dev/Searching/KNN) query
+Performs a [knn search](https://manual.manticoresearch.com/Searching/KNN) query
 
 ```php
 $search->knn('some_float_vector_field', [0.567, 0.322], 100);
