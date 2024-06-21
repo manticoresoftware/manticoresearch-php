@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Manticoresearch;
 
+use Manticoresearch\Connection\ConnectionFactory;
 use Manticoresearch\Connection\ConnectionPool;
 use Manticoresearch\Connection\Strategy\SelectorInterface;
 use Manticoresearch\Connection\Strategy\StaticRoundRobin;
@@ -36,11 +37,6 @@ class Client
 	const VERSION = '1.0.0';
 
 	/**
-	 * @var string
-	 */
-	protected $id;
-
-	/**
 	 * @var array
 	 */
 	protected $config = [];
@@ -66,7 +62,6 @@ class Client
 	 * $config['connectionStrategy'] = class name of pool strategy
 	 */
 	public function __construct($config = [], LoggerInterface $logger = null) {
-		$this->id = uniqid('', true);
 		$this->setConfig($config);
 		$this->logger = $logger ?? new NullLogger();
 		$this->initConnections();
@@ -77,7 +72,7 @@ class Client
 		if (isset($this->config['connections'])) {
 			foreach ($this->config['connections'] as $connection) {
 				if (is_array($connection)) {
-					$connections[] = Connection::create($connection);
+					$connections[] = ConnectionFactory::create($connection);
 				} else {
 					$connections[] = $connection;
 				}
@@ -85,7 +80,7 @@ class Client
 		}
 
 		if (empty($connections)) {
-			$connections[] = Connection::create($this->config);
+			$connections[] = ConnectionFactory::create($this->config);
 		}
 		if (isset($this->config['connectionStrategy'])) {
 			if (is_string($this->config['connectionStrategy'])) {
@@ -371,7 +366,7 @@ class Client
 	public function request(Request $request, array $params = []): Response {
 		try {
 			$connection = $this->connectionPool->getConnection();
-			$this->lastResponse = $connection->getTransportHandler($this->logger, [$this->id])
+			$this->lastResponse = $connection->getTransportHandler($this->logger)
 				->execute($request, $params);
 		} catch (NoMoreNodesException $e) {
 			$e->setRequest($request);

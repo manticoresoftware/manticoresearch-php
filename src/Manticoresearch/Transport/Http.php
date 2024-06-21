@@ -27,30 +27,20 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 	protected $scheme = 'http';
 
 	/**
-	 * @var string
-	 */
-	protected $clientId;
-
-	protected static $curl = null;
-
-	/**
 	 * HTTP Transport constructor.
 	 * @param Connection|null $connection
 	 * @param LoggerInterface|null $logger
-	 * @param string|null $clientId
 	 */
 	public function __construct(
 		Connection $connection = null,
 		LoggerInterface $logger = null,
-		string $clientId = null
 	) {
 		parent::__construct($connection, $logger);
-		$this->clientId = $clientId;
 	}
 
 	public function execute(Request $request, $params = []) {
 		$connection = $this->getConnection();
-		$conn = $this->getCurlConnection($connection->getConfig('persistent'));
+		$conn = $connection->getCurl();
 		$url = $this->scheme . '://' . $connection->getHost() . ':' . $connection->getPort() . $connection->getPath();
 		$endpoint = $request->getPath();
 		$url .= $endpoint;
@@ -157,16 +147,5 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 			throw new ResponseException($request, $response);
 		}
 		return $response;
-	}
-
-	protected function getCurlConnection(bool $persistent = true) {
-		if (!$persistent || ($this->clientId === null) || (static::$curl === null)
-			|| !isset(static::$curl[$this->clientId])) {
-			if (static::$curl === null) {
-				static::$curl = [];
-			}
-			static::$curl[$this->clientId] = curl_init();
-		}
-		return static::$curl[$this->clientId];
 	}
 }
