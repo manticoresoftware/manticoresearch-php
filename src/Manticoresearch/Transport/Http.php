@@ -7,7 +7,7 @@
 
 namespace Manticoresearch\Transport;
 
-use Manticoresearch\Connection;
+use Manticoresearch\CurlConnection;
 use Manticoresearch\Exceptions\ConnectionException;
 use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Request;
@@ -28,11 +28,11 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 
 	/**
 	 * HTTP Transport constructor.
-	 * @param Connection|null $connection
+	 * @param CurlConnection|null $connection
 	 * @param LoggerInterface|null $logger
 	 */
 	public function __construct(
-		Connection $connection = null,
+		CurlConnection $connection = null,
 		LoggerInterface $logger = null,
 	) {
 		parent::__construct($connection, $logger);

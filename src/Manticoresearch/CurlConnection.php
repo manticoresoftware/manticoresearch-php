@@ -19,10 +19,6 @@ class CurlConnection extends Connection
 	/**
 	 * @var resource
 	 */
-	protected static $sharedCurl;
-	/**
-	 * @var resource
-	 */
 	protected $curl;
 
 /*
@@ -38,7 +34,6 @@ class CurlConnection extends Connection
  * $params['headers']   = array of custom headers
  * $params['curl']      = array of pairs of curl option=>value
  * $params['persistent'] = bool if connection is persistent
- * $params['shared'] = bool if connection is shared between client instances
  */
 	/**
 	 * CurlConnection constructor.
@@ -49,11 +44,7 @@ class CurlConnection extends Connection
 		if (!$this->config['persistent']) {
 			return;
 		}
-		if ($this->config['persistent'] === 1) {
-			$this->curl = curl_init();
-		} elseif (!isset(static::$curl)) {
-			static::$sharedCurl = curl_init();
-		}
+		$this->curl = curl_init();
 	}
 
 	/**
@@ -61,7 +52,7 @@ class CurlConnection extends Connection
 	 *
 	 */
 	public function getCurl() {
-		return static::$sharedCurl ?? ($this->curl ?? curl_init());
+		return $this->curl ?? curl_init();
 	}
 	
 }

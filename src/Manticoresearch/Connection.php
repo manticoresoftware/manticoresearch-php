@@ -66,7 +66,7 @@ class Connection
 	 * @param string $host
 	 * @return $this
 	 */
-	public function setHost($host): self {
+	public function setHost($host): static {
 		$this->config['host'] = $host;
 		return $this;
 	}
@@ -82,7 +82,7 @@ class Connection
 	 * @param string $path
 	 * @return $this
 	 */
-	public function setPath(string $path): self {
+	public function setPath(string $path): static {
 		$this->config['path'] = $path;
 		return $this;
 	}
@@ -98,7 +98,7 @@ class Connection
 	 * @param string|integer $port
 	 * @return $this
 	 */
-	public function setPort($port): self {
+	public function setPort($port): static {
 		$this->config['port'] = (int)$port;
 		return $this;
 	}
@@ -114,7 +114,7 @@ class Connection
 	 * @param integer $timeout
 	 * @return $this
 	 */
-	public function setTimeout($timeout): self {
+	public function setTimeout($timeout): static {
 		$this->config['timeout'] = (int)$timeout;
 		return $this;
 	}
@@ -130,7 +130,7 @@ class Connection
 	 * @param array $headers
 	 * @return $this
 	 */
-	public function setheaders($headers): self {
+	public function setheaders($headers): static {
 		$this->config['headers'] = $headers;
 		return $this;
 	}
@@ -146,7 +146,7 @@ class Connection
 	 * @param integer $connectTimeout
 	 * @return $this
 	 */
-	public function setConnectTimeout($connectTimeout): self {
+	public function setConnectTimeout($connectTimeout): static {
 		$this->config['connect_timeout'] = (int)$connectTimeout;
 		return $this;
 	}
@@ -162,7 +162,7 @@ class Connection
 	 * @param Transport $transport
 	 * @return $this
 	 */
-	public function setTransport($transport): self {
+	public function setTransport($transport): static {
 		$this->config['transport'] = $transport;
 		return $this;
 	}
@@ -188,7 +188,7 @@ class Connection
 	 * @param array $config
 	 * @return $this
 	 */
-	public function setConfig($config): self {
+	public function setConfig($config): static {
 		foreach ($config as $ckey => $cvalue) {
 			$this->config[$ckey] = $cvalue;
 		}
@@ -208,14 +208,14 @@ class Connection
 	}
 
 	/**
-	 * @param array|Connection $params|self
+	 * @param array|Connection $params|static
 	 * @return Connection
 	 */
 	public static function create($params) {
 		if (is_array($params)) {
-			return new self($params);
+			return new static($params);
 		}
-		if ($params instanceof self) {
+		if ($params instanceof static) {
 			return $params;
 		}
 		throw new RuntimeException('connection must receive array of parameters or self');

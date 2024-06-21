@@ -17,10 +17,10 @@ use Manticoresearch\CurlConnection;
 class ConnectionFactory
 {
 	public static function create($config) {
-		if (isset($config['transport']) && $config['transport'] !== 'PhpHttp') {
-			return CurlConnection::create($config);
-		} else {
+		if (isset($config['transport']) && $config['transport'] === 'PhpHttp') {
 			return Connection::create($config);
+		} else {
+			return CurlConnection::create($config);
 		}
 	}
 }
