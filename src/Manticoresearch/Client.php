@@ -344,6 +344,18 @@ class Client
 		return $response->getResponse();
 	}
 
+	/**
+	 * Endpoint: autocomplete
+	 * @param array $params
+	 * @return mixed
+	 */
+	public function autocomplete(array $params = []) {
+		$endpoint = new Endpoints\Autocomplete($params);
+		$response = $this->request($endpoint);
+
+		return $response->getResponse();
+	}
+
 	public function explainQuery(array $params = []) {
 		$endpoint = new Endpoints\ExplainQuery();
 		$endpoint->setIndex($params['index']);
