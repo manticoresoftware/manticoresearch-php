@@ -18,6 +18,8 @@ Table of Contents
 
 * [Bulk operations with documents](#bulk)
 
+* [Autocomplete](#autocomplete)
+
 * [Percolate searches](percolate.md)
 
 * [Keyword helpers](queryhelpers.md)
@@ -192,4 +194,23 @@ $doc = [
 
 $response = $client->bulk($doc);
 ```
+
+### Autocomplete
+
+For a complete reference of payload and response, see Manticore's [Autocomplete manual](https://manual.manticoresearch.com).
+
+The request requires `query` and `table` defined as required parameters.
+
+```
+$request = [
+[
+    'body' => [
+        'query' => 'hello wo',
+        'table' => 'testrt',
+    ],
+];
+
+$response = $client->autocomplete($request);
+```
+
 <!-- proofread -->
