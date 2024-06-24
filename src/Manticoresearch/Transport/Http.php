@@ -33,10 +33,10 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 	 */
 	public function __construct(
 		CurlConnection $connection = null,
-		LoggerInterface $logger = null,
+		LoggerInterface $logger = null
 	) {
 		$this->connection = $connection;
-		parent::__construct(null, $logger);
+		$this->logger = $logger ?? new NullLogger();
 	}
 
 	public function execute(Request $request, $params = []) {
