@@ -24,7 +24,7 @@ class ConnectionTest extends TestCase
 	public function setUp():void {
 		parent::setUp();
 		$this->connection = new Connection([]);
-		$this->connection = new CurlConnection([]);
+		$this->curlConnection = new CurlConnection([]);
 	}
 
 	public function testSetHostGetHost() {

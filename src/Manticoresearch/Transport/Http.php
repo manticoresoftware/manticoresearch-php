@@ -13,6 +13,7 @@ use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Request;
 use Manticoresearch\Response;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Class Http
