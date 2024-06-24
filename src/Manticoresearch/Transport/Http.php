@@ -35,7 +35,8 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 		CurlConnection $connection = null,
 		LoggerInterface $logger = null,
 	) {
-		parent::__construct($connection, $logger);
+		$this->connection = $connection;
+		parent::__construct(null, $logger);
 	}
 
 	public function execute(Request $request, $params = []) {

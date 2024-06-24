@@ -7,7 +7,6 @@
 
 namespace Manticoresearch;
 
-use Manticoresearch\Exceptions\RuntimeException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -66,7 +65,7 @@ class Connection
 	 * @param string $host
 	 * @return $this
 	 */
-	public function setHost($host): static {
+	public function setHost($host) {
 		$this->config['host'] = $host;
 		return $this;
 	}
@@ -82,7 +81,7 @@ class Connection
 	 * @param string $path
 	 * @return $this
 	 */
-	public function setPath(string $path): static {
+	public function setPath(string $path) {
 		$this->config['path'] = $path;
 		return $this;
 	}
@@ -98,7 +97,7 @@ class Connection
 	 * @param string|integer $port
 	 * @return $this
 	 */
-	public function setPort($port): static {
+	public function setPort($port) {
 		$this->config['port'] = (int)$port;
 		return $this;
 	}
@@ -114,7 +113,7 @@ class Connection
 	 * @param integer $timeout
 	 * @return $this
 	 */
-	public function setTimeout($timeout): static {
+	public function setTimeout($timeout) {
 		$this->config['timeout'] = (int)$timeout;
 		return $this;
 	}
@@ -130,7 +129,7 @@ class Connection
 	 * @param array $headers
 	 * @return $this
 	 */
-	public function setheaders($headers): static {
+	public function setheaders($headers) {
 		$this->config['headers'] = $headers;
 		return $this;
 	}
@@ -146,7 +145,7 @@ class Connection
 	 * @param integer $connectTimeout
 	 * @return $this
 	 */
-	public function setConnectTimeout($connectTimeout): static {
+	public function setConnectTimeout($connectTimeout) {
 		$this->config['connect_timeout'] = (int)$connectTimeout;
 		return $this;
 	}
@@ -162,7 +161,7 @@ class Connection
 	 * @param Transport $transport
 	 * @return $this
 	 */
-	public function setTransport($transport): static {
+	public function setTransport($transport) {
 		$this->config['transport'] = $transport;
 		return $this;
 	}
@@ -188,7 +187,7 @@ class Connection
 	 * @param array $config
 	 * @return $this
 	 */
-	public function setConfig($config): static {
+	public function setConfig($config) {
 		foreach ($config as $ckey => $cvalue) {
 			$this->config[$ckey] = $cvalue;
 		}
