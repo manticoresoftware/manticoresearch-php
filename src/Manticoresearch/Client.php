@@ -72,7 +72,7 @@ class Client
 		if (isset($this->config['connections'])) {
 			foreach ($this->config['connections'] as $connection) {
 				if (is_array($connection)) {
-					$connections[] = ConnectionFactory::create($connection);
+					$connections[] = Connection::create($connection);
 				} else {
 					$connections[] = $connection;
 				}
@@ -80,7 +80,7 @@ class Client
 		}
 
 		if (empty($connections)) {
-			$connections[] = ConnectionFactory::create($this->config);
+			$connections[] = Connection::create($this->config);
 		}
 		if (isset($this->config['connectionStrategy'])) {
 			if (is_string($this->config['connectionStrategy'])) {

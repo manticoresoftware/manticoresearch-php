@@ -7,6 +7,7 @@
 
 namespace Manticoresearch;
 
+use Manticoresearch\Exceptions\RuntimeException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -23,7 +24,13 @@ class Connection
 	 * @var bool
 	 */
 	protected $alive = true;
-/*
+
+	/**
+	 * @var resource
+	 */
+	protected $curl = null;
+
+	/*
  * $params['transport']  = transport class name
  * $params['host']       = hostname
  * $params['path']       = path
@@ -59,13 +66,16 @@ class Connection
 		];
 		$this->config = array_merge($this->config, $params);
 		$this->alive = true;
+		if ($this->config['persistent']) {
+			$this->curl = curl_init();
+		}
 	}
 
 	/**
 	 * @param string $host
 	 * @return $this
 	 */
-	public function setHost($host) {
+	public function setHost($host): self {
 		$this->config['host'] = $host;
 		return $this;
 	}
@@ -81,7 +91,7 @@ class Connection
 	 * @param string $path
 	 * @return $this
 	 */
-	public function setPath(string $path) {
+	public function setPath(string $path): self {
 		$this->config['path'] = $path;
 		return $this;
 	}
@@ -97,7 +107,7 @@ class Connection
 	 * @param string|integer $port
 	 * @return $this
 	 */
-	public function setPort($port) {
+	public function setPort($port): self {
 		$this->config['port'] = (int)$port;
 		return $this;
 	}
@@ -113,7 +123,7 @@ class Connection
 	 * @param integer $timeout
 	 * @return $this
 	 */
-	public function setTimeout($timeout) {
+	public function setTimeout($timeout): self {
 		$this->config['timeout'] = (int)$timeout;
 		return $this;
 	}
@@ -129,7 +139,7 @@ class Connection
 	 * @param array $headers
 	 * @return $this
 	 */
-	public function setheaders($headers) {
+	public function setheaders($headers): self {
 		$this->config['headers'] = $headers;
 		return $this;
 	}
@@ -145,7 +155,7 @@ class Connection
 	 * @param integer $connectTimeout
 	 * @return $this
 	 */
-	public function setConnectTimeout($connectTimeout) {
+	public function setConnectTimeout($connectTimeout): self {
 		$this->config['connect_timeout'] = (int)$connectTimeout;
 		return $this;
 	}
@@ -161,7 +171,7 @@ class Connection
 	 * @param Transport $transport
 	 * @return $this
 	 */
-	public function setTransport($transport) {
+	public function setTransport($transport): self {
 		$this->config['transport'] = $transport;
 		return $this;
 	}
@@ -187,7 +197,7 @@ class Connection
 	 * @param array $config
 	 * @return $this
 	 */
-	public function setConfig($config) {
+	public function setConfig($config): self {
 		foreach ($config as $ckey => $cvalue) {
 			$this->config[$ckey] = $cvalue;
 		}
@@ -207,6 +217,20 @@ class Connection
 	}
 
 	/**
+	 * @param array|Connection $params|self
+	 * @return Connection
+	 */
+	public static function create($params) {
+		if (is_array($params)) {
+			return new self($params);
+		}
+		if ($params instanceof self) {
+			return $params;
+		}
+		throw new RuntimeException('connection must receive array of parameters or self');
+	}
+
+	/**
 	 * @return bool
 	 */
 	public function isAlive(): bool {
@@ -219,4 +243,13 @@ class Connection
 	public function mark(bool $state) {
 		$this->alive = $state;
 	}
+
+	/**
+	 * @return resource|null
+	 *
+	 */
+	public function getCurl() {
+		return $this->curl ?? curl_init();
+	}
+
 }

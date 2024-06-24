@@ -8,8 +8,6 @@
 namespace Manticoresearch\Test;
 
 use Manticoresearch\Connection;
-use Manticoresearch\Connection\ConnectionFactory;
-use Manticoresearch\CurlConnection;
 use Manticoresearch\Exceptions\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
@@ -18,13 +16,9 @@ class ConnectionTest extends TestCase
 	/** @var Connection */
 	private $connection;
 
-	/** @var CurlConnection */
-	private $curlConnection;
-
 	public function setUp():void {
 		parent::setUp();
 		$this->connection = new Connection([]);
-		$this->curlConnection = new CurlConnection([]);
 	}
 
 	public function testSetHostGetHost() {
@@ -112,19 +106,19 @@ class ConnectionTest extends TestCase
 	}
 
 	public function testStaticCreateSelf() {
-		$newConnection = ConnectionFactory::create($this->connection);
+		$newConnection = Connection::create($this->connection);
 		$this->assertEquals($this->connection, $newConnection);
 	}
 
 	public function testStaticCreateEmptyParams() {
-		$newConnection = ConnectionFactory::create([]);
-		$this->assertEquals($this->curlConnection, $newConnection);
+		$newConnection = Connection::create([]);
+		$this->assertEquals($this->connection, $newConnection);
 	}
 
 	public function testStaticCreateInvalidParams() {
 		$this->expectException(RuntimeException::class);
 		$this->expectExceptionMessage('connection must receive array of parameters or self');
-		$newConnection = ConnectionFactory::create('this is invalid');
+		$newConnection = Connection::create('this is invalid');
 		$this->assertEquals($this->connection, $newConnection);
 	}
 }
