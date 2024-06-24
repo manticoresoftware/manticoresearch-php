@@ -150,7 +150,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 	}
 
 	/**
-	 * @return CurlConnection|null
+	 * @return Connection|null
 	 */
 	public function getConnection() {
 		return $this->connection;

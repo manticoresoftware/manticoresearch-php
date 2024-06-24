@@ -66,9 +66,10 @@ class Connection
 		];
 		$this->config = array_merge($this->config, $params);
 		$this->alive = true;
-		if ($this->config['persistent']) {
-			$this->curl = curl_init();
+		if (!$this->config['persistent']) {
+			return;
 		}
+		$this->curl = curl_init();
 	}
 
 	/**

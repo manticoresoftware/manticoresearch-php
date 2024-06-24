@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Manticoresearch;
 
-use Manticoresearch\Connection\ConnectionFactory;
 use Manticoresearch\Connection\ConnectionPool;
 use Manticoresearch\Connection\Strategy\SelectorInterface;
 use Manticoresearch\Connection\Strategy\StaticRoundRobin;
