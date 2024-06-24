@@ -208,20 +208,6 @@ class Connection
 	}
 
 	/**
-	 * @param array|Connection $params|static
-	 * @return Connection
-	 */
-	public static function create($params) {
-		if (is_array($params)) {
-			return new static($params);
-		}
-		if ($params instanceof static) {
-			return $params;
-		}
-		throw new RuntimeException('connection must receive array of parameters or self');
-	}
-
-	/**
 	 * @return bool
 	 */
 	public function isAlive(): bool {

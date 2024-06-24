@@ -115,8 +115,6 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 		//hard error
 		if ($errorno > 0) {
 			$error = curl_error($conn);
-
-			static::$curl = null;
 			throw new ConnectionException($error, $request);
 		}
 
@@ -147,5 +145,12 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 			throw new ResponseException($request, $response);
 		}
 		return $response;
+	}
+
+	/**
+	 * @return CurlConnection|null
+	 */
+	public function getConnection() {
+		return $this->connection;
 	}
 }

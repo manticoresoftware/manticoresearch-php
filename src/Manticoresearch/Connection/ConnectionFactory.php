@@ -9,6 +9,7 @@ namespace Manticoresearch\Connection;
 
 use Manticoresearch\Connection;
 use Manticoresearch\CurlConnection;
+use \RuntimeException;
 
 /**
  * Class ConnectionFactory
@@ -16,11 +17,16 @@ use Manticoresearch\CurlConnection;
  */
 class ConnectionFactory
 {
-	public static function create($config) {
-		if (isset($config['transport']) && $config['transport'] === 'PhpHttp') {
-			return Connection::create($config);
-		} else {
-			return CurlConnection::create($config);
+	public static function create($params) {
+		if ($params instanceof Connection) {
+			return $params;
 		}
+		$connectionCls = (is_array($params) && isset($params['transport']) && $params['transport'] === 'PhpHttp')
+			? Connection::class
+			: CurlConnection::class;
+		if (is_array($params)) {
+			return new $connectionCls($params);
+		}
+		throw new RuntimeException('connection must receive array of parameters or self');
 	}
 }

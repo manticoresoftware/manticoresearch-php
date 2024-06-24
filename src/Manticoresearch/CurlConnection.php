@@ -7,11 +7,8 @@
 
 namespace Manticoresearch;
 
-use Manticoresearch\Exceptions\RuntimeException;
-use Psr\Log\LoggerInterface;
-
 /**
- * Class Connection
+ * Class CurlConnection
  * @package Manticoresearch
  */
 class CurlConnection extends Connection
@@ -54,5 +51,5 @@ class CurlConnection extends Connection
 	public function getCurl() {
 		return $this->curl ?? curl_init();
 	}
-	
+
 }
