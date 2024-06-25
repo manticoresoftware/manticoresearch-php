@@ -24,7 +24,13 @@ class Connection
 	 * @var bool
 	 */
 	protected $alive = true;
-/*
+
+	/**
+	 * @var resource
+	 */
+	protected $curl = null;
+
+	/*
  * $params['transport']  = transport class name
  * $params['host']       = hostname
  * $params['path']       = path
@@ -60,6 +66,10 @@ class Connection
 		];
 		$this->config = array_merge($this->config, $params);
 		$this->alive = true;
+		if (!$this->config['persistent']) {
+			return;
+		}
+		$this->curl = curl_init();
 	}
 
 	/**
@@ -234,4 +244,13 @@ class Connection
 	public function mark(bool $state) {
 		$this->alive = $state;
 	}
+
+	/**
+	 * @return resource|null
+	 *
+	 */
+	public function getCurl() {
+		return $this->curl ?? curl_init();
+	}
+
 }

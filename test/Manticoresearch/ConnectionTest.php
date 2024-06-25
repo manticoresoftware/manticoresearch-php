@@ -112,7 +112,8 @@ class ConnectionTest extends TestCase
 
 	public function testStaticCreateEmptyParams() {
 		$newConnection = Connection::create([]);
-		$this->assertEquals($this->connection, $newConnection);
+		// Fix for php 7.4 since it treats Connection objects with different curl instances as not equal
+		$this->assertEquals($this->connection->getConfig(), $newConnection->getConfig());
 	}
 
 	public function testStaticCreateInvalidParams() {
