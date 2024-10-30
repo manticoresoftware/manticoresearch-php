@@ -187,7 +187,7 @@ class ClientTest extends TestCase
 
 		$client->unsetLastResponse();
 
-		$lastResponse = $client->getLastResponse()->getResponse();
+		$lastResponse = $client->getLastResponse();
 		$this->assertNull($lastResponse);
 	}
 }
