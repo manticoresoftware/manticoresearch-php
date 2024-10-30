@@ -418,7 +418,7 @@ class Client
 	 *
 	 * @return Response
 	 */
-	public function getLastResponse(): ?Response {
+	public function getLastResponse(): Response {
 		return $this->lastResponse;
 	}
 
@@ -427,6 +427,6 @@ class Client
 	 * @return void
 	 */
 	public function unsetLastResponse(): void {
-		$this->lastResponse = null;
+		$this->lastResponse = new Response([], null, []);
 	}
 }
