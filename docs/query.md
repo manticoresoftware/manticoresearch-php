@@ -15,8 +15,8 @@ Bool queries can be nested, meaning that nodes added to a root `BoolQuery` can, 
 
 ```php
 $bool2 = new \Manticoresearch\Query\BoolQuery();
-$bool2->should(new \Manticoresearch\Query\('year', 2000));
-$bool2->should(new \Manticoresearch\Query\('year', 2010));
+$bool2->should(new \Manticoresearch\Query\('_year', 2000));
+$bool2->should(new \Manticoresearch\Query\('_year', 2010));
 $bool->must($bool2);
 ```
 
@@ -59,7 +59,7 @@ Creates an `in` filter.
 Expects two arguments: an attribute or alias name and an array with values.
 
  ```php
-$bool->must(new \Manticoresearch\Query\In('year', [2014,2015,2016]));
+$bool->must(new \Manticoresearch\Query\In('_year', [2014,2015,2016]));
 ```
 
 ## Equals()
@@ -69,7 +69,7 @@ Creates an `equals` filter.
 Expects two arguments: an attribute or alias name and a value.
 
  ```php
-$bool->must(new \Manticoresearch\Query\Equals('year', 2014));
+$bool->must(new \Manticoresearch\Query\Equals('_year', 2014));
 ```
 
 
@@ -80,14 +80,14 @@ Creates an `equals` filter.
 Expects two arguments: an attribute or alias name and an array of operator => value pairs.
 
  ```php
-$bool->must(new \Manticoresearch\Query\Range('year', ['lte' => 2020]));
+$bool->must(new \Manticoresearch\Query\Range('_year', ['lte' => 2020]));
 ```
 
 
 ## Distance()
 
 Creates a `geo_distance` expression.
-Expects an array that follows the syntax defined in `/json/search`:
+Expects an array that follows the syntax defined in `/search`:
 
 - `location_anchor` containing the pin object
 - `location_source` containing the attributes with lat/long
@@ -111,20 +111,33 @@ $bool->must(new \Manticoresearch\Query\Distance([
 
 This code :
 ```php
-$response = $search->search('"team of explorers"/2')->filter('year', 'equals', 2014)->get();
+$response = $search->search('"team of explorers"/2')->filter('_year', 'equals', 2014)->get();
 ```
 
 can be rewritten as:
 ```php
 $q = new \Manticoresearch\Query\BoolQuery();
 $q->must(new \Manticoresearch\Query\MatchQuery(['query' => 'team of explorers', 'operator' => 'or'], '*'));
-$q->must(new \Manticoresearch\Query\Equals('year', 2014));
+$q->must(new \Manticoresearch\Query\Equals('_year', 2014));
 $response = $search->search($q)->get();
 ```
 
 Both sugar syntaxes can also be mixed:
 
 ```php
-$response = $search->search('"team of explorers"/2')->filter(new \Manticoresearch\Query\Equals('year', 2014))->get();
+$response = $search->search('"team of explorers"/2')->filter(new \Manticoresearch\Query\Equals('_year', 2014))->get();
 ```
+
+## KnnQuery()
+
+Constructor of the knn node:
+```php
+$knn1 = new \Manticoresearch\Query\KnnQuery('some_float_vector_field', [0.1, 0.45, 0.3], 5);
+$knn2 = new \Manticoresearch\Query\KnnQuery('some_float_vector_field', 2, 5);
+```
+It accepts:
+- a name of the `float_vector` type field
+- a float vector or a document id to execute knn search by 
+- a number of most similar documents to return
+
 <!-- proofread -->

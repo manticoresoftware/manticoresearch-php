@@ -1,5 +1,9 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 
 namespace Manticoresearch;
 
@@ -7,6 +11,7 @@ use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\Distance;
 use Manticoresearch\Query\Equals;
 use Manticoresearch\Query\In;
+use Manticoresearch\Query\KnnQuery;
 use Manticoresearch\Query\MatchPhrase;
 use Manticoresearch\Query\MatchQuery;
 use Manticoresearch\Query\QueryString;
@@ -87,10 +92,31 @@ class Search
 	 */
 	public function search($queryString): self {
 		if (is_object($queryString)) {
-			$this->query = $queryString;
-			return $this;
+			// we use the search query as a full-text filter for the existing knn query
+			if (is_a($this->query, KnnQuery::class)) {
+				$this->filter($queryString);
+			} else {
+				$this->query = $queryString;
+			}
+		} else {
+			$this->query->must(new QueryString($queryString));
 		}
-		$this->query->must(new QueryString($queryString));
+		return $this;
+	}
+
+	public function knn($field, $knnTarget, $docCount): self {
+		$filter = $this->query->toArray();
+		$this->query = new KnnQuery($field, $knnTarget, $docCount);
+		// we use the existing search query as a full-text filter for the knn query
+		if (isset($filter['bool']) && $filter['bool']) {
+			$filter = $filter['bool'];
+			foreach ($filter as $k => $vals) {
+				$op = ($k === 'must_not') ? 'mustNot' : $k;
+				foreach ($vals as $v) {
+					$this->query->$op($v);
+				}
+			}
+		}
 		return $this;
 	}
 
@@ -236,22 +262,57 @@ class Search
 		return $this;
 	}
 
-	public function facet($field, $group = null, $limit = null, $sortField = null, $sortDirection = 'desc') : self {
-		// reset facets
-		if ($field === false) {
-			$this->params['aggs'] = [];
-		}
+	public function facet(
+		$field,
+		$group = null,
+		$limit = null,
+		$sortField = null,
+		$sortDirection = 'desc',
+		$multiGroup = null
+	): self {
 		if ($group === null) {
 			$group = $field;
 		}
-			$terms = ['field' => $field];
+		$terms = ['field' => $field];
 		if ($limit !== null) {
 			$terms['size'] = $limit;
 		}
-		$this->params['aggs'][$group] = ['terms' => $terms];
+		$facet = ['terms' => $terms];
 		if ($sortField !== null) {
-			$this->params['aggs'][$group]['sort'] = [ [$sortField => $sortDirection] ];
+			$facet['sort'] = [ [$sortField => $sortDirection] ];
 		}
+		if ($multiGroup !== null && isset($this->params['aggs'], $this->params['aggs'][$multiGroup])) {
+			// reset facets
+			if ($field === false) {
+				$this->params['aggs'][$multiGroup]['sources'] = [];
+			}
+			$this->params['aggs'][$multiGroup]['composite']['sources'][] = [ $group => $facet ];
+		} else {
+			// reset facets
+			if ($field === false) {
+				$this->params['aggs'] = [];
+			}
+			$this->params['aggs'][$group] = $facet;
+		}
+
+		return $this;
+	}
+
+	public function multiFacet($group, $limit = null): self {
+		// reset multi facets
+		if ($group === false) {
+			$this->params['aggs'] = array_filter(
+				$this->params['aggs'],
+				function ($v) {
+					return isset($v['composite']);
+				}
+			);
+		}
+		$this->params['aggs'][$group] = [ 'composite' => [ 'sources' => [] ] ];
+		if ($limit !== null) {
+			$this->params['aggs'][$group]['composite']['size'] = $limit;
+		}
+
 		return $this;
 	}
 
@@ -318,7 +379,11 @@ class Search
 		$body = $this->params;
 		$query = $this->query->toArray();
 		if ($query !== null) {
-			$body['query'] = $query;
+			if (is_a($this->query, KnnQuery::class)) {
+				$body['knn'] = $query;
+			} else {
+				$body['query'] = $query;
+			}
 		}
 
 		if (isset($this->params['script_fields'])) {

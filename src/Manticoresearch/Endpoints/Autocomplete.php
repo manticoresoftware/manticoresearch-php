@@ -10,17 +10,16 @@ namespace Manticoresearch\Endpoints;
 use Manticoresearch\Request;
 
 /**
- * Class Sql
+ * Class Autocomplete
  * @package Manticoresearch\Endpoints
  */
-class Sql extends Request
+class Autocomplete extends Request
 {
 	/**
 	 * @return mixed|string
 	 */
-	protected $mode;
 	public function getPath() {
-		return '/sql';
+		return '/autocomplete';
 	}
 
 	/**
@@ -33,23 +32,19 @@ class Sql extends Request
 	/**
 	 * @return mixed|string
 	 */
-	public function getBody() {
-		if ($this->mode === 'raw') {
-			$return = ['mode=raw'];
-			foreach ($this->body as $k => $v) {
-				$return[] = $k.'='.urlencode($v);
-			}
-			return implode('&', $return);
+	public function getContentType() {
+		return 'application/json';
+	}
+
+	/**
+	 * @param mixed $body
+	 */
+	public function setBody($body = null) {
+		if (is_array($body)) {
+			$this->body = json_encode($body, true);
+		} else {
+			$this->body = $body;
 		}
-
-		return http_build_query($this->body);
 	}
 
-	public function getMode() {
-		return $this->mode;
-	}
-
-	public function setMode($mode) {
-		$this->mode = $mode;
-	}
 }

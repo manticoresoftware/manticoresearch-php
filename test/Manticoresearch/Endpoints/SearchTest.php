@@ -1,5 +1,10 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
+
 namespace Manticoresearch\Test\Endpoints;
 
 use Manticoresearch\Client;
@@ -13,8 +18,8 @@ class SearchTest extends \PHPUnit\Framework\TestCase
 			'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT'],
 		];
 		$client = new Client($params);
-		$this->expectException(\Manticoresearch\Exceptions\ResponseException::class);
-		$client->search(['body' => '']);
+		$result = $client->search(['body' => '']);
+		$this->assertEquals([['total' => 0, 'error' => '', 'warning' => '']], $result);
 	}
 
 	public function testNoArrayParams() {
@@ -52,6 +57,6 @@ class SearchTest extends \PHPUnit\Framework\TestCase
 
 	public function testPath() {
 		$search = new \Manticoresearch\Endpoints\Search();
-		$this->assertEquals('/json/search', $search->getPath());
+		$this->assertEquals('/search', $search->getPath());
 	}
 }

@@ -1,5 +1,9 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 
 namespace Manticoresearch;
 
@@ -29,6 +33,16 @@ class ResultHit
 
 	public function getScore() {
 		return $this->data['_score'];
+	}
+
+	/**
+	 * We have _knn_dist only for vector search results,
+	 * while for keyword search we can miss it.
+	 * So we return null when there is no such field or float
+	 * @return ?float
+	 */
+	public function getKnnDist(): ?float {
+		return $this->data['_knn_dist'] ?? null;
 	}
 
 	public function getHighlight() {
