@@ -418,7 +418,7 @@ class Client
 	 *
 	 * @return Response
 	 */
-	public function getLastResponse(): Response {
+	public function getLastResponse(): ?Response {
 		return $this->lastResponse;
 	}
 
