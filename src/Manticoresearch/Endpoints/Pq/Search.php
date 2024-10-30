@@ -1,5 +1,9 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 
 namespace Manticoresearch\Endpoints\Pq;
 
@@ -30,7 +34,7 @@ class Search extends Request
 	 */
 	public function getPath() {
 		if (isset($this->index)) {
-			return '/json/pq/' . $this->index . '/_search';
+			return '/pq/' . $this->index . '/search';
 		}
 		throw new RuntimeException('Index name is missing.');
 	}

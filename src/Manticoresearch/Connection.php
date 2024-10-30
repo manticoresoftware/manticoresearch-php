@@ -1,5 +1,9 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 
 namespace Manticoresearch;
 
@@ -20,7 +24,13 @@ class Connection
 	 * @var bool
 	 */
 	protected $alive = true;
-/*
+
+	/**
+	 * @var resource
+	 */
+	protected $curl = null;
+
+	/*
  * $params['transport']  = transport class name
  * $params['host']       = hostname
  * $params['path']       = path
@@ -56,6 +66,10 @@ class Connection
 		];
 		$this->config = array_merge($this->config, $params);
 		$this->alive = true;
+		if (!$this->config['persistent']) {
+			return;
+		}
+		$this->curl = curl_init();
 	}
 
 	/**
@@ -172,11 +186,12 @@ class Connection
 
 	/**
 	 * @param LoggerInterface $logger
+	 * @param array<mixed> $clientParams
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	public function getTransportHandler(LoggerInterface $logger) {
-		return Transport::create($this->getTransport(), $this, $logger);
+	public function getTransportHandler(LoggerInterface $logger, array $clientParams = []) {
+		return Transport::create($this->getTransport(), $this, $logger, $clientParams);
 	}
 
 	/**
@@ -229,4 +244,13 @@ class Connection
 	public function mark(bool $state) {
 		$this->alive = $state;
 	}
+
+	/**
+	 * @return resource|null
+	 *
+	 */
+	public function getCurl() {
+		return $this->curl ?? curl_init();
+	}
+
 }

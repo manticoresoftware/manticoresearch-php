@@ -7,16 +7,16 @@
 
 namespace Manticoresearch\Test\Endpoints;
 
-class ReplaceTest extends \PHPUnit\Framework\TestCase
+class AutocompleteTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testGetPath() {
-		$replace = new \Manticoresearch\Endpoints\Replace();
-		$this->assertEquals('/replace', $replace->getPath());
+		$replace = new \Manticoresearch\Endpoints\Autocomplete();
+		$this->assertEquals('/autocomplete', $replace->getPath());
 	}
 
 	public function testGetMethod() {
-		$replace = new \Manticoresearch\Endpoints\Replace();
+		$replace = new \Manticoresearch\Endpoints\Autocomplete();
 		$this->assertEquals('POST', $replace->getMethod());
 	}
 }

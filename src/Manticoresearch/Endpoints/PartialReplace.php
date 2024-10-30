@@ -10,16 +10,23 @@ namespace Manticoresearch\Endpoints;
 use Manticoresearch\Request;
 
 /**
- * Class Delete
+ * Class PartialReplace
  * @package Manticoresearch\Endpoints
  */
-class Delete extends Request
+class PartialReplace extends Request
 {
 	/**
-	 * @return mixed|string
+	 * @var string
 	 */
-	public function getPath() {
-		return '/delete';
+	protected $index;
+
+	/**
+	 * @param string $index
+	 * @param int $id
+	 */
+	public function setPathByIndexAndId($index, $id) {
+		$path = '/' .  $index . '/_update/' . $id;
+		parent::setPath($path);
 	}
 
 	/**

@@ -1,5 +1,10 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
+
 namespace Manticoresearch\Connection;
 
 use Manticoresearch\Connection;
@@ -54,6 +59,7 @@ class ConnectionPool
 			$this->retriesInfo[] = [
 				'host' => $connection->getHost(),
 				'port' => $connection->getPort(),
+				'reason' => 'unknown',
 			];
 		}
 		if ($connection->isAlive()) {
@@ -66,7 +72,7 @@ class ConnectionPool
 		$exMsg .= "\nRetries made:\n";
 		foreach ($this->retriesInfo as $i => $info) {
 			$i++;
-			$exMsg .= " $i. to {$info['host']}:{$info['port']}\n";
+			$exMsg .= " $i. to {$info['host']}:{$info['port']}, failure reason:{$info['reason']}\n";
 		}
 		$connCount = sizeof($this->connections);
 		throw new NoMoreNodesException(

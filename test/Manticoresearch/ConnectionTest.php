@@ -1,5 +1,10 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
+
 namespace Manticoresearch\Test;
 
 use Manticoresearch\Connection;
@@ -107,7 +112,8 @@ class ConnectionTest extends TestCase
 
 	public function testStaticCreateEmptyParams() {
 		$newConnection = Connection::create([]);
-		$this->assertEquals($this->connection, $newConnection);
+		// Fix for php 7.4 since it treats Connection objects with different curl instances as not equal
+		$this->assertEquals($this->connection->getConfig(), $newConnection->getConfig());
 	}
 
 	public function testStaticCreateInvalidParams() {

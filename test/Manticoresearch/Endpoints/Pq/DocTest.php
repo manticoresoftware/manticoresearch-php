@@ -1,5 +1,10 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
+
 namespace Manticoresearch\Test\Endpoints\Pq;
 
 use Manticoresearch\Client;
@@ -37,14 +42,14 @@ class DocTest extends \PHPUnit\Framework\TestCase
 	public function testGetPathNoID() {
 		$doc = new Doc();
 		$doc->setIndex('products');
-		$this->assertEquals('/json/pq/products/doc', $doc->getPath());
+		$this->assertEquals('/pq/products/doc', $doc->getPath());
 	}
 
 	public function testGetPathWithID() {
 		$doc = new Doc();
 		$doc->setIndex('products');
 		$doc->setId(4);
-		$this->assertEquals('/json/pq/products/doc/4', $doc->getPath());
+		$this->assertEquals('/pq/products/doc/4', $doc->getPath());
 	}
 
 	public function testMethod() {

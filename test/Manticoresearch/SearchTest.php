@@ -1,5 +1,9 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 
 namespace Manticoresearch\Test;
 
@@ -46,13 +50,21 @@ class SearchTest extends TestCase
 			'body' => [
 				'columns' => ['title' => ['type' => 'text'],
 					'plot' => ['type' => 'text'],
-					'year' => ['type' => 'integer'],
+					'_year' => ['type' => 'integer'],
 					'rating' => ['type' => 'float'],
 					'language' => ['type' => 'multi'],
 					'meta' => ['type' => 'json'],
 					'lat' => ['type' => 'float'],
 					'lon' => ['type' => 'float'],
 					'advise' => ['type' => 'string'],
+					'kind' => [
+						'type' => 'float_vector',
+						'options' => [
+							"knn_type='hnsw'",
+							"knn_dims='2'",
+							"hnsw_similarity='l2'",
+						],
+					],
 				],
 			],
 		];
@@ -63,41 +75,45 @@ class SearchTest extends TestCase
 				['title' => 'Interstellar',
 					'plot' => 'A team of explorers travel through a wormhole in space in an attempt to ensure'.
 						' humanity\'s survival.',
-					'year' => 2014, 'rating' => 8.5,
+					'_year' => 2014, 'rating' => 8.5,
 					'meta' => ['keywords' => ['astronaut', 'relativity', 'nasa'],
 						'genre' => ['drama', 'scifi', 'thriller']],
 					'lat' => 51.2, 'lon' => 47.5,
 					'advise' => 'PG-13',
+					'kind' => [0.2,0.3],
 				],
 			]],
 			['insert' => ['index' => 'movies', 'id' => 3, 'doc' =>
 				['title' => 'Inception', 'plot' => 'A thief who steals corporate secrets through the use of'.
 					' dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.',
-					'year' => 2010, 'rating' => 8.8,
+					'_year' => 2010, 'rating' => 8.8,
 					'meta' => ['keywords' => ['dream', 'thief', 'subconscious'],
 						'genre' => ['action', 'scifi', 'thriller']],
 					'lat' => 51.9, 'lon' => 48.5,
 					'advise' => 'PG-13',
+					'kind' => [0.2,0.7],
 				],
 			]],
 			['insert' => ['index' => 'movies', 'id' => 4, 'doc' =>
 				['title' => '1917', 'plot' => ' As a regiment assembles to wage war deep in enemy territory, two'.
 					' soldiers are assigned to race against time and deliver a message that will stop 1,600 men from'.
 					' walking straight into a deadly trap.',
-					'year' => 2018, 'rating' => 8.4,
+					'_year' => 2018, 'rating' => 8.4,
 					'meta' => ['keywords' => ['death', ' trench'], 'genre' => ['drama', 'war']],
 					'lat' => 51.1, 'lon' => 48.1,
 					'advise' => 'PG-13',
+					'kind' => [0.3,0.5],
 				],
 			]],
 			['insert' => ['index' => 'movies', 'id' => 5, 'doc' =>
 				['title' => 'Alien', 'plot' => ' After a space merchant vessel receives an unknown transmission as a'.
 					' distress call, one of the team\'s member is attacked by a mysterious life form and they soon '.
 					'realize that its life cycle has merely begun.',
-					'year' => 1979, 'rating' => 8.4,
+					'_year' => 1979, 'rating' => 8.4,
 					'meta' => ['keywords' => ['spaceship', 'monster', 'nasa'], 'genre' => ['scifi', 'horror']],
 					'lat' => 52.2, 'lon' => 48.9,
 					'advise' => 'R',
+					'kind' => [0.5,0.5],
 				],
 			]],
 			['insert' => ['index' => 'movies', 'id' => 6, 'doc' =>
@@ -105,11 +121,12 @@ class SearchTest extends TestCase
 					' being in hypersleep for 57 years. The moon that the Nostromo visited has been colonized by '.
 					'explorers, but contact is lost. This time, colonial marines have impressive firepower, but will'.
 					' that be enough?',
-					'year' => 1986, 'rating' => 8.3,
+					'_year' => 1986, 'rating' => 8.3,
 					'meta' => ['keywords' => ['alien', 'monster', 'soldier'],
 						'genre' => ['scifi', 'action', 'adventure']],
 					'lat' => 51.6, 'lon' => 48.0,
 					'advise' => 'R',
+					'kind' => [0.7,0.2],
 				],
 			]],
 			['insert' => ['index' => 'movies', 'id' => 10, 'doc' =>
@@ -117,10 +134,11 @@ class SearchTest extends TestCase
 					'explorers crash-lands on Fiorina 161, a maximum security prison. When a series of strange and '.
 					'deadly events occur shortly after her arrival, Ripley realizes that she has brought along an '.
 					'unwelcome visitor.',
-					'year' => 1992, 'rating' => 6.5,
+					'_year' => 1992, 'rating' => 6.5,
 					'meta' => ['keywords' => ['alien', 'prison', 'android'], 'genre' => ['scifi', 'horror', 'action']],
 					'lat' => 51.8, 'lon' => 48.2,
 					'advise' => 'R',
+					'kind' => [0.9,0.9],
 				],
 			]],
 		];
@@ -143,7 +161,7 @@ class SearchTest extends TestCase
 		while ($results->valid()) {
 			$hit = $results->current();
 			$data = $hit->getData();
-			$years[] = $data['year'];
+			$years[] = $data['_year'];
 			$results->next();
 		}
 		if ($sort !== false) {
@@ -197,33 +215,33 @@ class SearchTest extends TestCase
 	}
 
 	public function testFilterLTE() {
-		$results = static::$search->filter('year', 'lte', 1990)->get();
+		$results = static::$search->filter('_year', 'lte', 1990)->get();
 		$this->assertEquals([1979,1986], $this->yearsFromResults($results, 'sort'));
 	}
 
 	public function testFilterLTEAsObject() {
-		$results = static::$search->filter(new Range('year', ['lte' => 1990]))->get();
+		$results = static::$search->filter(new Range('_year', ['lte' => 1990]))->get();
 		$this->assertEquals([1979,1986], $this->yearsFromResults($results, 'sort'));
 	}
 
 	public function testFilterGTE() {
-		$results = static::$search->filter('year', 'gte', 1990)->sort('id', 'asc')->get();
+		$results = static::$search->filter('_year', 'gte', 1990)->sort('id', 'asc')->get();
 		$this->assertEquals([1992,2010,2014,2018], $this->yearsFromResults($results, 'sort'));
 	}
 
 	public function testFilterEq() {
 
-		$results = static::$search->filter('year', 'equals', 1979)->get();
+		$results = static::$search->filter('_year', 'equals', 1979)->get();
 		$this->assertCount(1, $results);
 	}
 
 	public function testFilterRange() {
-		$results = static::$search->filter('year', 'range', [1960,1992])->get();
+		$results = static::$search->filter('_year', 'range', [1960,1992])->get();
 		$this->assertEquals([1979,1986,1992], $this->yearsFromResults($results, 'sort'));
 	}
 
 	public function testFilterIn() {
-		$results = static::$search->filter('year', 'in', [1960,1979,1986])->get();
+		$results = static::$search->filter('_year', 'in', [1960,1979,1986])->get();
 		$this->assertEquals([1979,1986], $this->yearsFromResults($results, 'sort'));
 	}
 
@@ -256,36 +274,36 @@ class SearchTest extends TestCase
 	}
 
 	public function testNotFilterLTE() {
-		$results = static::$search->phrase('team of explorers')->notFilter('year', 'lte', 1990)->get();
+		$results = static::$search->phrase('team of explorers')->notFilter('_year', 'lte', 1990)->get();
 		$this->assertEquals([2014,1992], $this->yearsFromResults($results));
 
-		$results = static::$search->phrase('team of explorers')->notFilter('year', 'lte', 1992)->get();
+		$results = static::$search->phrase('team of explorers')->notFilter('_year', 'lte', 1992)->get();
 		$this->assertEquals([2014], $this->yearsFromResults($results));
 	}
 
 	public function testNotFilterRange() {
-		$results = static::$search->notFilter('year', 'range', [1900,1990])->get();
+		$results = static::$search->notFilter('_year', 'range', [1900,1990])->get();
 		$this->assertEquals([1992,2010,2014,2018], $this->yearsFromResults($results, 'sort'));
 	}
 
 	public function testNotFilterIn() {
-		$results = static::$search->notFilter('year', 'in', [1960,1979,1986])->get();
+		$results = static::$search->notFilter('_year', 'in', [1960,1979,1986])->get();
 		$this->assertEquals([1992,2010,2014,2018], $this->yearsFromResults($results, 'sort'));
 	}
 
 	public function testNotFilterRangeAsObject() {
-		$range = new Range('year', ['gte' => 1900, 'lte' => 1990]);
+		$range = new Range('_year', ['gte' => 1900, 'lte' => 1990]);
 		$results = static::$search->notFilter($range)->get();
 		$this->assertEquals([1992,2010,2014,2018], $this->yearsFromResults($results, 'sort'));
 	}
 
 	public function testOrFilterRange() {
-		$results = static::$search->phrase('team of explorers')->orFilter('year', 'range', [1900,1990])->get();
+		$results = static::$search->phrase('team of explorers')->orFilter('_year', 'range', [1900,1990])->get();
 		$this->assertEquals([1986], $this->yearsFromResults($results));
 	}
 
 	public function testOrFilterRangeAsObject() {
-		$range = new Range('year', ['gte' => 1900, 'lte' => 1990]);
+		$range = new Range('_year', ['gte' => 1900, 'lte' => 1990]);
 
 		$results = static::$search->phrase('team of explorers')->orFilter($range)->get();
 		$this->assertEquals([1986], $this->yearsFromResults($results));
@@ -296,40 +314,40 @@ class SearchTest extends TestCase
 	 */
 	public function testOrFilterRangeSkip90s() {
 		$results = static::$search->
-			orFilter('year', 'lt', 1990)->
-			orFilter('year', 'gte', 2000)->
+			orFilter('_year', 'lt', 1990)->
+			orFilter('_year', 'gte', 2000)->
 			get();
 		$this->assertEquals([1979,1986,2010,2014,2018], $this->yearsFromResults($results, 'sort'));
 	}
 
 	public function testOrFilterEquals() {
 		$results = static::$search->
-		orFilter('year', 'equals', 1979)->
-		orFilter('year', 'equals', 1986)->
+		orFilter('_year', 'equals', 1979)->
+		orFilter('_year', 'equals', 1986)->
 		get();
 		$this->assertEquals([1979,1986], $this->yearsFromResults($results, 'sort'));
 	}
 
 
 	public function testSortMethodAscending() {
-		$results = static::$search->sort('year')->phrase('team of explorers')->get();
+		$results = static::$search->sort('_year')->phrase('team of explorers')->get();
 		$this->assertEquals([1986,1992,2014], $this->yearsFromResults($results));
 	}
 
 	public function testSortMethodDescending() {
-		$results = static::$search->sort('year', 'desc')->phrase('team of explorers')->get();
+		$results = static::$search->sort('_year', 'desc')->phrase('team of explorers')->get();
 		$this->assertEquals([2014,1992,1986], $this->yearsFromResults($results));
 	}
 
 	public function testSortMethodNyMultipleAttributesAscending() {
 		$results = self::$search->filter('rating', 'gte', 8.3)
-			->sort(['rating' => 'asc','year' => 'asc'])->get();
+			->sort(['rating' => 'asc','_year' => 'asc'])->get();
 		$this->assertEquals(['Aliens','Alien','1917','Interstellar','Inception'], $this->titlesFromResults($results));
 	}
 
 	public function testSortMethodNyMultipleAttributesDescending() {
 		$results = self::$search->filter('rating', 'gte', 8.3)
-			->sort(['rating' => 'asc','year' => 'desc'])->get();
+			->sort(['rating' => 'asc','_year' => 'desc'])->get();
 		$this->assertEquals(['Aliens','1917','Alien','Interstellar','Inception'], $this->titlesFromResults($results));
 	}
 
@@ -509,7 +527,7 @@ class SearchTest extends TestCase
 	}
 
 	public function testTextSearchFilterToAYear() {
-		$result = static::$search->search('"team of explorers"/2')->filter('year', 'equals', 2014)->get();
+		$result = static::$search->search('"team of explorers"/2')->filter('_year', 'equals', 2014)->get();
 		$this->assertCount(1, $result);
 	}
 
@@ -535,7 +553,7 @@ class SearchTest extends TestCase
 
 	public function testMatchFilteredToSingleYear() {
 		$result = static::$search->match(['query' => 'team of explorers', 'operator' => 'and'])->
-			filter('year', 'equals', 2014)->get();
+			filter('_year', 'equals', 2014)->get();
 		$this->assertCount(1, $result);
 	}
 
@@ -543,7 +561,7 @@ class SearchTest extends TestCase
 		$result = static::$search->search('"team of explorers"/2')
 			->expression('genre', "in(meta['genre'],'adventure')")
 			->notfilter('genre', 'equals', 1)
-			->filter('year', 'lte', 2000)
+			->filter('_year', 'lte', 2000)
 			->filter('advise', 'equals', 'R')
 			->get();
 
@@ -567,7 +585,7 @@ class SearchTest extends TestCase
 	public function testBoolQueryMutipleFilters1() {
 		$q = new BoolQuery();
 		$q->must(new MatchQuery(['query' => 'team of explorers', 'operator' => 'or'], '*'));
-		$q->must(new Equals('year', 2014));
+		$q->must(new Equals('_year', 2014));
 		$result = static::$search->search($q)->get();
 		$this->assertCount(1, $result);
 	}
@@ -586,7 +604,7 @@ class SearchTest extends TestCase
 	public function testInFilter() {
 		$q = new BoolQuery();
 		$q->must(new MatchQuery(['query' => 'team of explorers', 'operator' => 'or'], '*'));
-		$q->must(new In('year', [1992,2014]));
+		$q->must(new In('_year', [1992,2014]));
 		$result = static::$search->search($q)->get();
 		$this->assertCount(2, $result);
 	}
@@ -594,7 +612,7 @@ class SearchTest extends TestCase
 	public function testBoolQueryMutipleFilters2() {
 		$q = new BoolQuery();
 		$q->must(new MatchQuery(['query' => 'team of explorers', 'operator' => 'or'], '*'));
-		$q->must(new Range('year', ['lte' => 2020]));
+		$q->must(new Range('_year', ['lte' => 2020]));
 		$result = static::$search->search($q)->get();
 		$this->assertCount(5, $result);
 	}
@@ -653,9 +671,8 @@ class SearchTest extends TestCase
 	public function testProfileForSearch() {
 		$results = static::$search->profile()->phrase('team of explorers')->get();
 		$profile = $results->getProfile();
-		$expected = 'PHRASE( AND(KEYWORD(team, querypos=1)),  AND(KEYWORD(of, querypos=2)),  AND(KEYWORD(explorers, ' .
-			'querypos=3)))';
-		$this->assertEquals($expected, $profile['query']['description']);
+		$expected = 'unknown';
+		$this->assertEquals($expected, $profile['query'][0]['status']);
 	}
 
 	public function testResultHitGetScore() {
@@ -670,14 +687,14 @@ class SearchTest extends TestCase
 
 	public function testResultHitGetValue() {
 		$resultHit = $this->getFirstResultHit();
-		$this->assertEquals(1986, $resultHit->get('year'));
-		$this->assertEquals(1986, $resultHit->__get('year'));
+		$this->assertEquals(1986, $resultHit->get('_year'));
+		$this->assertEquals(1986, $resultHit->__get('_year'));
 	}
 
 	public function testResultHitHasValue() {
 		$resultHit = $this->getFirstResultHit();
-		$this->assertTrue($resultHit->has('year'));
-		$this->assertTrue($resultHit->__isset('year'));
+		$this->assertTrue($resultHit->has('_year'));
+		$this->assertTrue($resultHit->__isset('_year'));
 	}
 
 	public function testResultHitDoesNotHaveValue() {
@@ -742,14 +759,14 @@ class SearchTest extends TestCase
 
 	public function testTrackScores() {
 		// when there are match and sort, but there is no track_scores, the score is equal to 1
-		$result = static::$search->search('space')->sort('year', 'desc')->get();
+		$result = static::$search->search('space')->sort('_year', 'desc')->get();
 		$this->assertCount(2, $result);
 		foreach ($result as $resultHit) {
 			$this->assertEquals(1, $resultHit->getScore());
 		}
 
 		// when there are match, sort and track_scores, the score is greater than 1
-		$result = static::$search->search('space')->trackScores(true)->sort('year', 'desc')->get();
+		$result = static::$search->search('space')->trackScores(true)->sort('_year', 'desc')->get();
 		$this->assertCount(2, $result);
 		foreach ($result as $resultHit) {
 			$this->assertGreaterThan(1, $resultHit->getScore());
@@ -773,15 +790,16 @@ class SearchTest extends TestCase
 		sort($keys);
 		$this->assertEquals(
 			[
-			0 => 'advise',
-			1 => 'language',
-			2 => 'lat',
-			3 => 'lon',
-			4 => 'meta',
-			5 => 'plot',
-			6 => 'rating',
-			7 => 'title',
-			8 => 'year',
+			0 => '_year',
+			1 => 'advise',
+			2 => 'kind',
+			3 => 'language',
+			4 => 'lat',
+			5 => 'lon',
+			6 => 'meta',
+			7 => 'plot',
+			8 => 'rating',
+			9 => 'title',
 			], $keys
 		);
 	}
@@ -828,10 +846,74 @@ class SearchTest extends TestCase
 	}
 
 	public function testFacets() {
-		$results = static::$search->filter('year', 'range', [1960,1992])->facet('year')->get();
+		$results = static::$search->filter('_year', 'range', [1960,1992])->facet('_year')->get();
 		$facets = $results->getFacets();
 		$this->assertCount(1, $facets);
-		$this->assertArrayHasKey('year', $facets);
-		$this->assertCount(3, $facets['year']['buckets']);
+		$this->assertArrayHasKey('_year', $facets);
+		$this->assertCount(3, $facets['_year']['buckets']);
 	}
+
+	public function multiFacets() {
+		$results = static::$search->filter('_year', 'range', [1960,1992])->multiFacet('multi')
+			->facet('_year', null, null, null, 'desc', 'multi')
+			->facet('rating', null, null, null, 'desc', 'multi')
+			->get();
+		$facets = $results->getFacets();
+		$this->assertCount(1, $facets);
+		$this->assertArrayHasKey('_year', $facets);
+		$this->assertCount(3, $facets['_year']['buckets']);
+	}
+
+	public function testKnnSearchByDocId() {
+		$results = static::$search->knn('kind', 3, 5)->get();
+		$resultIds = [4,5,2,6,10];
+		$this->assertCount(5, $results);
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+	}
+
+	public function testKnnSearchByDocIdWithChainedSearch() {
+		$resultIds = [5,10];
+		$results = static::$search->knn('kind', 3, 5)->search('Alien')->get();
+		$this->assertCount(2, $results);
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+		static::$search->reset();
+		static::$search->setIndex('movies');
+		$results = static::$search->search('Alien')->knn('kind', 3, 5)->get();
+		$this->assertCount(2, $results);
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+	}
+
+	public function testKnnSearchByDocIdWithFilter() {
+		$results = static::$search->knn('kind', 2, 3)->filter('id', 'range', [4,5])->get();
+		$this->assertCount(2, $results);
+		$resultIds = [4,5];
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+	}
+
+	public function testKnnSearchByQueryVector() {
+		$results = static::$search->knn('kind', [0.5,0.5], 4)->get();
+		$this->assertCount(6, $results);
+		$resultIds = [5,4,2,3,6,10];
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+	}
+
+	public function testKnnSearchByQueryVectorWithFilter() {
+		$results = static::$search->knn('kind', [0.5,0.5], 4)->filter('id', 'range', [1,4])->get();
+		$this->assertCount(3, $results);
+		$resultIds = [4,2,3];
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+	}
+
 }

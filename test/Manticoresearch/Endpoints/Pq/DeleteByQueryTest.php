@@ -1,5 +1,10 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
+
 namespace Manticoresearch\Test\Endpoints\Pq;
 
 use Manticoresearch\Endpoints\Pq\DeleteByQuery;
@@ -22,7 +27,7 @@ class DeleteByQueryTest extends \PHPUnit\Framework\TestCase
 	public function testGetPath() {
 		$dbq = new DeleteByQuery();
 		$dbq->setIndex('products');
-		$this->assertEquals('/json/pq/products/_search', $dbq->getPath());
+		$this->assertEquals('/pq/products/_delete_by_query', $dbq->getPath());
 	}
 
 	public function testGetPathIndexMissing() {

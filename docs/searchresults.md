@@ -1,6 +1,6 @@
 # Search result objects
 
-The native [Client:search](lowlevelclient.md#search) method returns an unmodified array by default, which represents the response of the `/json/search` endpoint, such as:
+The native [Client:search](lowlevelclient.md#search) method returns an unmodified array by default, which represents the response of the `/search` endpoint, such as:
 
 ```json
 {
@@ -81,7 +81,7 @@ Each facet is an array containing the faceted values and counts in the `buckets`
 
 ``` php
 $facets = $results->getFacets();
-$year_facet = $facets['year'];
+$year_facet = $facets['_year'];
 print_r($year_facet);
 
 (

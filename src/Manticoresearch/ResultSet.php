@@ -1,5 +1,9 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 
 namespace Manticoresearch;
 
@@ -39,7 +43,7 @@ class ResultSet implements \Iterator, \Countable
 		$this->response = $responseObj;
 		$response = $responseObj->getResponse();
 		if (isset($response['hits']['hits'])) {
-			$this->array = $response['hits']['hits'];
+			$this->array = array_values($response['hits']['hits']);
 			$this->total = $response['hits']['total'];
 		} else {
 			$this->total = 0;

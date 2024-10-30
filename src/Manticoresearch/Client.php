@@ -1,5 +1,10 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
+
 declare(strict_types=1);
 
 namespace Manticoresearch;
@@ -195,6 +200,21 @@ class Client
 	}
 
 	/**
+	 * Endpoint: _update
+	 * @param string $index
+	 * @param int $id
+	 * @param array $params
+	 * @return mixed
+	 */
+	public function partialReplace(string $index, int $id, array $params = []) {
+		$endpoint = new Endpoints\PartialReplace($params);
+		$endpoint->setPathByIndexAndId($index, $id);
+		$response = $this->request($endpoint);
+
+		return $response->getResponse();
+	}
+
+	/**
 	 * Endpoint: update
 	 * @param array $params
 	 * @return array
@@ -324,6 +344,18 @@ class Client
 		return $response->getResponse();
 	}
 
+	/**
+	 * Endpoint: autocomplete
+	 * @param array $params
+	 * @return mixed
+	 */
+	public function autocomplete(array $params = []) {
+		$endpoint = new Endpoints\Autocomplete($params);
+		$response = $this->request($endpoint);
+
+		return $response->getResponse();
+	}
+
 	public function explainQuery(array $params = []) {
 		$endpoint = new Endpoints\ExplainQuery();
 		$endpoint->setIndex($params['index']);
@@ -345,8 +377,10 @@ class Client
 	public function request(Request $request, array $params = []): Response {
 		try {
 			$connection = $this->connectionPool->getConnection();
-			$this->lastResponse = $connection->getTransportHandler($this->logger)->execute($request, $params);
+			$this->lastResponse = $connection->getTransportHandler($this->logger)
+				->execute($request, $params);
 		} catch (NoMoreNodesException $e) {
+			$e->setRequest($request);
 			$this->logger->error(
 				'Manticore Search Request out of retries:', [
 				'exception' => $e->getMessage(),
@@ -357,10 +391,16 @@ class Client
 			$this->initConnections();
 			throw $e;
 		} catch (ConnectionException $e) {
+			$curRetryCount = sizeof($this->connectionPool->retriesInfo);
+			$exMsg = $e->getMessage();
+			// We rely on the common error message format from Manticore here
+			$exReasonPos = strrpos($exMsg, ':');
+			$exceptionReason = substr($exMsg, ($exReasonPos === false) ? 0 : $exReasonPos + 1);
+			$this->connectionPool->retriesInfo[$curRetryCount - 1]['reason'] = $exceptionReason;
 			$this->logger->warning(
 				'Manticore Search Request failed on attempt ' . $this->connectionPool->retriesAttempts . ':',
 				[
-					'exception' => $e->getMessage(),
+					'exception' => $exMsg,
 					'request' => $e->getRequest()->toArray(),
 				]
 			);

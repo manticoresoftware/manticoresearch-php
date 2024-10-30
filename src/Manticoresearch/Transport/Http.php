@@ -1,11 +1,19 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
+
 namespace Manticoresearch\Transport;
 
+use Manticoresearch\Connection;
 use Manticoresearch\Exceptions\ConnectionException;
 use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Request;
 use Manticoresearch\Response;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Class Http
@@ -19,11 +27,22 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 	 */
 	protected $scheme = 'http';
 
-	protected static $curl = null;
+	/**
+	 * HTTP Transport constructor.
+	 * @param Connection|null $connection
+	 * @param LoggerInterface|null $logger
+	 */
+	public function __construct(
+		Connection $connection = null,
+		LoggerInterface $logger = null
+	) {
+		$this->connection = $connection;
+		$this->logger = $logger ?? new NullLogger();
+	}
 
 	public function execute(Request $request, $params = []) {
 		$connection = $this->getConnection();
-		$conn = $this->getCurlConnection($connection->getConfig('persistent'));
+		$conn = $connection->getCurl();
 		$url = $this->scheme . '://' . $connection->getHost() . ':' . $connection->getPort() . $connection->getPath();
 		$endpoint = $request->getPath();
 		$url .= $endpoint;
@@ -52,13 +71,11 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 		}
 		curl_setopt($conn, CURLOPT_CUSTOMREQUEST, $method);
 		curl_setopt($conn, CURLOPT_HTTPHEADER, $headers);
-
 		if ($connection->getConnectTimeout() > 0) {
 			curl_setopt($conn, CURLOPT_CONNECTTIMEOUT, $connection->getConnectTimeout());
 		}
 
 		if ($connection->getConfig('username') !== null && $connection->getConfig('password') !== null) {
-			curl_setopt($conn, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
 			curl_setopt(
 				$conn,
 				CURLOPT_USERPWD,
@@ -100,8 +117,6 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 		//hard error
 		if ($errorno > 0) {
 			$error = curl_error($conn);
-
-			static::$curl = null;
 			throw new ConnectionException($error, $request);
 		}
 
@@ -134,10 +149,10 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 		return $response;
 	}
 
-	protected function getCurlConnection(bool $persistent = true) {
-		if (!$persistent || !static::$curl) {
-			static::$curl = curl_init();
-		}
-		return static::$curl;
+	/**
+	 * @return Connection|null
+	 */
+	public function getConnection() {
+		return $this->connection;
 	}
 }

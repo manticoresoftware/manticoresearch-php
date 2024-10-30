@@ -133,6 +133,26 @@ Returns an array response with:
 - errors - stating whether an error occurred
 - items - response status for each document.
 
+### getDocumentById()
+
+Get an existing document by its ID.
+Expects:
+- a document ID
+Example:
+
+```php
+$index->getDocumentById(1);
+```
+
+### getDocumentByIds()
+Get multiple documents by their IDs.
+Expects:
+- an array of document IDs
+Example:
+
+```php
+$index->getDocumentByIds([1,3,5]);
+```
 
 ### replaceDocument()
 
@@ -140,6 +160,7 @@ Replace an existing document in the index.
 Expects:
 - an array of values
 - a document ID
+- to execute a partial replace ( `false|true`, `false` by default )
 
 Example:
 
@@ -155,6 +176,15 @@ $index->replaceDocument([
             ]
         ], 1);
 ```
+
+```php
+$index->replaceDocument([
+            'title' => 'find me',
+            'label' => 'not used'
+        ], 2, true);
+```
+
+
 
 ### replaceDocuments()
 
@@ -245,14 +275,14 @@ $index->updateDocuments(['price'=>100],['match'=>['*'=>'apple']]);
 An example using a Query object:
 
 ```php
-$index->updateDocuments(['year'=>2000], new \Manticoresearch\Query\MatchQuery('team','*'));
+$index->updateDocuments(['_year'=>2000], new \Manticoresearch\Query\MatchQuery('team','*'));
 ```
 
 ```php
 $bool = new BoolQuery();
 $bool->must(new \Manticoresearch\Query\MatchQuery('team','*'));
 $bool->must(new \Manticoresearch\Query\Range('rating',['gte'=>8.5]));
-$response = $index->updateDocuments(['year'=>2000], $bool);
+$response = $index->updateDocuments(['_year'=>2000], $bool);
 ```
 
 It returns an array with:

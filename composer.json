@@ -9,7 +9,8 @@
 	"license" : "MIT",
 	"type" : "library",
 	"require" : {
-		"php" : "^7.1|^8.0",
+		"php" : "^7.4|^8.0",
+		"php-http/discovery" : "^1.14",
 		"ext-json" : "*",
 		"psr/log" : "^1.1 || ^2.0 || ^3.0"
 	},
@@ -25,7 +26,7 @@
 		"mockery/mockery" : "*",
 		"phpstan/phpstan" : "^1.4",
 		"phpunit/phpunit" : ">=7.5 || ^9.6",
-		"slevomat/coding-standard": "^7.0",
+		"slevomat/coding-standard" : "^7.0",
 		"squizlabs/php_codesniffer" : "^3.7"
 	},
 	"autoload" : {
@@ -40,9 +41,9 @@
 	},
 	"config" : {
 		"sort-packages" : true,
-		"allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": false
-        }
+		"allow-plugins" : {
+			"dealerdirect/phpcodesniffer-composer-installer" : false
+		}
 	},
 	"authors" : [{
 			"name" : "Manticore Software",
@@ -60,8 +61,8 @@
 		"chat" : "https://slack.manticoresearch.com/"
 	},
 	"scripts" : {
-		"check-cs": "phpcs --standard=ruleset.xml src/ test/",
-        "fix-cs": "phpcbf --standard=ruleset.xml src/ test/",
+		"check-cs" : "phpcs --standard=ruleset.xml src/ test/",
+		"fix-cs" : "phpcbf --standard=ruleset.xml src/ test/",
 		"phpstan" : "phpstan"
 	}
 }

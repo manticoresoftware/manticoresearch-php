@@ -1,12 +1,17 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
+
 namespace Manticoresearch\Test\Endpoints;
 
 class InsertTest extends \PHPUnit\Framework\TestCase
 {
 	public function testPath() {
 		$insert = new \Manticoresearch\Endpoints\Insert();
-		$this->assertEquals('/json/insert', $insert->getPath());
+		$this->assertEquals('/insert', $insert->getPath());
 	}
 
 	public function testGetMethod() {

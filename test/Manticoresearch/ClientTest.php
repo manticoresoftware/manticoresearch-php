@@ -1,5 +1,9 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 
 namespace Manticoresearch\Test;
 
@@ -98,7 +102,8 @@ class ClientTest extends TestCase
 			'retries' => 2,
 		];
 		$exMsg = "After 2 retries to 2 nodes, connection has failed. No more retries left.\n"
-			. "Retries made:\n 1. to 127.0.0.1:9418\n 2. to 127.0.0.2:9428\n";
+			. "Retries made:\n 1. to 127.0.0.1:9418, failure reason: Connection refused\n"
+			. " 2. to 127.0.0.2:9428, failure reason: Connection refused\n";
 		$client = new Client($params);
 		$this->expectException(ConnectionException::class);
 		$this->expectExceptionMessage($exMsg);

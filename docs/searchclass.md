@@ -70,11 +70,31 @@ $search->limit(24)->offset(12);
 
 ### maxMatches()
 
-Set [max_matches](https://mnt.cr/max_matches) for the search.
+Set [max_matches](https://manual.manticoresearch.com/Searching/Options#max_matches) for the search.
 
 ```php
 $search->limit(10000)->maxMatches(10000);
 ```
+
+### knn()
+
+Performs a [knn search](https://manual.manticoresearch.com/Searching/KNN) query
+
+```php
+$search->knn('some_float_vector_field', [0.567, 0.322], 100);
+```
+
+or
+
+```php
+$search->knn('some_float_vector_field', 5, 100);
+```
+
+It expects 3 parameters:
+- a name of the `float_vector` type field
+- a float vector or a document id to execute knn search by 
+- a number of most similar documents to return
+
 
 ### filter(), orFilter() and notFilter()
 
@@ -92,32 +112,32 @@ It can expect 3 parameters for filtering an attribute:
 `orFilter()` executes logical disjunction in case of multiple filters. Alternatively, the `OR` filtering condition can be used.
 
 ```php
-$search->filter('year', 'equals', 2000);
-$search->filter('year', 'lte', 2000);
-$search->filter('year', 'range', [1960,1992]);
-$search->filter('year', 'in', [1960,1975,1990]);
+$search->filter('_year', 'equals', 2000);
+$search->filter('_year', 'lte', 2000);
+$search->filter('_year', 'range', [1960,1992]);
+$search->filter('_year', 'in', [1960,1975,1990]);
 ```
 
 ```php
-$search->filter('year', 'equals', 2000, 'OR');
-$search->filter('year', 'equals', 2002, 'OR');
+$search->filter('_year', 'equals', 2000, 'OR');
+$search->filter('_year', 'equals', 2002, 'OR');
 
-$search->filter('year', 'range', [1960,1992], 'OR');
-$search->filter('year', 'range', [1995,2000], 'OR');
+$search->filter('_year', 'range', [1960,1992], 'OR');
+$search->filter('_year', 'range', [1995,2000], 'OR');
 
-$search->orFilter('year', 'equals', 2000);
-$search->orFilter('year', 'equals', 2002);
+$search->orFilter('_year', 'equals', 2000);
+$search->orFilter('_year', 'equals', 2002);
 
-$search->orFilter('year', 'range', [1960,1992]);
-$search->orFilter('year', 'range', [1995,2000]);
+$search->orFilter('_year', 'range', [1960,1992]);
+$search->orFilter('_year', 'range', [1995,2000]);
 ```
 
 ```php
-$search->filter('year', 'equals', 2000, 'NOT');
-$search->filter('year', 'lte', 1995, 'NOT');
+$search->filter('_year', 'equals', 2000, 'NOT');
+$search->filter('_year', 'lte', 1995, 'NOT');
 
-$search->notFilter('year', 'equals', 2000);
-$search->notFilter('year', 'lte', 1995);
+$search->notFilter('_year', 'equals', 2000);
+$search->notFilter('_year', 'lte', 1995);
 
 ```
 
@@ -125,13 +145,13 @@ $search->notFilter('year', 'lte', 1995);
 Note that the `equals` operator can be omitted, and the filter function can be called only with the `value` parameter, as shown in the example below:
 
 ```php
-$search->filter('year', 2000);
+$search->filter('_year', 2000);
 ```
 
 The functions can also accept a single parameter as a filter class like `Range()`, `Equals()`, or `Distance()`.
 
 ```php
-$search->filter(new Range('year', ['lte' => 2020]));
+$search->filter(new Range('_year', ['lte' => 2020]));
 ```
 
 ### sort()
@@ -184,7 +204,7 @@ $search->sort([
 The `sort` method can be chained. For example:
 
 ```php
-$search->sort('name','asc')->sort('tags', 'desc')->sort('year', 'asc');
+$search->sort('name','asc')->sort('tags', 'desc')->sort('_year', 'asc');
 ```
 
 Note that the maximum number of attributes to sort by is equal to 5.
@@ -232,13 +252,27 @@ The `facet()` method allows you to add a facet (aggregation) to your search quer
 $search->facet($field, $group = null, $limit = null, $sortField = null, $sortDirection = 'desc');
 ```
 Parameters:
- * attribute name - This is a required parameter and can also be an expression name.
- * facet alias - If not provided, the attribute name will be utilized.
+ * field - name of the attribute to group by. This is a required parameter and can also be an expression name.
+ * group - Facet name. If not provided, the attribute name will be utilized.
  * limit - Defines the maximum number of facet values to return.
  * sortField - Field the facet values will be sorted by. Also, can be set as `COUNT(*)` or `FACET()`. For details, see [Ordering in facet result](https://manual.manticoresearch.com/Searching/Faceted_search#Ordering-in-facet-result).
  * sortDirection - Direction of sorting, `desc` by default
 
 Facets will be included in the result set and can be accessed using [ResultSet:getFacets()](searchresults.md#resultset-object).
+
+### multiFacet()
+
+The `multiFacet()` method allows you to add a facet (aggregation) composed by multiple fields to your search query.
+
+```php
+$search->multiFacet($group = null, $limit = null);
+```
+Parameters:
+ * group - Facet name. This is a required parameter.
+ * limit - Defines the maximum number of facet values to return.
+
+Multi field facets will be included in the result set and can be accessed using [ResultSet:getFacets()](searchresults.md#resultset-object).
+
 
 ### option()
 

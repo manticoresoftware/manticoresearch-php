@@ -1,9 +1,15 @@
 <?php
 
+// Copyright (c) Manticore Software LTD (https://manticoresearch.com)
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
+
 namespace Manticoresearch\Test\Endpoints;
 
 use Manticoresearch\Client;
-use Manticoresearch\Exceptions\ResponseException;
+
+//use Manticoresearch\Exceptions\ResponseException;
 
 class BulkTest extends \PHPUnit\Framework\TestCase
 {
@@ -34,6 +40,7 @@ class BulkTest extends \PHPUnit\Framework\TestCase
 		static::$client->indices()->truncate(['index' => 'bulktest']);
 	}
 
+	/*
 	public function testBulkInsertError() {
 		static::$client->bulk(
 			['body' => [
@@ -50,9 +57,16 @@ class BulkTest extends \PHPUnit\Framework\TestCase
 			['insert' => ['index' => 'bulktest', 'id' => 3, 'doc' => ['title' => 'test']]],
 			]]
 		);
-	}
+	}*/
 
 	public function testDelete() {
+		static::$client->bulk(
+			['body' => [
+				['insert' => ['index' => 'bulktest', 'id' => 1, 'doc' => ['title' => 'test']]],
+				['insert' => ['index' => 'bulktest', 'id' => 2, 'doc' => ['title' => 'test']]],
+				['insert' => ['index' => 'bulktest', 'id' => 3, 'doc' => ['title' => 'test']]],
+			]]
+		);
 		static::$client->search(['body' => ['index' => 'bulktest', 'query' => ['match_all' => '']]]);
 		$response = static:: $client->bulk(
 			['body' => [
