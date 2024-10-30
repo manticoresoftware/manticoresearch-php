@@ -421,4 +421,12 @@ class Client
 	public function getLastResponse(): Response {
 		return $this->lastResponse;
 	}
+
+	/*
+	 *
+	 * @return void
+	 */
+	public function unsetLastResponse(): void {
+		$this->lastResponse = null;
+	}
 }
