@@ -20,13 +20,13 @@ jobs:
 
     services:
       manticoresearch-manticore:
-        image: manticoresearch/manticore:5.0.2
+        image: manticoresearch/manticore:dev
         env:
           EXTRA: 1
         ports:
           - 9308:9308
       manticoresearch-manticore-2:
-        image: manticoresearch/manticore:5.0.2
+        image: manticoresearch/manticore:dev
         env:
           EXTRA: 1
         ports:
