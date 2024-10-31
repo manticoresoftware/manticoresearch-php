@@ -34,8 +34,8 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 			],
 		];
 		$response = $client->insert(['body' => $doc]);
-        unset($response['_index']);
-        unset($response['table']);
+		unset($response['_index']);
+		unset($response['table']);
 
 		// assert inserted
 		$this->assertEquals(
