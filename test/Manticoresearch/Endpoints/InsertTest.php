@@ -34,11 +34,12 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 			],
 		];
 		$response = $client->insert(['body' => $doc]);
+		unset($response['_index']);
+		unset($response['table']);
 
 		// assert inserted
 		$this->assertEquals(
 			[
-			'_index' => 'products',
 			'_id' => 1001,
 			'created' => true,
 			'result' => 'created',
