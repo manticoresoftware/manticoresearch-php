@@ -87,11 +87,11 @@ class IndexTest extends TestCase
 
 		$this->assertEquals(
 			[
-			'_index' => 'testindex',
 			'_id' => 1,
 			'created' => false,
 			'result' => 'updated',
 			'status' => 200,
+			'_table' => 'testindex',
 			], $response
 		);
 	}
