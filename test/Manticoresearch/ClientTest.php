@@ -167,4 +167,27 @@ class ClientTest extends TestCase
 		$lastResponse = $client->getLastResponse()->getResponse();
 		$this->assertEquals($result, $lastResponse);
 	}
+	public function testUnsetLastResponse() {
+		$helper = new PopulateHelperTest();
+		$helper->populateForKeywords();
+		$client = $helper->getClient();
+
+		$payload = [
+			'body' => [
+				'index' => 'products',
+				'query' => [
+					'match' => ['*' => 'broken'],
+				],
+			],
+		];
+
+		$result = $client->search($payload);
+		$lastResponse = $client->getLastResponse()->getResponse();
+		$this->assertEquals($result, $lastResponse);
+
+		$client->unsetLastResponse();
+
+		$lastResponse = $client->getLastResponse()->getResponse();
+		$this->assertEquals([], $lastResponse);
+	}
 }
