@@ -35,8 +35,10 @@ class TablesTest extends \PHPUnit\Framework\TestCase
 		$client = $helper->getClient();
 		$response = $client->nodes()->tables();
 		$result = [
-			'Table' => 'products',
-			'Type' => 'rt',
+			[
+				'Table' => 'products',
+				'Type' => 'rt',
+			],
 		];
 		$this->assertEquals($result, $response);
 	}
