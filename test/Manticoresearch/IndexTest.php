@@ -91,7 +91,7 @@ class IndexTest extends TestCase
 			'created' => false,
 			'result' => 'updated',
 			'status' => 200,
-			'_table' => 'testindex',
+			'table' => 'testindex',
 			], $response
 		);
 	}
