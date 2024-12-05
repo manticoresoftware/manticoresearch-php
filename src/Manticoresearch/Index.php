@@ -141,7 +141,7 @@ class Index
 		// Deduplicate and order the list
 		static::checkIfList($ids);
 
-		array_walk($ids, 'self::checkDocumentId');
+		array_walk($ids, ['static::class', 'checkDocumentId']);
 		$params = [
 			'body' => [
 				'index' => $this->index,
