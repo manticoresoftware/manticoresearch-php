@@ -203,7 +203,6 @@ The request requires `query` and `table` defined as required parameters.
 
 ```
 $request = [
-[
     'body' => [
         'query' => 'hello wo',
         'table' => 'testrt',
