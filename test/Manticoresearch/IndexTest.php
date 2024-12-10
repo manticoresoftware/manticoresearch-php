@@ -87,11 +87,11 @@ class IndexTest extends TestCase
 
 		$this->assertEquals(
 			[
-			'_index' => 'testindex',
 			'_id' => 1,
 			'created' => false,
 			'result' => 'updated',
 			'status' => 200,
+			'table' => 'testindex',
 			], $response
 		);
 	}
@@ -135,13 +135,13 @@ class IndexTest extends TestCase
 			[
 			'items' => [
 				['bulk' => [
-					'_index' => 'testindex',
 					'_id' => 1,
 					'created' => 1,
 					'deleted' => 1,
 					'updated' => 0,
 					'result' => 'updated',
 					'status' => 200,
+					'table' => 'testindex',
 				]],
 			],
 			'errors' => false,
