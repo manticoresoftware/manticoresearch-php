@@ -21,7 +21,7 @@ class QueryTest extends TestCase
 	}
 
 	public function testNoParams() {
-		$this->assertEquals(null, $this->query->toArray());
+		$this->assertEquals([], $this->query->toArray());
 	}
 
 	public function testParamsNoNesting() {
