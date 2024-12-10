@@ -24,6 +24,9 @@ class BoolQuery extends Query
 		return $this;
 	}
 	public function toArray() {
-		return $this->convertArray(['bool' => $this->params]);
+		if (!empty($this->params)) {
+			return $this->convertArray(['bool' => $this->params]);
+		}
+		return null;
 	}
 }
