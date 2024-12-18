@@ -70,7 +70,7 @@ Getting Started
 Install the Manticore Search PHP client using [composer](https://getcomposer.org) package manager:
 
 ```bash
-composer require manticoresoftware/manticoresearch-php
+composer require manticoresoftware/manticoresearch-php:dev-master
 ```
 ### Initiate an index:
 
