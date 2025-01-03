@@ -13,6 +13,7 @@ use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\Distance;
 use Manticoresearch\Query\Equals;
 use Manticoresearch\Query\In;
+use Manticoresearch\Query\JoinQuery;
 use Manticoresearch\Query\MatchQuery;
 use Manticoresearch\Query\Range;
 use Manticoresearch\ResultSet;
@@ -44,6 +45,67 @@ class SearchTest extends TestCase
 			'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT'],
 		];
 		$client = new Client($params);
+
+		$client->indices()->drop(['index' => 'movie_years','body' => ['silent' => true]]);
+		$index = [
+			'index' => 'movie_years',
+			'body' => [
+				'columns' => ['year_half' => ['type' => 'text'],
+					'movie_year' => ['type' => 'integer'],
+					'movie_count' => ['type' => 'integer'],
+				],
+			],
+		];
+		$client->indices()->create($index);
+
+		$docs = [
+			[
+				'insert' => [
+					'index' => 'movie_years',
+					'id' => 1,
+					'doc' => [
+						'year_half' => 'first half',
+						'movie_year' => 2010,
+						'movie_count' => 1400,
+					],
+				],
+			],
+			[
+				'insert' => [
+					'index' => 'movie_years',
+					'id' => 2,
+					'doc' => [
+						'year_half' => 'first half',
+						'movie_year' => 2011,
+						'movie_count' => 1700,
+					],
+				],
+			],
+			[
+				'insert' => [
+					'index' => 'movie_years',
+					'id' => 3,
+					'doc' => [
+						'year_half' => 'second half',
+						'movie_year' => 2010,
+						'movie_count' => 1600,
+					],
+				],
+			],
+			[
+				'insert' => [
+					'index' => 'movie_years',
+					'id' => 4,
+					'doc' => [
+						'year_half' => 'second half',
+						'movie_year' => 2011,
+						'movie_count' => 1200,
+					],
+				],
+			],
+		];
+		$client->bulk(['body' => $docs]);
+
 		$client->indices()->drop(['index' => 'movies','body' => ['silent' => true]]);
 		$index = [
 			'index' => 'movies',
@@ -68,8 +130,8 @@ class SearchTest extends TestCase
 				],
 			],
 		];
-
 		$client->indices()->create($index);
+
 		$docs = [
 			['insert' => ['index' => 'movies', 'id' => 2, 'doc' =>
 				['title' => 'Interstellar',
@@ -916,4 +978,46 @@ class SearchTest extends TestCase
 		}
 	}
 
+	public function testJoinSearchWithLeftJoin() {
+		$join = new JoinQuery('left', 'movie_years', '_year', 'movie_year');
+		$results = static::$search->join($join)->get();
+		print_r($results);
+		$this->assertCount(7, $results);
+		$resultIds = [2,3,3,4,5,6,10];
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+	}
+
+	public function testJoinSearchWithInnerJoin() {
+		$join = new JoinQuery('inner', 'movie_years', '_year', 'movie_year');
+		$results = static::$search->join()->join($join, true)->get();
+		$this->assertCount(2, $results);
+		$resultIds = [3,3];
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+	}
+	
+	public function testJoinSearchWithMainTableQuery() {
+		$join = new JoinQuery('left', 'movie_years', '_year', 'movie_year');
+		$results = static::$search->match(['query' => 'dream-sharing technology', 'operator' => 'and'])
+			->join($join, true)->get();
+		$this->assertCount(2, $results);
+		$resultIds = [3,3];
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+	}
+
+	public function testJoinSearchWithJoinedTableQuery() {
+		$joinQuery = new MatchQuery(['query' => 'First half', 'operator' => 'and'], '*');
+		$join = new JoinQuery('left', 'movie_years', '_year', 'movie_year', '', $joinQuery);
+		$results = static::$search->join($join, true)->get();
+		$this->assertCount(1, $results);
+		$resultIds = [3];
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+	}
 }
