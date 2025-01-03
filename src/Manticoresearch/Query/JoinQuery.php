@@ -16,7 +16,7 @@ class JoinQuery extends Query
 	const JOIN_QUERY_TYPES = [
 		'Manticoresearch\Query\MatchPhrase',
 		'Manticoresearch\Query\MatchQuery',
-		'Manticoresearch\Query\QueryString'
+		'Manticoresearch\Query\QueryString',
 	];
 
 	public function __construct(
@@ -44,7 +44,7 @@ class JoinQuery extends Query
 			'field' => $joinRightField,
 			'table' => $joinTable,
 		];
-		
+
 		$this->params['on'] = [
 			[
 				'left' => $joinLeft,
@@ -64,9 +64,12 @@ class JoinQuery extends Query
 		if (!$joinQuery) {
 			return;
 		}
-		if (!in_array(get_class($joinQuery), static::JOIN_QUERY_TYPES)) {
-			throw new \RuntimeException("`joinQuery` must be a full-text query object");
+		foreach (static::JOIN_QUERY_TYPES as $queryType) {
+			if (is_a($joinQuery, $queryType)) {
+				return;
+			}
 		}
+		throw new \RuntimeException('`joinQuery` must be a full-text query object');
 	}
 
 	public function add($k, $v) {

@@ -998,7 +998,7 @@ class SearchTest extends TestCase
 			$this->assertEquals($resultIds[$i], $resultHit->getId());
 		}
 	}
-	
+
 	public function testJoinSearchWithMainTableQuery() {
 		$join = new JoinQuery('left', 'movie_years', '_year', 'movie_year');
 		$results = static::$search->match(['query' => 'dream-sharing technology', 'operator' => 'and'])
