@@ -37,6 +37,7 @@ class Search
 	protected $client;
 
 	protected $query;
+	protected $join;
 	protected $body;
 	/**
 	 * @var array
@@ -54,6 +55,7 @@ class Search
 	public function __construct(Client $client) {
 		$this->client = $client;
 		$this->query = new BoolQuery();
+		$this->join = [];
 	}
 
 	public function setIndex($index): self {
@@ -117,6 +119,14 @@ class Search
 				}
 			}
 		}
+		return $this;
+	}
+
+	public function join($joinQuery = null, $clearJoin = false): self {
+		if ($clearJoin) {
+			$this->join = [];
+		}
+		$this->join[] = $joinQuery;
 		return $this;
 	}
 
@@ -383,6 +393,13 @@ class Search
 				$body['knn'] = $query;
 			} else {
 				$body['query'] = $query;
+			}
+		}
+		if ($this->join) {
+			$body['join'] = [];
+			foreach ($this->join as $join) {
+				$join->add('main_table', $this->params['index']);
+				$body['join'][] = $join->toArray();
 			}
 		}
 
