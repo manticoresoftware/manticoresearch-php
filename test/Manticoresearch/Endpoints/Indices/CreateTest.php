@@ -26,7 +26,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 				'columns' => [
 					'title' => [
 						'type' => 'text',
-						'options' => ['indexed', 'stored'],
+						'options' => ['indexed', 'stored', 'engine' => 'columnar'],
 					],
 					'price' => [
 						'type' => 'float',

@@ -23,6 +23,15 @@ class Create extends EmulateBySql
 	 */
 	protected $index;
 
+	protected function buildOptionsExpr($options) {
+		$exprParts = [];
+		foreach ($options as $k => $v) {
+			$exprParts[] = is_string($k) ? "$k='$v'" : $v;
+		}
+
+		return ' ' . implode(' ', $exprParts);
+	}
+
 	public function setBody($params = null) {
 		if (isset($this->index)) {
 			$columns = [];
@@ -30,7 +39,7 @@ class Create extends EmulateBySql
 				foreach ($params['columns'] as $name => $settings) {
 					$column = '`' . $name . '` ' . $settings['type'];
 					if (isset($settings['options']) && sizeof($settings['options']) > 0) {
-						$column .= ' ' . implode(' ', $settings['options']);
+						$column .= $this->buildOptionsExpr($settings['options']);
 					}
 					$columns[] = $column;
 				}
@@ -47,6 +56,7 @@ class Create extends EmulateBySql
 					}
 				}
 			}
+
 			return parent::setBody(
 				['query' => 'CREATE TABLE '.
 				(isset($params['silent']) && $params['silent'] === true ? ' IF NOT EXISTS ' : '').
