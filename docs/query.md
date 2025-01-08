@@ -128,6 +128,23 @@ Both sugar syntaxes can also be mixed:
 $response = $search->search('"team of explorers"/2')->filter(new \Manticoresearch\Query\Equals('_year', 2014))->get();
 ```
 
+## JoinQuery()
+
+Constructor of the join node:
+```php
+$join1 = new \Manticoresearch\Query\JoinQuery('inner', 'joined_table_name', 'main_table_field_name', 'joined_table_field_name');
+$join2 = new \Manticoresearch\Query\JoinQuery('left', 'joined_table_name', 'main_table_field_name', 'joined_table_field_name', 'join_json_attribute_field_type', 'join_query');
+```
+It accepts:
+- a name of the join type ('inner' or 'left')
+- a name of the joined table 
+- a name of the join field from the main table
+- a name of the join field from the joined table
+- a type of the join json attribute field from the joined table ('int' or 'string'; optional)
+- an extra full-text query to perform on the joined table (optional)
+
+For details, see [Joining tables](https://manual.manticoresearch.com/dev/Searching/Joining#Joining-tables)
+
 ## KnnQuery()
 
 Constructor of the knn node:

@@ -76,6 +76,20 @@ Set [max_matches](https://manual.manticoresearch.com/Searching/Options#max_match
 $search->limit(10000)->maxMatches(10000);
 ```
 
+### join()
+
+Performs a query with [joined tables](https://manual.manticoresearch.com/dev/Searching/Joining#Joining-tables) 
+
+```php
+$joinQuery = new JoinQuery('inner', 'joined_table_name', 'main_table_field_name', 'joined_table_field_name');
+$search->join($joinQuery, true);
+```
+
+It expects 2 parameters:
+- a `JoinQuery` object
+- a boolean flag to remove previously added join queries before adding a new one. Optional, set to `false` by default. 
+
+
 ### knn()
 
 Performs a [knn search](https://manual.manticoresearch.com/Searching/KNN) query
