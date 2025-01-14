@@ -50,7 +50,7 @@ jobs:
         run: composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message php-http/message-factory http-interop/http-factory-guzzle
 
       - name: Test
-        run: vendor/bin/phpunit -d memory_limit=4G --stop-on-failure test/
+        run: vendor/bin/phpunit -d memory_limit=4G --stop-on-deprecation --stop-on-failure test/
         env:
           MS_HOST: 127.0.0.1
           MS_PORT: 9308
