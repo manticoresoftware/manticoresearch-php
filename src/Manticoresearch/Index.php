@@ -59,7 +59,9 @@ class Index
 		// Deduplicate and order the list
 		static::checkIfList($ids);
 
-		array_walk($ids, 'static::checkDocumentId');
+		foreach ($ids as &$id) {
+			static::checkDocumentId($id);
+		}
 		$params = [
 			'body' => [
 				'index' => $this->index,
@@ -141,7 +143,9 @@ class Index
 		// Deduplicate and order the list
 		static::checkIfList($ids);
 
-		array_walk($ids, 'static::checkDocumentId');
+		foreach ($ids as &$id) {
+			static::checkDocumentId($id);
+		}
 		$params = [
 			'body' => [
 				'index' => $this->index,

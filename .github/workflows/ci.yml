@@ -14,10 +14,31 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest']
-        php-version: ['7.4', '8.0', '8.1', '8.2', '8.3']
+        php-version: ['7.4', '8.0', '8.1']
         phpunit-version: ['latest']
+        phpunit-deprecation-check: ['']
         transport: ['', 'PhpHttp']
-
+        include:
+          - php-version: '8.2'
+            phpunit-deprecation-check: '--stop-on-deprecation'
+            os: 'ubuntu-latest'
+            phpunit-version: 'latest'
+            transport: ''
+          - php-version: '8.3'
+            phpunit-deprecation-check: '--stop-on-deprecation'
+            os: 'ubuntu-latest'
+            phpunit-version: 'latest'
+            transport: ''
+          - php-version: '8.2'
+            phpunit-deprecation-check: '--stop-on-deprecation'
+            os: 'ubuntu-latest'
+            phpunit-version: 'latest'
+            transport: 'PhpHttp'
+          - php-version: '8.3'
+            phpunit-deprecation-check: '--stop-on-deprecation'
+            os: 'ubuntu-latest'
+            phpunit-version: 'latest'
+            transport: 'PhpHttp'
     services:
       manticoresearch-manticore:
         image: manticoresearch/manticore:dev
@@ -50,7 +71,7 @@ jobs:
         run: composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message php-http/message-factory http-interop/http-factory-guzzle
 
       - name: Test
-        run: vendor/bin/phpunit -d memory_limit=4G --stop-on-failure test/
+        run: vendor/bin/phpunit -d memory_limit=4G ${{ matrix.phpunit-deprecation-check }} --stop-on-failure test/
         env:
           MS_HOST: 127.0.0.1
           MS_PORT: 9308
