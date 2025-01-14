@@ -21,9 +21,24 @@ jobs:
         include:
           - php-version: '8.2'
             phpunit-deprecation-check: '--stop-on-deprecation'
+            os: 'ubuntu-latest'
+            phpunit-version: 'latest'
+            transport: ''
           - php-version: '8.3'
             phpunit-deprecation-check: '--stop-on-deprecation'
-
+            os: 'ubuntu-latest'
+            phpunit-version: 'latest'
+            transport: ''
+          - php-version: '8.2'
+            phpunit-deprecation-check: '--stop-on-deprecation'
+            os: 'ubuntu-latest'
+            phpunit-version: 'latest'
+            transport: 'PhpHttp'
+          - php-version: '8.3'
+            phpunit-deprecation-check: '--stop-on-deprecation'
+            os: 'ubuntu-latest'
+            phpunit-version: 'latest'
+            transport: 'PhpHttp'
     services:
       manticoresearch-manticore:
         image: manticoresearch/manticore:dev
