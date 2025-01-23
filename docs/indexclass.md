@@ -39,7 +39,10 @@ Creates the index and accepts:
 
 Each field is an array consisting of:
 - `type` - the [field/attribute type](https://manual.manticoresearch.com/Creating_an_index/Data_types)
-- `options` - an array of options for the field; `text` can have `indexed`, `stored` (default is both), and `string` can have `attribute` (default) and `indexed`
+- `options` - an array of options for the field:
+  - `text` can have `indexed`, `stored` (default is both)
+  - `string` can have `attribute` (default) and `indexed`
+  - `json` can have `json_secondary_indexes` set to `'1'` 
 
 
 Example:
@@ -52,7 +55,8 @@ Example:
     'gid' => ['type' => 'int'],
     'label' => ['type' => 'string'],
     'tags' => ['type' => 'multi'],
-    'props' => ['type' => 'json']
+    'props' => ['type' => 'json'],
+    'props_indexed' => ['type' => 'json', 'options' => ['json_secondary_indexes' => '1']],
     ], [
     'rt_mem_limit' => '256M',
     'min_infix_len' => '3'
