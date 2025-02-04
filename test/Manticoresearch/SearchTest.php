@@ -1030,7 +1030,7 @@ class SearchTest extends TestCase
 		}
 
 		$scrollToken = $results->getScroll();
-		$results = static::$search->search('*')->sort('id', 'asc')->option('scroll', $scrollToken)->limit(2)->get();
+		$results = static::$search->search('*')->option('scroll', $scrollToken)->get();
 		$this->assertCount(2, $results);
 		$resultIds = [4,5];
 		foreach ($results as $i => $resultHit) {
