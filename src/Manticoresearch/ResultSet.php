@@ -38,7 +38,7 @@ class ResultSet implements \Iterator, \Countable
 	protected $profile;
 
 	protected $facets;
-	
+
 	protected $scroll;
 
 	public function __construct($responseObj) {

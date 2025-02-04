@@ -1022,7 +1022,7 @@ class SearchTest extends TestCase
 	}
 
 	public function testSearchWithPagination() {
-		$result = static::$search->search('*')->sort('id', 'asc')->option('scroll', true)->limit(2)->get();
+		$results = static::$search->search('*')->sort('id', 'asc')->option('scroll', true)->limit(2)->get();
 		$this->assertCount(2, $results);
 		$resultIds = [2,3];
 		foreach ($results as $i => $resultHit) {
@@ -1030,7 +1030,7 @@ class SearchTest extends TestCase
 		}
 
 		$scrollToken = $results->getScroll();
-		$result = static::$search->search('*')->sort('id', 'asc')->option('scroll', $scrollToken)->limit(2)->get();
+		$results = static::$search->search('*')->sort('id', 'asc')->option('scroll', $scrollToken)->limit(2)->get();
 		$this->assertCount(2, $results);
 		$resultIds = [4,5];
 		foreach ($results as $i => $resultHit) {
