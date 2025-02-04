@@ -60,6 +60,13 @@ Total search matches:
 $result->getTotal();
 ```
 
+Scroll token if one was passed:
+
+```php
+$result->getScroll();
+```
+
+
 Query time:
 ```php
 $result->getTime();

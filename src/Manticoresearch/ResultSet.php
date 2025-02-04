@@ -38,6 +38,8 @@ class ResultSet implements \Iterator, \Countable
 	protected $profile;
 
 	protected $facets;
+	
+	protected $scroll;
 
 	public function __construct($responseObj) {
 		$this->response = $responseObj;
@@ -48,6 +50,7 @@ class ResultSet implements \Iterator, \Countable
 		} else {
 			$this->total = 0;
 		}
+		$this->scroll = $response['scroll'] ?? 0;
 		$this->took = $response['took'] ?? 0;
 		// phpcs:ignore Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
 		$this->timed_out = $response['timed_out'] ?? false;
@@ -79,6 +82,10 @@ class ResultSet implements \Iterator, \Countable
 
 	public function key(): int {
 		return $this->position;
+	}
+
+	public function getScroll() {
+		return $this->scroll;
 	}
 
 	public function getTotal() {
