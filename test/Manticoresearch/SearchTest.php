@@ -1020,4 +1020,21 @@ class SearchTest extends TestCase
 			$this->assertEquals($resultIds[$i], $resultHit->getId());
 		}
 	}
+
+	public function testSearchWithPagination() {
+		$results = static::$search->search('*')->sort('id', 'asc')->option('scroll', true)->limit(2)->get();
+		$this->assertCount(2, $results);
+		$resultIds = [2,3];
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+
+		$scrollToken = $results->getScroll();
+		$results = static::$search->search('*')->option('scroll', $scrollToken)->get();
+		$this->assertCount(2, $results);
+		$resultIds = [4,5];
+		foreach ($results as $i => $resultHit) {
+			$this->assertEquals($resultIds[$i], $resultHit->getId());
+		}
+	}
 }

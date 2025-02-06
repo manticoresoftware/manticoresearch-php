@@ -417,6 +417,7 @@ class Search
 	public function reset() {
 		$this->params = [];
 		$this->query = new BoolQuery();
+		$this->join = [];
 	}
 
 	public function getClient() {
