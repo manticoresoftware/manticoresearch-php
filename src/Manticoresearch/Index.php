@@ -26,7 +26,7 @@ class Index
 	protected $index;
 	protected $cluster = null;
 
-	public function __construct(Client $client, $index = null) {
+	public function __construct(Client $client, ?string $index = null) {
 		$this->client = $client;
 
 		$this->index = $index;
@@ -329,7 +329,7 @@ class Index
 		$this->client->indices()->flushramchunk($params);
 	}
 
-	public function alter($operation, $name, $type = null) {
+	public function alter($operation, $name, ?string $type = null) {
 		if ($operation === 'add') {
 			$params = [
 				'index' => $this->index,

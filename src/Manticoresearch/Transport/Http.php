@@ -33,8 +33,8 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 	 * @param LoggerInterface|null $logger
 	 */
 	public function __construct(
-		Connection $connection = null,
-		LoggerInterface $logger = null
+		?Connection $connection = null,
+		?LoggerInterface $logger = null
 	) {
 		$this->connection = $connection;
 		$this->logger = $logger ?? new NullLogger();

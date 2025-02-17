@@ -210,7 +210,7 @@ class Connection
 	 * @return mixed|null
 	 *
 	 */
-	public function getConfig($key = null) {
+	public function getConfig(?string $key = null) {
 		if ($key === null) {
 			return $this->config;
 		}

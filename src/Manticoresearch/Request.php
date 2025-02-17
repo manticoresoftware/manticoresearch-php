@@ -69,7 +69,7 @@ class Request
 	 * @param mixed $body
 	 */
 
-	public function setBody($body = null) {
+	public function setBody(mixed $body = null) {
 		$this->body = $body;
 		return $this;
 	}

@@ -31,7 +31,7 @@ class PhpHttp extends Transport implements TransportInterface
 	 * @param LoggerInterface|null $logger
 	 */
 
-	public function __construct(Connection $connection = null, LoggerInterface $logger = null) {
+	public function __construct(?Connection $connection = null, ?LoggerInterface $logger = null) {
 		if (!class_exists(HttpClientDiscovery::class) || !class_exists(MessageFactoryDiscovery::class)) {
 			throw new \LogicException(
 				'You cannot use the "' . self::class . '" '
