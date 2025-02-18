@@ -14,9 +14,11 @@ class PopulateHelperTest extends \PHPUnit\Framework\TestCase
 	/** @var Client */
 	private $client;
 
+	/*
 	public function __construct() {
 		parent::__construct('testDummy');
 	}
+	*/
 
 	public function getClient() {
 		$params = [
