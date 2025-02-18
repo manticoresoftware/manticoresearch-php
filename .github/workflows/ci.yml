@@ -14,38 +14,38 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest']
-        php-version: ['7.4', '8.0', '8.1']
+        php: ['7.4', '8.0', '8.1']
         phpunit-version: ['latest']
-        phpunit-deprecation-check: ['']
+        deprecation: ['']
         transport: ['', 'PhpHttp']
         include:
-          - php-version: '8.2'
-            phpunit-deprecation-check: '--stop-on-deprecation'
+          - php: '8.2'
+            deprecation: '--stop-on-deprecation'
             os: 'ubuntu-latest'
             phpunit-version: 'latest'
             transport: ''
-          - php-version: '8.3'
-            phpunit-deprecation-check: '--stop-on-deprecation'
+          - php: '8.3'
+            deprecation: '--stop-on-deprecation'
             os: 'ubuntu-latest'
             phpunit-version: 'latest'
             transport: ''
-          - php-version: '8.2'
-            phpunit-deprecation-check: '--stop-on-deprecation'
+          - php: '8.2'
+            deprecation: '--stop-on-deprecation'
             os: 'ubuntu-latest'
             phpunit-version: 'latest'
             transport: 'PhpHttp'
-          - php-version: '8.3'
-            phpunit-deprecation-check: '--stop-on-deprecation'
+          - php: '8.3'
+            deprecation: '--stop-on-deprecation'
             os: 'ubuntu-latest'
             phpunit-version: 'latest'
             transport: 'PhpHttp'
-          - php-version: '8.4'
-            phpunit-deprecation-check: '--stop-on-deprecation'
+          - php: '8.4'
+            deprecation: '--stop-on-deprecation'
             os: 'ubuntu-latest'
             phpunit-version: 'latest'
             transport: ''
-          - php-version: '8.4'
-            phpunit-deprecation-check: '--stop-on-deprecation'
+          - php: '8.4'
+            deprecation: '--stop-on-deprecation'
             os: 'ubuntu-latest'
             phpunit-version: 'latest'
             transport: 'PhpHttp'
