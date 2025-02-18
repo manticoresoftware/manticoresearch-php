@@ -66,7 +66,7 @@ class Request
 	}
 
 	/**
-	 * @param ?array|?string $body
+	 * @param mixed $body
 	 */
 
 	public function setBody($body = null) {
