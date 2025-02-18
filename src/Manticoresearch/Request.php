@@ -66,11 +66,11 @@ class Request
 	}
 
 	/**
-	 * @param mixed $body
+	 * @param ?array|?string $body
 	 */
 
-	public function setBody(mixed $body = null) {
-		$this->body = $body;
+	public function setBody($body = null) {
+		$this->body = $body ?? [];
 		return $this;
 	}
 
