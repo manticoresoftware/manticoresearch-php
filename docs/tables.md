@@ -68,11 +68,10 @@ Drop an existing table. `table` is mandatory.
 
 `body` can contain the optional parameter `silent` - for not failing with an error in case the table doesn't exist.
 
-
         $params = [
             'table' => 'testrt',
-            ['body' => ['silent'=>true ]]
-         ];
+            'body' => ['silent'=>true ]
+        ];
         $response = $client->tables()->drop($params);
         
 Alter
