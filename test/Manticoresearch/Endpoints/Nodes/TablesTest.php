@@ -12,7 +12,7 @@ use Manticoresearch\Test\Helper\PopulateHelperTest;
 class TablesTest extends \PHPUnit\Framework\TestCase
 {
 	public function testTables() {
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$client = $helper->getClient();
 
 		// need to remove indexes created by other tests
@@ -31,7 +31,7 @@ class TablesTest extends \PHPUnit\Framework\TestCase
 
 		$helper->populateForKeywords();
 
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$client = $helper->getClient();
 		$response = $client->nodes()->tables();
 		$result = [

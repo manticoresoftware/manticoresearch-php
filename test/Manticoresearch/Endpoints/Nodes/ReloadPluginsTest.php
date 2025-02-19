@@ -16,7 +16,7 @@ class ReloadPluginsTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testReloadPlugins() {
 		$this->markTestSkipped();
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$client = $helper->getClient();
 		$response = $client->nodes()->reloadplugins();
 		$this->assertEquals(['total' => 0,'error' => '','warning' => ''], $response);

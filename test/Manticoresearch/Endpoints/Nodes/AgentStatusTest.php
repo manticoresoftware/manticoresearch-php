@@ -24,7 +24,7 @@ class AgentStatusTest extends \PHPUnit\Framework\TestCase
 	}
 
 	public function testGetStatus() {
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$client = $helper->getClient();
 		$response = $client->nodes()->agentstatus();
 

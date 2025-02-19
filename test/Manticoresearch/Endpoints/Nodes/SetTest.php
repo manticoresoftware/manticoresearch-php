@@ -18,7 +18,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
 	 * See https://manual.manticoresearch.com/Server_settings/Setting_variables_online#SET
 	 */
 	public function testSet() {
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$client = $helper->getClient();
 		$payload = [
 			'body' => [

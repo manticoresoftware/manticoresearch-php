@@ -23,7 +23,7 @@ class DescribeTest extends \PHPUnit\Framework\TestCase
 	public static function setUpBeforeClass(): void {
 		parent::setUpBeforeClass();
 
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$helper->populateForKeywords();
 		static::$client = $helper->getClient();
 		static::$helper = $helper;

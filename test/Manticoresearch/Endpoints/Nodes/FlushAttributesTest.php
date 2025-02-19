@@ -12,7 +12,7 @@ use Manticoresearch\Test\Helper\PopulateHelperTest;
 class FlushAttributesTest extends \PHPUnit\Framework\TestCase
 {
 	public function testFlushAttributes() {
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$client = $helper->getClient();
 
 		$response = $client->nodes()->flushattributes();
