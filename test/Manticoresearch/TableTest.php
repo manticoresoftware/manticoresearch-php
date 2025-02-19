@@ -9,11 +9,11 @@ namespace Manticoresearch\Test;
 
 use Manticoresearch\Client;
 use Manticoresearch\Exceptions\RuntimeException;
-use Manticoresearch\Table;
 use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\MatchQuery;
 use Manticoresearch\Query\Range;
 use Manticoresearch\ResultHit;
+use Manticoresearch\Table;
 use PHPUnit\Framework\TestCase;
 
 class TableTest extends TestCase
