@@ -108,8 +108,8 @@ class TableTest extends TestCase
 
 		$this->assertEquals(
 			[
-			'table' => 'testtable',
-			'updated' => 1,
+				'_index' => 'testtable',
+				'updated' => 1,
 			], $response
 		);
 	}
