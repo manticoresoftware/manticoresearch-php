@@ -8,7 +8,7 @@
 namespace Manticoresearch\Test;
 
 use Manticoresearch\Client;
-use Manticoresearch\Index;
+use Manticoresearch\Table;
 use PHPUnit\Framework\TestCase;
 
 class ClusterTest extends TestCase
@@ -50,9 +50,9 @@ class ClusterTest extends TestCase
 		$result = $client2->cluster()->join($params);
 		$this->assertEquals('', $result['error']);
 
-		//create index on node 1
+		//create table on node 1
 		$params = [
-			'index' => 'products',
+			'table' => 'products',
 			'body' => [
 				'columns' => [
 					'title' => [
@@ -70,22 +70,22 @@ class ClusterTest extends TestCase
 				'silent' => true,
 			],
 		];
-		$client->indices()->create($params);
+		$client->tables()->create($params);
 
-		//add index to cluster
+		//add table to cluster
 		$params = [
 			'cluster' => 'testcluster',
 			'body' => [
 				'operation' => 'add',
-				'index' => 'products',
+				'table' => 'products',
 			],
 		];
 		$result = $client->cluster()->alter($params);
 		$this->assertEquals('', $result['error']);
 
-		//add document to index
+		//add document to table
 		$doc = [
-			'index' => 'products',
+			'table' => 'products',
 			'cluster' => 'testcluster',
 			'id' => 1000,
 			'doc' => [
@@ -95,11 +95,11 @@ class ClusterTest extends TestCase
 		];
 		$client->insert(['body' => $doc]);
 
-		//add document via Index class
-		$index = new Index($client);
-		$index->setName('products');
-		$index->setCluster('testcluster');
-		$result = $index->addDocument(['title' => 'The Dark Knight','price' => 7.5], 2000);
+		//add document via Table class
+		$table = new Table($client);
+		$table->setName('products');
+		$table->setCluster('testcluster');
+		$result = $table->addDocument(['title' => 'The Dark Knight','price' => 7.5], 2000);
 
 		// workaround against unstable tests. For some reason the replication which
 		// has to be synchronous acts like if it was asynchronous
@@ -108,7 +108,7 @@ class ClusterTest extends TestCase
 		//check if documents replicated on node 2
 		$params = [
 			'body' => [
-				'index' => 'products',
+				'table' => 'products',
 				'query' => [
 					'range' => ['id' => ['gte' => 500]],
 				],
@@ -117,12 +117,12 @@ class ClusterTest extends TestCase
 		$result = $client2->search($params);
 		$this->assertEquals(2, $result['hits']['total']);
 
-		//drop index from cluster
+		//drop table from cluster
 		$params = [
 			'cluster' => 'testcluster',
 			'body' => [
 				'operation' => 'drop',
-				'index' => 'products',
+				'table' => 'products',
 			],
 		];
 		$result = $client->cluster()->alter($params);
@@ -139,8 +139,8 @@ class ClusterTest extends TestCase
 		$result = $client->cluster()->delete($params);
 		$this->assertEquals('', $result['error']);
 
-		// drop index on
-		$result = $client->indices()->drop(['index' => 'products']);
+		// drop table on
+		$result = $client->tables()->drop(['table' => 'products']);
 		$this->assertEquals('', $result['error']);
 	}
 }

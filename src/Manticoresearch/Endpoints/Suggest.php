@@ -13,12 +13,12 @@ use Manticoresearch\Utils;
 class Suggest extends EmulateBySql
 {
 	use Utils;
-	protected $index;
+	protected $table;
 	public function setBody($params = null) {
-		if (isset($this->index)) {
+		if (isset($this->table)) {
 			$binds = [];
 			$binds[] = "'" . static::escape($params['query']) . "'";
-			$binds[] = "'" . $this->index . "'";
+			$binds[] = "'" . $this->table . "'";
 			if (sizeof($params['options']) > 0) {
 				foreach ($params['options'] as $name => $value) {
 					$binds[] = "$value AS $name";
@@ -26,19 +26,19 @@ class Suggest extends EmulateBySql
 			}
 			return parent::setBody(['query' => 'CALL SUGGEST(' . implode(',', $binds) . ')']);
 		}
-		throw new RuntimeException('Index name is missing.');
+		throw new RuntimeException('Table name is missing.');
 	}
 	/**
 	 * @return mixed
 	 */
-	public function getIndex() {
-		return $this->index;
+	public function getTable() {
+		return $this->table;
 	}
 
 	/**
-	 * @param mixed $index
+	 * @param mixed $table
 	 */
-	public function setIndex($index) {
-		$this->index = $index;
+	public function setTable($table) {
+		$this->table = $table;
 	}
 }

@@ -8,7 +8,7 @@
 
 [Client configuration](configuration.md)
 
-[Index API](indexclass.md)
+[Table API](tableclass.md)
 
 [Search API](searchclass.md)
 

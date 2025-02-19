@@ -5,10 +5,10 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-namespace Manticoresearch\Test\Endpoints\Indices;
+namespace Manticoresearch\Test\Endpoints\Tables;
 
 use Manticoresearch\Client;
-use Manticoresearch\Endpoints\Indices\Drop;
+use Manticoresearch\Endpoints\Tables\Drop;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
@@ -29,21 +29,21 @@ class DropTest extends \PHPUnit\Framework\TestCase
 		static::$helper = $helper;
 	}
 
-	public function testIndexTruncate() {
-		$response = static::$client->indices()->truncate(['index' => 'products']);
+	public function testTableTruncate() {
+		$response = static::$client->tables()->truncate(['table' => 'products']);
 
 		$this->assertEquals(['total' => 0,'error' => '','warning' => ''], $response);
 	}
 
-	public function testSetGetIndex() {
+	public function testSetGetTable() {
 		$describe = new Drop();
-		$describe->setIndex('testName');
-		$this->assertEquals('testName', $describe->getIndex());
+		$describe->setTable('testName');
+		$this->assertEquals('testName', $describe->getTable());
 	}
 
-	public function testSetBodyNoIndex() {
+	public function testSetBodyNoTable() {
 		$describe = new Drop();
-		$this->expectExceptionMessage('Missing index name in /indices/drop');
+		$this->expectExceptionMessage('Missing table name in /indices/drop');
 		$this->expectException(RuntimeException::class);
 		$describe->setBody([]);
 	}

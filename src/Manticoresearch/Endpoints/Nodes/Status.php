@@ -14,7 +14,7 @@ class Status extends EmulateBySql
 	/**
 	 * @var string
 	 */
-	protected $index;
+	protected $table;
 
 	public function setBody($params = null) {
 		return parent::setBody(

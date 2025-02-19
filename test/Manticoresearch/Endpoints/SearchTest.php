@@ -33,7 +33,7 @@ class SearchTest extends \PHPUnit\Framework\TestCase
 		$client->search('this is not a json');
 	}
 
-	public function testMissingIndex() {
+	public function testMissingTable() {
 		$params = [
 			'host' => $_SERVER['MS_HOST'],
 			'port' => $_SERVER['MS_PORT'],

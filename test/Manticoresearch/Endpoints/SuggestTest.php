@@ -26,7 +26,7 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
 	}
 	public function testSuggest() {
 		$params = [
-			'index' => 'products',
+			'table' => 'products',
 			'body' => [
 				'query' => 'brokn',
 				'options' => [
@@ -37,9 +37,9 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
 		$response = static::$client->suggest($params);
 		$this->assertSame('broken', array_keys($response)[0]);
 	}
-	public function testSuggestBadIndex() {
+	public function testSuggestBadTable() {
 		$params = [
-			'index' => 'productsNOT',
+			'table' => 'productsNOT',
 			'body' => [
 				'query' => 'brokn',
 				'options' => [
@@ -62,7 +62,7 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
 	}
 	public function testResponseExceptionViaSuggest() {
 		$params = [
-			'index' => 'productsNOT',
+			'table' => 'productsNOT',
 			'body' => [
 				'query' => 'brokn',
 				'options' => [
@@ -89,15 +89,15 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
 			}
 		}
 	}
-	public function testSuggestGetIndex() {
+	public function testSuggestGetTable() {
 		$suggest = new \Manticoresearch\Endpoints\Suggest();
-		$suggest->setIndex('products');
-		$this->assertEquals('products', $suggest->getIndex());
+		$suggest->setTable('products');
+		$this->assertEquals('products', $suggest->getTable());
 	}
-	public function testSuggestNoIndex() {
+	public function testSuggestNoTable() {
 		$suggest = new \Manticoresearch\Endpoints\Suggest();
 		$this->expectException(RuntimeException::class);
-		$this->expectExceptionMessage('Index name is missing');
+		$this->expectExceptionMessage('Table name is missing');
 		$suggest->setBody([]);
 	}
 }

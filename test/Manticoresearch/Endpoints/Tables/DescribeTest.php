@@ -5,10 +5,10 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-namespace Manticoresearch\Test\Endpoints\Indices;
+namespace Manticoresearch\Test\Endpoints\Tables;
 
 use Manticoresearch\Client;
-use Manticoresearch\Endpoints\Indices\Describe;
+use Manticoresearch\Endpoints\Tables\Describe;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
@@ -29,8 +29,8 @@ class DescribeTest extends \PHPUnit\Framework\TestCase
 		static::$helper = $helper;
 	}
 
-	public function testDescribeIndex() {
-		$response = static::$client->indices()->describe(['index' => 'products']);
+	public function testDescribeTable() {
+		$response = static::$client->tables()->describe(['table' => 'products']);
 
 		$this->assertEquals(
 			array_keys(
@@ -53,15 +53,15 @@ class DescribeTest extends \PHPUnit\Framework\TestCase
 		);
 	}
 
-	public function testSetGetIndex() {
+	public function testSetGetTable() {
 		$describe = new Describe();
-		$describe->setIndex('testName');
-		$this->assertEquals('testName', $describe->getIndex());
+		$describe->setTable('testName');
+		$this->assertEquals('testName', $describe->getTable());
 	}
 
-	public function testSetBodyNoIndex() {
+	public function testSetBodyNoTable() {
 		$describe = new Describe();
-		$this->expectExceptionMessage('Index name is missing.');
+		$this->expectExceptionMessage('Table name is missing.');
 		$this->expectException(RuntimeException::class);
 		$describe->setBody([]);
 	}

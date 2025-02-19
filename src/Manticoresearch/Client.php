@@ -201,14 +201,14 @@ class Client
 
 	/**
 	 * Endpoint: _update
-	 * @param string $index
+	 * @param string $table
 	 * @param int $id
 	 * @param array $params
 	 * @return mixed
 	 */
-	public function partialReplace(string $index, int $id, array $params = []) {
+	public function partialReplace(string $table, int $id, array $params = []) {
 		$endpoint = new Endpoints\PartialReplace($params);
-		$endpoint->setPathByIndexAndId($index, $id);
+		$endpoint->setPathByTableAndId($table, $id);
 		$response = $this->request($endpoint);
 
 		return $response->getResponse();
@@ -277,10 +277,10 @@ class Client
 	}
 
 	/**
-	 * Endpoint: indices
+	 * Endpoint: tables
 	 */
-	public function indices(): Indices {
-		return new Indices($this);
+	public function tables(): Tables {
+		return new Tables($this);
 	}
 
 	/**
@@ -295,14 +295,14 @@ class Client
 	}
 
 	/**
-	 * Return Index object
+	 * Return Table object
 	 *
-	 * @param string|null $name Name of index
+	 * @param string|null $name Name of table
 	 *
-	 * @return \Manticoresearch\Index
+	 * @return \Manticoresearch\Table
 	 */
-	public function index(?string $name = null): Index {
-		return new Index($this, $name);
+	public function table(?string $name = null): Table {
+		return new Table($this, $name);
 	}
 
 	/**
@@ -324,7 +324,8 @@ class Client
 	 */
 	public function suggest(array $params = []) {
 		$endpoint = new Endpoints\Suggest();
-		$endpoint->setIndex($params['index']);
+		$table = $params['table'] ?? $params['index'] ?? null;
+		$endpoint->setTable($table);
 		$endpoint->setBody($params['body']);
 		$response = $this->request(
 			$endpoint,
@@ -338,7 +339,8 @@ class Client
 
 	public function keywords(array $params = []) {
 		$endpoint = new Endpoints\Keywords();
-		$endpoint->setIndex($params['index']);
+		$table = $params['table'] ?? $params['index'] ?? null;
+		$endpoint->setTable($table);
 		$endpoint->setBody($params['body']);
 		$response = $this->request($endpoint, ['responseClass' => SqlToArray::class]);
 		return $response->getResponse();
@@ -358,7 +360,8 @@ class Client
 
 	public function explainQuery(array $params = []) {
 		$endpoint = new Endpoints\ExplainQuery();
-		$endpoint->setIndex($params['index']);
+		$table = $params['table'] ?? $params['index'] ?? null;
+		$endpoint->setTable($table);
 		$endpoint->setBody($params['body']);
 		$response = $this->request(
 			$endpoint,

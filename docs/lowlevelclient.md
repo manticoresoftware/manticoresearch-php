@@ -1,13 +1,13 @@
 Low-level client calls
 ======================
 
-The [Search](searchclass.md) and [Index](indexclass.md) classes are built on top of the low-level Client class methods,
+The [Search](searchclass.md) and [Table](tableclass.md) classes are built on top of the low-level Client class methods,
 providing an easier way to construct the queries. 
 Those familiar with the HTTP API syntax or wanting the ultimate speed can simply use the Client class.
 
 The methods of the Client class reflect, as much as possible, the same request payloads/responses of the Manticore Search HTTP API.
 
-Besides operations on an index, there are also provided methods for performing tasks on the search server or search cluster.
+Besides operations on a table, there are also provided methods for performing tasks on the search server or search cluster.
 
 Table of Contents
 -----------------
@@ -32,7 +32,7 @@ Table of Contents
 
 * Administrative operations
 
-    * [Indices](indices.md)
+    * [Tables](tables.md)
     * [Nodes](nodes.md)
     * [Cluster](cluster.md)
     
@@ -44,7 +44,7 @@ Table of Contents
 Each request array can have one of the following parameters:
 
 * body - its content goes as the payload of the HTTP request
-* index/cluster - index/cluster name
+* table/cluster - table/cluster name
 * id - document id
 * query - endpoint URL parameters (not to be confused with `query` found in the payload of some responses)
 
@@ -61,7 +61,7 @@ Responses are returned as arrays, reflecting the response object received from t
 For a complete reference of payload and response, see Manticore's [Search API](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON).
 
 `body` properties:
-- index name (mandatory)
+- table name (mandatory)
 - query tree expression (mandatory)
 - sort array
 - script fields with expressions
@@ -75,7 +75,7 @@ A simple search example:
 ```php
 $params = [
     'body' => [
-        'index' => 'movies',
+        'table' => 'movies',
         'query' => [
             'match_phrase' => [
                 'movie_title' => 'star trek nemesis',
@@ -104,11 +104,11 @@ The response will be a JSON object containing:
 
 ### Insert
 
-For a complete reference of payload and response, see Manticore's [Insert API](https://manual.manticoresearch.com/Data_creation_and_modification/Adding_documents_to_a_table/Adding_documents_to_a_real-time_table#Adding-documents-to-a-real-time-index).
+For a complete reference of payload and response, see Manticore's [Insert API](https://manual.manticoresearch.com/Data_creation_and_modification/Adding_documents_to_a_table/Adding_documents_to_a_real-time_table#Adding-documents-to-a-real-time-table).
 
 `body` properties consist of:
 
-- index name
+- table name
 - document as an array of properties
 - id as a document id
 
@@ -117,7 +117,7 @@ All are mandatory.
 ```
 $doc = [
     'body' => [
-        'index' => 'testrt',
+        'table' => 'testrt',
         'id' => 3,
         'doc' => [
             'gid' => 10,
@@ -138,11 +138,11 @@ $doc = [
 $response = $client->insert($doc);
 ```
 
-If the index is the part of a cluster, the `body` must also contain the cluster name:
+If the table is the part of a cluster, the `body` must also contain the cluster name:
 ```
 $doc = [
     'body' => [
-        'index' => 'testrt',
+        'table' => 'testrt',
         'cluster' => 'testcluster',
         'id' => 3,
         'doc' => [
@@ -170,7 +170,7 @@ For a complete reference of payload and response, see Manticore's [Replace API](
 
 `body` properties consist of:
 
-- index name
+- table name
 - document as an array of properties
 - id as a document id
 
@@ -179,7 +179,7 @@ All are mandatory.
 ```
 $doc = [
     'body' => [
-        'index' => 'testrt',
+        'table' => 'testrt',
         'id' => 3,
         'doc' => [
             'gid' => 10,
@@ -191,12 +191,12 @@ $doc = [
 $response = $client->replace($doc);
 ```
 
-If the index is the part of a cluster, the `body` must also contain the cluster name:
+If the table is the part of a cluster, the `body` must also contain the cluster name:
 
 ```
 $doc = [
     'body' => [
-        'index' => 'testrt',
+        'table' => 'testrt',
         'cluster' => 'testcluster',
         'id' => 3,
         'doc' => [
@@ -215,7 +215,7 @@ For a complete reference of payload and response, see Manticore's [Update API](h
 
 `body` properties consist of:
 
-- index name
+- table name
 - document as an array of properties
 - id as a document id or a query array
 
@@ -223,7 +223,7 @@ If id is used, only one document can be updated:
 ```
 $doc = [
     'body' => [
-        'index' => 'testrt',
+        'table' => 'testrt',
         'id' => 3,
         'doc' => [
             'gid' => 20,
@@ -239,7 +239,7 @@ With a query, it's possible to update multiple documents at a time:
 ```
 $doc = [
     'body' => [
-        'index' => 'testrt',
+        'table' => 'testrt',
         'query' => ['match'=>['*' =>'find me']],
         'doc' => [
             'gid' => 20,
@@ -250,11 +250,11 @@ $doc = [
 $response = $client->update($doc);
 ```
 
-If the index is part of a cluster, the `body` must also contain the cluster name:
+If the table is part of a cluster, the `body` must also contain the cluster name:
 ```
 $doc = [
     'body' => [
-        'index' => 'testrt',
+        'table' => 'testrt',
         'cluster' => 'testcluster',
         'id' => 3,
         'doc' => [
@@ -272,7 +272,7 @@ For a complete reference of payload and response, refer to Manticore's [Delete A
 
 The `body` properties include:
 
-- index name
+- table name
 - id as the document id
 
 Both properties are required.
@@ -280,7 +280,7 @@ Both properties are required.
 ```
 $doc = [
     'body' => [
-        'index' => 'testrt',
+        'table' => 'testrt',
         'id' => 3
     ]
 ];
@@ -288,12 +288,12 @@ $doc = [
 $response = $client->delete($doc);
 ```
 
-If the index is the part of a cluster, the `body` should also include the cluster name:
+If the table is the part of a cluster, the `body` should also include the cluster name:
 
 ```
 $doc = [
     'body' => [
-        'index' => 'testrt',
+        'table' => 'testrt',
         'cluster' => 'testcluster',
         'id' => 3
     ]
@@ -312,7 +312,7 @@ Bulk enables sending multiple data manipulation operations (inserts, replaces, u
 $doc = [
     'body' => [
         ['insert' => [
-            'index' => 'testrt',
+            'table' => 'testrt',
             'id' => 34,
             'doc' => [
                 'gid' => 1,
@@ -320,14 +320,14 @@ $doc = [
             ]
         ]],
         ['update' => [
-            'index' => 'testrt',
+            'table' => 'testrt',
             'id' => 56,
             'doc' => [
                 'gid' => 4,
             ]
         ]],
        [ 'delete' => [
-            'index' => 'testrt',
+            'table' => 'testrt',
             'id' => 100
         ]]
     ]

@@ -7,20 +7,20 @@
 
 namespace Manticoresearch;
 
-use Manticoresearch\Endpoints\Indices\Alter;
-use Manticoresearch\Endpoints\Indices\Create;
-use Manticoresearch\Endpoints\Indices\Describe;
-use Manticoresearch\Endpoints\Indices\Drop;
-use Manticoresearch\Endpoints\Indices\FlushRamchunk;
-use Manticoresearch\Endpoints\Indices\FlushRtindex;
-use Manticoresearch\Endpoints\Indices\Import;
-use Manticoresearch\Endpoints\Indices\Optimize;
-use Manticoresearch\Endpoints\Indices\Settings;
-use Manticoresearch\Endpoints\Indices\Status;
-use Manticoresearch\Endpoints\Indices\Truncate;
+use Manticoresearch\Endpoints\Tables\Alter;
+use Manticoresearch\Endpoints\Tables\Create;
+use Manticoresearch\Endpoints\Tables\Describe;
+use Manticoresearch\Endpoints\Tables\Drop;
+use Manticoresearch\Endpoints\Tables\FlushRamchunk;
+use Manticoresearch\Endpoints\Tables\FlushRttable;
+use Manticoresearch\Endpoints\Tables\Import;
+use Manticoresearch\Endpoints\Tables\Optimize;
+use Manticoresearch\Endpoints\Tables\Settings;
+use Manticoresearch\Endpoints\Tables\Status;
+use Manticoresearch\Endpoints\Tables\Truncate;
 use Manticoresearch\Response\SqlToArray;
 
-class Indices
+class Tables
 {
 	use Utils;
 	/**
@@ -46,10 +46,10 @@ class Indices
 	 * @return mixed
 	 */
 	public function alter($params) {
-		$index = $params['index'] ?? null;
+		$table = $params['table'] ?? $params['index'] ?? null;
 		$body = $params['body'];
 		$endpoint = new Alter();
-		$endpoint->setIndex($index);
+		$endpoint->setTable($table);
 		$endpoint->setBody($body);
 		$response = $this->client->request(
 			$endpoint,
@@ -65,10 +65,10 @@ class Indices
 	 * @return mixed
 	 */
 	public function create($params) {
-		$index = $params['index'] ?? null;
+		$table = $params['table'] ?? $params['index'] ?? null;
 		$body = $params['body'];
 		$endpoint = new Create();
-		$endpoint->setIndex($index);
+		$endpoint->setTable($table);
 		$endpoint->setBody($body);
 		$response = $this->client->request($endpoint, $this->params);
 		return $response->getResponse();
@@ -79,10 +79,10 @@ class Indices
 	 * @return mixed
 	 */
 	public function describe($params) {
-		$index = $params['index'] ?? null;
+		$table = $params['table'] ?? $params['index'] ?? null;
 		$body = $params['body'] ?? [];
 		$endpoint = new Describe();
-		$endpoint->setIndex($index);
+		$endpoint->setTable($table);
 		$endpoint->setBody($body);
 		$response = $this->client->request(
 			$endpoint,
@@ -96,10 +96,10 @@ class Indices
 	 * @return mixed
 	 */
 	public function drop($params) {
-		$index = $params['index'] ?? null;
+		$table = $params['table'] ?? $params['index'] ?? null;
 		$body = $params['body'] ?? [];
 		$endpoint = new Drop();
-		$endpoint->setIndex($index);
+		$endpoint->setTable($table);
 		$endpoint->setBody($body);
 		$response = $this->client->request($endpoint, $this->params);
 		return $response->getResponse();
@@ -109,10 +109,10 @@ class Indices
 	 * @return mixed
 	 */
 	public function import($params) {
-		$index = $params['index'] ?? null;
+		$table = $params['table'] ?? $params['index'] ?? null;
 		$body = $params['body'] ?? [];
 		$endpoint = new Import();
-		$endpoint->setIndex($index);
+		$endpoint->setTable($table);
 		$endpoint->setBody($body);
 		$response = $this->client->request($endpoint, $this->params);
 		return $response->getResponse();
@@ -122,9 +122,9 @@ class Indices
 	 * @return mixed
 	 */
 	public function flushramchunk($params) {
-		$index = $params['index'] ?? null;
+		$table = $params['table'] ?? $params['index'] ?? null;
 		$endpoint = new FlushRamchunk();
-		$endpoint->setIndex($index);
+		$endpoint->setTable($table);
 		$endpoint->setBody();
 		$response = $this->client->request($endpoint, $this->params);
 		return $response->getResponse();
@@ -134,10 +134,10 @@ class Indices
 	 * @param array $params
 	 * @return mixed
 	 */
-	public function flushrtindex($params) {
-		$index = $params['index'] ?? null;
-		$endpoint = new FlushRtindex();
-		$endpoint->setIndex($index);
+	public function flushrttable($params) {
+		$table = $params['table'] ?? $params['index'] ?? null;
+		$endpoint = new FlushRttable();
+		$endpoint->setTable($table);
 		$endpoint->setBody();
 		$response = $this->client->request($endpoint, $this->params);
 		return $response->getResponse();
@@ -148,10 +148,10 @@ class Indices
 	 * @return mixed
 	 */
 	public function optimize($params) {
-		$index = $params['index'] ?? null;
+		$table = $params['table'] ?? $params['index'] ?? null;
 		$body = $params['body'] ?? null;
 		$endpoint = new Optimize();
-		$endpoint->setIndex($index);
+		$endpoint->setTable($table);
 		$endpoint->setBody($body);
 		$response = $this->client->request(
 			$endpoint,
@@ -165,10 +165,10 @@ class Indices
 	 * @return mixed
 	 */
 	public function status($params) {
-		$index = $params['index'] ?? null;
+		$table = $params['table'] ?? $params['index'] ?? null;
 		$body = $params['body'] ?? null;
 		$endpoint = new Status();
-		$endpoint->setIndex($index);
+		$endpoint->setTable($table);
 		$endpoint->setBody($body);
 		$response = $this->client->request(
 			$endpoint,
@@ -182,10 +182,10 @@ class Indices
 	 * @return array|mixed|string
 	 */
 	public function settings($params) {
-		$index = $params['index'] ?? null;
+		$table = $params['table'] ?? $params['index'] ?? null;
 		$body = $params['body'] ?? null;
 		$endpoint = new Settings();
-		$endpoint->setIndex($index);
+		$endpoint->setTable($table);
 		$endpoint->setBody($body);
 		$response = $this->client->request(
 			$endpoint,
@@ -199,10 +199,10 @@ class Indices
 	 * @return mixed
 	 */
 	public function truncate($params) {
-		$index = $params['index'] ?? null;
+		$table = $params['table'] ?? $params['index'] ?? null;
 		$body = $params['body'] ?? null;
 		$endpoint = new Truncate();
-		$endpoint->setIndex($index);
+		$endpoint->setTable($table);
 		$endpoint->setBody($body);
 		$response = $this->client->request($endpoint, $this->params);
 		return $response->getResponse();

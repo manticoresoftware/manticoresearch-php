@@ -25,7 +25,7 @@ class BulkTest extends \PHPUnit\Framework\TestCase
 
 		static::$client = new Client($params);
 		$params = [
-			'index' => 'bulktest',
+			'table' => 'bulktest',
 			'body' => [
 				'columns' => [
 					'title' => [
@@ -36,25 +36,25 @@ class BulkTest extends \PHPUnit\Framework\TestCase
 			],
 		];
 
-		static::$client->indices()->create($params);
-		static::$client->indices()->truncate(['index' => 'bulktest']);
+		static::$client->tables()->create($params);
+		static::$client->tables()->truncate(['table' => 'bulktest']);
 	}
 
 	/*
 	public function testBulkInsertError() {
 		static::$client->bulk(
 			['body' => [
-			['insert' => ['index' => 'bulktest', 'id' => 1, 'doc' => ['title' => 'test']]],
-			['insert' => ['index' => 'bulktest', 'id' => 2, 'doc' => ['title' => 'test']]],
-			['insert' => ['index' => 'bulktest', 'id' => 3, 'doc' => ['title' => 'test']]],
+			['insert' => ['table' => 'bulktest', 'id' => 1, 'doc' => ['title' => 'test']]],
+			['insert' => ['table' => 'bulktest', 'id' => 2, 'doc' => ['title' => 'test']]],
+			['insert' => ['table' => 'bulktest', 'id' => 3, 'doc' => ['title' => 'test']]],
 			]]
 		);
 		$this->expectException(ResponseException::class);
 		static::$client->bulk(
 			['body' => [
-			['insert' => ['index' => 'bulktest', 'id' => 1, 'doc' => ['title' => 'test']]],
-			['insert' => ['index' => 'bulktest', 'id' => 2, 'doc' => ['title' => 'test']]],
-			['insert' => ['index' => 'bulktest', 'id' => 3, 'doc' => ['title' => 'test']]],
+			['insert' => ['table' => 'bulktest', 'id' => 1, 'doc' => ['title' => 'test']]],
+			['insert' => ['table' => 'bulktest', 'id' => 2, 'doc' => ['title' => 'test']]],
+			['insert' => ['table' => 'bulktest', 'id' => 3, 'doc' => ['title' => 'test']]],
 			]]
 		);
 	}*/
@@ -62,17 +62,17 @@ class BulkTest extends \PHPUnit\Framework\TestCase
 	public function testDelete() {
 		static::$client->bulk(
 			['body' => [
-				['insert' => ['index' => 'bulktest', 'id' => 1, 'doc' => ['title' => 'test']]],
-				['insert' => ['index' => 'bulktest', 'id' => 2, 'doc' => ['title' => 'test']]],
-				['insert' => ['index' => 'bulktest', 'id' => 3, 'doc' => ['title' => 'test']]],
+				['insert' => ['table' => 'bulktest', 'id' => 1, 'doc' => ['title' => 'test']]],
+				['insert' => ['table' => 'bulktest', 'id' => 2, 'doc' => ['title' => 'test']]],
+				['insert' => ['table' => 'bulktest', 'id' => 3, 'doc' => ['title' => 'test']]],
 			]]
 		);
-		static::$client->search(['body' => ['index' => 'bulktest', 'query' => ['match_all' => '']]]);
+		static::$client->search(['body' => ['table' => 'bulktest', 'query' => ['match_all' => '']]]);
 		$response = static:: $client->bulk(
 			['body' => [
-			['insert' => ['index' => 'bulktest', 'id' => 4, 'doc' => ['title' => 'test']]],
-			['delete' => ['index' => 'bulktest', 'id' => 2]],
-			['delete' => ['index' => 'bulktest', 'id' => 3]],
+			['insert' => ['table' => 'bulktest', 'id' => 4, 'doc' => ['title' => 'test']]],
+			['delete' => ['table' => 'bulktest', 'id' => 2]],
+			['delete' => ['table' => 'bulktest', 'id' => 3]],
 			]]
 		);
 
@@ -80,7 +80,7 @@ class BulkTest extends \PHPUnit\Framework\TestCase
 		$responseKeys = array_keys($response['items'][0]);
 		$this->assertEquals(1, sizeof($responseKeys));
 		$this->assertEquals('bulk', array_shift($responseKeys));
-		$response = static::$client->search(['body' => ['index' => 'bulktest', 'query' => ['match_all' => '']]]);
+		$response = static::$client->search(['body' => ['table' => 'bulktest', 'query' => ['match_all' => '']]]);
 		$this->assertEquals(2, $response['hits']['total']);
 	}
 

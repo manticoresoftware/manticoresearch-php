@@ -58,7 +58,7 @@ class StaticRoundRobinTest extends TestCase
 		);
 
 		$params = [
-			'index' => 'testrt',
+			'table' => 'testrt',
 			'body' => [
 				'columns' => [
 					'title' => [
@@ -69,10 +69,10 @@ class StaticRoundRobinTest extends TestCase
 				'silent' => true,
 			],
 		];
-		$client->indices()->create($params);
+		$client->tables()->create($params);
 		$params = [
 			'body' => [
-				'index' => 'testrt',
+				'table' => 'testrt',
 				'query' => [
 					'match_phrase' => [
 						'title' => 'find me',

@@ -18,8 +18,8 @@ class ThreadsTest extends \PHPUnit\Framework\TestCase
 		$response = $client->nodes()->threads();
 
 		// there is only one key returned, but it is always a different number
-		$index = array_keys($response);
-		$response2 = $response[$index[0]];
+		$table = array_keys($response);
+		$response2 = $response[$table[0]];
 		$this->assertArrayHasKey('Info', $response2);
 	}
 

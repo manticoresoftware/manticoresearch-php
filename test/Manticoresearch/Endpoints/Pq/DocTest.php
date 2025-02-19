@@ -13,7 +13,7 @@ use Manticoresearch\Exceptions\RuntimeException;
 
 class DocTest extends \PHPUnit\Framework\TestCase
 {
-	public function testMissingIndexName() {
+	public function testMissingTableName() {
 		$client = new Client();
 		$params = [
 
@@ -23,14 +23,14 @@ class DocTest extends \PHPUnit\Framework\TestCase
 			],
 		];
 		$this->expectException(RuntimeException::class);
-		$this->expectExceptionMessage('Index name is missing.');
+		$this->expectExceptionMessage('Table name is missing.');
 		$client->pq()->doc($params);
 	}
 
-	public function testSetGetIndex() {
+	public function testSetGetTable() {
 		$doc = new Doc();
-		$doc->setIndex('products');
-		$this->assertEquals('products', $doc->getIndex());
+		$doc->setTable('products');
+		$this->assertEquals('products', $doc->getTable());
 	}
 
 	public function testSetGetID() {
@@ -41,13 +41,13 @@ class DocTest extends \PHPUnit\Framework\TestCase
 
 	public function testGetPathNoID() {
 		$doc = new Doc();
-		$doc->setIndex('products');
+		$doc->setTable('products');
 		$this->assertEquals('/pq/products/doc', $doc->getPath());
 	}
 
 	public function testGetPathWithID() {
 		$doc = new Doc();
-		$doc->setIndex('products');
+		$doc->setTable('products');
 		$doc->setId(4);
 		$this->assertEquals('/pq/products/doc/4', $doc->getPath());
 	}

@@ -1,44 +1,44 @@
-# Index Class
+# Table Class
 
-It's a wrapper on top of the Client that simplifies working with an Index.
+It's a wrapper on top of the Client that simplifies working with an Table.
 
-Index provides all the operations which can be executed on an index.
+Table provides all the operations which can be executed on a table.
 
 
 ```php
 $config = ['host' => '127.0.0.1', 'port' => '9308'];
 $client = new \Manticoresearch\Client($config);
-$index = new \Manticoresearch\Index($client,'myindex');
+$table = new \Manticoresearch\Table($client,'mytable');
 ```
-The second argument is not required; the index name can also be set with `setName()`.
+The second argument is not required; the table name can also be set with `setName()`.
 
 
 
 ### setName()
 
-Allows setting the index name.
+Allows setting the table name.
 
 ```php
-$index->setName('myindex');
+$table->setName('mytable');
 ```
 
 ### setCluster()
 
-Setting the cluster name is required for add/replace/update/delete operations if the index belongs to an active cluster.
+Setting the cluster name is required for add/replace/update/delete operations if the table belongs to an active cluster.
 
 ```php
-$index->setCluster('mycluster');
+$table->setCluster('mycluster');
 ```
 ### create()
 
-Creates the index and accepts:
+Creates the table and accepts:
 
 - fields - an array of fields where the key is the field name
-- settings - an optional list of index settings
-- silent - default is false; if true, no error is returned if an index with the same name already exists
+- settings - an optional list of table settings
+- silent - default is false; if true, no error is returned if a table with the same name already exists
 
 Each field is an array consisting of:
-- `type` - the [field/attribute type](https://manual.manticoresearch.com/Creating_an_index/Data_types)
+- `type` - the [field/attribute type](https://manual.manticoresearch.com/Creating_a_table/Data_types)
 - `options` - an array of options for the field:
   - `text` can have `indexed`, `stored` (default is both)
   - `string` can have `attribute` (default) and `indexed`
@@ -48,8 +48,8 @@ Each field is an array consisting of:
 Example:
 
 ```php
- $index->setName('mynewindex');
- $index->create([
+ $table->setName('mynewtable');
+ $table->create([
     'title' => ['type' => 'text'],
     'content' => ['type' => 'text','options'=>['indexed']],
     'gid' => ['type' => 'int'],
@@ -66,27 +66,27 @@ Example:
 If a setting can have multiple values, an array of values will be used, like:
 
 ```php
- $index->setName('mynewindex');
- $index->create([],
+ $table->setName('mynewtable');
+ $table->create([],
     [
         'type' => 'distributed',
         'local' => [
-            'local_index_1',
-            'local_index_2',
+            'local_table_1',
+            'local_table_2',
         ]
     ]
  );
 ````
 ### addDocument()
 
-Inserts a new document into the index.
+Inserts a new document into the table.
 Expects:
 - an array of values
 - a document ID
 Example:
 
 ```php
-$index->addDocument([
+$table->addDocument([
             'title' => 'find me',
             'gid' => 1,
             'label' => 'not used',
@@ -100,14 +100,14 @@ $index->addDocument([
 
 ### addDocuments()
 
-Add multiple documents to the index.
+Add multiple documents to the table.
 Expects an array with documents as arrays.
 
 
 Example:
 
 ```php
-$index->addDocuments([
+$table->addDocuments([
    [
    'id' => 1,
    'title' => 'This is an example document for cooking',
@@ -145,7 +145,7 @@ Expects:
 Example:
 
 ```php
-$index->getDocumentById(1);
+$table->getDocumentById(1);
 ```
 
 ### getDocumentByIds()
@@ -155,12 +155,12 @@ Expects:
 Example:
 
 ```php
-$index->getDocumentByIds([1,3,5]);
+$table->getDocumentByIds([1,3,5]);
 ```
 
 ### replaceDocument()
 
-Replace an existing document in the index.
+Replace an existing document in the table.
 Expects:
 - an array of values
 - a document ID
@@ -169,7 +169,7 @@ Expects:
 Example:
 
 ```php
-$index->replaceDocument([
+$table->replaceDocument([
             'title' => 'find me',
             'gid' => 1,
             'label' => 'not used',
@@ -182,7 +182,7 @@ $index->replaceDocument([
 ```
 
 ```php
-$index->replaceDocument([
+$table->replaceDocument([
             'title' => 'find me',
             'label' => 'not used'
         ], 2, true);
@@ -192,14 +192,14 @@ $index->replaceDocument([
 
 ### replaceDocuments()
 
-Replace multiple documents in the index.
+Replace multiple documents in the table.
 Expects an array with documents as arrays.
 
 
 Example:
 
 ```php
-$index->replaceDocuments([
+$table->replaceDocuments([
    [
    'id' => 1,
    'title' => 'This is an example document for cooking',
@@ -238,7 +238,7 @@ Expects:
 - a document ID
 
 ```php
-$index->updateDocument([
+$table->updateDocument([
             'title' => 'find me',
             'gid' => 1,
             'label' => 'not used',
@@ -252,14 +252,14 @@ $index->updateDocument([
 
 It returns an array with:
 
-- `_index` as the index name 
+- `table` as the table name 
 - `_id` as the updated ID
 - result as `updated` if the update was successful or  `noop` otherwise
 
 Example of a return value:
 
 ```json
-{"_index":"test","_id":4,"result":"updated"}
+{"table":"test","_id":4,"result":"updated"}
 ```
 
 ### updateDocuments()
@@ -273,31 +273,31 @@ Expects:
 An example with array:
 
 ```php
-$index->updateDocuments(['price'=>100],['match'=>['*'=>'apple']]);
+$table->updateDocuments(['price'=>100],['match'=>['*'=>'apple']]);
 ```
 
 An example using a Query object:
 
 ```php
-$index->updateDocuments(['_year'=>2000], new \Manticoresearch\Query\MatchQuery('team','*'));
+$table->updateDocuments(['_year'=>2000], new \Manticoresearch\Query\MatchQuery('team','*'));
 ```
 
 ```php
 $bool = new BoolQuery();
 $bool->must(new \Manticoresearch\Query\MatchQuery('team','*'));
 $bool->must(new \Manticoresearch\Query\Range('rating',['gte'=>8.5]));
-$response = $index->updateDocuments(['_year'=>2000], $bool);
+$response = $table->updateDocuments(['_year'=>2000], $bool);
 ```
 
 It returns an array with:
 
-- `_index` as the index_name
+- `table` as the table name
 - updated as the number of documents updated
 
 Example of a return value:
 
 ```json
-{"_index":"test","updated":2}
+{"table":"test","updated":2}
 ```
 
 ### deleteDocument()
@@ -307,12 +307,12 @@ Deletes a document. Expects one argument as the document ID.
 Example:
 
 ```php
-$index->deleteDocument(100);
+$table->deleteDocument(100);
 ```
 
 It returns an array with:
 
-- _index as index name
+- table as the table name
 - _id as the document id
 - found - true if document existed
 - result as `deleted` if the update was successful or `not found` otherwise 
@@ -320,7 +320,7 @@ It returns an array with:
 Example of a return value:
 
 ```json
-{"_index":"test","_id":5,"found":true,"result":"deleted"}
+{"table":"test","_id":5,"found":true,"result":"deleted"}
 ```
 
 ### deleteDocumentsByIds()
@@ -330,12 +330,12 @@ Deletes multiple documents by ID. Expects an array of IDs.
 Example:
 
 ```php
-$index->deleteDocumentsByIds([100,101]);
+$table->deleteDocumentsByIds([100,101]);
 ```
 
 It returns an array with:
 
-- `_index` as index name
+- `table` as the table name
 - `_id` as the first document id passed
 - `found` as true if at least one document existed
 - `result` as `deleted` if at least one document was deleted, or `not found` if no document was found
@@ -343,7 +343,7 @@ It returns an array with:
 Example of a return value:
 
 ```json
-{"_index":"test","_id":100,"found":true,"result":"deleted"}
+{"table":"test","_id":100,"found":true,"result":"deleted"}
 ```
 
 ### deleteDocuments()
@@ -353,24 +353,24 @@ Deletes documents using a query expression which can be passed either as an arra
 An example with query as array:
 
 ```php
-$index->deleteDocuments(['match'=>['*'=>'apple']]);
+$table->deleteDocuments(['match'=>['*'=>'apple']]);
 ```
 
 An example with query as Query object:
 
 ```php
-$index->deleteDocuments( new \Manticoresearch\Query\MatchQuery('apple','*'));
+$table->deleteDocuments( new \Manticoresearch\Query\MatchQuery('apple','*'));
 ```
 
 It returns an array with:
 
-- `_index` as index name
+- `table` as the table name
 - `deleted` as the number of found and deleted documents
 
 Example of a return value:
 
 ```json
-{"_index":"test","deleted":0}
+{"table":"test","deleted":0}
 ```
 
 ### search()
@@ -380,72 +380,72 @@ It accepts either a full-text query string or a [BoolQuery](query.md#boolquery) 
 It returns a [ResultSet](searchresults.md#resultset-object) object.
 
 ```php
- $result = $index->search('find')->get();
+ $result = $table->search('find')->get();
 ```
 Note that a new instance of the Search class is created with each call, therefore search conditions are not carried over multiple calls.
  
 
 ### drop()
 
-Drop the index.
-If `silent` is true, no error will be returned if the index doesn't exist.
+Drop the table.
+If `silent` is true, no error will be returned if the table doesn't exist.
 
 ```php
-$index->drop($silent=false);
+$table->drop($silent=false);
 ```
 ### describe()
 
-Returns the schema of the index
+Returns the schema of the table
 
 ```php
-$index->describe();
+$table->describe();
 ```
 
 ### status()
 
-Provides information about the index.
+Provides information about the table.
 
 ```php
-$index->status();
+$table->status();
 ```
 
 ### truncate()
 
-Empties the index of data.
+Empties the table of data.
 
 ```php
-$index->truncate();
+$table->truncate();
 ```
 
 ### optimize()
 
-Performs optimization on the index (not available for distributed type).
+Performs optimization on the table (not available for distributed type).
 
 If `sync` is set to true, the command will wait for the optimization to finish, otherwise the engine will send the optimization to run in the background and return a success message.
 
 ```php
-$index->optimize($sync=false);
+$table->optimize($sync=false);
 ```
 
 ### flush()
 
-Performs Real-Time index flushing to disk.
+Performs Real-Time table flushing to disk.
 
 ```php
-$index->flush();
+$table->flush();
 ```
 
 ### flushramchunk()
 
-Performs Real-Time index flushing of the RAM chunk to disk. In general, this operation is run before performing an optimization.
+Performs Real-Time table flushing of the RAM chunk to disk. In general, this operation is run before performing an optimization.
 
 ```php
-$index->flushramchunk();
+$table->flushramchunk();
 ```
 
 ### alter()
 
-Alter the index schema. Please note that currently, the `text` type is not supported by this command.
+Alter the table schema. Please note that currently, the `text` type is not supported by this command.
 
 Parameters:
 
@@ -455,7 +455,7 @@ Parameters:
 
 
 ```php
-$index->alter($operation,$name,$type);
+$table->alter($operation,$name,$type);
 ```
 
 
@@ -470,11 +470,11 @@ Parameters:
 
 
 ```php
-$index->keywords($query, $options);
+$table->keywords($query, $options);
 ```
 
 ```php
-$index->alter($operation,$name,$type);
+$table->alter($operation,$name,$type);
 ```
 
 
@@ -488,27 +488,27 @@ Parameters:
 - options. For more information about the available options, check https://manual.manticoresearch.com/Searching/Spell_correction#CALL-QSUGGEST,-CALL-SUGGEST
 
 ```php
-$index->keywords($query, $options);
-$index->suggest('trsting', ['limit' => 5]);
+$table->keywords($query, $options);
+$table->suggest('trsting', ['limit' => 5]);
 ```
 
 
 ### explainQuery()
 
-Returns the transformation tree for a full-text query without running it over the index.
+Returns the transformation tree for a full-text query without running it over the table.
 
 Parameters:
 
 - input query string
 
 ```php
-$index->explainQuery($query);
+$table->explainQuery($query);
 ```
 
 
 ### percolate()
 
-Performs a percolate search over a percolate index. This method works only with percolate indexes.
+Performs a percolate search over a percolate table. This method works only with percolate tables.
 
 Expects an array with documents
 ```php
@@ -518,24 +518,24 @@ $docs = [
     ['title' => 'something else','color'=>'blue'], 
     ['title' => 'this is false','color'=>'black']
 ];
-$result = $index->percolate($docs);
+$result = $table->percolate($docs);
 ```
 
 Returns a [PercolateResultSet](percolateresults.md#percolateresultset-object) object containing stored queries that 
 match on documents at input. The PercolateResultHit object can be iterated to retrieve the stored queries encapsulated 
-as a [PercolateResultHit](percolateresults.md#percolateresulthit-object) object and the list of indices of documents 
+as a [PercolateResultHit](percolateresults.md#percolateresulthit-object) object and the list of tables of documents 
 from input.
 
 Usage example:
 ```php
 $docs = [['title' => 'pick me'], ['title' => 'find me fast'], ['title' => 'something else'], ['title' => 'this is false']];
-$result = $index->percolate($docs);
+$result = $table->percolate($docs);
 echo "Number of stored queries with matches:".$result->count();
 foreach ($result as $row) {
     echo 'Query ID' . $row->getId() . "\n";
     echo "Stored query:\n";
     print_r($row->getData());
-    echo "Indices of input docs list:\n";
+    echo "Tables of input docs list:\n";
     print_r($row->getDocSlots());
     echo "List of input docs that match:\n";
     print_r($row->getDocsMatched($docs));
@@ -553,7 +553,7 @@ Array
             [ql] => find me
         )
 )
-Indices of input docs list:
+Tables of input docs list:
 Array
 (
     [0] => 2
@@ -581,7 +581,7 @@ Array
             [ql] => something
         )
 )
-Indices of input docs list:
+Tables of input docs list:
 Array
 (
     [0] => 3
@@ -604,7 +604,7 @@ Array
         )
 
 )
-Indices of input docs list:
+Tables of input docs list:
 Array
 (
     [0] => 2
@@ -632,7 +632,7 @@ The PercolateResultDoc provides the document through the `getData()` method and 
 
 ```php
 $docs = [['title' => 'pick me'], ['title' => 'find me fast'], ['title' => 'something else'], ['title' => 'this is false']];
-$result = $index->percolateToDocs($docs);
+$result = $table->percolateToDocs($docs);
 foreach ($result as $row) {
     echo "Document:\n";
     print_r($row->getData());

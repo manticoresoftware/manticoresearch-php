@@ -58,8 +58,8 @@ class Search
 		$this->join = [];
 	}
 
-	public function setIndex($index): self {
-		$this->params['index'] = $index;
+	public function setTable($table): self {
+		$this->params['table'] = $table;
 		return $this;
 	}
 
@@ -398,7 +398,7 @@ class Search
 		if ($this->join) {
 			$body['join'] = [];
 			foreach ($this->join as $join) {
-				$join->add('main_table', $this->params['index']);
+				$join->add('main_table', $this->params['table'] ?? $this->params['index'] ?? null);
 				$body['join'][] = $join->toArray();
 			}
 		}

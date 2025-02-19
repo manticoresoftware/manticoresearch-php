@@ -5,10 +5,10 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-namespace Manticoresearch\Test\Endpoints\Indices;
+namespace Manticoresearch\Test\Endpoints\Tables;
 
 use Manticoresearch\Client;
-use Manticoresearch\Endpoints\Indices\Settings;
+use Manticoresearch\Endpoints\Tables\Settings;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
@@ -30,22 +30,22 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
 	}
 
 	public function testSettings() {
-		$response = static::$client->indices()->settings(['index' => 'products']);
+		$response = static::$client->tables()->settings(['table' => 'products']);
 
 		$expectedSettings = "min_infix_len = 3\nrt_mem_limit = 268435456" ;
 
 		$this->assertEquals(['settings' => $expectedSettings], $response);
 	}
 
-	public function testSetGetIndex() {
+	public function testSetGetTable() {
 		$describe = new Settings();
-		$describe->setIndex('testName');
-		$this->assertEquals('testName', $describe->getIndex());
+		$describe->setTable('testName');
+		$this->assertEquals('testName', $describe->getTable());
 	}
 
-	public function testSetBodyNoIndex() {
+	public function testSetBodyNoTable() {
 		$describe = new Settings();
-		$this->expectExceptionMessage('Index name is missing.');
+		$this->expectExceptionMessage('Table name is missing.');
 		$this->expectException(RuntimeException::class);
 		$describe->setBody([]);
 	}

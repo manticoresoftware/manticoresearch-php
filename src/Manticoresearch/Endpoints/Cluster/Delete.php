@@ -14,7 +14,7 @@ use Manticoresearch\Utils;
 /**
  * @todo maybe pattern should be a query parameter rather than body?
  * Class Status
- * @package Manticoresearch\Endpoints\Indices
+ * @package Manticoresearch\Endpoints\Tables
  */
 class Delete extends EmulateBySql
 {

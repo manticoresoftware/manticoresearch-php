@@ -12,7 +12,7 @@ Results can be filtered by requesting information for a single agent - set by `a
 
         $params = [
             'body' => [
-                'agent' => '141.212.121.211:9312:index'
+                'agent' => '141.212.121.211:9312:table'
                 'pattern' => 'propertyname'
             ]
         ];
@@ -182,9 +182,9 @@ Result can be filtered by setting `pattern` (on status metric names) parameter o
         $response = $client->nodes()->status($params);           
 Tables
 ======
-Return list of current indexes.
+Return list of current tables.
 
-Result can be filtered by setting `pattern` (on index names) parameter of `body`.
+Result can be filtered by setting `pattern` (on table names) parameter of `body`.
 
         $params = [
             'body' => [

@@ -13,10 +13,10 @@ use Manticoresearch\Exceptions\RuntimeException;
 class DeleteByQueryTest extends \PHPUnit\Framework\TestCase
 {
 
-	public function testSetGetIndex() {
+	public function testSetGetTable() {
 		$dbq = new DeleteByQuery();
-		$dbq->setIndex('products');
-		$this->assertEquals('products', $dbq->getIndex());
+		$dbq->setTable('products');
+		$this->assertEquals('products', $dbq->getTable());
 	}
 
 	public function testMethod() {
@@ -26,14 +26,14 @@ class DeleteByQueryTest extends \PHPUnit\Framework\TestCase
 
 	public function testGetPath() {
 		$dbq = new DeleteByQuery();
-		$dbq->setIndex('products');
+		$dbq->setTable('products');
 		$this->assertEquals('/pq/products/_delete_by_query', $dbq->getPath());
 	}
 
-	public function testGetPathIndexMissing() {
+	public function testGetPathTableMissing() {
 		$dbq = new DeleteByQuery();
 		$this->expectException(RuntimeException::class);
-		$this->expectExceptionMessage('Index name is missing');
+		$this->expectExceptionMessage('Table name is missing');
 		$dbq->getPath();
 	}
 }

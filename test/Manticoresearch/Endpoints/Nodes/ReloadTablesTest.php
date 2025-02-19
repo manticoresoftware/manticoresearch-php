@@ -9,12 +9,12 @@ namespace Manticoresearch\Test\Endpoints;
 
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class ReloadIndexesTest extends \PHPUnit\Framework\TestCase
+class ReloadTablesTest extends \PHPUnit\Framework\TestCase
 {
-	public function testReloadIndexes() {
+	public function testReloadTables() {
 		$helper = new PopulateHelperTest('testDummy');
 		$client = $helper->getClient();
-		$response = $client->nodes()->reloadindexes();
+		$response = $client->nodes()->reloadtables();
 		$this->assertEquals(['total' => 0,'error' => '','warning' => ''], $response);
 	}
 }

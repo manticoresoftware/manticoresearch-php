@@ -49,10 +49,14 @@ class SqlToArray extends Response
 						if (sizeof($property) > 1) {
 							unset($property['Variable_name']);
 						}
-					} elseif (isset($property['Index'])) {
-						$id = $property['Index'];
+					} elseif (isset($property['Index']) || isset($property['Table'])) {
+						$id = $property['Index'] ?? $property['Table'];
 						if (sizeof($property) > 1) {
-							unset($property['Index']);
+							if (isset($property['Index'])) {
+								unset($property['Index']);
+							} else {
+								unset($property['Table']);
+							}
 						}
 					} elseif (isset($property['Counter'])) {
 						$id = $property['Counter'];

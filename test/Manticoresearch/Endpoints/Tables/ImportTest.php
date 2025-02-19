@@ -5,16 +5,16 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-namespace Manticoresearch\Test\Endpoints\Indices;
+namespace Manticoresearch\Test\Endpoints\Tables;
 
-use Manticoresearch\Endpoints\Indices\Import;
+use Manticoresearch\Endpoints\Tables\Import;
 
 class ImportTest extends \PHPUnit\Framework\TestCase
 {
 
-	public function testSetGetIndex() {
+	public function testSetGetTable() {
 		$describe = new Import();
-		$describe->setIndex('testName');
-		$this->assertEquals('testName', $describe->getIndex());
+		$describe->setTable('testName');
+		$this->assertEquals('testName', $describe->getTable());
 	}
 }

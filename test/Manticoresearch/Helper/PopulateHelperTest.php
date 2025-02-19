@@ -27,15 +27,15 @@ class PopulateHelperTest extends \PHPUnit\Framework\TestCase
 	public function populateForKeywords() {
 		$this->getClient();
 
-		$this->client->indices()->drop(
+		$this->client->tables()->drop(
 			[
-			'index' => 'products',
+			'table' => 'products',
 				'body' => ['silent' => true],
 			]
 		);
 
 		$params = [
-			'index' => 'products',
+			'table' => 'products',
 			'body' => [
 				'columns' => [
 					'title' => [
@@ -53,11 +53,11 @@ class PopulateHelperTest extends \PHPUnit\Framework\TestCase
 				'silent' => true,
 			],
 		];
-		$this->client->indices()->create($params);
+		$this->client->tables()->create($params);
 		$this->client->replace(
 			[
 			'body' => [
-				'index' => 'products',
+				'table' => 'products',
 				'id' => 100,
 				'doc' => [
 					'title' => 'this product is not broken',
@@ -68,12 +68,12 @@ class PopulateHelperTest extends \PHPUnit\Framework\TestCase
 		);
 	}
 
-	public function search($indexName, $query, $numberOfResultsExpected) {
+	public function search($tableName, $query, $numberOfResultsExpected) {
 		$this->getClient();
 
 		$search = [
 			'body' => [
-				'index' => $indexName,
+				'table' => $tableName,
 				'query' => [
 					'match' => ['*' => $query],
 				],
@@ -85,8 +85,8 @@ class PopulateHelperTest extends \PHPUnit\Framework\TestCase
 		return $results;
 	}
 
-	public function describe($indexName) {
-		return $this->client->indices()->describe(['index' => $indexName]);
+	public function describe($tableName) {
+		return $this->client->tables()->describe(['table' => $tableName]);
 	}
 
 	public function testDummy() {

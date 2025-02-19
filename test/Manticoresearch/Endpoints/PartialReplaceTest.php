@@ -12,7 +12,7 @@ class PartialReplaceTest extends \PHPUnit\Framework\TestCase
 
 	public function testGetPath() {
 		$replace = new \Manticoresearch\Endpoints\PartialReplace();
-		$replace->setPathByIndexAndId('test', 1);
+		$replace->setPathByTableAndId('test', 1);
 		$this->assertEquals('/test/_update/1', $replace->getPath());
 	}
 

@@ -5,10 +5,10 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-namespace Manticoresearch\Test\Endpoints\Indices;
+namespace Manticoresearch\Test\Endpoints\Tables;
 
 use Manticoresearch\Client;
-use Manticoresearch\Endpoints\Indices\Create;
+use Manticoresearch\Endpoints\Tables\Create;
 use Manticoresearch\Exceptions\RuntimeException;
 
 class CreateTest extends \PHPUnit\Framework\TestCase
@@ -21,7 +21,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 		];
 		$client = new Client($params);
 		$params = [
-			'index' => 'products',
+			'table' => 'products',
 			'body' => [
 				'columns' => [
 					'title' => [
@@ -39,12 +39,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 				'silent' => true,
 			],
 		];
-		$response = $client->indices()->create($params);
+		$response = $client->tables()->create($params);
 		$this->assertSame(['total' => 0,'error' => '','warning' => ''], $response);
 		$params = [
-			'index' => 'products',
+			'table' => 'products',
 		];
-		$response = $client->indices()->drop($params);
+		$response = $client->tables()->drop($params);
 		$this->assertSame(['total' => 0,'error' => '','warning' => ''], $response);
 	}
 
@@ -52,7 +52,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 		$params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
 		$client = new Client($params);
 		$params = [
-			'index' => 'testrt',
+			'table' => 'testrt',
 			'body' => [
 				'columns' => [
 					'title' => [
@@ -63,10 +63,10 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 				'silent' => true,
 			],
 		];
-		$response = $client->indices()->create($params);
+		$response = $client->tables()->create($params);
 
 		$params = [
-			'index' => 'testrtdist',
+			'table' => 'testrtdist',
 			'body' => [
 				'settings' => [
 					'type' => 'distributed',
@@ -74,24 +74,24 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 				],
 			],
 		];
-		$response = $client->indices()->create($params);
+		$response = $client->tables()->create($params);
 		$this->assertSame(['total' => 0,'error' => '','warning' => ''], $response);
 		$params = [
-			'index' => 'testrtdist',
+			'table' => 'testrtdist',
 		];
-		$response = $client->indices()->drop($params);
+		$response = $client->tables()->drop($params);
 		$this->assertSame(['total' => 0,'error' => '','warning' => ''], $response);
 	}
 
-	public function testCreateDistributedWIthMultipleIndexes() {
-		$localIndexName = 'testrt';
-		$localIndexName2 = 'testrt2';
-		$distributedIndexName = 'testrtdist';
+	public function testCreateDistributedWIthMultipleTablees() {
+		$localTableName = 'testrt';
+		$localTableName2 = 'testrt2';
+		$distributedTableName = 'testrtdist';
 
 		$params = ['host' => $_SERVER['MS_HOST'], 'port' => $_SERVER['MS_PORT']];
 		$client = new Client($params);
 		$params = [
-			'index' => $localIndexName,
+			'table' => $localTableName,
 			'body' => [
 				'columns' => [
 					'title' => [
@@ -102,9 +102,9 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 				'silent' => true,
 			],
 		];
-		$response = $client->indices()->create($params);
+		$response = $client->tables()->create($params);
 		$params = [
-			'index' => $localIndexName2,
+			'table' => $localTableName2,
 			'body' => [
 				'columns' => [
 					'title' => [
@@ -115,46 +115,46 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 				'silent' => true,
 			],
 		];
-		$response = $client->indices()->create($params);
+		$response = $client->tables()->create($params);
 
 		$params = [
-			'index' => $distributedIndexName,
+			'table' => $distributedTableName,
 			'body' => [
 				'settings' => [
 					'type' => 'distributed',
 					'local' => [
-						$localIndexName,
-						$localIndexName2,
+						$localTableName,
+						$localTableName2,
 					],
 				],
 			],
 		];
-		$response = $client->indices()->create($params);
+		$response = $client->tables()->create($params);
 		$this->assertSame(['total' => 0, 'error' => '', 'warning' => ''], $response);
 
-		$response = $client->indices()->drop(
+		$response = $client->tables()->drop(
 			[
-			'index' => $distributedIndexName,
+			'table' => $distributedTableName,
 			]
 		);
 		$this->assertSame(['total' => 0, 'error' => '', 'warning' => ''], $response);
 
-		$response = $client->indices()->drop(
+		$response = $client->tables()->drop(
 			[
-			'index' => $localIndexName,
+			'table' => $localTableName,
 			]
 		);
 		$this->assertSame(['total' => 0, 'error' => '', 'warning' => ''], $response);
 
-		$response = $client->indices()->drop(
+		$response = $client->tables()->drop(
 			[
-			'index' => $localIndexName2,
+			'table' => $localTableName2,
 			]
 		);
 		$this->assertSame(['total' => 0, 'error' => '', 'warning' => ''], $response);
 	}
 
-	public function testNoIndexDrop() {
+	public function testNoTableDrop() {
 		$params = [
 			'host' => $_SERVER['MS_HOST'],
 			'port' => $_SERVER['MS_PORT'],
@@ -162,22 +162,22 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 		];
 		$client = new Client($params);
 		$params = [
-			'index' => 'noindexname',
+			'table' => 'notablename',
 			'body' => ['silent' => true],
 		];
-		$response = $client->indices()->drop($params);
+		$response = $client->tables()->drop($params);
 		$this->assertSame(['total' => 0,'error' => '','warning' => ''], $response);
 	}
 
-	public function testSetGetIndex() {
+	public function testSetGetTable() {
 		$describe = new Create();
-		$describe->setIndex('testName');
-		$this->assertEquals('testName', $describe->getIndex());
+		$describe->setTable('testName');
+		$this->assertEquals('testName', $describe->getTable());
 	}
 
-	public function testSetBodyNoIndex() {
+	public function testSetBodyNoTable() {
 		$describe = new Create();
-		$this->expectExceptionMessage('Index name is missing');
+		$this->expectExceptionMessage('Table name is missing');
 		$this->expectException(RuntimeException::class);
 		$describe->setBody([]);
 	}
