@@ -23,7 +23,7 @@ class AlterTest extends \PHPUnit\Framework\TestCase
 	public function setUp() : void {
 		parent::setUp();
 
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$helper->populateForKeywords();
 		static::$client = $helper->getClient();
 		static::$helper = $helper;

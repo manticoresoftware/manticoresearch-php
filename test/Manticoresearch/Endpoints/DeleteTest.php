@@ -18,7 +18,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 	public static function setUpBeforeClass(): void {
 		parent::setUpBeforeClass();
 
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$helper->populateForKeywords();
 		static::$client = $helper->getClient();
 	}
@@ -34,7 +34,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 	}
 
 	public function testDelete() {
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$helper->search('products', 'broken', 1);
 		$doc = [
 			'body' => [

@@ -60,7 +60,7 @@ class Client
 	 * $config['connections] = array of connections
 	 * $config['connectionStrategy'] = class name of pool strategy
 	 */
-	public function __construct($config = [], LoggerInterface $logger = null) {
+	public function __construct($config = [], ?LoggerInterface $logger = null) {
 		$this->setConfig($config);
 		$this->logger = $logger ?? new NullLogger();
 		$this->initConnections();
@@ -301,7 +301,7 @@ class Client
 	 *
 	 * @return \Manticoresearch\Index
 	 */
-	public function index(string $name = null): Index {
+	public function index(?string $name = null): Index {
 		return new Index($this, $name);
 	}
 

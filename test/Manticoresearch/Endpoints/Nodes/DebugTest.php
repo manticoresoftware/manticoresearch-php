@@ -13,7 +13,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testDebug() {
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$client = $helper->getClient();
 		$response = $client->nodes()->debug(['body' => []]);
 

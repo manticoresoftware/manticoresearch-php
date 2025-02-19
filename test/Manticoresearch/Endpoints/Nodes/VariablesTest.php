@@ -12,7 +12,7 @@ use Manticoresearch\Test\Helper\PopulateHelperTest;
 class VariablesTest extends \PHPUnit\Framework\TestCase
 {
 	public function testVariables() {
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$client = $helper->getClient();
 		$response = $client->nodes()->variables();
 
@@ -47,7 +47,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
 	}
 
 	public function testVariablesWithPattern() {
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$client = $helper->getClient();
 		$response = $client->nodes()->variables(['body' => ['pattern' => 'cha%']]);
 
@@ -64,7 +64,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
 	public function testVariablesWithWhere() {
 		$this->markTestSkipped('Not sure of the functionality here');
 		/*
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$client = $helper->getClient();
 		$response = $client->nodes()->variables(['body' => ['where' => ['variable_name' => 'character_set_client' ]]]);
 

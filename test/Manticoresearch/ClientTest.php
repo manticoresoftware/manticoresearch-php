@@ -150,7 +150,7 @@ class ClientTest extends TestCase
 	}
 
 	public function testGetLastResponse() {
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$helper->populateForKeywords();
 		$client = $helper->getClient();
 
@@ -168,7 +168,7 @@ class ClientTest extends TestCase
 		$this->assertEquals($result, $lastResponse);
 	}
 	public function testUnsetLastResponse() {
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$helper->populateForKeywords();
 		$client = $helper->getClient();
 

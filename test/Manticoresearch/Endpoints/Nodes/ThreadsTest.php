@@ -13,7 +13,7 @@ use Manticoresearch\Test\Helper\PopulateHelperTest;
 class ThreadsTest extends \PHPUnit\Framework\TestCase
 {
 	public function testThreads() {
-		$helper = new PopulateHelperTest();
+		$helper = new PopulateHelperTest('testDummy');
 		$client = $helper->getClient();
 		$response = $client->nodes()->threads();
 

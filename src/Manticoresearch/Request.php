@@ -70,7 +70,7 @@ class Request
 	 */
 
 	public function setBody($body = null) {
-		$this->body = $body;
+		$this->body = $body ?? [];
 		return $this;
 	}
 

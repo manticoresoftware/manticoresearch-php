@@ -20,7 +20,7 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 	}
 
 	public function testInsert() {
-		$helper = new \Manticoresearch\Test\Helper\PopulateHelperTest();
+		$helper = new \Manticoresearch\Test\Helper\PopulateHelperTest('testDummy');
 		$helper->populateForKeywords();
 		$client = $helper->getClient();
 

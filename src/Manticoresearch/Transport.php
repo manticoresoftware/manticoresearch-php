@@ -31,7 +31,7 @@ class Transport
 	 * @param Connection|null $connection
 	 * @param LoggerInterface|null $logger
 	 */
-	public function __construct(Connection $connection = null, LoggerInterface $logger = null) {
+	public function __construct(?Connection $connection = null, ?LoggerInterface $logger = null) {
 		if ($connection) {
 			$this->connection = $connection;
 		}

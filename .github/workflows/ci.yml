@@ -14,31 +14,42 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest']
-        php-version: ['7.4', '8.0', '8.1']
+        php: ['7.4', '8.0', '8.1']
         phpunit-version: ['latest']
-        phpunit-deprecation-check: ['']
+        deprecation: ['']
         transport: ['', 'PhpHttp']
         include:
-          - php-version: '8.2'
-            phpunit-deprecation-check: '--stop-on-deprecation'
+          - php: '8.2'
+            deprecation: '--stop-on-deprecation'
             os: 'ubuntu-latest'
             phpunit-version: 'latest'
             transport: ''
-          - php-version: '8.3'
-            phpunit-deprecation-check: '--stop-on-deprecation'
+          - php: '8.3'
+            deprecation: '--stop-on-deprecation'
             os: 'ubuntu-latest'
             phpunit-version: 'latest'
             transport: ''
-          - php-version: '8.2'
-            phpunit-deprecation-check: '--stop-on-deprecation'
+          - php: '8.2'
+            deprecation: '--stop-on-deprecation'
             os: 'ubuntu-latest'
             phpunit-version: 'latest'
             transport: 'PhpHttp'
-          - php-version: '8.3'
-            phpunit-deprecation-check: '--stop-on-deprecation'
+          - php: '8.3'
+            deprecation: '--stop-on-deprecation'
             os: 'ubuntu-latest'
             phpunit-version: 'latest'
             transport: 'PhpHttp'
+          - php: '8.4'
+            deprecation: '--stop-on-deprecation'
+            os: 'ubuntu-latest'
+            phpunit-version: 'latest'
+            transport: ''
+          - php: '8.4'
+            deprecation: '--stop-on-deprecation'
+            os: 'ubuntu-latest'
+            phpunit-version: 'latest'
+            transport: 'PhpHttp'
+
     services:
       manticoresearch-manticore:
         image: manticoresearch/manticore:dev
@@ -54,24 +65,20 @@ jobs:
           - 5308:9308
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install PHP {{matrix.php-version}}
-        uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v4
+      
+      - uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}
+          php-version: ${{ matrix.php }}
           extensions: yaml, zip, curl
           tools: phpunit
 
-      - name: Install dependencies
-        run: composer install --prefer-dist
-
-      - name: Composer require
-        run: composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message php-http/message-factory http-interop/http-factory-guzzle
+      - run: composer install --prefer-dist
+      
+      - run: composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message php-http/message-factory http-interop/http-factory-guzzle
 
       - name: Test
-        run: vendor/bin/phpunit -d memory_limit=4G ${{ matrix.phpunit-deprecation-check }} --stop-on-failure test/
+        run: vendor/bin/phpunit -d memory_limit=4G ${{ matrix.deprecation }} --stop-on-failure test/
         env:
           MS_HOST: 127.0.0.1
           MS_PORT: 9308
@@ -82,41 +89,24 @@ jobs:
   stan:
     name: static analysis
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install PHP 7.4
-        uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: 7.4
-
-      - name: Install dependencies
-        run: composer install --prefer-dist
-
-      - name: Composer require
-        run: composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle
-
-      - name: Run phpstan
-        run: composer phpstan
-
+      - run: |
+          composer install --prefer-dist
+          composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle
+          composer phpstan
 
   codestyle:
     name: codestyle
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install PHP 8.0
-        uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: 8.0
-
-      - name: Install dependencies
-        run: composer install --prefer-dist
-
-      - name: Check code style
-        run: composer check-cs
+      - run: |
+          composer install --prefer-dist
+          composer check-cs
