@@ -16,28 +16,28 @@ class ExplainQuery extends EmulateBySql
 	/**
 	 * @var string
 	 */
-	protected $index;
+	protected $table;
 
 	public function setBody($params = null) {
-		if (isset($this->index)) {
+		if (isset($this->table)) {
 			if (isset($params['query'])) {
-				return parent::setBody(['query' => 'EXPLAIN QUERY '.$this->index. '\''.$params['query'].'\'']);
+				return parent::setBody(['query' => 'EXPLAIN QUERY '.$this->table. '\''.$params['query'].'\'']);
 			}
 			throw new RuntimeException('Query param is missing.');
 		}
-		throw new RuntimeException('Index name is missing.');
+		throw new RuntimeException('Table name is missing.');
 	}
 	/**
 	 * @return mixed
 	 */
-	public function getIndex() {
-		return $this->index;
+	public function getTable() {
+		return $this->table;
 	}
 
 	/**
-	 * @param mixed $index
+	 * @param mixed $table
 	 */
-	public function setIndex($index) {
-		$this->index = $index;
+	public function setTable($table) {
+		$this->table = $table;
 	}
 }

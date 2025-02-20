@@ -9,26 +9,26 @@ namespace Manticoresearch\Test;
 
 use Manticoresearch\Client;
 use Manticoresearch\Exceptions\RuntimeException;
-use Manticoresearch\Index;
 use Manticoresearch\Query\BoolQuery;
 use Manticoresearch\Query\MatchQuery;
 use Manticoresearch\Query\Range;
 use Manticoresearch\ResultHit;
+use Manticoresearch\Table;
 use PHPUnit\Framework\TestCase;
 
-class IndexTest extends TestCase
+class TableTest extends TestCase
 {
-	protected $index;
+	protected $table;
 
-	protected function getIndex($keywords = false): Index {
+	protected function getTable($keywords = false): Table {
 		$params = [
 			'host' => $_SERVER['MS_HOST'],
 			'port' => $_SERVER['MS_PORT'],
 			'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT'],
 		];
-		$this->index = new Index(new Client($params));
-		$this->index->setName('testindex');
-		$this->index->drop(true);
+		$this->table = new Table(new Client($params));
+		$this->table->setName('testtable');
+		$this->table->drop(true);
 
 		$options = [];
 		if ($keywords === true) {
@@ -38,10 +38,10 @@ class IndexTest extends TestCase
 			];
 		}
 
-		// for coverage purposes, does not affect functionality as index already dropped silently
+		// for coverage purposes, does not affect functionality as table is already dropped silently
 		$options['silent'] = true;
 
-		$this->index->create(
+		$this->table->create(
 			[
 			'title' => ['type' => 'text'],
 			'gid' => ['type' => 'int'],
@@ -50,11 +50,11 @@ class IndexTest extends TestCase
 			'props' => ['type' => 'json'],
 			], $options
 		);
-		return $this->index;
+		return $this->table;
 	}
 
-	protected function addDocument($index) {
-		$index->addDocument(
+	protected function addDocument($table) {
+		$table->addDocument(
 			[
 			'title' => 'This is an example document for testing',
 			'gid' => 1,
@@ -70,9 +70,9 @@ class IndexTest extends TestCase
 
 
 	public function testReplaceDocument() {
-		$index = $this->getIndex();
-		$this->addDocument($index);
-		$response = $index->replaceDocument(
+		$table = $this->getTable();
+		$this->addDocument($table);
+		$response = $table->replaceDocument(
 			[
 			'title' => 'This is an example document for cooking',
 			'gid' => 1,
@@ -91,15 +91,15 @@ class IndexTest extends TestCase
 			'created' => false,
 			'result' => 'updated',
 			'status' => 200,
-			'table' => 'testindex',
+			'table' => 'testtable',
 			], $response
 		);
 	}
 
 	public function testPartialReplaceDocument() {
-		$index = $this->getIndex();
-		$this->addDocument($index);
-		$response = $index->replaceDocument(
+		$table = $this->getTable();
+		$this->addDocument($table);
+		$response = $table->replaceDocument(
 			[
 				'title' => 'This is an example document for cooking',
 				'label' => 'not used',
@@ -108,16 +108,16 @@ class IndexTest extends TestCase
 
 		$this->assertEquals(
 			[
-			'_index' => 'testindex',
-			'updated' => 1,
+				'_index' => 'testtable',
+				'updated' => 1,
 			], $response
 		);
 	}
 
 	public function testReplaceDocuments() {
-		$index = $this->getIndex();
-		$this->addDocument($index);
-		$response = $index->replaceDocuments(
+		$table = $this->getTable();
+		$this->addDocument($table);
+		$response = $table->replaceDocuments(
 			[[
 			'id' => 1,
 			'title' => 'This is an example document for cooking',
@@ -141,7 +141,7 @@ class IndexTest extends TestCase
 					'updated' => 0,
 					'result' => 'updated',
 					'status' => 200,
-					'table' => 'testindex',
+					'table' => 'testtable',
 				]],
 			],
 			'errors' => false,
@@ -153,9 +153,9 @@ class IndexTest extends TestCase
 	}
 
 	public function testDeleteDocumentsByIds() {
-		$index = $this->getIndex();
+		$table = $this->getTable();
 
-		$index->addDocuments(
+		$table->addDocuments(
 			[
 			['id' => 1, 'title' => 'First document'],
 			['id' => 2, 'title' => 'Second document'],
@@ -165,8 +165,8 @@ class IndexTest extends TestCase
 			]
 		);
 
-		$index->deleteDocumentsByIds([2, 4]);
-		$documents = $index->getDocumentByIds([1, 2, 3, 4, 5]);
+		$table->deleteDocumentsByIds([2, 4]);
+		$documents = $table->getDocumentByIds([1, 2, 3, 4, 5]);
 		$remainingIds = [];
 		foreach ($documents as $document) {
 			$remainingIds[] = $document->getId();
@@ -175,36 +175,36 @@ class IndexTest extends TestCase
 	}
 
 	public function testClassOfHit() {
-		$index = $this->getIndex();
-		$this->addDocument($index);
-		$hit = $index->getDocumentById(1);
+		$table = $this->getTable();
+		$this->addDocument($table);
+		$hit = $table->getDocumentById(1);
 		$this->assertInstanceOf(ResultHit::class, $hit);
 	}
 
 	public function testClassOfNonExistentHit() {
-		$index = $this->getIndex();
-		$this->addDocument($index);
-		$hit = $index->getDocumentById(2);
+		$table = $this->getTable();
+		$this->addDocument($table);
+		$hit = $table->getDocumentById(2);
 		$this->assertNull($hit);
 	}
 
 	public function testUpdateTagsThenDeleteDocument() {
-		$index = $this->getIndex();
-		$this->addDocument($index);
-		$update = $index->updateDocument(['tags' => [10, 12, 14]], 1);
+		$table = $this->getTable();
+		$this->addDocument($table);
+		$update = $table->updateDocument(['tags' => [10, 12, 14]], 1);
 		$this->assertEquals($update['_id'], 1);
 
-		$index->deleteDocument(1);
+		$table->deleteDocument(1);
 		$this->assertEquals($update['_id'], 1);
 
-		$result = $index->getDocumentById(1);
+		$result = $table->getDocumentById(1);
 		$this->assertNull($result);
 	}
 
 	public function testStatus() {
-		$index = $this->getIndex();
-		$this->addDocument($index);
-		$status = $index->status();
+		$table = $this->getTable();
+		$this->addDocument($table);
+		$status = $table->status();
 		$this->assertEquals(1, $status['indexed_documents']);
 
 		$this->assertArrayHasKey('disk_bytes', $status);
@@ -212,8 +212,8 @@ class IndexTest extends TestCase
 
 
 	public function testDescribe() {
-		$index = $this->getIndex();
-		$keys = array_keys($index->describe());
+		$table = $this->getTable();
+		$keys = array_keys($table->describe());
 		sort($keys);
 		$this->assertEquals(
 			[
@@ -228,12 +228,12 @@ class IndexTest extends TestCase
 	}
 
 	public function testAlterDrop() {
-		$index = $this->getIndex();
-		$response = $index->alter('drop', 'props');
+		$table = $this->getTable();
+		$response = $table->alter('drop', 'props');
 		$this->assertEquals(['total' => 0, 'error' => '', 'warning' => ''], $response);
 
 		// use describe to demonstrate the field has been removed
-		$keys = array_keys($index->describe());
+		$keys = array_keys($table->describe());
 		sort($keys);
 		$this->assertEquals(
 			[
@@ -247,12 +247,12 @@ class IndexTest extends TestCase
 	}
 
 	public function testAlterAdd() {
-		$index = $this->getIndex();
-		$response = $index->alter('add', 'example', 'string');
+		$table = $this->getTable();
+		$response = $table->alter('add', 'example', 'string');
 		$this->assertEquals(['total' => 0, 'error' => '', 'warning' => ''], $response);
 
 		// use describe to demonstrate the field has been removed
-		$description = $index->describe();
+		$description = $table->describe();
 		$keys = array_keys($description);
 		sort($keys);
 		$this->assertEquals(
@@ -271,35 +271,35 @@ class IndexTest extends TestCase
 	}
 
 	public function testAlterInvalidOperation() {
-		$index = $this->getIndex();
+		$table = $this->getTable();
 		$this->expectException(RuntimeException::class);
 		$this->expectExceptionMessage('Alter operation not recognized');
-		$index->alter('invalidOperation', 'example', 'string');
+		$table->alter('invalidOperation', 'example', 'string');
 	}
 
 	public function testTruncate() {
-		$index = $this->getIndex();
-		$response = $index->truncate();
+		$table = $this->getTable();
+		$response = $table->truncate();
 		$this->assertEquals(['total' => 0, 'error' => '', 'warning' => ''], $response);
 	}
 
 	public function testOptimze() {
-		$index = $this->getIndex();
-		$response = $index->optimize(true);
+		$table = $this->getTable();
+		$response = $table->optimize(true);
 		$this->assertEquals(['total' => 0, 'error' => '', 'warning' => ''], $response);
 	}
 
 	public function testFlush() {
-		$index = $this->getIndex();
-		$response = $index->flush();
+		$table = $this->getTable();
+		$response = $table->flush();
 
 		// @todo Is this correct?
 		$this->assertEquals(null, $response);
 	}
 
 	public function testFlushRamChunk() {
-		$index = $this->getIndex();
-		$response = $index->flushramchunk();
+		$table = $this->getTable();
+		$response = $table->flushramchunk();
 
 		// @todo Is this correct?
 		$this->assertEquals(null, $response);
@@ -307,41 +307,41 @@ class IndexTest extends TestCase
 
 
 	public function testSearch() {
-		$index = $this->getIndex();
-		$this->addDocument($index);
-		$result = $index->search('testing')->get();
+		$table = $this->getTable();
+		$this->addDocument($table);
+		$result = $table->search('testing')->get();
 		$this->assertCount(1, $result);
-		$index->drop();
+		$table->drop();
 	}
 
-	public function testIndexSuggest() {
-		$index = $this->getIndex(true);
-		$this->addDocument($index);
-		$result = $index->suggest('tasting', []);
+	public function testTableSuggest() {
+		$table = $this->getTable(true);
+		$this->addDocument($table);
+		$result = $table->suggest('tasting', []);
 		$this->assertEquals(['distance' => 1, 'docs' => 1], $result['testing']);
 	}
 
-	public function testIndexExplainQuery() {
-		$index = $this->getIndex(true);
-		$result = $index->explainQuery('test');
+	public function testTableExplainQuery() {
+		$table = $this->getTable(true);
+		$result = $table->explainQuery('test');
 		$this->assertEquals('AND(KEYWORD(test, querypos=1))', $result['transformed_tree']);
 	}
 
-	public function testIndexKeywords() {
-		$index = $this->getIndex(true);
-		$this->addDocument($index);
-		$result = $index->keywords('tasting', []);
+	public function testTableKeywords() {
+		$table = $this->getTable(true);
+		$this->addDocument($table);
+		$result = $table->keywords('tasting', []);
 
 		// @todo Is this correct functionality
 		$this->assertEquals(['tokenized' => 'tasting', 'normalized' => 'tasting', 'qpos' => '1'], $result[0]);
 	}
 
 	public function testStart() {
-		$index = $this->getIndex();
+		$table = $this->getTable();
 
-		$index->setName('test');
-		$index->drop(true);
-		$index->create(
+		$table->setName('test');
+		$table->drop(true);
+		$table->create(
 			['title' => [
 				'type' => 'text'],
 				'plot' => ['type' => 'text'],
@@ -351,7 +351,7 @@ class IndexTest extends TestCase
 			[],
 			true
 		);
-		$index->addDocument(
+		$table->addDocument(
 			[
 				'title' => 'Star Trek: Nemesis',
 				'plot' => 'The Enterprise is diverted to the Romulan homeworld Romulus, supposedly because they want' .
@@ -363,7 +363,7 @@ class IndexTest extends TestCase
 			1
 		);
 
-		$index->addDocuments(
+		$table->addDocuments(
 			[
 			['id' => 2, 'title' => 'Interstellar', 'plot' => 'A team of explorers travel through a wormhole in space' .
 				' in an attempt to ensure humanity\'s survival.', '_year' => 2014, 'rating' => 8.5],
@@ -380,7 +380,7 @@ class IndexTest extends TestCase
 		);
 
 		for ($i = 6; $i <= 30; $i++) {
-			$index->addDocument(
+			$table->addDocument(
 				[
 					'title' => 'Star Trek: Nemesis',
 					'plot' => 'The Enterprise is diverted to the Romulan homeworld Romulus, supposedly because they' .
@@ -393,13 +393,13 @@ class IndexTest extends TestCase
 			);
 		}
 
-		$results = $index->search('space team')->get();
+		$results = $table->search('space team')->get();
 
 		foreach ($results as $hit) {
 			$this->assertInstanceOf(ResultHit::class, $hit);
 		}
 
-		$results = $index->search('alien')
+		$results = $table->search('alien')
 			->filter('_year', 'gte', 2000)
 			->filter('rating', 'gte', 8.0)
 			->sort('_year', 'desc')
@@ -410,99 +410,99 @@ class IndexTest extends TestCase
 			$this->assertInstanceOf(ResultHit::class, $hit);
 		}
 
-		$response = $index->updateDocument(['_year' => 2019], 4);
+		$response = $table->updateDocument(['_year' => 2019], 4);
 		$this->assertEquals(4, $response['_id']);
 
-		$schema = $index->describe();
+		$schema = $table->describe();
 		$this->assertCount(5, $schema);
 
-		$response = $index->updateDocuments(['_year' => 2000], ['match' => ['*' => 'team']]);
+		$response = $table->updateDocuments(['_year' => 2000], ['match' => ['*' => 'team']]);
 		$this->assertEquals(2, $response['updated']);
 
-		$response = $index->updateDocuments(['_year' => 2000], new MatchQuery('team', '*'));
+		$response = $table->updateDocuments(['_year' => 2000], new MatchQuery('team', '*'));
 		$this->assertEquals(2, $response['updated']);
 
 		$bool = new BoolQuery();
 		$bool->must(new MatchQuery('team', '*'));
 		$bool->must(new Range('rating', ['gte' => 8.5]));
-		$response = $index->updateDocuments(['_year' => 2000], $bool);
+		$response = $table->updateDocuments(['_year' => 2000], $bool);
 		$this->assertEquals(1, $response['updated']);
 
-		$response = $index->deleteDocument(4);
+		$response = $table->deleteDocument(4);
 		$this->assertEquals(4, $response['_id']);
 
-		$response = $index->deleteDocumentsByIds([100]);
+		$response = $table->deleteDocumentsByIds([100]);
 		$this->assertEquals('not found', $response['result']);
 
-		$response = $index->deleteDocumentsByIds([5,6]);
+		$response = $table->deleteDocumentsByIds([5,6]);
 		$this->assertEquals(5, $response['_id']);
 
-		$response = $index->deleteDocumentsByIds(range(7, 30));
+		$response = $table->deleteDocumentsByIds(range(7, 30));
 		$this->assertEquals(7, $response['_id']);
-		$docTotal = $index->search('')
+		$docTotal = $table->search('')
 			->get()
 			->getTotal();
 		$this->assertEquals(3, $docTotal);
 
-		$response = $index->deleteDocuments(new Range('id', ['gte' => 100]));
+		$response = $table->deleteDocuments(new Range('id', ['gte' => 100]));
 		$this->assertEquals(0, $response['deleted']);
 
 
-		$index->truncate();
-		$results = $index->search('')
+		$table->truncate();
+		$results = $table->search('')
 			->get();
 		$this->assertCount(0, $results);
 
 		$newdoc = '{"title":"Tenet","plot":"Armed with only one word, Tenet, and fighting for the survival of the '.
 			'entire world, a Protagonist journeys through a twilight world of international espionage on a mission '.
 			'that will unfold in something beyond real time","_year":2020,"rating":8.8}';
-		$index->addDocument($newdoc);
-		$index->addDocument(json_decode($newdoc));
-		$results = $index->search('tenet')->get();
+		$table->addDocument($newdoc);
+		$table->addDocument(json_decode($newdoc));
+		$results = $table->search('tenet')->get();
 		$this->assertCount(2, $results);
 
 
-		$response = $index->drop();
+		$response = $table->drop();
 		$this->assertEquals('', $response['error']);
 	}
 
 	public function testPercolates() {
-		$this->getIndex();
-		$this->index->setName('pqtest');
-		$this->index->drop(true);
-		$this->index->create(
+		$this->getTable();
+		$this->table->setName('pqtest');
+		$this->table->drop(true);
+		$this->table->create(
 			['title' => ['type' => 'text'], 'gid' => ['type' => 'integer']],
 			['type' => 'percolate'],
 			true
 		);
-		$this->index->addDocument(['query' => 'find me'], 6);
-		$this->index->addDocument(['query' => 'fast'], 8);
-		$this->index->addDocument(['query' => 'something'], 7);
+		$this->table->addDocument(['query' => 'find me'], 6);
+		$this->table->addDocument(['query' => 'fast'], 8);
+		$this->table->addDocument(['query' => 'something'], 7);
 		$docs = [
 			['title' => 'find me fast'],
 			['title' => 'pick me'],
 			['title' => 'something else'],
 			['title' => 'this is false'],
 		];
-		$result = $this->index->percolate($docs);
+		$result = $this->table->percolate($docs);
 		$this->assertEquals(3, $result->count());
-		$result = $this->index->percolateToDocs($docs);
+		$result = $this->table->percolateToDocs($docs);
 		$this->assertEquals(4, $result->count());
 		$result->rewind();
 		$doc = $result->current();
 		$this->assertTrue($doc->hasQueries());
-		$this->index->drop();
+		$this->table->drop();
 	}
 
 	public function testGetClient() {
-		$index = $this->getIndex();
-		$this->assertInstanceOf(Client::class, $index->getClient());
+		$table = $this->getTable();
+		$this->assertInstanceOf(Client::class, $table->getClient());
 	}
 
 
 	public function testSetGetName() {
-		$index = $this->getIndex();
-		$this->assertEquals('testindex', $index->getName());
+		$table = $this->getTable();
+		$this->assertEquals('testtable', $table->getName());
 	}
 
 	public function testRawSelectQuery() {
@@ -513,11 +513,11 @@ class IndexTest extends TestCase
 		];
 		$client = new Client($params);
 
-		$index = $this->getIndex();
+		$table = $this->getTable();
 
-		$index->setName('test');
-		$index->drop(true);
-		$index->create(
+		$table->setName('test');
+		$table->drop(true);
+		$table->create(
 			[
 				'title' => ['type' => 'text'],
 				'plot' => ['type' => 'text'],
@@ -527,7 +527,7 @@ class IndexTest extends TestCase
 			[],
 			true
 		);
-		$index->addDocument(
+		$table->addDocument(
 			[
 				'title' => 'Star Trek: Nemesis',
 				'plot' => 'The Enterprise is diverted to the Romulan homeworld Romulus, supposedly because they want' .

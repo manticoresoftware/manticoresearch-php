@@ -15,9 +15,9 @@ $client = new Client($config);
 $search = new Search($client);
 ```
 
-## Set the index
+## Set the table
 ```php
-$search->setIndex('indexname');
+$search->setTable('tablename');
 ```
 
 
@@ -332,6 +332,6 @@ Provides query profiling in the result set.
 
 ### reset()
 
-This method clears all search conditions, including the index name.
+This method clears all search conditions, including the table name.
 
 <!-- proofread -->

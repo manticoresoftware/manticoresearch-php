@@ -15,7 +15,7 @@ class Set extends EmulateBySql
 	/**
 	 * @var string
 	 */
-	protected $index;
+	protected $table;
 
 	public function setBody($params = null) {
 		$this->body = $params;

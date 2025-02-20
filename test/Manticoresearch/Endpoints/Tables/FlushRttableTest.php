@@ -5,14 +5,14 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-namespace Manticoresearch\Test\Endpoints\Indices;
+namespace Manticoresearch\Test\Endpoints\Tables;
 
 use Manticoresearch\Client;
-use Manticoresearch\Endpoints\Indices\Truncate;
+use Manticoresearch\Endpoints\Tables\FlushRttable;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class TruncateTest extends \PHPUnit\Framework\TestCase
+class FlushRttableTest extends \PHPUnit\Framework\TestCase
 {
 	/** @var Client */
 	private static $client;
@@ -29,21 +29,21 @@ class TruncateTest extends \PHPUnit\Framework\TestCase
 		static::$helper = $helper;
 	}
 
-	public function testIndexTruncate() {
-		$response = static::$client->indices()->truncate(['index' => 'products']);
+	public function testFlushRTTable() {
+		$response = static::$client->tables()->flushrttable(['table' => 'products']);
 
 		$this->assertEquals(['total' => 0,'error' => '','warning' => ''], $response);
 	}
 
-	public function testSetGetIndex() {
-		$describe = new Truncate();
-		$describe->setIndex('testName');
-		$this->assertEquals('testName', $describe->getIndex());
+	public function testSetGetTable() {
+		$describe = new FlushRttable();
+		$describe->setTable('testName');
+		$this->assertEquals('testName', $describe->getTable());
 	}
 
-	public function testSetBodyNoIndex() {
-		$describe = new Truncate();
-		$this->expectExceptionMessage('Index name is missing.');
+	public function testSetBodyNoTable() {
+		$describe = new FlushRttable();
+		$this->expectExceptionMessage('Table name is missing.');
 		$this->expectException(RuntimeException::class);
 		$describe->setBody([]);
 	}

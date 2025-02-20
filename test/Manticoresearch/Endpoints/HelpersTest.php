@@ -22,7 +22,7 @@ class HelpersTest extends \PHPUnit\Framework\TestCase
 		];
 		static::$client = new Client($params);
 		$params = [
-			'index' => 'products',
+			'table' => 'products',
 			'body' => [
 				'columns' => [
 					'title' => [
@@ -40,11 +40,11 @@ class HelpersTest extends \PHPUnit\Framework\TestCase
 				'silent' => true,
 			],
 		];
-		static::$client->indices()->create($params);
+		static::$client->tables()->create($params);
 		static::$client->replace(
 			[
 			'body' => [
-				'index' => 'products',
+				'table' => 'products',
 				'id' => 100,
 				'doc' => [
 					'title' => 'this product is not broken',
@@ -57,7 +57,7 @@ class HelpersTest extends \PHPUnit\Framework\TestCase
 
 	public function testKeywords() {
 		$params = [
-			'index' => 'products',
+			'table' => 'products',
 			'body' => [
 				'query' => 'product',
 				'options' => [
@@ -72,7 +72,7 @@ class HelpersTest extends \PHPUnit\Framework\TestCase
 
 	public function testSuggest() {
 		$params = [
-			'index' => 'products',
+			'table' => 'products',
 			'body' => [
 				'query' => 'brokn',
 				'options' => [

@@ -38,7 +38,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 		$helper->search('products', 'broken', 1);
 		$doc = [
 			'body' => [
-				'index' => 'products',
+				'table' => 'products',
 				'id' => 100,
 			],
 		];

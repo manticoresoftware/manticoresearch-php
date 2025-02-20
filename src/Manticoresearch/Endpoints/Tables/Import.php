@@ -5,7 +5,7 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-namespace Manticoresearch\Endpoints\Indices;
+namespace Manticoresearch\Endpoints\Tables;
 
 use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
@@ -15,36 +15,36 @@ class Import extends EmulateBySql
 	/**
 	 * @var string
 	 */
-	protected $index;
+	protected $table;
 
 	public function setBody($params = null) {
-		if (isset($this->index)) {
+		if (isset($this->table)) {
 			if (isset($params['path'])) {
 				return parent::setBody(
 					[
 					'query' => 'IMPORT TABLE ' .
-						$this->index .
+						$this->table .
 						' FROM ' .
 						$params['path'],
 					]
 				);
 			}
-			throw new RuntimeException('Missing import index path in /indices/import');
+			throw new RuntimeException('Missing import table path in /indices/import');
 		}
-		throw new RuntimeException('Missing index name in /indices/import');
+		throw new RuntimeException('Missing table name in /indices/import');
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function getIndex() {
-		return $this->index;
+	public function getTable() {
+		return $this->table;
 	}
 
 	/**
-	 * @param mixed $index
+	 * @param mixed $table
 	 */
-	public function setIndex($index) {
-		$this->index = $index;
+	public function setTable($table) {
+		$this->table = $table;
 	}
 }

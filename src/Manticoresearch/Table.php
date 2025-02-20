@@ -12,29 +12,29 @@ use Manticoresearch\Query\Percolate;
 use Manticoresearch\Results;
 
 /**
- * Manticore index object
+ * Manticore table object
  * @category ManticoreSearch
  * @package ManticoreSearch
  * @author Adrian Nuta <adrian.nuta@manticoresearch.com>
  * @link https://manticoresearch.com
  */
-class Index
+class Table
 {
 	use Utils;
 
 	protected $client;
-	protected $index;
+	protected $table;
 	protected $cluster = null;
 
-	public function __construct(Client $client, ?string $index = null) {
+	public function __construct(Client $client, ?string $table = null) {
 		$this->client = $client;
 
-		$this->index = $index;
+		$this->table = $table;
 	}
 
 	public function search($input): Search {
 		$search = new Search($this->client);
-		$search->setIndex($this->index);
+		$search->setTable($this->table);
 		return $search->search($input);
 	}
 
@@ -42,7 +42,7 @@ class Index
 		static::checkDocumentId($id);
 		$params = [
 			'body' => [
-				'index' => $this->index,
+				'table' => $this->table,
 				'query' => [
 					'equals' => ['id' => $id],
 				],
@@ -64,7 +64,7 @@ class Index
 		}
 		$params = [
 			'body' => [
-				'index' => $this->index,
+				'table' => $this->table,
 				'limit' => sizeof($ids),
 				'query' => [
 					'in' => ['id' => $ids],
@@ -84,7 +84,7 @@ class Index
 		static::checkDocument($data);
 		$params = [
 			'body' => [
-				'index' => $this->index,
+				'table' => $this->table,
 				'id' => $id,
 				'doc' => $data,
 			],
@@ -113,7 +113,7 @@ class Index
 				$id = 0;
 			}
 			$insert = [
-				'index' => $this->index,
+				'table' => $this->table,
 				'id' => $id,
 				'doc' => $document,
 			];
@@ -129,7 +129,7 @@ class Index
 		static::checkDocumentId($id);
 		$params = [
 			'body' => [
-				'index' => $this->index,
+				'table' => $this->table,
 				'id' => $id,
 			],
 		];
@@ -148,7 +148,7 @@ class Index
 		}
 		$params = [
 			'body' => [
-				'index' => $this->index,
+				'table' => $this->table,
 				'limit' => sizeof($ids),
 				'id' => $ids,
 			],
@@ -165,7 +165,7 @@ class Index
 		}
 		$params = [
 			'body' => [
-				'index' => $this->index,
+				'table' => $this->table,
 				'query' => $query,
 			],
 		];
@@ -180,7 +180,7 @@ class Index
 		static::checkDocument($data);
 		$params = [
 			'body' => [
-				'index' => $this->index,
+				'table' => $this->table,
 				'id' => $id,
 				'doc' => $data,
 			],
@@ -197,7 +197,7 @@ class Index
 		}
 		$params = [
 			'body' => [
-				'index' => $this->index,
+				'table' => $this->table,
 				'query' => $query,
 				'doc' => $data,
 			],
@@ -222,10 +222,10 @@ class Index
 			],
 		];
 		if ($isPartialReplace) {
-			return $this->client->partialReplace($this->index, $id, $params);
+			return $this->client->partialReplace($this->table, $id, $params);
 		}
 		$params['body'] += [
-			'index' => $this->index,
+			'table' => $this->table,
 			'id' => $id,
 			'doc' => $data,
 		];
@@ -248,7 +248,7 @@ class Index
 			static::checkDocument($document);
 			unset($document['id']);
 			$replace = [
-				'index' => $this->index,
+				'table' => $this->table,
 				'id' => $id,
 				'doc' => $document,
 			];
@@ -262,7 +262,7 @@ class Index
 
 	public function create($fields, $settings = [], $silent = false) {
 		$params = [
-			'index' => $this->index,
+			'table' => $this->table,
 			'body' => [
 				'columns' => $fields,
 				'settings' => $settings,
@@ -271,68 +271,68 @@ class Index
 		if ($silent === true) {
 			$params['body']['silent'] = true;
 		}
-		return $this->client->indices()->create($params);
+		return $this->client->tables()->create($params);
 	}
 
 	public function drop($silent = false) {
 		$params = [
-			'index' => $this->index,
+			'table' => $this->table,
 		];
 		if ($silent === true) {
 			$params['body'] = ['silent' => true];
 		}
-		return $this->client->indices()->drop($params);
+		return $this->client->tables()->drop($params);
 	}
 
 	public function describe() {
 		$params = [
-			'index' => $this->index,
+			'table' => $this->table,
 		];
-		return $this->client->indices()->describe($params);
+		return $this->client->tables()->describe($params);
 	}
 
 	public function status() {
 		$params = [
-			'index' => $this->index,
+			'table' => $this->table,
 		];
-		return $this->client->indices()->status($params);
+		return $this->client->tables()->status($params);
 	}
 
 	public function truncate() {
 		$params = [
-			'index' => $this->index,
+			'table' => $this->table,
 		];
-		return $this->client->indices()->truncate($params);
+		return $this->client->tables()->truncate($params);
 	}
 
 	public function optimize($sync = false) {
 		$params = [
-			'index' => $this->index,
+			'table' => $this->table,
 		];
 		if ($sync === true) {
 			$params['body'] = ['sync' => true];
 		}
-		return $this->client->indices()->optimize($params);
+		return $this->client->tables()->optimize($params);
 	}
 
 	public function flush() {
 		$params = [
-			'index' => $this->index,
+			'table' => $this->table,
 		];
-		$this->client->indices()->flushrtindex($params);
+		$this->client->tables()->flushrttable($params);
 	}
 
 	public function flushramchunk() {
 		$params = [
-			'index' => $this->index,
+			'table' => $this->table,
 		];
-		$this->client->indices()->flushramchunk($params);
+		$this->client->tables()->flushramchunk($params);
 	}
 
 	public function alter($operation, $name, ?string $type = null) {
 		if ($operation === 'add') {
 			$params = [
-				'index' => $this->index,
+				'table' => $this->table,
 				'body' => [
 					'operation' => 'add',
 					'column' => ['name' => $name, 'type' => $type],
@@ -340,7 +340,7 @@ class Index
 			];
 		} elseif ($operation === 'drop') {
 			$params = [
-				'index' => $this->index,
+				'table' => $this->table,
 				'body' => [
 					'operation' => 'drop',
 					'column' => ['name' => $name],
@@ -349,12 +349,12 @@ class Index
 		} else {
 			throw new RuntimeException('Alter operation not recognized');
 		}
-		return $this->client->indices()->alter($params);
+		return $this->client->tables()->alter($params);
 	}
 
 	public function keywords($query, $options) {
 		$params = [
-			'index' => $this->index,
+			'table' => $this->table,
 			'body' => [
 				'query' => $query,
 				'options' => $options,
@@ -365,7 +365,7 @@ class Index
 
 	public function suggest($query, $options) {
 		$params = [
-			'index' => $this->index,
+			'table' => $this->table,
 			'body' => [
 				'query' => $query,
 				'options' => $options,
@@ -376,7 +376,7 @@ class Index
 
 	public function explainQuery($query) {
 		$params = [
-			'index' => $this->index,
+			'table' => $this->table,
 			'body' => [
 				'query' => $query,
 			],
@@ -386,7 +386,7 @@ class Index
 
 
 	public function percolate($docs) {
-		$params = ['index' => $this->index, 'body' => []];
+		$params = ['table' => $this->table, 'body' => []];
 		if ($docs instanceof Percolate) {
 			$params['body']['query'] = $docs->toArray();
 		} else {
@@ -400,7 +400,7 @@ class Index
 	}
 
 	public function percolateToDocs($docs) {
-		$params = ['index' => $this->index, 'body' => []];
+		$params = ['table' => $this->table, 'body' => []];
 		if ($docs instanceof Percolate) {
 			$params['body']['query'] = $docs->toArray();
 		} else {
@@ -419,11 +419,11 @@ class Index
 	}
 
 	public function getName(): string {
-		return $this->index;
+		return $this->table;
 	}
 
-	public function setName($index): self {
-		$this->index = $index;
+	public function setName($table): self {
+		$this->table = $table;
 		return $this;
 	}
 
@@ -445,17 +445,17 @@ class Index
 	 * or display better error to identify the issue when manticore failed
 	 * to insert value that contains null
 	 * @param  array    $data
-	 * @param  ?int $index
+	 * @param  ?int $table
 	 * @return void
 	 */
-	protected static function checkDocument(array $data, ?int $index = null) {
+	protected static function checkDocument(array $data, ?int $table = null) {
 		foreach ($data as $key => $value) {
 			if ($value !== null) {
 				continue;
 			}
 
-			if ($index !== null) {
-				$key = "[$index][$key]";
+			if ($table !== null) {
+				$key = "[$table][$key]";
 			}
 			throw new RuntimeException("Error: The key '{$key}' in document has a null value.\n");
 		}

@@ -26,7 +26,7 @@ Table of Contents
 
 * Administrative operations
 
-    * [Indices](indices.md)
+    * [Tables](tables.md)
     * [Nodes](nodes.md)
     * [Cluster](cluster.md)
     
@@ -39,7 +39,7 @@ Table of Contents
 Each request array can include one of the following:
 
 * body - the API endpoint POST payload
-* index/cluster - index/cluster name
+* table/cluster - table/cluster name
 * id - document id
 * query - endpoint parameters
 
@@ -55,13 +55,13 @@ Responses are returned as arrays reflecting the response object received from th
 ### Search
 For a complete reference of payload and response, see Manticore's [Search API](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON).
 
-`body` requires the presence of the `index` and `query` parameters.
+`body` requires the presence of the `table` and `query` parameters.
 
 A simple search example:
 ```
 $params = [
     'body' => [
-        'index' => 'movies',
+        'table' => 'movies',
         'query' => [
             'match_phrase' => [
                 'movie_title' => 'star trek nemesis',
@@ -75,14 +75,14 @@ $response = $client->search($params);
 
 ### Insert
 
-For a complete reference of payload and response, see Manticore's [Insert API](https://manual.manticoresearch.com/Data_creation_and_modification/Adding_documents_to_a_table/Adding_documents_to_a_real-time_table#Adding-documents-to-a-real-time-index).
+For a complete reference of payload and response, see Manticore's [Insert API](https://manual.manticoresearch.com/Data_creation_and_modification/Adding_documents_to_a_table/Adding_documents_to_a_real-time_table#Adding-documents-to-a-real-time-table).
 
-`body` requires the presence of the `index`, `id`, and `doc` parameters.
+`body` requires the presence of the `table`, `id`, and `doc` parameters.
 
 ```
 $doc = [
     'body' => [
-        'index' => 'testrt',
+        'table' => 'testrt',
         'id' => 3,
         'doc' => [
             'gid' => 10,
@@ -107,12 +107,12 @@ $response = $client->insert($doc);
 
 For a complete reference of payload and response, see Manticore's [Replace API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/REPLACE).
 
-`body` requires the presence of the `index`, `id`, and `doc` parameters.
+`body` requires the presence of the `table`, `id`, and `doc` parameters.
 
 ```
 $doc = [
     'body' => [
-        'index' => 'testrt',
+        'table' => 'testrt',
         'id' => 3,
         'doc' => [
             'gid' => 10,
@@ -128,12 +128,12 @@ $response = $client->replace($doc);
 
 For a complete reference of payload and response, see Manticore's [Update API](https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/UPDATE).
 
-`body` requires the presence of the `index`, `id`, and `doc` parameters.
+`body` requires the presence of the `table`, `id`, and `doc` parameters.
 
 ```
 $doc = [
     'body' => [
-        'index' => 'testrt',
+        'table' => 'testrt',
         'id' => 3,
         'doc' => [
             'gid' => 20,
@@ -148,12 +148,12 @@ $response = $client->update($doc);
 
 For a complete reference of payload and response, see Manticore's [Delete API](https://manual.manticoresearch.com/Data_creation_and_modification/Deleting_documents).
 
-`body` requires the presence of both `index` and `id` parameters.
+`body` requires the presence of both `table` and `id` parameters.
 
 ```
 $doc = [
     'body' => [
-        'index' => 'testrt',
+        'table' => 'testrt',
         'id' => 3
     ]
 ];
@@ -171,7 +171,7 @@ Bulk allows sending multiple data manipulation operations (inserts, replaces, up
 $doc = [
     'body' => [
         ['insert' => [
-            'index' => 'testrt',
+            'table' => 'testrt',
             'id' => 34,
             'doc' => [
                 'gid' => 1,
@@ -179,14 +179,14 @@ $doc = [
             ]
         ]],
         ['update' => [
-            'index' => 'testrt',
+            'table' => 'testrt',
             'id' => 56,
             'doc' => [
                 'gid' => 4,
             ]
         ]],
         ['delete' => [
-            'index' => 'testrt',
+            'table' => 'testrt',
             'id' => 100
         ]]
     ]

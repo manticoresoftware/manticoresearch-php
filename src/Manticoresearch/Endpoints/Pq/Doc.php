@@ -18,7 +18,7 @@ class Doc extends \Manticoresearch\Request
 	/**
 	 * @var string
 	 */
-	protected $index;
+	protected $table;
 	/**
 	 * @var integer
 	 */
@@ -35,28 +35,28 @@ class Doc extends \Manticoresearch\Request
 	 * @return mixed|string
 	 */
 	public function getPath() {
-		if (isset($this->index)) {
+		if (isset($this->table)) {
 			if (isset($this->id)) {
-				return '/pq/' . $this->index . '/doc/' . $this->id;
+				return '/pq/' . $this->table . '/doc/' . $this->id;
 			}
 
-			return '/pq/' . $this->index . '/doc';
+			return '/pq/' . $this->table . '/doc';
 		}
-		throw new RuntimeException('Index name is missing.');
+		throw new RuntimeException('Table name is missing.');
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function getIndex() {
-		return $this->index;
+	public function getTable() {
+		return $this->table;
 	}
 
 	/**
-	 * @param mixed $index
+	 * @param mixed $table
 	 */
-	public function setIndex($index) {
-		$this->index = $index;
+	public function setTable($table) {
+		$this->table = $table;
 	}
 
 	/**

@@ -5,10 +5,10 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-namespace Manticoresearch\Test\Endpoints\Indices;
+namespace Manticoresearch\Test\Endpoints\Tables;
 
 use Manticoresearch\Client;
-use Manticoresearch\Endpoints\Indices\Alter;
+use Manticoresearch\Endpoints\Tables\Alter;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
@@ -29,9 +29,9 @@ class AlterTest extends \PHPUnit\Framework\TestCase
 		static::$helper = $helper;
 	}
 
-	public function testIndexNoOperation() {
+	public function testTableNoOperation() {
 		$params = [
-			'index' => 'products',
+			'table' => 'products',
 			'body' => [
 				'column' => [
 					'name' => 'price',
@@ -41,12 +41,12 @@ class AlterTest extends \PHPUnit\Framework\TestCase
 		];
 		$this->expectException(RuntimeException::class);
 		$this->expectExceptionMessage('Operation is missing.');
-		static::$client->indices()->alter($params);
+		static::$client->tables()->alter($params);
 	}
 
-	public function testIndexDropColumn() {
+	public function testTableDropColumn() {
 		$params = [
-		'index' => 'products',
+		'table' => 'products',
 		'body' => [
 			'operation' => 'drop',
 			'column' => [
@@ -55,11 +55,11 @@ class AlterTest extends \PHPUnit\Framework\TestCase
 
 		],
 		];
-		$response = static::$client->indices()->alter($params);
+		$response = static::$client->tables()->alter($params);
 		$this->assertEquals(['total' => 0, 'error' => '', 'warning' => ''], $response);
 
 		// check the column has been added using the Describe endpoint
-		$response = static::$client->indices()->describe(['index' => 'products']);
+		$response = static::$client->tables()->describe(['table' => 'products']);
 
 		$expectedResponse = [
 		'id' =>
@@ -76,9 +76,9 @@ class AlterTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals(array_keys($expectedResponse), array_keys($response));
 	}
 
-	public function testIndexAddColumn() {
+	public function testTableAddColumn() {
 		$params = [
-			'index' => 'products',
+			'table' => 'products',
 			'body' => [
 				'operation' => 'add',
 				'column' => [
@@ -88,11 +88,11 @@ class AlterTest extends \PHPUnit\Framework\TestCase
 
 			],
 		];
-		$response = static::$client->indices()->alter($params);
+		$response = static::$client->tables()->alter($params);
 		$this->assertEquals(['total' => 0,'error' => '','warning' => ''], $response);
 
 		// check the column has been added using the Describe endpoint
-		$response = static::$client->indices()->describe(['index' => 'products']);
+		$response = static::$client->tables()->describe(['table' => 'products']);
 
 		$expectedResponse = [
 			'id' =>
@@ -121,15 +121,15 @@ class AlterTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals(array_keys($expectedResponse), array_keys($response));
 	}
 
-	public function testSetGetIndex() {
+	public function testSetGetTable() {
 		$alter = new Alter();
-		$alter->setIndex('testName');
-		$this->assertEquals('testName', $alter->getIndex());
+		$alter->setTable('testName');
+		$this->assertEquals('testName', $alter->getTable());
 	}
 
-	public function testSetBodyNoIndex() {
+	public function testSetBodyNoTable() {
 		$alter = new Alter();
-		$this->expectExceptionMessage('Index name is missing.');
+		$this->expectExceptionMessage('Table name is missing.');
 		$this->expectException(RuntimeException::class);
 		$alter->setBody([]);
 	}

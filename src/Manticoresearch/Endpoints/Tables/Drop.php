@@ -5,7 +5,7 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-namespace Manticoresearch\Endpoints\Indices;
+namespace Manticoresearch\Endpoints\Tables;
 
 use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
@@ -15,29 +15,29 @@ class Drop extends EmulateBySql
 	/**
 	 * @var string
 	 */
-	protected $index;
+	protected $table;
 
 	public function setBody($params = null) {
-		if (isset($this->index)) {
+		if (isset($this->table)) {
 			return parent::setBody(
 				['query' => 'DROP TABLE ' .
 				(isset($params['silent']) && $params['silent'] === true ? ' IF EXISTS ' : '').
-				$this->index]
+				$this->table]
 			);
 		}
-		throw new RuntimeException('Missing index name in /indices/drop');
+		throw new RuntimeException('Missing table name in /indices/drop');
 	}
 	/**
 	 * @return mixed
 	 */
-	public function getIndex() {
-		return $this->index;
+	public function getTable() {
+		return $this->table;
 	}
 
 	/**
-	 * @param mixed $index
+	 * @param mixed $table
 	 */
-	public function setIndex($index) {
-		$this->index = $index;
+	public function setTable($table) {
+		$this->table = $table;
 	}
 }

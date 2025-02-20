@@ -28,17 +28,17 @@ The `cluster` parameter is required, as it specifies the name of the cluster.
 
 `body` parameters:
 * `operation` - mandatory, can be:
-      * add - add an index to the cluster
-      * drop - remove an index from the cluster
+      * add - add a table to the cluster
+      * drop - remove a table from the cluster
       * update - trigger nodes in the cluster to update the rejoin nodes list in the event of a cluster restart
-* `index` - mandatory for add/drop operations, specifies the index name that is added or removed from the cluster
+* `table` - mandatory for add/drop operations, specifies the table name that is added or removed from the cluster
 
 
         $params = [
             'cluster' => 'mycluster',
             'body' => [
                'operation' => 'add',
-               'index' => 'newindex'
+               'table' => 'newtable'
                 
             ]
         ];
@@ -48,7 +48,7 @@ The `cluster` parameter is required, as it specifies the name of the cluster.
             'cluster' => 'mycluster',
             'body' => [
                'operation' => 'drop',
-               'index' => 'newindex'
+               'table' => 'newtable'
                 
             ]
         ];

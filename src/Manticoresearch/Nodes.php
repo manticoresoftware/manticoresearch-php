@@ -17,8 +17,8 @@ use Manticoresearch\Endpoints\Nodes\FlushAttributes;
 use Manticoresearch\Endpoints\Nodes\FlushHostnames;
 use Manticoresearch\Endpoints\Nodes\FlushLogs;
 use Manticoresearch\Endpoints\Nodes\Plugins;
-use Manticoresearch\Endpoints\Nodes\ReloadIndexes;
 use Manticoresearch\Endpoints\Nodes\ReloadPlugins;
+use Manticoresearch\Endpoints\Nodes\ReloadTables;
 use Manticoresearch\Endpoints\Nodes\Set;
 use Manticoresearch\Endpoints\Nodes\Status;
 use Manticoresearch\Endpoints\Nodes\Tables;
@@ -128,9 +128,9 @@ class Nodes
 		return  $response->getResponse();
 	}
 
-	public function reloadindexes($params = []) {
+	public function reloadtables($params = []) {
 		$body = $params['body'] ?? [];
-		$endpoint = new ReloadIndexes();
+		$endpoint = new ReloadTables();
 		$endpoint->setBody($body);
 		$response = $this->client->request($endpoint, $this->params);
 		return  $response->getResponse();

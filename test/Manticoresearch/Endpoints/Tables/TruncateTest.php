@@ -5,14 +5,14 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-namespace Manticoresearch\Test\Endpoints\Indices;
+namespace Manticoresearch\Test\Endpoints\Tables;
 
 use Manticoresearch\Client;
-use Manticoresearch\Endpoints\Indices\Optimize;
+use Manticoresearch\Endpoints\Tables\Truncate;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 
-class OptimizeTest extends \PHPUnit\Framework\TestCase
+class TruncateTest extends \PHPUnit\Framework\TestCase
 {
 	/** @var Client */
 	private static $client;
@@ -29,27 +29,21 @@ class OptimizeTest extends \PHPUnit\Framework\TestCase
 		static::$helper = $helper;
 	}
 
-	public function testDescribeIndex() {
-		$response = static::$client->indices()->optimize(['index' => 'products']);
+	public function testTableTruncate() {
+		$response = static::$client->tables()->truncate(['table' => 'products']);
 
-		$this->assertEquals(
-			[
-			'total' => 0,
-			'error' => '',
-			'warning' => '',
-			], $response
-		);
+		$this->assertEquals(['total' => 0,'error' => '','warning' => ''], $response);
 	}
 
-	public function testSetGetIndex() {
-		$describe = new Optimize();
-		$describe->setIndex('testName');
-		$this->assertEquals('testName', $describe->getIndex());
+	public function testSetGetTable() {
+		$describe = new Truncate();
+		$describe->setTable('testName');
+		$this->assertEquals('testName', $describe->getTable());
 	}
 
-	public function testSetBodyNoIndex() {
-		$describe = new Optimize();
-		$this->expectExceptionMessage('Index name is missing.');
+	public function testSetBodyNoTable() {
+		$describe = new Truncate();
+		$this->expectExceptionMessage('Table name is missing.');
 		$this->expectException(RuntimeException::class);
 		$describe->setBody([]);
 	}

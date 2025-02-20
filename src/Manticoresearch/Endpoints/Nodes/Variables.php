@@ -14,7 +14,7 @@ class Variables extends EmulateBySql
 	/**
 	 * @var string
 	 */
-	protected $index;
+	protected $table;
 
 	public function setBody($params = null) {
 		$option = '';

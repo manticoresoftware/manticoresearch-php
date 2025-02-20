@@ -26,7 +26,7 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 
 		// insert a product
 		$doc = [
-			'index' => 'products',
+			'table' => 'products',
 			'id' => 1001,
 			'doc' => [
 				'title' => 'Star Trek: Nemesis DVD',
@@ -34,7 +34,6 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 			],
 		];
 		$response = $client->insert(['body' => $doc]);
-		unset($response['_index']);
 		unset($response['table']);
 
 		// assert inserted

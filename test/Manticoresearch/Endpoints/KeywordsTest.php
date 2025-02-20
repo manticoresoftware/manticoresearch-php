@@ -27,7 +27,7 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
 
 	public function testKeywords() {
 		$params = [
-			'index' => 'products',
+			'table' => 'products',
 			'body' => [
 				'query' => 'product',
 				'options' => [
@@ -40,9 +40,9 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
 		$this->assertSame('product', $response['0']['normalized']);
 	}
 
-	public function testKeywordsBadIndex() {
+	public function testKeywordsBadTable() {
 		$params = [
-			'index' => 'productsNOT',
+			'table' => 'productsNOT',
 			'body' => [
 				'query' => 'product',
 				'options' => [
@@ -57,18 +57,18 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
 			static::$client->keywords($params);
 		} catch (ResponseException $e) {
 			try {
-				$this->assertEquals('"no such index productsNOT"', $e->getMessage());
+				$this->assertEquals('"no such table productsNOT"', $e->getMessage());
 			} catch (\PHPUnit\Framework\ExpectationFailedException $e) {
 				$this->expectException(ResponseException::class);
-				$this->expectExceptionMessage('no such table productsNOT');
+				$this->expectExceptionMessage('no such index productsNOT');
 				static::$client->keywords($params);
 			}
 		}
 	}
 
-	public function testSetGetIndex() {
+	public function testSetGetTable() {
 		$kw = new Keywords();
-		$kw->setIndex('products');
-		$this->assertEquals('products', $kw->getIndex());
+		$kw->setTable('products');
+		$this->assertEquals('products', $kw->getTable());
 	}
 }

@@ -2,14 +2,14 @@
 
 ## PercolateResultSet object
 
-Returned by the [percolate()](indexclass.md#percolate) method, the PercolateResultSet object extends the [ResultSet](searchresults.md#resultset-object) by using [PercolateResultHit](#percolateresulthit-object) objects as elements instead of [ResultHit](searchresults.md#resulthit-object) objects.
+Returned by the [percolate()](tableclass.md#percolate) method, the PercolateResultSet object extends the [ResultSet](searchresults.md#resultset-object) by using [PercolateResultHit](#percolateresulthit-object) objects as elements instead of [ResultHit](searchresults.md#resulthit-object) objects.
 
 ## PercolateResultHit object
 
 The PercolateResultHit object extends [ResultHit](searchresults.md#resulthit-object) and offers several additional methods:
 
-- `getDocSlots()` returns an array that specifies the indexes of documents from the array provided by [percolate()](indexclass.md#percolate) that match the current returned query.
-- `getDocsMatches($docs)` filters the input document list with the doc slots of the current returned query. The document list must maintain the same indexes as the list provided at [percolate()](indexclass.md#percolate).
+- `getDocSlots()` returns an array that specifies the tables of documents from the array provided by [percolate()](tableclass.md#percolate) that match the current returned query.
+- `getDocsMatches($docs)` filters the input document list with the doc slots of the current returned query. The document list must maintain the same tables as the list provided at [percolate()](tableclass.md#percolate).
 - `getData()` returns the stored query that is provided.
 
    
@@ -17,7 +17,7 @@ The PercolateResultHit object extends [ResultHit](searchresults.md#resulthit-obj
  
 ## PercolateDocsResultSet object
  
-Returned by the [percolateToDocs()](indexclass.md#percolatetodocs) method, this object implements `Iterator`, similar to the [PercolateResultSet](#percolateresultset-object). However, the constructor also requires the input document list used at the input of the [percolateToDocs()](indexclass.md#percolatetodocs) method. The iterated elements are [PercolateResultDoc](#percolateresultdoc-object) objects.
+Returned by the [percolateToDocs()](tableclass.md#percolatetodocs) method, this object implements `Iterator`, similar to the [PercolateResultSet](#percolateresultset-object). However, the constructor also requires the input document list used at the input of the [percolateToDocs()](tableclass.md#percolatetodocs) method. The iterated elements are [PercolateResultDoc](#percolateresultdoc-object) objects.
  
 ## PercolateResultDoc object
 

@@ -40,7 +40,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
 	public function testUpdateProduct() {
 		$partial = [
 			'body' => [
-				'index' => 'products',
+				'table' => 'products',
 				'id' => 100,
 				'doc' => [
 					// title cannot be updated as it is a text field, see
@@ -53,7 +53,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
 
 		$search = [
 			'body' => [
-				'index' => 'products',
+				'table' => 'products',
 				'query' => [
 					'match' => ['*' => 'broken'],
 				],

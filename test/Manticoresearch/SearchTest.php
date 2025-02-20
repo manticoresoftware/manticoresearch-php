@@ -35,7 +35,7 @@ class SearchTest extends TestCase
 	protected function setUp(): void {
 		parent::setUp();
 		static::$search->reset();
-		static::$search->setIndex('movies');
+		static::$search->setTable('movies');
 	}
 
 	protected static function indexDocuments(): Search {
@@ -46,9 +46,9 @@ class SearchTest extends TestCase
 		];
 		$client = new Client($params);
 
-		$client->indices()->drop(['index' => 'movie_years','body' => ['silent' => true]]);
-		$index = [
-			'index' => 'movie_years',
+		$client->tables()->drop(['table' => 'movie_years','body' => ['silent' => true]]);
+		$table = [
+			'table' => 'movie_years',
 			'body' => [
 				'columns' => ['year_half' => ['type' => 'text'],
 					'movie_year' => ['type' => 'integer'],
@@ -56,12 +56,12 @@ class SearchTest extends TestCase
 				],
 			],
 		];
-		$client->indices()->create($index);
+		$client->tables()->create($table);
 
 		$docs = [
 			[
 				'insert' => [
-					'index' => 'movie_years',
+					'table' => 'movie_years',
 					'id' => 1,
 					'doc' => [
 						'year_half' => 'first half',
@@ -72,7 +72,7 @@ class SearchTest extends TestCase
 			],
 			[
 				'insert' => [
-					'index' => 'movie_years',
+					'table' => 'movie_years',
 					'id' => 2,
 					'doc' => [
 						'year_half' => 'first half',
@@ -83,7 +83,7 @@ class SearchTest extends TestCase
 			],
 			[
 				'insert' => [
-					'index' => 'movie_years',
+					'table' => 'movie_years',
 					'id' => 3,
 					'doc' => [
 						'year_half' => 'second half',
@@ -94,7 +94,7 @@ class SearchTest extends TestCase
 			],
 			[
 				'insert' => [
-					'index' => 'movie_years',
+					'table' => 'movie_years',
 					'id' => 4,
 					'doc' => [
 						'year_half' => 'second half',
@@ -106,9 +106,9 @@ class SearchTest extends TestCase
 		];
 		$client->bulk(['body' => $docs]);
 
-		$client->indices()->drop(['index' => 'movies','body' => ['silent' => true]]);
-		$index = [
-			'index' => 'movies',
+		$client->tables()->drop(['table' => 'movies','body' => ['silent' => true]]);
+		$table = [
+			'table' => 'movies',
 			'body' => [
 				'columns' => ['title' => ['type' => 'text'],
 					'plot' => ['type' => 'text'],
@@ -130,10 +130,10 @@ class SearchTest extends TestCase
 				],
 			],
 		];
-		$client->indices()->create($index);
+		$client->tables()->create($table);
 
 		$docs = [
-			['insert' => ['index' => 'movies', 'id' => 2, 'doc' =>
+			['insert' => ['table' => 'movies', 'id' => 2, 'doc' =>
 				['title' => 'Interstellar',
 					'plot' => 'A team of explorers travel through a wormhole in space in an attempt to ensure'.
 						' humanity\'s survival.',
@@ -145,7 +145,7 @@ class SearchTest extends TestCase
 					'kind' => [0.2,0.3],
 				],
 			]],
-			['insert' => ['index' => 'movies', 'id' => 3, 'doc' =>
+			['insert' => ['table' => 'movies', 'id' => 3, 'doc' =>
 				['title' => 'Inception', 'plot' => 'A thief who steals corporate secrets through the use of'.
 					' dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.',
 					'_year' => 2010, 'rating' => 8.8,
@@ -156,7 +156,7 @@ class SearchTest extends TestCase
 					'kind' => [0.2,0.7],
 				],
 			]],
-			['insert' => ['index' => 'movies', 'id' => 4, 'doc' =>
+			['insert' => ['table' => 'movies', 'id' => 4, 'doc' =>
 				['title' => '1917', 'plot' => ' As a regiment assembles to wage war deep in enemy territory, two'.
 					' soldiers are assigned to race against time and deliver a message that will stop 1,600 men from'.
 					' walking straight into a deadly trap.',
@@ -167,7 +167,7 @@ class SearchTest extends TestCase
 					'kind' => [0.3,0.5],
 				],
 			]],
-			['insert' => ['index' => 'movies', 'id' => 5, 'doc' =>
+			['insert' => ['table' => 'movies', 'id' => 5, 'doc' =>
 				['title' => 'Alien', 'plot' => ' After a space merchant vessel receives an unknown transmission as a'.
 					' distress call, one of the team\'s member is attacked by a mysterious life form and they soon '.
 					'realize that its life cycle has merely begun.',
@@ -178,7 +178,7 @@ class SearchTest extends TestCase
 					'kind' => [0.5,0.5],
 				],
 			]],
-			['insert' => ['index' => 'movies', 'id' => 6, 'doc' =>
+			['insert' => ['table' => 'movies', 'id' => 6, 'doc' =>
 				['title' => 'Aliens', 'plot' => ' Ellen Ripley is rescued by a deep salvage team of explorers after'.
 					' being in hypersleep for 57 years. The moon that the Nostromo visited has been colonized by '.
 					'explorers, but contact is lost. This time, colonial marines have impressive firepower, but will'.
@@ -191,7 +191,7 @@ class SearchTest extends TestCase
 					'kind' => [0.7,0.2],
 				],
 			]],
-			['insert' => ['index' => 'movies', 'id' => 10, 'doc' =>
+			['insert' => ['table' => 'movies', 'id' => 10, 'doc' =>
 				['title' => 'Alien 3', 'plot' => 'After her last encounter, without a team Ellen Ripley team of '.
 					'explorers crash-lands on Fiorina 161, a maximum security prison. When a series of strange and '.
 					'deadly events occur shortly after her arrival, Ripley realizes that she has brought along an '.
@@ -207,7 +207,7 @@ class SearchTest extends TestCase
 		$client->bulk(['body' => $docs]);
 
 		$search = new Search($client);
-		$search->setIndex('movies');
+		$search->setTable('movies');
 		return $search;
 	}
 
@@ -880,7 +880,7 @@ class SearchTest extends TestCase
 		$body = static::$search->getBody();
 		$this->assertEquals(
 			[
-			'index' => 'movies',
+			'table' => 'movies',
 			'query' =>
 				[
 					'bool' =>
@@ -943,7 +943,7 @@ class SearchTest extends TestCase
 			$this->assertEquals($resultIds[$i], $resultHit->getId());
 		}
 		static::$search->reset();
-		static::$search->setIndex('movies');
+		static::$search->setTable('movies');
 		$results = static::$search->search('Alien')->knn('kind', 3, 5)->get();
 		$this->assertCount(2, $results);
 		foreach ($results as $i => $resultHit) {

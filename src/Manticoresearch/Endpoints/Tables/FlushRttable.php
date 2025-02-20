@@ -5,42 +5,38 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-namespace Manticoresearch\Endpoints\Indices;
+namespace Manticoresearch\Endpoints\Tables;
 
 use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Utils;
 
-/**
- * Class Status
- * @package Manticoresearch\Endpoints\Indices
- */
-class Settings extends EmulateBySql
+class FlushRttable extends EmulateBySql
 {
 	use Utils;
 	/**
 	 * @var string
 	 */
-	protected $index;
+	protected $table;
 
 	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter,SlevomatCodingStandard.Functions.UnusedParameter
 	public function setBody($params = null) {
-		if (isset($this->index)) {
-			return parent::setBody(['query' => 'SHOW INDEX '.$this->index. ' SETTINGS']);
+		if (isset($this->table)) {
+			return parent::setBody(['query' => 'FLUSH TABLE '.$this->table]);
 		}
-		throw new RuntimeException('Index name is missing.');
+		throw new RuntimeException('Table name is missing.');
 	}
 	/**
 	 * @return mixed
 	 */
-	public function getIndex() {
-		return $this->index;
+	public function getTable() {
+		return $this->table;
 	}
 
 	/**
-	 * @param mixed $index
+	 * @param mixed $table
 	 */
-	public function setIndex($index) {
-		$this->index = $index;
+	public function setTable($table) {
+		$this->table = $table;
 	}
 }

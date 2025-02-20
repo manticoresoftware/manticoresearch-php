@@ -24,22 +24,22 @@ class Alter extends EmulateBySql
 			if (isset($params['operation'])) {
 				switch ($params['operation']) {
 					case 'add':
-						if (isset($params['index'])) {
+						if (isset($params['table'])) {
 							return parent::setBody(
 								['query' => 'ALTER CLUSTER ' .
-								$this->cluster . ' ADD  ' . $params['index']]
+								$this->cluster . ' ADD  ' . $params['table']]
 							);
 						}
-						throw new RuntimeException('Index name is missing.');
+						throw new RuntimeException('Table name is missing.');
 						break;
 					case 'drop':
-						if (isset($params['index'])) {
+						if (isset($params['table'])) {
 							return parent::setBody(
 								['query' => 'ALTER CLUSTER ' .
-								$this->cluster . ' DROP  ' . $params['index']]
+								$this->cluster . ' DROP  ' . $params['table']]
 							);
 						}
-						throw new RuntimeException('Index name is missing.');
+						throw new RuntimeException('Table name is missing.');
 						break;
 					case 'update':
 						return parent::setBody(['query' => 'ALTER CLUSTER ' .$this->cluster . ' UPDATE nodes']);

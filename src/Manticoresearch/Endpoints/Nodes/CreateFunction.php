@@ -15,7 +15,7 @@ class CreateFunction extends EmulateBySql
 	/**
 	 * @var string
 	 */
-	protected $index;
+	protected $table;
 
 	public function setBody($params = null) {
 		if (isset($params['name'], $params['type']) && $params['library']) {

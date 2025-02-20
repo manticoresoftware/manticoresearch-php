@@ -15,14 +15,14 @@ class TablesTest extends \PHPUnit\Framework\TestCase
 		$helper = new PopulateHelperTest('testDummy');
 		$client = $helper->getClient();
 
-		// need to remove indexes created by other tests
-		$otherIndexes = [
-		  'testrt', 'products', 'test', 'testrtdist', 'testindex', 'movies', 'bulktest',
+		// need to remove tables created by other tests
+		$otherTables = [
+		  'testrt', 'products', 'test', 'testrtdist', 'testtable', 'movies', 'bulktest',
 		];
-		foreach ($otherIndexes as $index) {
-			$client->indices()->drop(
+		foreach ($otherTables as $table) {
+			$client->tables()->drop(
 				[
-					'index' => $index,
+					'table' => $table,
 					'body' => ['silent' => true],
 				]
 			);

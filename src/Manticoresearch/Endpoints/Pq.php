@@ -35,12 +35,12 @@ class Pq
 	 * @return mixed
 	 */
 	public function doc($params) {
-		$index = $params['index'] ?? null;
+		$table = $params['table'] ?? $params['index'] ?? null;
 		$id = $params['id'] ?? null;
 
 		$body = $params['body'];
 		$endpoint = new Doc();
-		$endpoint->setIndex($index);
+		$endpoint->setTable($table);
 		$endpoint->setId($id);
 		$endpoint->setQuery($params['query'] ?? null);
 		$endpoint->setBody($body);
@@ -53,10 +53,10 @@ class Pq
 	 * @return mixed
 	 */
 	public function search($params, $obj = false) {
-		$index = $params['index'] ?? null;
+		$table = $params['table'] ?? $params['index'] ?? null;
 		$body = $params['body'];
 		$endpoint = new \Manticoresearch\Endpoints\Pq\Search();
-		$endpoint->setIndex($index);
+		$endpoint->setTable($table);
 		$endpoint->setQuery($params['query'] ?? null);
 		$endpoint->setBody($body);
 		$response = $this->client->request($endpoint);
@@ -72,10 +72,10 @@ class Pq
 	 * @return mixed
 	 */
 	public function deleteByQuery($params = []) {
-		$index = $params['index'] ?? null;
+		$table = $params['table'] ?? $params['index'] ?? null;
 		$body = $params['body'];
 		$endpoint = new DeleteByQuery();
-		$endpoint->setIndex($index);
+		$endpoint->setTable($table);
 		$endpoint->setQuery($params['query'] ?? null);
 		$endpoint->setBody($body);
 		$response = $this->client->request($endpoint);

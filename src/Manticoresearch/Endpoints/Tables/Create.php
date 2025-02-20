@@ -5,7 +5,7 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-namespace Manticoresearch\Endpoints\Indices;
+namespace Manticoresearch\Endpoints\Tables;
 
 use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
@@ -13,7 +13,7 @@ use Manticoresearch\Utils;
 
 /**
  * Class Create
- * @package Manticoresearch\Endpoints\Indices
+ * @package Manticoresearch\Endpoints\Tables
  */
 class Create extends EmulateBySql
 {
@@ -21,7 +21,7 @@ class Create extends EmulateBySql
 	/**
 	 * @var string
 	 */
-	protected $index;
+	protected $table;
 
 	protected function buildOptionsExpr($options) {
 		$exprParts = [];
@@ -33,7 +33,7 @@ class Create extends EmulateBySql
 	}
 
 	public function setBody($params = null) {
-		if (isset($this->index)) {
+		if (isset($this->table)) {
 			$columns = [];
 			if (isset($params['columns'])) {
 				foreach ($params['columns'] as $name => $settings) {
@@ -60,24 +60,24 @@ class Create extends EmulateBySql
 			return parent::setBody(
 				['query' => 'CREATE TABLE '.
 				(isset($params['silent']) && $params['silent'] === true ? ' IF NOT EXISTS ' : '').
-				$this->index.
+				$this->table.
 				(sizeof($columns) > 0 ? '('.implode(',', $columns).')' : ' ')
 				.$options]
 			);
 		}
-		throw new RuntimeException('Index name is missing.');
+		throw new RuntimeException('Table name is missing.');
 	}
 	/**
 	 * @return mixed
 	 */
-	public function getIndex() {
-		return $this->index;
+	public function getTable() {
+		return $this->table;
 	}
 
 	/**
-	 * @param mixed $index
+	 * @param mixed $table
 	 */
-	public function setIndex($index) {
-		$this->index = $index;
+	public function setTable($table) {
+		$this->table = $table;
 	}
 }

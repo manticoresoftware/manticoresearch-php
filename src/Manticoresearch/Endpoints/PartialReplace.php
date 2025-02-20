@@ -18,14 +18,14 @@ class PartialReplace extends Request
 	/**
 	 * @var string
 	 */
-	protected $index;
+	protected $table;
 
 	/**
-	 * @param string $index
+	 * @param string $table
 	 * @param int $id
 	 */
-	public function setPathByIndexAndId($index, $id) {
-		$path = '/' .  $index . '/_update/' . $id;
+	public function setPathByTableAndId($table, $id) {
+		$path = '/' .  $table . '/_update/' . $id;
 		parent::setPath($path);
 	}
 

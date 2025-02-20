@@ -20,7 +20,7 @@ class DeleteByQuery extends Request
 	/**
 	 * @var string
 	 */
-	protected $index;
+	protected $table;
 
 	/**
 	 * @return mixed|string
@@ -33,23 +33,23 @@ class DeleteByQuery extends Request
 	 * @return mixed|string
 	 */
 	public function getPath() {
-		if (isset($this->index)) {
-			return '/pq/' . $this->index . '/_delete_by_query';
+		if (isset($this->table)) {
+			return '/pq/' . $this->table . '/_delete_by_query';
 		}
-		throw new RuntimeException('Index name is missing.');
+		throw new RuntimeException('Table name is missing.');
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function getIndex() {
-		return $this->index;
+	public function getTable() {
+		return $this->table;
 	}
 
 	/**
-	 * @param mixed $index
+	 * @param mixed $table
 	 */
-	public function setIndex($index) {
-		$this->index = $index;
+	public function setTable($table) {
+		$this->table = $table;
 	}
 }

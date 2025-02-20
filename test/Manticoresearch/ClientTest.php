@@ -12,7 +12,7 @@ use Manticoresearch\Cluster;
 use Manticoresearch\Connection;
 use Manticoresearch\Connection\Strategy\Random;
 use Manticoresearch\Exceptions\ConnectionException;
-use Manticoresearch\Index;
+use Manticoresearch\Table;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 use PHPUnit\Framework\TestCase;
 
@@ -38,19 +38,19 @@ class ClientTest extends TestCase
 		$this->assertInstanceOf(Cluster::class, $client->cluster());
 	}
 
-	public function testIndex(): void {
+	public function testTable(): void {
 		$client = new Client();
-		$index = $client->index();
+		$table = $client->table();
 
-		$this->assertInstanceOf(Index::class, $index);
+		$this->assertInstanceOf(Table::class, $table);
 	}
 
-	public function testIndexName(): void {
+	public function testTableName(): void {
 		$client = new Client();
-		$index = $client->index('video');
+		$table = $client->table('video');
 
-		$this->assertInstanceOf(Index::class, $index);
-		$this->assertEquals('video', $index->getName());
+		$this->assertInstanceOf(Table::class, $table);
+		$this->assertEquals('video', $table->getName());
 	}
 
 	public function testCreationWithConnection() {
@@ -156,7 +156,7 @@ class ClientTest extends TestCase
 
 		$payload = [
 			'body' => [
-				'index' => 'products',
+				'table' => 'products',
 				'query' => [
 					'match' => ['*' => 'broken'],
 				],
@@ -174,7 +174,7 @@ class ClientTest extends TestCase
 
 		$payload = [
 			'body' => [
-				'index' => 'products',
+				'table' => 'products',
 				'query' => [
 					'match' => ['*' => 'broken'],
 				],

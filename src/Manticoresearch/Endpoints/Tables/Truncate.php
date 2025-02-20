@@ -5,7 +5,7 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 
-namespace Manticoresearch\Endpoints\Indices;
+namespace Manticoresearch\Endpoints\Tables;
 
 use Manticoresearch\Endpoints\EmulateBySql;
 use Manticoresearch\Exceptions\RuntimeException;
@@ -13,7 +13,7 @@ use Manticoresearch\Utils;
 
 /**
  * Class Truncate
- * @package Manticoresearch\Endpoints\Indices
+ * @package Manticoresearch\Endpoints\Tables
  */
 class Truncate extends EmulateBySql
 {
@@ -21,28 +21,28 @@ class Truncate extends EmulateBySql
 	/**
 	 * @var string
 	 */
-	protected $index;
+	protected $table;
 
 	public function setBody($params = null) {
-		if (isset($this->index)) {
+		if (isset($this->table)) {
 			return parent::setBody(
-				['query' => 'TRUNCATE RTINDEX '.$this->index. ''.
+				['query' => 'TRUNCATE TABLE '.$this->table. ''.
 				(isset($params['with']) ? " WITH'".strtoupper($params['with'])."'" : '')]
 			);
 		}
-		throw new RuntimeException('Index name is missing.');
+		throw new RuntimeException('Table name is missing.');
 	}
 	/**
 	 * @return mixed
 	 */
-	public function getIndex() {
-		return $this->index;
+	public function getTable() {
+		return $this->table;
 	}
 
 	/**
-	 * @param mixed $index
+	 * @param mixed $table
 	 */
-	public function setIndex($index) {
-		$this->index = $index;
+	public function setTable($table) {
+		$this->table = $table;
 	}
 }
