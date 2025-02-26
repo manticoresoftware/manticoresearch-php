@@ -41,6 +41,8 @@ $search->search('find me')->get();
 
 It returns a [ResultSet](searchresults.md#resultset-object) object.
 
+Note that the query string must be escaped as described [here](https://manual.manticoresearch.com/Searching/Full_text_matching/Escaping#Escaping-characters-in-query-string)
+
 ### match()
 
 `Match` is a simplified search method. The query string is interpreted as a bag of words with OR as the default operator.
