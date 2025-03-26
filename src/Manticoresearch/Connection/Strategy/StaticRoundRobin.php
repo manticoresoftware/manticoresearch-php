@@ -25,7 +25,7 @@ class StaticRoundRobin implements SelectorInterface
 	 * @return Connection
 	 */
 	public function getConnection(array $connections):Connection {
-		if ($connections[$this->current % sizeof($connections)]->isAlive()) {
+		if (array_key_exists($this->current, $connections) && $connections[$this->current % sizeof($connections)]->isAlive()) {
 			return $connections[$this->current];
 		}
 		++$this->current;

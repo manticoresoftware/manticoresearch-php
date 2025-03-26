@@ -377,11 +377,17 @@ class Client
 	/*
 	 * @return Response
 	 */
-	public function request(Request $request, array $params = []): Response {
+	public function request(Request $request, array $params = [], string $retryReason = ''): Response {
 		try {
-			$connection = $this->connectionPool->getConnection();
+			$connection = $this->connectionPool->getConnection($retryReason);
 			$this->lastResponse = $connection->getTransportHandler($this->logger)
 				->execute($request, $params);
+			if ($this->connectionPool->retriesAttempts) {
+				$this->connectionPool->resetRetries();
+				if (!$connection->isAlive()) {
+					$connection->mark(true);
+				}
+			}
 		} catch (NoMoreNodesException $e) {
 			$e->setRequest($request);
 			$this->logger->error(
@@ -394,12 +400,13 @@ class Client
 			$this->initConnections();
 			throw $e;
 		} catch (ConnectionException $e) {
-			$curRetryCount = sizeof($this->connectionPool->retriesInfo);
+			if (!$this->connectionPool->retries) {
+				throw new NoMoreNodesException($e);	
+			}
 			$exMsg = $e->getMessage();
 			// We rely on the common error message format from Manticore here
 			$exReasonPos = strrpos($exMsg, ':');
 			$exceptionReason = substr($exMsg, ($exReasonPos === false) ? 0 : $exReasonPos + 1);
-			$this->connectionPool->retriesInfo[$curRetryCount - 1]['reason'] = $exceptionReason;
 			$this->logger->warning(
 				'Manticore Search Request failed on attempt ' . $this->connectionPool->retriesAttempts . ':',
 				[
@@ -412,8 +419,9 @@ class Client
 				$connection->mark(false);
 			}
 
-			return $this->request($request, $params);
+			return $this->request($request, $params, $exceptionReason);
 		}
+
 		return $this->lastResponse;
 	}
 
