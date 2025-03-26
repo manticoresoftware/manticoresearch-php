@@ -401,7 +401,7 @@ class Client
 			throw $e;
 		} catch (ConnectionException $e) {
 			if (!$this->connectionPool->retries) {
-				throw new NoMoreNodesException($e);	
+				throw new NoMoreNodesException($e);
 			}
 			$exMsg = $e->getMessage();
 			// We rely on the common error message format from Manticore here
