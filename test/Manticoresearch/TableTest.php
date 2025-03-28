@@ -87,11 +87,11 @@ class TableTest extends TestCase
 
 		$this->assertEquals(
 			[
-			'_id' => 1,
-			'created' => false,
-			'result' => 'updated',
-			'status' => 200,
-			'table' => 'testtable',
+				'created' => false,
+				'result' => 'updated',
+				'status' => 200,
+				'table' => 'testtable',
+				'id' => 1,
 			], $response
 		);
 	}
@@ -192,10 +192,10 @@ class TableTest extends TestCase
 		$table = $this->getTable();
 		$this->addDocument($table);
 		$update = $table->updateDocument(['tags' => [10, 12, 14]], 1);
-		$this->assertEquals($update['_id'], 1);
+		$this->assertEquals($update['id'], 1);
 
 		$table->deleteDocument(1);
-		$this->assertEquals($update['_id'], 1);
+		$this->assertEquals($update['id'], 1);
 
 		$result = $table->getDocumentById(1);
 		$this->assertNull($result);
@@ -411,7 +411,7 @@ class TableTest extends TestCase
 		}
 
 		$response = $table->updateDocument(['_year' => 2019], 4);
-		$this->assertEquals(4, $response['_id']);
+		$this->assertEquals(4, $response['id']);
 
 		$schema = $table->describe();
 		$this->assertCount(5, $schema);
@@ -429,16 +429,16 @@ class TableTest extends TestCase
 		$this->assertEquals(1, $response['updated']);
 
 		$response = $table->deleteDocument(4);
-		$this->assertEquals(4, $response['_id']);
+		$this->assertEquals(4, $response['id']);
 
 		$response = $table->deleteDocumentsByIds([100]);
 		$this->assertEquals('not found', $response['result']);
 
 		$response = $table->deleteDocumentsByIds([5,6]);
-		$this->assertEquals(5, $response['_id']);
+		$this->assertEquals(5, $response['id']);
 
 		$response = $table->deleteDocumentsByIds(range(7, 30));
-		$this->assertEquals(7, $response['_id']);
+		$this->assertEquals(7, $response['id']);
 		$docTotal = $table->search('')
 			->get()
 			->getTotal();

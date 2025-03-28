@@ -52,20 +52,17 @@ class ConnectionPool
 	public function setConnections(array $connections) {
 		$this->connections = $connections;
 	}
-	public function getConnection(): Connection {
-		$this->retriesAttempts++;
+	public function getConnection(string $retryReason = ''): Connection {
 		$connection = $this->strategy->getConnection($this->connections);
-		if ($this->retriesAttempts <= $this->retries) {
+		if ($retryReason && $this->retriesAttempts <= $this->retries) {
+			$this->retriesAttempts++;
 			$this->retriesInfo[] = [
 				'host' => $connection->getHost(),
 				'port' => $connection->getPort(),
-				'reason' => 'unknown',
+				'reason' => $retryReason,
 			];
 		}
-		if ($connection->isAlive()) {
-			return $connection;
-		}
-		if ($this->retriesAttempts < $this->retries) {
+		if ($connection->isAlive() || $this->retriesAttempts < $this->retries) {
 			return $connection;
 		}
 		$exMsg = 'After %d retr%s to %d node%s, connection has failed. No more retries left.';
@@ -78,6 +75,11 @@ class ConnectionPool
 		throw new NoMoreNodesException(
 			sprintf($exMsg, $this->retries, $this->retries > 1 ? 'ies' : 'y', $connCount, $connCount > 1 ? 's' : '')
 		);
+	}
+
+	public function resetRetries(): void {
+		$this->retriesAttempts = 0;
+		$this->retriesInfo = [];
 	}
 
 	public function hasConnections(): bool {

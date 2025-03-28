@@ -102,8 +102,8 @@ class ClientTest extends TestCase
 			'retries' => 2,
 		];
 		$exMsg = "After 2 retries to 2 nodes, connection has failed. No more retries left.\n"
-			. "Retries made:\n 1. to 127.0.0.1:9418, failure reason: Couldn't connect to server\n"
-			. " 2. to 127.0.0.2:9428, failure reason: Couldn't connect to server\n";
+			. "Retries made:\n 1. to 127.0.0.2:9428, failure reason: Couldn't connect to server\n"
+			. " 2. to 127.0.0.1:9418, failure reason: Couldn't connect to server\n";
 		$client = new Client($params);
 		$this->expectException(ConnectionException::class);
 		$this->expectExceptionMessage($exMsg);

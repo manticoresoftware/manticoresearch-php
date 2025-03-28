@@ -39,10 +39,10 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 		// assert inserted
 		$this->assertEquals(
 			[
-			'_id' => 1001,
-			'created' => true,
-			'result' => 'created',
-			'status' => 201,
+				'created' => true,
+				'result' => 'created',
+				'status' => 201,
+				'id' => 1001,
 			], $response
 		);
 
