@@ -21,8 +21,6 @@ manticoresearch-php
 
 Official PHP client for Manticore Search.
 
-❗ WARNING: this is a development version of the client. The latest release's readme is https://github.com/manticoresoftware/manticoresearch-php/tree/4.0.0
-
 
 Features
 --------
@@ -36,24 +34,11 @@ Features
 Requirements
 ------------
 
-Requires PHP 7.1 or greater with the native JSON extension. Default transport handler uses the cURL extension.
-
-Minimum Manticore Search version is 2.5.1 with HTTP protocol enabled.
+Requires PHP 7.4 or greater with the native JSON extension. Default transport handler uses the cURL extension.
 
 | Manticore Search  | manticoresearch-php |     PHP       |
 | ----------------- | ------------------- | ------------- |
 | >= 7.0.0          | 4.0.x               | >= 7.4, >=8.0 |
-| >= 6.3.6          | 3.2.x               | >= 7.4, >=8.0 |
-| >= 6.2.0          | 3.1.x               | >= 7.4, >=8.0 |
-| >= 6.2.0          | 3.0.x               | >= 7.4, >=8.0 |
-| >= 6.0.4          | 3.0.x               | >= 7.1, >=8.0 |
-| >= 4.2.1          | 2.0.x, 2.1.x, 2.2.x | >= 7.1, >=8.0 |
-| >= 4.0.2          | 1.7.x, 1.8.x        | >= 7.1, >=8.0 |
-| >= 3.5.2          | 1.6.x               | >= 7.1, >=8.0 |
-| >= 3.5.0          | 1.5.x               | >= 7.1, <8.0  |
-| >= 3.5.0          | 1.4                 | >= 7.1, <8.0  |
-| <= 3.4.x          | 1.3                 | >= 7.1, <8.0  |
-| >= 2.5.1, <3.4.0  | 1.2                 | >= 7.1, <8.0  |
 
 Documentation
 -------------
