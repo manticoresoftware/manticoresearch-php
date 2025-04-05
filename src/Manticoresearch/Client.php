@@ -14,6 +14,7 @@ use Manticoresearch\Connection\Strategy\SelectorInterface;
 use Manticoresearch\Connection\Strategy\StaticRoundRobin;
 
 use Manticoresearch\Endpoints\Pq;
+use Manticoresearch\Endpoints\QSuggest;
 use Manticoresearch\Exceptions\ConnectionException;
 use Manticoresearch\Exceptions\NoMoreNodesException;
 use Manticoresearch\Exceptions\RuntimeException;
@@ -335,6 +336,48 @@ class Client
 			]
 		);
 		return $response->getResponse();
+	}
+
+
+	/**
+	 * Executes a QSUGGEST query for autocompletion using the QSuggest class.
+	 *
+	 * @param array $params Parameters:
+	 *  - 'table' => string (required) The name of the table/index to query.
+	 *  - 'query' => string (required) The input query string for suggestions.
+	 *  - 'limit' => int (optional, default: 5) The maximum number of suggestions to return.
+	 *  - 'sentence' => int (optional, 0 or 1) Whether to treat the query as a sentence (1) or a single term (0).
+	 *  - 'options' => array (optional) Additional options
+	 * @return array List of suggestions in a simplified format.
+	 * @throws \RuntimeException If the table name is not provided.
+	 */
+	public function qsuggest(array $params): array {
+		$endpoint = new QSuggest();
+
+		$table = $params['table'] ?? null;
+		$query = $params['query'] ?? '';
+		$limit = (int)($params['limit'] ?? 5);
+		$sentence = isset($params['sentence']) ? (int)$params['sentence'] : null;
+		$options = $params['options'] ?? [];
+
+		$endpoint->setParams(['table' => $table]);
+		$endpoint->setBody(
+			[
+			'query' => $query,
+			'limit' => $limit,
+			'sentence' => $sentence,
+			'options' => $options,
+			]
+		);
+
+		$response = $this->request($endpoint);
+		$rawResponse = $response->getResponse();
+
+		if (!empty($rawResponse) && isset($rawResponse[0]['data'])) {
+			return $rawResponse[0]['data'];
+		}
+
+		return [];
 	}
 
 	public function keywords(array $params = []) {
