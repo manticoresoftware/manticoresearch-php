@@ -114,6 +114,26 @@ class Client
 	}
 
 	/**
+	 * @param Endpoints\Suggest $endpoint
+	 * @param array $params
+	 * @return array
+	 */
+	protected function keywordSuggest($endpoint, $params) {
+		$table = $params['table'] ?? $params['index'] ?? null;
+		$endpoint->setTable($table);
+		$endpoint->setBody($params['body']);
+		$response = $this->request(
+			$endpoint,
+			[
+				'responseClass' => SqlToArray::class,
+				'responseClassParams' => ['customMapping' => true],
+			]
+		);
+		
+		return $response->getResponse();
+	}
+
+	/**
 	 * @param string|array $hosts
 	 */
 	public function setHosts($hosts) {
@@ -325,59 +345,17 @@ class Client
 	 */
 	public function suggest(array $params = []) {
 		$endpoint = new Endpoints\Suggest();
-		$table = $params['table'] ?? $params['index'] ?? null;
-		$endpoint->setTable($table);
-		$endpoint->setBody($params['body']);
-		$response = $this->request(
-			$endpoint,
-			[
-				'responseClass' => SqlToArray::class,
-				'responseClassParams' => ['customMapping' => true],
-			]
-		);
-		return $response->getResponse();
+		return $this->keywordSuggest($endpoint, $params);
 	}
-
-
+	
 	/**
-	 * Executes a QSUGGEST query for autocompletion using the QSuggest class.
-	 *
-	 * @param array $params Parameters:
-	 *  - 'table' => string (required) The name of the table/index to query.
-	 *  - 'query' => string (required) The input query string for suggestions.
-	 *  - 'limit' => int (optional, default: 5) The maximum number of suggestions to return.
-	 *  - 'sentence' => int (optional, 0 or 1) Whether to treat the query as a sentence (1) or a single term (0).
-	 *  - 'options' => array (optional) Additional options
-	 * @return array List of suggestions in a simplified format.
-	 * @throws \RuntimeException If the table name is not provided.
+	 * Endpoint: qsuggest
+	 * @param array $params
+	 * @return array
 	 */
-	public function qsuggest(array $params): array {
-		$endpoint = new QSuggest();
-
-		$table = $params['table'] ?? null;
-		$query = $params['query'] ?? '';
-		$limit = (int)($params['limit'] ?? 5);
-		$sentence = isset($params['sentence']) ? (int)$params['sentence'] : null;
-		$options = $params['options'] ?? [];
-
-		$endpoint->setParams(['table' => $table]);
-		$endpoint->setBody(
-			[
-			'query' => $query,
-			'limit' => $limit,
-			'sentence' => $sentence,
-			'options' => $options,
-			]
-		);
-
-		$response = $this->request($endpoint);
-		$rawResponse = $response->getResponse();
-
-		if (!empty($rawResponse) && isset($rawResponse[0]['data'])) {
-			return $rawResponse[0]['data'];
-		}
-
-		return [];
+	public function qsuggest(array $params = []) {
+		$endpoint = new Endpoints\QSuggest();
+		return $this->keywordSuggest($endpoint, $params);
 	}
 
 	public function keywords(array $params = []) {

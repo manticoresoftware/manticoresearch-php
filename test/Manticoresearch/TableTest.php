@@ -321,6 +321,13 @@ class TableTest extends TestCase
 		$this->assertEquals(['distance' => 1, 'docs' => 1], $result['testing']);
 	}
 
+	public function testTableQSuggest() {
+		$table = $this->getTable(true);
+		$this->addDocument($table);
+		$result = $table->qsuggest('tasting', []);
+		$this->assertEquals(['distance' => 1, 'docs' => 1], $result['testing']);
+	}
+
 	public function testTableExplainQuery() {
 		$table = $this->getTable(true);
 		$result = $table->explainQuery('test');
