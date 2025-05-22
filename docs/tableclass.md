@@ -478,9 +478,9 @@ $table->alter($operation,$name,$type);
 ```
 
 
-### suggest()
+### suggest(), qsuggest()
 
-Returns suggestions for a given keyword.
+Returns suggestions for a given keyword. Using `suggest` returns suggestions for the *first* word, `qsuggest` - for the *last* word.
 
 Parameters:
 
@@ -490,6 +490,7 @@ Parameters:
 ```php
 $table->keywords($query, $options);
 $table->suggest('trsting', ['limit' => 5]);
+$table->qsuggest('trsting', ['limit' => 5]);
 ```
 
 
