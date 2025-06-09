@@ -113,6 +113,26 @@ class Client
 	}
 
 	/**
+	 * @param Endpoints\Suggest $endpoint
+	 * @param array $params
+	 * @return array
+	 */
+	protected function keywordSuggest($endpoint, $params) {
+		$table = $params['table'] ?? $params['index'] ?? null;
+		$endpoint->setTable($table);
+		$endpoint->setBody($params['body']);
+		$response = $this->request(
+			$endpoint,
+			[
+				'responseClass' => SqlToArray::class,
+				'responseClassParams' => ['customMapping' => true],
+			]
+		);
+
+		return $response->getResponse();
+	}
+
+	/**
 	 * @param string|array $hosts
 	 */
 	public function setHosts($hosts) {
@@ -324,17 +344,17 @@ class Client
 	 */
 	public function suggest(array $params = []) {
 		$endpoint = new Endpoints\Suggest();
-		$table = $params['table'] ?? $params['index'] ?? null;
-		$endpoint->setTable($table);
-		$endpoint->setBody($params['body']);
-		$response = $this->request(
-			$endpoint,
-			[
-				'responseClass' => SqlToArray::class,
-				'responseClassParams' => ['customMapping' => true],
-			]
-		);
-		return $response->getResponse();
+		return $this->keywordSuggest($endpoint, $params);
+	}
+
+	/**
+	 * Endpoint: qsuggest
+	 * @param array $params
+	 * @return array
+	 */
+	public function qsuggest(array $params = []) {
+		$endpoint = new Endpoints\QSuggest();
+		return $this->keywordSuggest($endpoint, $params);
 	}
 
 	public function keywords(array $params = []) {

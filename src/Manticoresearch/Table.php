@@ -374,6 +374,17 @@ class Table
 		return $this->client->suggest($params);
 	}
 
+	public function qsuggest($query, $options) {
+		$params = [
+			'table' => $this->table,
+			'body' => [
+				'query' => $query,
+				'options' => $options,
+			],
+		];
+		return $this->client->qsuggest($params);
+	}
+
 	public function explainQuery($query) {
 		$params = [
 			'table' => $this->table,

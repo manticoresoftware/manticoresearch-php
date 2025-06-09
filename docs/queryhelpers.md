@@ -40,6 +40,8 @@ Optional settings can be passed via the `options` array. For a complete list of 
             ]
          ];
         $response = $client->suggest($params);
+        // or, for QSUGGEST
+        $response = $client->qsuggest($params);
 
 Note that the table must be created as a keyword dictionary with a minimum infix length, otherwise Manticore will return an error. To do this, pass the `settings` option in the body part of a table creation request as below.
 
