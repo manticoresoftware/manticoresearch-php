@@ -25,7 +25,7 @@ class Suggest extends EmulateBySql
 		'non_char',
 		'sentence',
 	];
-	
+
 	protected $table;
 
 	public function setBody($params = null) {

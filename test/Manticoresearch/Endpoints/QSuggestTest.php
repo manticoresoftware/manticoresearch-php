@@ -8,7 +8,6 @@
 namespace Manticoresearch\Test\Endpoints;
 
 use Manticoresearch\Client;
-use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 

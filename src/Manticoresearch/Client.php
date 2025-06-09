@@ -14,7 +14,6 @@ use Manticoresearch\Connection\Strategy\SelectorInterface;
 use Manticoresearch\Connection\Strategy\StaticRoundRobin;
 
 use Manticoresearch\Endpoints\Pq;
-use Manticoresearch\Endpoints\QSuggest;
 use Manticoresearch\Exceptions\ConnectionException;
 use Manticoresearch\Exceptions\NoMoreNodesException;
 use Manticoresearch\Exceptions\RuntimeException;
@@ -129,7 +128,7 @@ class Client
 				'responseClassParams' => ['customMapping' => true],
 			]
 		);
-		
+
 		return $response->getResponse();
 	}
 
@@ -347,7 +346,7 @@ class Client
 		$endpoint = new Endpoints\Suggest();
 		return $this->keywordSuggest($endpoint, $params);
 	}
-	
+
 	/**
 	 * Endpoint: qsuggest
 	 * @param array $params
