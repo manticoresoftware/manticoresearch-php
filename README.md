@@ -56,7 +56,7 @@ Getting Started
 Install the Manticore Search PHP client using [composer](https://getcomposer.org) package manager:
 
 ```bash
-composer require manticoresoftware/manticoresearch-php:dev-master
+composer require manticoresoftware/manticoresearch-php:4.0.1
 ```
 ### Initiate a table:
 
