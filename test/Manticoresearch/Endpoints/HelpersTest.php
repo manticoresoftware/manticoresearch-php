@@ -83,4 +83,18 @@ class HelpersTest extends \PHPUnit\Framework\TestCase
 		$response = static::$client->suggest($params);
 		$this->assertSame('broken', array_keys($response)[0]);
 	}
+
+	public function testQSuggest() {
+		$params = [
+			'table' => 'products',
+			'body' => [
+				'query' => 'brokn',
+				'options' => [
+					'limit' => 5,
+				],
+			],
+		];
+		$response = static::$client->qsuggest($params);
+		$this->assertSame('broken', array_keys($response)[0]);
+	}
 }
