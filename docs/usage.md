@@ -197,7 +197,7 @@ $response = $client->bulk($doc);
 
 ### Autocomplete
 
-For a complete reference of payload and response, see Manticore's [Autocomplete manual](https://manual.manticoresearch.com).
+For a complete reference of payload and response, see Manticore's [Autocomplete manual](https://manual.manticoresearch.com/Searching/Autocomplete#CALL-AUTOCOMPLETE).
 
 The request requires `query` and `table` defined as required parameters.
 
