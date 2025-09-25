@@ -45,8 +45,8 @@ Implemented transports:
 
 Http/Https adapter options:
 
-* timeout - connection timeout
-* connection_timeout - connection connect timeout
+* timeout - query timeout
+* connection_timeout - connection timeout
 * proxy - proxy definition as host:port
 * username - username for HTTP Auth
 * password - password for HTTP Auth

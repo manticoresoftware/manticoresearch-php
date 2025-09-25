@@ -41,6 +41,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 	}
 
 	public function execute(Request $request, $params = []) {
+		set_time_limit(0);
 		$connection = $this->getConnection();
 		$conn = $connection->getCurl();
 		$url = $this->scheme . '://' . $connection->getHost() . ':' . $connection->getPort() . $connection->getPath();
