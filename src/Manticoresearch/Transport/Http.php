@@ -52,6 +52,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 		curl_setopt($conn, CURLOPT_TIMEOUT, $connection->getTimeout());
 		curl_setopt($conn, CURLOPT_ENCODING, '');
 		curl_setopt($conn, CURLOPT_FORBID_REUSE, 0);
+		curl_setopt($conn, CURLOPT_RETURNTRANSFER, true);
 		$data = $request->getBody();
 		$method = $request->getMethod();
 		$headers = $connection->getHeaders();
@@ -91,9 +92,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 			}
 		}
 		$start = microtime(true);
-		ob_start();
-		curl_exec($conn);
-		$responseString = \ob_get_clean();
+		$responseString = curl_exec($conn);
 		$end = microtime(true);
 		$errorno = curl_errno($conn);
 		$status = curl_getinfo($conn, CURLINFO_HTTP_CODE);
