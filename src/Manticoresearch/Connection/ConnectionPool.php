@@ -65,13 +65,14 @@ class ConnectionPool
 		if ($connection->isAlive() || $this->retriesAttempts < $this->retries) {
 			return $connection;
 		}
-		$exMsg = 'After %d retr%s to %d node%s, connection has failed. No more retries left.';
+		$connCount = sizeof($this->connections);
+		$exMsg = "$connCount connection" . ($connCount > 1 ? 's' : '') . " allocated.\n";
+		$exMsg .= 'After %d retr%s to %d node%s, connection has failed. No more retries left.';
 		$exMsg .= "\nRetries made:\n";
 		foreach ($this->retriesInfo as $i => $info) {
 			$i++;
 			$exMsg .= " $i. to {$info['host']}:{$info['port']}, failure reason:{$info['reason']}\n";
 		}
-		$connCount = sizeof($this->connections);
 		throw new NoMoreNodesException(
 			sprintf($exMsg, $this->retries, $this->retries > 1 ? 'ies' : 'y', $connCount, $connCount > 1 ? 's' : '')
 		);

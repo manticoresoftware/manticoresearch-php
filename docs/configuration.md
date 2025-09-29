@@ -24,7 +24,7 @@ If using a single connection, it can be defined directly in the configuration ar
    $client = new \Manticoresearch\Client($config);
 ```
 
-If multiple connections are used, they must be defined in the `connections` array (see below).
+If multiple connections are used, they must be defined in the `connections` array (see below).  By default, the client uses a single connection with host=127.0.0.1 and port=9308, respectively.
 
 A connection array can contain:
 
