@@ -45,7 +45,6 @@ class PhpHttp extends Transport implements TransportInterface
 	}
 
 	public function execute(Request $request, $params = []) {
-		set_time_limit(0);
 		$connection = $this->getConnection();
 
 		$url = $this->connection->getConfig('scheme') . '://' . $connection->getHost() . ':' . $connection->getPort()
