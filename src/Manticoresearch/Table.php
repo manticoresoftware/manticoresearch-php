@@ -210,12 +210,12 @@ class Table
 
 	public function replaceDocument($data, $id, $isPartialReplace = false) {
 		static::checkDocumentId($id);
-		static::checkDocument($data);
 		if (is_object($data)) {
 			$data = (array)$data;
 		} elseif (is_string($data)) {
 			$data = json_decode($data, true);
 		}
+		static::checkDocument($data);
 		$params = [
 			'body' => [
 				'doc' => $data,
