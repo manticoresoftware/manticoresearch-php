@@ -28,7 +28,7 @@ use Psr\Log\NullLogger;
  * @author Adrian Nuta <adrian.nuta@manticoresearch.com>
  * @link https://manticoresearch.com
  */
-class Client
+class Client implements ClientInterface
 {
 	/**
 	 *
