@@ -26,6 +26,10 @@ class KnnQuery extends BoolQuery
 			$this->knnTargetKey = 'doc_id';
 			return;
 		}
+		if (is_string($knnTarget)) {
+			$this->knnTargetKey = 'query';
+			return;
+		}
 		if (is_array($knnTarget)) {
 			foreach ($knnTarget as $i) {
 				if (!is_numeric($i)) {

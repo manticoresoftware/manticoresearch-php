@@ -106,11 +106,18 @@ or
 $search->knn('some_float_vector_field', 5, 100);
 ```
 
+or 
+
+```php
+$search->knn('some_float_vector_field', 'some_query', 100);
+```
+
 It expects 3 parameters:
 - a name of the `float_vector` type field
-- a float vector or a document id to execute knn search by 
+- a float vector or a document id or a text query to execute knn search by 
 - a number of most similar documents to return
 
+Note that performing KNN search with text queries requires the float vector field be configured accordingly, as shown [here](https://manual.manticoresearch.com/KNN#Creating-a-table-with-auto-embeddings) 
 
 ### filter(), orFilter() and notFilter()
 
