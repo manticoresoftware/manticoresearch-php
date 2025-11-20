@@ -72,16 +72,16 @@ class PhpHttp extends Transport implements TransportInterface
 		$start = microtime(true);
 		$message = $this->messageFactory->createRequest($method, $url, $headers, $content);
 		if (!$message->hasHeader('Content-Type')) {
-		    foreach ($headers as $key => $value) {
-                $message = $message->withAddedHeader($key, $value);
-            }
-        }
+			foreach ($headers as $key => $value) {
+				$message = $message->withAddedHeader($key, $value);
+			}
+		}
 		$body = $message->getBody();
 		$isBodyEmpty = ($body->getSize() === 0 || $body->getContents() === '');
 		if ($content !== false && $content !== '' && $isBodyEmpty) {
-		    $message = $message->withBody(
-		        $this->messageFactory->createStream($content)
-		    );
+			$message = $message->withBody(
+				$this->messageFactory->createStream($content)
+			);
 		}
 		try {
 			$responsePSR = $this->client->sendRequest($message);
