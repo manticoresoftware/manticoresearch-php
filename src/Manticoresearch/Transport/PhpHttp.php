@@ -7,8 +7,8 @@
 
 namespace Manticoresearch\Transport;
 
-use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
 use Manticoresearch\Connection;
 use Manticoresearch\Exceptions\ConnectionException;
 use Manticoresearch\Exceptions\ResponseException;
@@ -32,15 +32,15 @@ class PhpHttp extends Transport implements TransportInterface
 	 */
 
 	public function __construct(?Connection $connection = null, ?LoggerInterface $logger = null) {
-		if (!class_exists(HttpClientDiscovery::class) || !class_exists(MessageFactoryDiscovery::class)) {
+		if (!class_exists(Psr18ClientDiscovery::class) || !class_exists(Psr17FactoryDiscovery::class)) {
 			throw new \LogicException(
 				'You cannot use the "' . self::class . '" '
 				. 'as the "php-http/discovery" package is not installed. '
 				. 'Try running "composer require php-http/discovery".'
 			);
 		}
-		$this->client = HttpClientDiscovery::find();
-		$this->messageFactory = MessageFactoryDiscovery::find();
+		$this->client = Psr18ClientDiscovery::find();
+		$this->messageFactory = Psr17FactoryDiscovery::findRequestFactory();
 		parent::__construct($connection, $logger);
 	}
 
@@ -71,6 +71,18 @@ class PhpHttp extends Transport implements TransportInterface
 		}
 		$start = microtime(true);
 		$message = $this->messageFactory->createRequest($method, $url, $headers, $content);
+		if (!$message->hasHeader('Content-Type')) {
+			foreach ($headers as $key => $value) {
+				$message = $message->withAddedHeader($key, $value);
+			}
+		}
+		$body = $message->getBody();
+		$isBodyEmpty = ($body->getSize() === 0 || $body->getContents() === '');
+		if ($content !== false && $content !== '' && $isBodyEmpty) {
+			$message = $message->withBody(
+				$this->messageFactory->createStream($content)
+			);
+		}
 		try {
 			$responsePSR = $this->client->sendRequest($message);
 		} catch (\Exception $e) {
