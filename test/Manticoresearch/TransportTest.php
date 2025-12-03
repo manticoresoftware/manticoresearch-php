@@ -12,6 +12,7 @@ use Manticoresearch\Transport;
 use Manticoresearch\Transport\Http;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Http\Discovery\Psr17FactoryDiscovery;
 
 class TransportTest extends TestCase
 {
@@ -36,5 +37,28 @@ class TransportTest extends TestCase
 
 		$url = $method->invokeArgs($transport, ['/search', ['a' => 1, 'b' => false]]);
 		$this->assertEquals('/search?a=1&b=false', $url);
+	}
+
+	public function testTransportMessageFactory() {
+		$method = 'GET';
+		$uriPath = '/test';
+		$headers = [
+			'X-Forwarded-Host' => 'test.com'
+		];
+		$content = 'test content';
+
+		$messageFactory = Psr17FactoryDiscovery::findRequestFactory();
+		$message = $messageFactory->createRequest($method, $uriPath, $headers, $content);
+		foreach ($headers as $key => $value) {
+			$message = $message->withAddedHeader($key, $value);
+		}
+		if (!empty($content) && empty($message->getBody()->getContents())) {
+			$message = $message->withBody($messageFactory->createStream($content));
+		}
+
+		$this->assertEquals($method, $message->getMethod());
+		$this->assertEquals($uriPath, $message->getUri()->getPath());
+		$this->assertEquals($headers, $message->getHeaders());
+		$this->assertEquals($content, $message->getBody()->getContents());
 	}
 }
