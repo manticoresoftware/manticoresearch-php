@@ -43,7 +43,7 @@ class TransportTest extends TestCase
 		$method = 'GET';
 		$uriPath = '/test';
 		$headers = [
-			'X-Forwarded-Host' => 'test.com',
+			'X-Forwarded-Host' => ['test.com'],
 		];
 		$content = 'test content';
 
