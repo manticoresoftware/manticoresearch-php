@@ -7,12 +7,12 @@
 
 namespace Manticoresearch\Test;
 
+use Http\Discovery\Psr17FactoryDiscovery;
 use Manticoresearch\Connection;
 use Manticoresearch\Transport;
 use Manticoresearch\Transport\Http;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-use Http\Discovery\Psr17FactoryDiscovery;
 
 class TransportTest extends TestCase
 {
@@ -43,7 +43,7 @@ class TransportTest extends TestCase
 		$method = 'GET';
 		$uriPath = '/test';
 		$headers = [
-			'X-Forwarded-Host' => 'test.com'
+			'X-Forwarded-Host' => 'test.com',
 		];
 		$content = 'test content';
 
