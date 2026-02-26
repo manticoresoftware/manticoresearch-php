@@ -400,6 +400,9 @@ class Client implements ClientInterface
 	public function request(Request $request, array $params = [], string $retryReason = ''): Response {
 		try {
 			$connection = $this->connectionPool->getConnection($retryReason);
+			if (isset($this->config['bigint_to_string']) && $this->config['bigint_to_string']) {
+				$params['bigIntToString'] = true;
+			}
 			$this->lastResponse = $connection->getTransportHandler($this->logger)
 				->execute($request, $params);
 			if ($this->connectionPool->retriesAttempts) {
