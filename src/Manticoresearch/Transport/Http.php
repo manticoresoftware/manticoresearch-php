@@ -104,8 +104,8 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 			$response = new Response($responseString, $status);
 		}
 
-		if (isset($params('bigIntToString'))) {
-			$response->enableBigintConversion();	
+		if (isset($params['bigIntToString'])) {
+			$response->enableBigintConversion();
 		}
 
 		$time = $end - $start;
