@@ -76,12 +76,9 @@ class Response
 	 */
 	public function getResponse() {
 		if (null === $this->response) {
-			$this->response = json_decode($this->string, true);
-			/*
 			$this->response = $this->bigIntToString
 				? json_decode($this->string, true, 512, JSON_BIGINT_AS_STRING)
 				: json_decode($this->string, true);
-			*/
 			if (json_last_error() !== JSON_ERROR_NONE) {
 				if (json_last_error() !== JSON_ERROR_UTF8 || !$this->stripBadUtf8()) {
 					throw new RuntimeException(
