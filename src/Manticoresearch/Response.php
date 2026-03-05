@@ -16,6 +16,7 @@ namespace Manticoresearch;
  * @link https://manticoresearch.com
  */
 use Manticoresearch\Exceptions\RuntimeException;
+use Manticoresearch\Exceptions\ResponseException;
 
 /**
  * Class Response
@@ -75,24 +76,35 @@ class Response
 	 * @return array
 	 */
 	public function getResponse() {
-		if (null === $this->response) {
-			$this->response = $this->bigIntToString
-				? json_decode($this->string, true, 512, JSON_BIGINT_AS_STRING)
-				: json_decode($this->string, true);
-			if (json_last_error() !== JSON_ERROR_NONE) {
-				if (json_last_error() !== JSON_ERROR_UTF8 || !$this->stripBadUtf8()) {
-					throw new RuntimeException(
-						'fatal error while trying to decode JSON response: ' . json_last_error_msg()
-					);
-				}
-
-				$this->response = json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $this->string), true);
-			}
-
-			if (empty($this->response)) {
-				$this->response = [];
-			}
+		if (null !== $this->response) {
+			return $this->response;
 		}
+		
+		$this->response = $this->bigIntToString
+			? json_decode($this->string, true, 512, JSON_BIGINT_AS_STRING)
+			: json_decode($this->string, true);
+
+		if (json_last_error() !== JSON_ERROR_NONE) {
+			// If server returns 5xx error, we suppose it to be temporary and attempt retries
+			if ($this->status >= 500 && $this->status < 600) {
+				throw new ResponseException(
+					new Request($this->getTransportInfo()),
+					$this
+				);
+			}
+			if (json_last_error() !== JSON_ERROR_UTF8 || !$this->stripBadUtf8()) {
+				throw new RuntimeException(
+					'fatal error while trying to decode JSON response: ' . json_last_error_msg()
+				);
+			}
+
+			$this->response = json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $this->string), true);
+		}
+
+		if (empty($this->response)) {
+			$this->response = [];
+		}
+		
 		return $this->response;
 	}
 
@@ -126,6 +138,7 @@ class Response
 	 * @return false|string
 	 */
 	public function getError() {
+		// check if this->error
 		$response = $this->getResponse();
 		if (isset($response['error'])) {
 			return json_encode($response['error'], true);

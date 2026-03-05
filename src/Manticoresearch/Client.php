@@ -16,10 +16,12 @@ use Manticoresearch\Connection\Strategy\StaticRoundRobin;
 use Manticoresearch\Endpoints\Pq;
 use Manticoresearch\Exceptions\ConnectionException;
 use Manticoresearch\Exceptions\NoMoreNodesException;
+use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Response\SqlToArray;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Manticoresearch\Exceptions\ResponseException;
 
 /**
  * Manticore  client object
@@ -422,16 +424,17 @@ class Client implements ClientInterface
 
 			$this->initConnections();
 			throw $e;
-		} catch (ConnectionException $e) {
+		} catch (ConnectionException | ResponseException $e) {
 			if (!$this->connectionPool->retries) {
 				throw new NoMoreNodesException($e);
 			}
+			$failContext = ($e::class === ResponseException::class) ? 'bad response' : 'attempt';
 			$exMsg = $e->getMessage();
 			// We rely on the common error message format from Manticore here
 			$exReasonPos = strrpos($exMsg, ':');
 			$exceptionReason = substr($exMsg, ($exReasonPos === false) ? 0 : $exReasonPos + 1);
 			$this->logger->warning(
-				'Manticore Search Request failed on attempt ' . $this->connectionPool->retriesAttempts . ':',
+				"Manticore Search Request failed on $failContext " . $this->connectionPool->retriesAttempts . ':',
 				[
 					'exception' => $exMsg,
 					'request' => $e->getRequest()->toArray(),
