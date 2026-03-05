@@ -15,6 +15,7 @@ namespace Manticoresearch;
  * @author Adrian Nuta <adrian.nuta@manticoresearch.com>
  * @link https://manticoresearch.com
  */
+use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Exceptions\RuntimeException;
 
 /**
@@ -54,6 +55,17 @@ class Response
 	 */
 	protected $params;
 
+	/**
+	 * flag defining to apply or not bigint to string conversion
+	 * @var bool
+	 */
+	protected $bigIntToString = false;
+
+	/**
+	 * Response error message
+	 * @var string
+	 */
+	protected $error = '';
 
 	public function __construct($responseString, $status = null, $params = []) {
 		if (is_array($responseString)) {
@@ -70,22 +82,36 @@ class Response
 	 * @return array
 	 */
 	public function getResponse() {
-		if (null === $this->response) {
-			$this->response = json_decode($this->string, true);
-			if (json_last_error() !== JSON_ERROR_NONE) {
-				if (json_last_error() !== JSON_ERROR_UTF8 || !$this->stripBadUtf8()) {
-					throw new RuntimeException(
-						'fatal error while trying to decode JSON response: ' . json_last_error_msg()
-					);
-				}
-
-				$this->response = json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $this->string), true);
-			}
-
-			if (empty($this->response)) {
-				$this->response = [];
-			}
+		if (null !== $this->response) {
+			return $this->response;
 		}
+
+		//$this->response = $this->bigIntToString
+		//	? json_decode($this->string, true, 512, JSON_BIGINT_AS_STRING)
+		$this->response = json_decode($this->string, true);
+
+		if (json_last_error() !== JSON_ERROR_NONE) {
+			// If server returns 5xx error, we suppose it to be temporary and attempt retries
+			if ($this->is5xxRetriedStatus()) {
+				$this->error = json_last_error_msg();
+				throw new ResponseException(
+					new Request(),
+					$this
+				);
+			}
+			if (json_last_error() !== JSON_ERROR_UTF8 || !$this->stripBadUtf8()) {
+				throw new RuntimeException(
+					'fatal error while trying to decode JSON response: ' . json_last_error_msg()
+				);
+			}
+
+			$this->response = json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $this->string), true);
+		}
+
+		if (empty($this->response)) {
+			$this->response = [];
+		}
+
 		return $this->response;
 	}
 
@@ -119,6 +145,9 @@ class Response
 	 * @return false|string
 	 */
 	public function getError() {
+		if ($this->error) {
+			return $this->error;
+		}
 		$response = $this->getResponse();
 		if (isset($response['error'])) {
 			return json_encode($response['error'], true);
@@ -161,6 +190,13 @@ class Response
 		return $this->time;
 	}
 
+	/*
+	 * @return bool
+	 */
+	public function is5xxRetriedStatus() {
+		return $this->status >= 503 && $this->status < 505;
+	}
+
 	/**
 	 *  set request info
 	 * @param array $info
@@ -178,4 +214,12 @@ class Response
 	public function getTransportInfo() {
 		return $this->transportInfo;
 	}
+
+	/**
+	 * @return void
+	 */
+	public function enableBigintConversion() {
+		$this->bigIntToString = true;
+	}
+
 }

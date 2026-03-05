@@ -7,6 +7,7 @@
 
 namespace Manticoresearch\Test;
 
+use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Response;
 use PHPUnit\Framework\TestCase;
@@ -38,6 +39,15 @@ class ResponseTest extends TestCase
 		$response = new Response($payload);
 
 		$this->expectException(RuntimeException::class);
+		$response->getResponse();
+	}
+
+	public function test5xxInvalidJsonResponseException() {
+		$payload = '{invalid: json]';
+		$response = new Response($payload, 503);
+
+		$this->expectException(ResponseException::class);
+		$this->expectExceptionMessage('Syntax error');
 		$response->getResponse();
 	}
 }

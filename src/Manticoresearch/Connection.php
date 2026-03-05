@@ -26,7 +26,7 @@ class Connection
 	protected $alive = true;
 
 	/**
-	 * @var resource
+	 * @var resource|\CurlHandle|null
 	 */
 	protected $curl = null;
 
@@ -246,8 +246,7 @@ class Connection
 	}
 
 	/**
-	 * @return resource|null
-	 *
+	 * @return resource|\CurlHandle
 	 */
 	public function getCurl() {
 		return $this->curl ?? curl_init();

@@ -29,6 +29,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
 				'collation_connection',
 				'distinct_precision_threshold',
 				'grouping_in_utc',
+				'interactive_timeout',
 				'last_insert_id',
 				'log_level',
 				'max_allowed_packet',
@@ -42,6 +43,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
 				'threads_ex_effective',
 				'timezone',
 				'user',
+				'wait_timeout',
 			], $keys
 		);
 	}

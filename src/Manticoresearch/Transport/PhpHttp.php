@@ -100,6 +100,10 @@ class PhpHttp extends Transport implements TransportInterface
 			$response = new Response($responseString, $status);
 		}
 
+		if (isset($params['bigIntToString'])) {
+			$response->enableBigintConversion();
+		}
+
 		$time = $end - $start;
 		$response->setTime($time);
 		$response->setTransportInfo(
