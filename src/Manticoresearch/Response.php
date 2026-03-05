@@ -194,7 +194,7 @@ class Response
 	 * @return bool
 	 */
 	public function is5xxStatus() {
-		return $this->status >= 500 && $this->status < 600;
+		return $this->status >= 502 && $this->status < 600;
 	}
 
 	/**
