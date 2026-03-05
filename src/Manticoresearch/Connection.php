@@ -26,7 +26,7 @@ class Connection
 	protected $alive = true;
 
 	/**
-	 * @var \CurlHandle|null
+	 * @var resource|\CurlHandle|null
 	 */
 	protected $curl = null;
 
@@ -250,10 +250,10 @@ class Connection
 	}
 
 	/**
-	 * @return \CurlHandle
+	 * @return resource|\CurlHandle
 	 */
 	public function getCurl() {
-		if ($this->curl instanceof \CurlHandle) {
+		if (is_resource($this->curl) || $this->curl instanceof \CurlHandle) {
 			return $this->curl;
 		}
 
