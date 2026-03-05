@@ -26,7 +26,7 @@ class Connection
 	protected $alive = true;
 
 	/**
-	 * @var resource
+	 * @var \CurlHandle|null
 	 */
 	protected $curl = null;
 
@@ -69,7 +69,11 @@ class Connection
 		if (!$this->config['persistent']) {
 			return;
 		}
-		$this->curl = curl_init();
+		$curl = curl_init();
+		if ($curl === false) {
+			throw new RuntimeException('Unable to initialize cURL');
+		}
+		$this->curl = $curl;
 	}
 
 	/**
@@ -246,11 +250,19 @@ class Connection
 	}
 
 	/**
-	 * @return resource|null
-	 *
+	 * @return \CurlHandle
 	 */
 	public function getCurl() {
-		return $this->curl ?? curl_init();
+		if ($this->curl instanceof \CurlHandle) {
+			return $this->curl;
+		}
+
+		$curl = curl_init();
+		if ($curl === false) {
+			throw new RuntimeException('Unable to initialize cURL');
+		}
+
+		return $curl;
 	}
 
 }

@@ -15,8 +15,8 @@ namespace Manticoresearch;
  * @author Adrian Nuta <adrian.nuta@manticoresearch.com>
  * @link https://manticoresearch.com
  */
-use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Exceptions\ResponseException;
+use Manticoresearch\Exceptions\RuntimeException;
 
 /**
  * Class Response
@@ -85,7 +85,7 @@ class Response
 		if (null !== $this->response) {
 			return $this->response;
 		}
-		
+
 		$this->response = $this->bigIntToString
 			? json_decode($this->string, true, 512, JSON_BIGINT_AS_STRING)
 			: json_decode($this->string, true);
@@ -111,7 +111,7 @@ class Response
 		if (empty($this->response)) {
 			$this->response = [];
 		}
-		
+
 		return $this->response;
 	}
 
