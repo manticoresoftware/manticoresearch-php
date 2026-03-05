@@ -92,7 +92,7 @@ class Response
 
 		if (json_last_error() !== JSON_ERROR_NONE) {
 			// If server returns 5xx error, we suppose it to be temporary and attempt retries
-			if ($this->is5xxStatus()) {
+			if ($this->is5xxRetriedStatus()) {
 				$this->error = json_last_error_msg();
 				throw new ResponseException(
 					new Request(),

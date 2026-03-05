@@ -430,7 +430,7 @@ class Client implements ClientInterface
 
 			if ($e instanceof ResponseException) {
 				// We apply retrying to 502-600 responses only
-				if (!$e->getResponse()->is5xxStatus()) {
+				if (!$e->getResponse()->is5xxRetriedStatus()) {
 					throw $e;
 				}
 				$e->setRequest($request);
