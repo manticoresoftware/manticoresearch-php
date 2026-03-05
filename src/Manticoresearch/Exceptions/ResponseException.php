@@ -45,6 +45,14 @@ class ResponseException extends \RuntimeException implements ExceptionInterface
 	}
 
 	/**
+	 *
+	 * @param Request $request
+	 */
+	public function setRequest(Request $request): void {
+		$this->request = $request;
+	}
+
+	/**
 	 * @return Response
 	 */
 	public function getResponse() :Response {

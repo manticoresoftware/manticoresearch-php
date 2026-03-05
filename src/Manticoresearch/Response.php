@@ -61,6 +61,12 @@ class Response
 	 */
 	protected $bigIntToString = false;
 
+	/**
+	 * Response error message
+	 * @var string
+	 */
+	protected $error = '';
+
 	public function __construct($responseString, $status = null, $params = []) {
 		if (is_array($responseString)) {
 			$this->response = $responseString;
@@ -87,8 +93,9 @@ class Response
 		if (json_last_error() !== JSON_ERROR_NONE) {
 			// If server returns 5xx error, we suppose it to be temporary and attempt retries
 			if ($this->status >= 500 && $this->status < 600) {
+				$this->error = json_last_error_msg();
 				throw new ResponseException(
-					new Request($this->getTransportInfo()),
+					new Request(),
 					$this
 				);
 			}
@@ -138,7 +145,9 @@ class Response
 	 * @return false|string
 	 */
 	public function getError() {
-		// check if this->error
+		if ($this->error) {
+			return $this->error;
+		}
 		$response = $this->getResponse();
 		if (isset($response['error'])) {
 			return json_encode($response['error'], true);

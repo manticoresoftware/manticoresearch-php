@@ -21,7 +21,6 @@ use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Response\SqlToArray;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Manticoresearch\Exceptions\ResponseException;
 
 /**
  * Manticore  client object
@@ -428,7 +427,12 @@ class Client implements ClientInterface
 			if (!$this->connectionPool->retries) {
 				throw new NoMoreNodesException($e);
 			}
-			$failContext = ($e::class === ResponseException::class) ? 'bad response' : 'attempt';
+			if ($e::class === ResponseException::class) {
+				$e->setRequest($request);
+				$failContext = 'bad response';
+			} else {
+				$failContext = 'attempt';
+			}
 			$exMsg = $e->getMessage();
 			// We rely on the common error message format from Manticore here
 			$exReasonPos = strrpos($exMsg, ':');
