@@ -69,11 +69,7 @@ class Connection
 		if (!$this->config['persistent']) {
 			return;
 		}
-		$curl = curl_init();
-		if ($curl === false) {
-			throw new RuntimeException('Unable to initialize cURL');
-		}
-		$this->curl = $curl;
+		$this->curl = curl_init();
 	}
 
 	/**
@@ -253,16 +249,7 @@ class Connection
 	 * @return resource|\CurlHandle
 	 */
 	public function getCurl() {
-		if (is_resource($this->curl) || $this->curl instanceof \CurlHandle) {
-			return $this->curl;
-		}
-
-		$curl = curl_init();
-		if ($curl === false) {
-			throw new RuntimeException('Unable to initialize cURL');
-		}
-
-		return $curl;
+		return $this->curl ?? curl_init();
 	}
 
 }

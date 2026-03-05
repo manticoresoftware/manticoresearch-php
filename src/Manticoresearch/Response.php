@@ -86,13 +86,13 @@ class Response
 			return $this->response;
 		}
 
-		$this->response = $this->bigIntToString
-			? json_decode($this->string, true, 512, JSON_BIGINT_AS_STRING)
-			: json_decode($this->string, true);
+		//$this->response = $this->bigIntToString
+		//	? json_decode($this->string, true, 512, JSON_BIGINT_AS_STRING)
+		$this->response = json_decode($this->string, true);
 
 		if (json_last_error() !== JSON_ERROR_NONE) {
 			// If server returns 5xx error, we suppose it to be temporary and attempt retries
-			if ($this->status >= 500 && $this->status < 600) {
+			if ($this->is5xxStatus()) {
 				$this->error = json_last_error_msg();
 				throw new ResponseException(
 					new Request(),
@@ -188,6 +188,13 @@ class Response
 	 */
 	public function getTime() {
 		return $this->time;
+	}
+
+	/*
+	 * @return bool
+	 */
+	public function is5xxStatus() {
+		return $this->status >= 500 && $this->status < 600;
 	}
 
 	/**

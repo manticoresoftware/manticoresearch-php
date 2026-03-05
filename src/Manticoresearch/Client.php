@@ -427,7 +427,12 @@ class Client implements ClientInterface
 			if (!$this->connectionPool->retries) {
 				throw new NoMoreNodesException($e);
 			}
+
 			if ($e instanceof ResponseException) {
+				// We apply retrying to 5xx responses only
+				if (!$e->getResponse()->is5xxStatus()) {
+					throw $e;
+				}
 				$e->setRequest($request);
 				$failContext = 'bad response';
 			} else {
