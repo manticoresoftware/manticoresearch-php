@@ -193,8 +193,8 @@ class Response
 	/*
 	 * @return bool
 	 */
-	public function is5xxStatus() {
-		return $this->status >= 502 && $this->status < 600;
+	public function is5xxRetriedStatus() {
+		return $this->status >= 503 && $this->status < 505;
 	}
 
 	/**

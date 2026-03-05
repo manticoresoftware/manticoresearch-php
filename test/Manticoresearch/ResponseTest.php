@@ -44,7 +44,7 @@ class ResponseTest extends TestCase
 
 	public function test5xxInvalidJsonResponseException() {
 		$payload = '{invalid: json]';
-		$response = new Response($payload, 502);
+		$response = new Response($payload, 503);
 
 		$this->expectException(ResponseException::class);
 		$this->expectExceptionMessage('Syntax error');
