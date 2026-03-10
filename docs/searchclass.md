@@ -314,6 +314,13 @@ You can also customize the ranker by setting a custom expression. Check out the 
     
     // unset options by passing null
     $search->option('ranker', null);
+
+    // use fuzzy search
+    $search->option('fuzzy', 1)
+    $search->option('layouts', 'us,ua');
+    $search->option('distance', 2);
+
+    For more details about fuzzy search, see [here](https://manual.manticoresearch.com/Searching/Spell_correction#Fuzzy-Search)
 ```
 
 ### trackScores()
