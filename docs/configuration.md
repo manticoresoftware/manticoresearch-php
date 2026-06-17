@@ -53,6 +53,7 @@ Http/Https adapter options:
 * headers - array of custom headers
 * curl - array of CURL settings as option=>value
 * persistent - define whether the connection is persistent or not
+* bigint_to_string - define whether big integers in response are converted to strings or not
 
 A simple example of multiple hosts:
 ```
@@ -92,7 +93,8 @@ A more advanced example where one host uses HTTP authentication and another requ
                     'curl' => [
                         CURLOPT_FAILONERROR => true
                     ],
-                    'persistent' => true
+                    'persistent' => true,
+                    'bigint_to_string' => true,
                 ],
                 [
                     'host' => '123.0.0.2',
