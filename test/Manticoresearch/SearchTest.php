@@ -127,6 +127,14 @@ class SearchTest extends TestCase
 							"hnsw_similarity='l2'",
 						],
 					],
+					'kind2' => [
+						'type' => 'float_vector',
+						'options' => [
+							"knn_type='hnsw'",
+							"knn_dims='2'",
+							"hnsw_similarity='l2'",
+						],
+					],
 				],
 			],
 		];
@@ -143,6 +151,7 @@ class SearchTest extends TestCase
 					'lat' => 51.2, 'lon' => 47.5,
 					'advise' => 'PG-13',
 					'kind' => [0.2,0.3],
+					'kind2' => [0.9,0.9],
 				],
 			]],
 			['insert' => ['table' => 'movies', 'id' => 3, 'doc' =>
@@ -154,6 +163,7 @@ class SearchTest extends TestCase
 					'lat' => 51.9, 'lon' => 48.5,
 					'advise' => 'PG-13',
 					'kind' => [0.2,0.7],
+					'kind2' => [0.7,0.7],
 				],
 			]],
 			['insert' => ['table' => 'movies', 'id' => 4, 'doc' =>
@@ -165,6 +175,7 @@ class SearchTest extends TestCase
 					'lat' => 51.1, 'lon' => 48.1,
 					'advise' => 'PG-13',
 					'kind' => [0.3,0.5],
+					'kind2' => [0.6,0.6],
 				],
 			]],
 			['insert' => ['table' => 'movies', 'id' => 5, 'doc' =>
@@ -176,6 +187,7 @@ class SearchTest extends TestCase
 					'lat' => 52.2, 'lon' => 48.9,
 					'advise' => 'R',
 					'kind' => [0.5,0.5],
+					'kind2' => [0.5,0.5],
 				],
 			]],
 			['insert' => ['table' => 'movies', 'id' => 6, 'doc' =>
@@ -189,6 +201,7 @@ class SearchTest extends TestCase
 					'lat' => 51.6, 'lon' => 48.0,
 					'advise' => 'R',
 					'kind' => [0.7,0.2],
+					'kind2' => [0.3,0.3],
 				],
 			]],
 			['insert' => ['table' => 'movies', 'id' => 10, 'doc' =>
@@ -201,6 +214,7 @@ class SearchTest extends TestCase
 					'lat' => 51.8, 'lon' => 48.2,
 					'advise' => 'R',
 					'kind' => [0.9,0.9],
+					'kind2' => [0.1,0.1],
 				],
 			]],
 		];
@@ -874,13 +888,14 @@ class SearchTest extends TestCase
 			0 => '_year',
 			1 => 'advise',
 			2 => 'kind',
-			3 => 'language',
-			4 => 'lat',
-			5 => 'lon',
-			6 => 'meta',
-			7 => 'plot',
-			8 => 'rating',
-			9 => 'title',
+			3 => 'kind2',
+			4 => 'language',
+			5 => 'lat',
+			6 => 'lon',
+			7 => 'meta',
+			8 => 'plot',
+			9 => 'rating',
+			10 => 'title',
 			], $keys
 		);
 	}
@@ -1072,6 +1087,62 @@ class SearchTest extends TestCase
 		$this->assertContains('Interstellar', $titles);
 		$this->assertContains('Alien 3', $titles);
 		$this->assertSame('Interstellar', $titles[0]);
+	}
+
+	public function testMultipleKnnSearches() {
+		$knnQueries = [
+			[
+				'field' => 'kind',
+				'target' => [0.9,0.9],
+				'k' => 1,
+				'options' => ['name' => 'dense1'],
+			],
+			[
+				'field' => 'kind2',
+				'target' => [0.9,0.9],
+				'k' => 1,
+				'options' => ['name' => 'dense2'],
+			],
+		];
+		$body = static::$search
+			->search('Interstellar')
+			->knn($knnQueries)
+			->rrf(['fusion_weights' => ['query' => 0.6, 'dense1' => 0.2, 'dense2' => 0.2]])
+			->compile();
+
+		$this->assertCount(2, $body['knn']);
+		$this->assertSame('kind', $body['knn'][0]['field']);
+		$this->assertSame('dense1', $body['knn'][0]['name']);
+		$this->assertSame('kind2', $body['knn'][1]['field']);
+		$this->assertSame('dense2', $body['knn'][1]['name']);
+		$this->assertArrayHasKey('query', $body);
+
+		$results = static::$search->limit(10)->get();
+		$titles = $this->titlesFromResults($results);
+		$this->assertContains('Interstellar', $titles);
+		$this->assertContains('Alien 3', $titles);
+	}
+
+	public function testMultipleKnnSearchesRequireRrf() {
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage('Multiple KNN searches require RRF fusion');
+		static::$search->knn(
+			[
+				['field' => 'kind', 'target' => [0.1,0.2], 'k' => 1],
+				['field' => 'kind2', 'target' => [0.3,0.4], 'k' => 1],
+			]
+		)->compile();
+	}
+
+	public function testMultipleKnnSearchesValidateDefinitions() {
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage("Missing 'target' in KNN query definition");
+		static::$search->knn(
+			[
+				['field' => 'kind', 'k' => 1],
+				['field' => 'kind2', 'target' => [0.3,0.4], 'k' => 1],
+			]
+		);
 	}
 
 	public function testKnnSearchRemainsPreHybridWithoutRrf() {

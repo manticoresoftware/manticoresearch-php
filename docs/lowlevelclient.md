@@ -62,9 +62,13 @@ For a complete reference of payload and response, see Manticore's [Search API](h
 
 `body` properties:
 - table name (mandatory)
-- query tree expression (mandatory)
+- query tree expression
+- `knn` object or array for vector and RRF hybrid searches
+- `hybrid` shorthand for tables with auto-embeddings
 - sort array
-- script fields with expressions
+- `script_fields` or shorthand `expressions`
+- `aggs` aggregation tree
+- `facet_filter_mode` for faceted filter inheritance
 - highlight parameters
 - limit of result set
 - offset of result set
@@ -99,6 +103,7 @@ The response will be a JSON object containing:
 - `took` - query time
 - `timed_out` - boolean, true if the query timed out
 - `hits` - array with matches
+- `aggregations` - optional, aggregation and facet results
 - `profile` - optional, if profiling is set
 
 

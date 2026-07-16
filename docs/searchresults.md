@@ -81,9 +81,19 @@ $result->hasTimedout();
 Facets (aggregations):
 
 ```php
-$result->getFacets();
+$facets = $result->getFacets();
+// Alias
+$facets = $result->getAggregations();
 ```
-This returns an associative array with the requested facets, where a facet can be identified by the chosen facet alias.
+This returns an associative array with the requested aggregations. Bucket aggregations such as `histogram`, `range`, `date_range`, and `date_histogram` usually contain a `buckets` array. Metric aggregations such as `min`, `max`, `sum`, `avg`, and `median_absolute_deviation` return a `value`; percentile aggregations return `values`.
+
+For example:
+
+```php
+$average = $result->getAggregations()['average_price']['value'];
+```
+
+Facets can be identified by their chosen alias.
 Each facet is an array containing the faceted values and counts in the `buckets` array:
 
 ``` php
@@ -112,6 +122,8 @@ print_r($year_facet);
    )
 )
 ```
+
+When `facet_filter_mode` is `auto` or `max`, buckets can also contain a `status` value: `selected`, `available`, or `unavailable`.
  
  ## ResultHit object
  

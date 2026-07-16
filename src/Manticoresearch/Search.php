@@ -12,6 +12,7 @@ use Manticoresearch\Query\Distance;
 use Manticoresearch\Query\Equals;
 use Manticoresearch\Query\In;
 use Manticoresearch\Query\KnnQuery;
+use Manticoresearch\Query\KnnQueryCollection;
 use Manticoresearch\Query\MatchPhrase;
 use Manticoresearch\Query\MatchQuery;
 use Manticoresearch\Query\QueryString;
@@ -99,7 +100,7 @@ class Search
 	public function search($queryString): self {
 		if (is_object($queryString)) {
 			// we use the search query as a full-text filter for the existing knn query
-			if (is_a($this->query, KnnQuery::class)) {
+			if ($this->isKnnQuery()) {
 				$this->filter($queryString);
 			} else {
 				$this->query = $queryString;
@@ -110,9 +111,41 @@ class Search
 		return $this;
 	}
 
-	public function knn($field, $knnTarget, $docCount, $options = []): self {
+	private function isKnnQuery() {
+		return is_a($this->query, KnnQuery::class) || is_a($this->query, KnnQueryCollection::class);
+	}
+
+	private function createKnnQueryCollection($definitions) {
+		if (!$definitions) {
+			throw new \RuntimeException('At least one KNN query definition is required');
+		}
+
+		$queries = [];
+		foreach ($definitions as $definition) {
+			if (!is_array($definition)) {
+				throw new \RuntimeException('Each KNN query definition must be an array');
+			}
+			foreach (['field', 'target', 'k'] as $required) {
+				if (!array_key_exists($required, $definition)) {
+					throw new \RuntimeException("Missing '{$required}' in KNN query definition");
+				}
+			}
+			$queries[] = new KnnQuery(
+				$definition['field'],
+				$definition['target'],
+				$definition['k'],
+				$definition['options'] ?? []
+			);
+		}
+
+		return new KnnQueryCollection($queries);
+	}
+
+	public function knn($field, $knnTarget = null, $docCount = null, $options = []): self {
 		$filter = $this->query->toArray();
-		$this->query = new KnnQuery($field, $knnTarget, $docCount, $options);
+		$this->query = is_array($field)
+			? $this->createKnnQueryCollection($field)
+			: new KnnQuery($field, $knnTarget, $docCount, $options);
 		// we use the existing search query as a full-text filter for the knn query
 		if (isset($filter['bool']) && $filter['bool']) {
 			$filter = $filter['bool'];
@@ -458,7 +491,7 @@ class Search
 			return $body;
 		}
 
-		if (is_a($this->query, KnnQuery::class)) {
+		if ($this->isKnnQuery()) {
 			return $this->compileKnnQuery($body, $query);
 		}
 
@@ -468,6 +501,9 @@ class Search
 
 	private function compileKnnQuery($body, $query) {
 		$isRrf = ($this->params['options']['fusion_method'] ?? null) === static::FUSION_METHOD_RRF;
+		if (is_a($this->query, KnnQueryCollection::class) && !$isRrf) {
+			throw new \RuntimeException('Multiple KNN searches require RRF fusion');
+		}
 		if (!$isRrf) {
 			$body['knn'] = $query;
 			return $body;
