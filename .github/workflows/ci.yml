@@ -2,7 +2,7 @@ name: tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ test/ci-workflow ]
   pull_request:
     branches: [ master ]
 
