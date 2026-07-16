@@ -54,8 +54,7 @@ class PhpHttp extends Transport implements TransportInterface
 		$url = $this->setupURI($url, $request->getQuery());
 		$method = $request->getMethod();
 
-		$headers = $connection->getHeaders();
-		$headers['Content-Type'] = $request->getContentType();
+		$headers = $this->getRequestHeaders($request, $connection);
 		$data = $request->getBody();
 		if (!empty($data)) {
 			if (is_array($data)) {
@@ -139,5 +138,24 @@ class PhpHttp extends Transport implements TransportInterface
 			throw new ResponseException($request, $response);
 		}
 		return $response;
+	}
+
+	private function getRequestHeaders(Request $request, Connection $connection) {
+		$headers = $connection->getHeaders();
+		$headers['Content-Type'] = $request->getContentType();
+		$authorization = $connection->getAuthorizationHeader();
+		if ($authorization === null) {
+			return $headers;
+		}
+
+		foreach (array_keys($headers) as $header) {
+			if (strcasecmp((string)$header, 'Authorization') !== 0) {
+				continue;
+			}
+
+			unset($headers[$header]);
+		}
+		$headers['Authorization'] = $authorization;
+		return $headers;
 	}
 }

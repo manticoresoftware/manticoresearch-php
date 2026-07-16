@@ -14,6 +14,8 @@ Table of Contents
 
 * [General notes on requests](#requests) 
 
+* [Create or rotate a bearer token](#token)
+
 * [Search](#search)
 
 * [Insert documents](#insert)
@@ -55,7 +57,39 @@ There is no check regarding the validity of the body payload's structure before 
 
 ### Responses 
 
-Responses are returned as arrays, reflecting the response object received from the API endpoint.
+Responses are returned as arrays, reflecting the response object received from the API endpoint. The `token()` method is an exception and returns the raw token string.
+
+### Token
+
+`token()` creates or rotates the bearer token for the authenticated HTTP user through `POST /token`. Configure the client with Basic credentials:
+
+```php
+$client = new \Manticoresearch\Client([
+    'host' => '127.0.0.1',
+    'port' => 9308,
+    'username' => 'admin',
+    'password' => 'StrongPass#2026',
+]);
+
+$token = $client->token();
+```
+
+The endpoint receives an empty JSON object and returns the raw token string. Pass `true` to return a `TokenResponse` object:
+
+```php
+$response = $client->token(true);
+$token = $response->getResponse();
+```
+
+Use the token in another client's `bearer_token` connection option:
+
+```php
+$client = new \Manticoresearch\Client([
+    'host' => '127.0.0.1',
+    'port' => 9308,
+    'bearer_token' => $token,
+]);
+```
 
 ### Search
 For a complete reference of payload and response, see Manticore's [Search API](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON).

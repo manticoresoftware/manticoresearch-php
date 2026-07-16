@@ -67,6 +67,13 @@ interface ClientInterface
 	public function search(array $params = [], $obj = false);
 
 	/**
+	 * Endpoint: token
+	 * @param bool $obj
+	 * @return string|TokenResponse
+	 */
+	public function token($obj = false);
+
+	/**
 	 * Endpoint: insert
 	 * @param array $params
 	 * @return mixed

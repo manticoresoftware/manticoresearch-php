@@ -26,7 +26,7 @@ class Connection
 	protected $alive = true;
 
 	/**
-	 * @var resource
+	 * @var resource|\CurlHandle|false|null
 	 */
 	protected $curl = null;
 
@@ -40,6 +40,7 @@ class Connection
  * $params['proxy']       = proxy host:port string
  * $params['username']  = username for http auth
  * $params['password']  = password for http auth
+ * $params['bearer_token'] = bearer token for http auth
  * $params['headers']   = array of custom headers
  * $params['curl']      = array of pairs of curl option=>value
  * $params['persistent'] = bool if connection is persistent
@@ -65,6 +66,7 @@ class Connection
 			'persistent' => true,
 		];
 		$this->config = array_merge($this->config, $params);
+		$this->validateAuthentication($this->config);
 		$this->alive = true;
 		if (!$this->config['persistent']) {
 			return;
@@ -199,10 +201,29 @@ class Connection
 	 * @return $this
 	 */
 	public function setConfig($config): self {
-		foreach ($config as $ckey => $cvalue) {
-			$this->config[$ckey] = $cvalue;
-		}
+		$newConfig = array_merge($this->config, $config);
+		$this->validateAuthentication($newConfig);
+		$this->config = $newConfig;
 		return $this;
+	}
+
+	public function getAuthorizationHeader() {
+		if (($this->config['bearer_token'] ?? null) !== null) {
+			return 'Bearer ' . $this->config['bearer_token'];
+		}
+		if ($this->config['username'] !== null && $this->config['password'] !== null) {
+			return 'Basic ' . base64_encode($this->config['username'] . ':' . $this->config['password']);
+		}
+
+		return null;
+	}
+
+	private function validateAuthentication($config) {
+		$hasBearerToken = ($config['bearer_token'] ?? null) !== null;
+		$hasBasicCredentials = ($config['username'] ?? null) !== null || ($config['password'] ?? null) !== null;
+		if ($hasBearerToken && $hasBasicCredentials) {
+			throw new RuntimeException('Basic and bearer authentication cannot be configured together');
+		}
 	}
 
 	/**

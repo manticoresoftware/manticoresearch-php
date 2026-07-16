@@ -196,6 +196,24 @@ class Client implements ClientInterface
 	}
 
 	/**
+	 * Endpoint: token
+	 * @param bool $obj
+	 * @return string|TokenResponse
+	 */
+	public function token($obj = false) {
+		$endpoint = new Endpoints\Token(['body' => '{}']);
+		$response = $this->request($endpoint, ['responseClass' => TokenResponse::class]);
+		if (!$response instanceof TokenResponse) {
+			throw new \LogicException('Token endpoint returned an unexpected response type');
+		}
+		if ($obj === true) {
+			return $response;
+		}
+
+		return $response->getResponse();
+	}
+
+	/**
 	 * Endpoint: insert
 	 * @param array $params
 	 * @return array

@@ -27,7 +27,7 @@ All methods of the `Search` class can be chained.
 
 When all the search conditions and options are set, `get()` is called to process and query the search engine.
 
-The `get()` method normally returns a [ResultSet](searchresults.md#resultset-object). Chat searches return a [ChatResult](searchresults.md#chatresult-object).
+The `get()` method normally returns a [ResultSet](searchresults.md#resultset-object). Conversational searches return a [ChatResult](searchresults.md#chatresult-object).
 
 ### search()
 
@@ -207,7 +207,7 @@ $result = $search
 
 The table is part of the `chat` object, so `setTable()` is not required. If no conversation UUID is supplied, Manticore creates one. If no vector field is supplied, Manticore detects the first suitable float-vector field.
 
-Chat search cannot be combined with `search()`, `match()`, other query builders, `knn()`, or `hybrid()`.
+Conversational search cannot be combined with `search()`, `match()`, other query builders, `knn()`, or `hybrid()`.
 
 
 ### expression() and expressions()

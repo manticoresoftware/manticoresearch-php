@@ -55,8 +55,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 		curl_setopt($conn, CURLOPT_RETURNTRANSFER, true);
 		$data = $request->getBody();
 		$method = $request->getMethod();
-		$headers = $connection->getHeaders();
-		$headers[] = sprintf('Content-Type: %s', $request->getContentType());
+		$headers = $this->getRequestHeaders($request, $connection);
 		if (!empty($data)) {
 			if (is_array($data)) {
 				$content = json_encode(
@@ -76,13 +75,6 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 			curl_setopt($conn, CURLOPT_CONNECTTIMEOUT, $connection->getConnectTimeout());
 		}
 
-		if ($connection->getConfig('username') !== null && $connection->getConfig('password') !== null) {
-			curl_setopt(
-				$conn,
-				CURLOPT_USERPWD,
-				$connection->getConfig('username').':'.$connection->getConfig('password')
-			);
-		}
 		if ($connection->getConfig('proxy') !== null) {
 			curl_setopt($conn, CURLOPT_PROXY, $connection->getConfig('proxy'));
 		}
@@ -150,6 +142,26 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 			throw new ResponseException($request, $response);
 		}
 		return $response;
+	}
+
+	private function getRequestHeaders(Request $request, Connection $connection) {
+		$headers = $connection->getHeaders();
+		$headers[] = sprintf('Content-Type: %s', $request->getContentType());
+		$authorization = $connection->getAuthorizationHeader();
+		if ($authorization === null) {
+			return $headers;
+		}
+
+		$headers = array_values(
+			array_filter(
+				$headers,
+				function ($header) {
+					return stripos($header, 'Authorization:') !== 0;
+				}
+			)
+		);
+		$headers[] = 'Authorization: ' . $authorization;
+		return $headers;
 	}
 
 	/**

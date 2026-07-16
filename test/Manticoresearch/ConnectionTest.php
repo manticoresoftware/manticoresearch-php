@@ -105,6 +105,83 @@ class ConnectionTest extends TestCase
 		$this->assertEquals(2, $this->connection->getConfig('b'));
 	}
 
+	public function testBasicAuthorizationHeader() {
+		$connection = new Connection(
+			[
+			'persistent' => false,
+			'username' => 'admin',
+			'password' => 'secret',
+			]
+		);
+
+		$this->assertSame(
+			'Basic ' . base64_encode('admin:secret'),
+			$connection->getAuthorizationHeader()
+		);
+	}
+
+	public function testBearerAuthorizationHeader() {
+		$connection = new Connection(
+			[
+			'persistent' => false,
+			'bearer_token' => 'raw-token',
+			]
+		);
+
+		$this->assertSame('Bearer raw-token', $connection->getAuthorizationHeader());
+	}
+
+	public function testIncompleteBasicCredentials() {
+		$connection = new Connection(
+			[
+			'persistent' => false,
+			'username' => 'admin',
+			]
+		);
+
+		$this->assertNull($connection->getAuthorizationHeader());
+	}
+
+	public function testBasicAndBearerAuthenticationCombineFail() {
+		$this->expectException(RuntimeException::class);
+		$this->expectExceptionMessage('Basic and bearer authentication cannot be configured together');
+
+		new Connection(
+			[
+			'persistent' => false,
+			'username' => 'admin',
+			'password' => 'secret',
+			'bearer_token' => 'raw-token',
+			]
+		);
+	}
+
+	public function testSetConfigRejectsConflictingAuthentication() {
+		$connection = new Connection(
+			[
+			'persistent' => false,
+			'username' => 'admin',
+			'password' => 'secret',
+			]
+		);
+
+		try {
+			$connection->setConfig(['bearer_token' => 'raw-token']);
+			$this->fail('Conflicting authentication was accepted');
+		} catch (RuntimeException $exception) {
+			$this->assertSame(
+				'Basic and bearer authentication cannot be configured together',
+				$exception->getMessage()
+			);
+		}
+
+		$this->assertNull($connection->getConfig('bearer_token'));
+		$this->assertSame(
+			'Basic ' . base64_encode('admin:secret'),
+			$connection->getAuthorizationHeader()
+		);
+	}
+
 	public function testStaticCreateSelf() {
 		$newConnection = Connection::create($this->connection);
 		$this->assertEquals($this->connection, $newConnection);
