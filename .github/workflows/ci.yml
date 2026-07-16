@@ -63,6 +63,19 @@ jobs:
           EXTRA: 1
         ports:
           - 5308:9308
+      manticoresearch-manticore-auth:
+        image: manticoresearch/manticore:dev
+        env:
+          EXTRA: 1
+          searchd_auth: '1'
+        ports:
+          - 7308:9308
+
+    env:
+      MS_AUTH_HOST: 127.0.0.1
+      MS_AUTH_PORT: 7308
+      MS_AUTH_USERNAME: admin
+      MS_AUTH_PASSWORD: 'TestPass#2026'
 
     steps:
       - uses: actions/checkout@v4
@@ -77,13 +90,35 @@ jobs:
       
       - run: composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message php-http/message-factory http-interop/http-factory-guzzle
 
+      - name: Bootstrap auth Manticore
+        run: |
+          set -euo pipefail
+          CONTAINER="$(docker ps -q --filter "name=manticoresearch-manticore-auth" | head -n1)"
+          # searchd_* env overrides live in manticore.conf.sh; static manticore.conf has auth disabled.
+          # Run as manticore so auth.json is owned by the daemon user.
+          bootstrap_cmd=$(cat <<EOF
+          set -e
+          CONFIG=/etc/manticoresearch/manticore.conf.sh
+          if [ ! -e "\$CONFIG" ]; then
+            CONFIG=/etc/manticoresearch/manticore.conf
+          fi
+          printf '%s\\n%s\\n%s\\n' '${MS_AUTH_USERNAME}' '${MS_AUTH_PASSWORD}' '${MS_AUTH_PASSWORD}' | searchd --config "\$CONFIG" --auth-non-interactive
+          EOF
+          )
+          docker exec -u manticore "$CONTAINER" bash -lc "$bootstrap_cmd"
+
       - name: Test
-        run: vendor/bin/phpunit -d memory_limit=4G ${{ matrix.deprecation }} --stop-on-failure test/
+        run: vendor/bin/phpunit -d memory_limit=4G ${{ matrix.deprecation }} --stop-on-failure --testsuite "Manticore PHP Client"
         env:
           MS_HOST: 127.0.0.1
           MS_PORT: 9308
           MS_HOST2: 127.0.0.1
           MS_PORT2: 5308
+          TRANSPORT: ${{ matrix.transport }}
+
+      - name: Auth integration test
+        run: vendor/bin/phpunit -d memory_limit=4G ${{ matrix.deprecation }} --stop-on-failure --testsuite auth
+        env:
           TRANSPORT: ${{ matrix.transport }}
 
   stan:

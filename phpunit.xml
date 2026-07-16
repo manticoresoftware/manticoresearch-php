@@ -1,8 +1,14 @@
 <?xml version="1.0"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="test/bootstrap.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
-    <testsuite name="Manticore PHP Client">
-        <directory>test/</directory>
-    </testsuite>
+    <testsuites>
+        <testsuite name="Manticore PHP Client">
+            <directory>test/</directory>
+            <exclude>test/Manticoresearch/AuthIntegrationTest.php</exclude>
+        </testsuite>
+        <testsuite name="auth">
+            <file>test/Manticoresearch/AuthIntegrationTest.php</file>
+        </testsuite>
+    </testsuites>
     <coverage includeUncoveredFiles="true">
         <include>
             <directory suffix=".php">src/</directory>
