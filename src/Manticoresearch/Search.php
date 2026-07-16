@@ -30,6 +30,10 @@ class Search
 	const FILTER_AND = 'AND';
 	const FILTER_OR = 'OR';
 	const FILTER_NOT = 'NOT';
+	const FACET_FILTER_MODE_STRICT = 'strict';
+	const FACET_FILTER_MODE_AUTO = 'auto';
+	const FACET_FILTER_MODE_MAX = 'max';
+	const FUSION_METHOD_RRF = 'rrf';
 
 	/**
 	 * @var Client
@@ -106,9 +110,9 @@ class Search
 		return $this;
 	}
 
-	public function knn($field, $knnTarget, $docCount): self {
+	public function knn($field, $knnTarget, $docCount, $options = []): self {
 		$filter = $this->query->toArray();
-		$this->query = new KnnQuery($field, $knnTarget, $docCount);
+		$this->query = new KnnQuery($field, $knnTarget, $docCount, $options);
 		// we use the existing search query as a full-text filter for the knn query
 		if (isset($filter['bool']) && $filter['bool']) {
 			$filter = $filter['bool'];
@@ -119,6 +123,34 @@ class Search
 				}
 			}
 		}
+		return $this;
+	}
+
+	public function rrf($options = []): self {
+		if ($options === null) {
+			unset($this->params['options']['fusion_method']);
+			return $this;
+		}
+
+		foreach ($options as $name => $value) {
+			$this->params['options'][$name] = $value;
+		}
+		$this->params['options']['fusion_method'] = static::FUSION_METHOD_RRF;
+
+		return $this;
+	}
+
+	public function hybrid($query, $field = null): self {
+		if ($query === null) {
+			unset($this->params['hybrid']);
+			return $this;
+		}
+
+		$this->params['hybrid'] = ['query' => $query];
+		if ($field !== null) {
+			$this->params['hybrid']['field'] = $field;
+		}
+
 		return $this;
 	}
 
@@ -163,6 +195,16 @@ class Search
 			$this->params['script_fields'] = new ScriptFields();
 		}
 		$this->params['script_fields']->add($name, $exp);
+		return $this;
+	}
+
+	public function expressions($expressions): self {
+		if ($expressions === null) {
+			unset($this->params['expressions']);
+		} else {
+			$this->params['expressions'] = $expressions;
+		}
+
 		return $this;
 	}
 
@@ -269,6 +311,31 @@ class Search
 
 	public function maxMatches($maxmatches): self {
 		$this->params['max_matches'] = $maxmatches;
+		return $this;
+	}
+
+	public function facetFilterMode($mode): self {
+		if ($mode === null) {
+			unset($this->params['facet_filter_mode']);
+		} else {
+			$this->params['facet_filter_mode'] = $mode;
+		}
+
+		return $this;
+	}
+
+	public function aggregation($name, $type, $options = []): self {
+		$this->params['aggs'][$name] = [$type => $options];
+		return $this;
+	}
+
+	public function aggregations($aggregations): self {
+		if ($aggregations === null) {
+			unset($this->params['aggs']);
+		} else {
+			$this->params['aggs'] = $aggregations;
+		}
+
 		return $this;
 	}
 
@@ -385,16 +452,38 @@ class Search
 		return new ResultSet($resp);
 	}
 
-	public function compile() {
-		$body = $this->params;
+	private function compileQuery($body) {
 		$query = $this->query->toArray();
-		if ($query !== null) {
-			if (is_a($this->query, KnnQuery::class)) {
-				$body['knn'] = $query;
-			} else {
-				$body['query'] = $query;
-			}
+		if ($query === null) {
+			return $body;
 		}
+
+		if (is_a($this->query, KnnQuery::class)) {
+			return $this->compileKnnQuery($body, $query);
+		}
+
+		$body['query'] = $query;
+		return $body;
+	}
+
+	private function compileKnnQuery($body, $query) {
+		$isRrf = ($this->params['options']['fusion_method'] ?? null) === static::FUSION_METHOD_RRF;
+		if (!$isRrf) {
+			$body['knn'] = $query;
+			return $body;
+		}
+
+		$body['knn'] = $this->query->toRrfArray();
+		$filter = $this->query->getFilterQuery();
+		if ($filter !== null) {
+			$body['query'] = $filter;
+		}
+
+		return $body;
+	}
+
+	public function compile() {
+		$body = $this->compileQuery($this->params);
 		if ($this->join) {
 			$body['join'] = [];
 			foreach ($this->join as $join) {

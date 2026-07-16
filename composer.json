@@ -9,10 +9,21 @@
 	"license" : "MIT",
 	"type" : "library",
 	"require" : {
-		"php" : "^7.4|^8.0",
-		"php-http/discovery" : "^1.14",
-		"ext-json" : "*",
-		"psr/log" : "^1.1 || ^2.0 || ^3.0"
+		"php": "^7.4|^8.0",
+		"ext-json": "*",
+		"guzzlehttp/psr7": "^2.8",
+		"http-interop/http-factory-guzzle": "^1.2",
+		"php-http/curl-client": "^2.4",
+		"php-http/discovery": "^1.20",
+		"php-http/message": "^1.16",
+		"php-http/message-factory": "^1.1",
+		"psr/log": "^1.1 || ^2.0 || ^3.0",
+		"slim/slim": "^4.12",
+		"slim/psr7": "^1.6",
+		"slim/twig-view": "^3.3",
+		"twig/twig": "^3.10",
+		"vlucas/phpdotenv": "^5.6",
+		"symfony/var-dumper": "^6.0"
 	},
 	"suggest" : {
 		"ext-curl" : "*",
@@ -31,7 +42,8 @@
 	},
 	"autoload" : {
 		"psr-4" : {
-			"Manticoresearch\\" : "src/Manticoresearch/"
+			"Manticoresearch\\" : "src/Manticoresearch/",
+			"ManticoreDemo\\": "catalog-app/src/"
 		}
 	},
 	"autoload-dev" : {
@@ -42,7 +54,8 @@
 	"config" : {
 		"sort-packages" : true,
 		"allow-plugins" : {
-			"dealerdirect/phpcodesniffer-composer-installer" : false
+			"dealerdirect/phpcodesniffer-composer-installer": false,
+			"php-http/discovery": true
 		}
 	},
 	"authors" : [{
@@ -64,5 +77,7 @@
 		"check-cs" : "phpcs --standard=ruleset.xml src/ test/",
 		"fix-cs" : "phpcbf --standard=ruleset.xml src/ test/",
 		"phpstan" : "phpstan"
-	}
+	},
+	"minimum-stability": "stable",
+	"prefer-stable": true
 }
