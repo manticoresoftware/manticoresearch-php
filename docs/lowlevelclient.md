@@ -61,10 +61,11 @@ Responses are returned as arrays, reflecting the response object received from t
 For a complete reference of payload and response, see Manticore's [Search API](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON).
 
 `body` properties:
-- table name (mandatory)
+- table name (mandatory for regular searches)
 - query tree expression
 - `knn` object or array for vector and RRF hybrid searches
 - `hybrid` shorthand for tables with auto-embeddings
+- `chat` object for conversational search; this is used instead of the regular table/query fields
 - sort array
 - `script_fields` or shorthand `expressions`
 - `aggs` aggregation tree
@@ -98,6 +99,24 @@ $params = [
 $response = $client->search($params);
 ```
 
+Conversational search uses a top-level `chat` object. Its required properties are `query`, `table`, and `model_name`; `conversation_uuid` and `vector_field` are optional:
+
+```php
+$params = [
+    'body' => [
+        'chat' => [
+            'query' => 'What is vector search?',
+            'table' => 'docs',
+            'model_name' => 'assistant',
+            'conversation_uuid' => 'docs-chat-001',
+            'vector_field' => 'embedding',
+        ],
+    ],
+];
+
+$response = $client->search($params);
+```
+
 The response will be a JSON object containing:
 
 - `took` - query time
@@ -105,6 +124,14 @@ The response will be a JSON object containing:
 - `hits` - array with matches
 - `aggregations` - optional, aggregation and facet results
 - `profile` - optional, if profiling is set
+
+Chat responses instead contain:
+
+- `conversation_uuid` - the existing or generated conversation UUID
+- `user_query` - the original user message
+- `search_query` - the query generated for retrieval
+- `response` - the generated answer
+- `sources` - a JSON string containing retrieved source rows
 
 
 ### Insert

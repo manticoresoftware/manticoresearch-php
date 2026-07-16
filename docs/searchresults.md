@@ -124,9 +124,46 @@ print_r($year_facet);
 ```
 
 When `facet_filter_mode` is `auto` or `max`, buckets can also contain a `status` value: `selected`, `available`, or `unavailable`.
- 
- ## ResultHit object
- 
+
+## ChatResult object
+
+[Search:chat](searchclass.md#chat) returns a `ChatResult` object:
+
+```php
+$result = $search
+    ->chat('What is vector search?', 'docs', 'assistant')
+    ->get();
+
+echo $result->getAnswer();
+$conversationUuid = $result->getConversationUuid();
+```
+
+The response fields are available through:
+
+- `getConversationUuid()` - the existing or generated conversation UUID.
+- `getUserQuery()` - the original user message.
+- `getSearchQuery()` - the standalone query generated for retrieval.
+- `getResponse()` or `getAnswer()` - the generated answer.
+- `getSources()` - retrieved source rows decoded from the response's JSON string into an array.
+- `getRawSources()` - the original `sources` JSON string.
+- `getData()` - the complete decoded chat response.
+- `getResponseObject()` - the underlying `Response` object.
+
+Use the returned UUID in the fourth argument of the next `chat()` call to continue the conversation:
+
+```php
+$nextResult = $search
+    ->chat(
+        'Give me an example.',
+        'docs',
+        'assistant',
+        $result->getConversationUuid()
+    )
+    ->get();
+```
+
+## ResultHit object
+
 The `ResultHit` encapsulates the matched document provided in the search result set.
 
 The document id can be retrieved with `getId()`

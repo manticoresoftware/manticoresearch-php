@@ -187,6 +187,36 @@ class Search
 		return $this;
 	}
 
+	public function chat(
+		$query,
+		$table = null,
+		$modelName = null,
+		$conversationUuid = null,
+		$vectorField = null
+	): self {
+		if ($query === null) {
+			unset($this->params['chat']);
+			return $this;
+		}
+		if ($table === null || $modelName === null) {
+			throw new \RuntimeException('Chat search requires a table and model name');
+		}
+
+		$this->params['chat'] = [
+			'query' => $query,
+			'table' => $table,
+			'model_name' => $modelName,
+		];
+		if ($conversationUuid !== null) {
+			$this->params['chat']['conversation_uuid'] = $conversationUuid;
+		}
+		if ($vectorField !== null) {
+			$this->params['chat']['vector_field'] = $vectorField;
+		}
+
+		return $this;
+	}
+
 	public function join($joinQuery = null, $clearJoin = false): self {
 		if ($clearJoin) {
 			$this->join = [];
@@ -477,16 +507,28 @@ class Search
 	}
 
 	/**
-	 * @return ResultSet
+	 * @return ResultSet|ChatResult
 	 */
 	public function get() {
 		$this->body = $this->compile();
 		$resp = $this->client->search(['body' => $this->body], true);
-		return new ResultSet($resp);
+		return isset($this->body['chat']) ? new ChatResult($resp) : new ResultSet($resp);
 	}
 
 	private function compileQuery($body) {
 		$query = $this->query->toArray();
+		if (isset($body['chat'])) {
+			if (isset($body['hybrid'])) {
+				throw new \RuntimeException('Chat search cannot be combined with hybrid search');
+			}
+			if ($query !== null) {
+				$type = $this->isKnnQuery() ? 'KNN search' : 'a query';
+				throw new \RuntimeException("Chat search cannot be combined with {$type}");
+			}
+
+			unset($body['table'], $body['index']);
+			return $body;
+		}
 		if ($query === null) {
 			return $body;
 		}

@@ -27,7 +27,7 @@ All methods of the `Search` class can be chained.
 
 When all the search conditions and options are set, `get()` is called to process and query the search engine.
 
-The `get()` method returns the results as a [ResultSet](searchresults.md#resultset-object) object.
+The `get()` method normally returns a [ResultSet](searchresults.md#resultset-object). Chat searches return a [ChatResult](searchresults.md#chatresult-object).
 
 ### search()
 
@@ -177,6 +177,38 @@ $search->hybrid('machine learning', 'embedding');
 ```
 
 The vector field is optional when Manticore can detect a single auto-embedding field. The `hybrid` shorthand cannot be combined with `knn()`.
+
+### chat()
+
+Performs [conversational search](https://manual.manticoresearch.com/Searching/Hybrid_search#Conversational-search) through the `/search` endpoint. The query, table, and chat model name are required:
+
+```php
+$result = $search
+    ->chat('What is vector search?', 'docs', 'assistant')
+    ->get();
+
+$conversationUuid = $result->getConversationUuid();
+echo $result->getAnswer();
+```
+
+The fourth argument continues an existing conversation. The fifth argument selects a specific float-vector field:
+
+```php
+$result = $search
+    ->chat(
+        'How does it compare embeddings?',
+        'docs',
+        'assistant',
+        $conversationUuid,
+        'embedding'
+    )
+    ->get();
+```
+
+The table is part of the `chat` object, so `setTable()` is not required. If no conversation UUID is supplied, Manticore creates one. If no vector field is supplied, Manticore detects the first suitable float-vector field.
+
+Chat search cannot be combined with `search()`, `match()`, other query builders, `knn()`, or `hybrid()`.
+
 
 ### expression() and expressions()
 
