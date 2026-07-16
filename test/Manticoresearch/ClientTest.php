@@ -14,9 +14,9 @@ use Manticoresearch\Connection\Strategy\Random;
 use Manticoresearch\Exceptions\ConnectionException;
 use Manticoresearch\Request;
 use Manticoresearch\Response;
+use Manticoresearch\Response\Token;
 use Manticoresearch\Table;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
-use Manticoresearch\Response\Token;
 use PHPUnit\Framework\TestCase;
 
 class ClientTest extends TestCase
