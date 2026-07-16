@@ -82,6 +82,8 @@ class AuthIntegrationTest extends TestCase
 
 		$this->assertIsString($token);
 		$this->assertNotSame('', $token);
+		// /token may return JSON {"token":"..."} or a raw string; client must yield the bare token.
+		$this->assertStringStartsNotWith('{', $token);
 	}
 
 	public function testBearerTokenAuthenticationSucceeds() {

@@ -16,7 +16,7 @@ use Manticoresearch\Request;
 use Manticoresearch\Response;
 use Manticoresearch\Table;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
-use Manticoresearch\TokenResponse;
+use Manticoresearch\Response\Token;
 use PHPUnit\Framework\TestCase;
 
 class ClientTest extends TestCase
@@ -202,7 +202,7 @@ class ClientTest extends TestCase
 		$this->assertSame('POST', $client->getTokenRequest()->getMethod());
 		$this->assertSame('{}', $client->getTokenRequest()->getBody());
 		$this->assertSame(
-			TokenResponse::class,
+			Token::class,
 			$client->getTokenRequestParams()['responseClass']
 		);
 	}
@@ -210,7 +210,7 @@ class ClientTest extends TestCase
 	public function testTokenEndpointCanReturnResponseObject() {
 		$client = $this->createTokenClient();
 
-		$this->assertInstanceOf(TokenResponse::class, $client->token(true));
+		$this->assertInstanceOf(Token::class, $client->token(true));
 	}
 
 	private function createTokenClient() {
@@ -225,7 +225,7 @@ class ClientTest extends TestCase
 				unset($retryReason);
 				$this->tokenRequest = $request;
 				$this->tokenRequestParams = $params;
-				return new TokenResponse("raw-token\n", 200);
+				return new Token("raw-token\n", 200);
 			}
 
 			public function getTokenRequest() {

@@ -74,7 +74,7 @@ $client = new \Manticoresearch\Client([
 $token = $client->token();
 ```
 
-The endpoint receives an empty JSON object and returns the raw token string. Pass `true` to return a `TokenResponse` object:
+The endpoint receives an empty JSON object and returns the raw token string. Pass `true` to return a `Response\Token` object:
 
 ```php
 $response = $client->token(true);

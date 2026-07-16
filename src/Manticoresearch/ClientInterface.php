@@ -69,7 +69,7 @@ interface ClientInterface
 	/**
 	 * Endpoint: token
 	 * @param bool $obj
-	 * @return string|TokenResponse
+	 * @return string|\Manticoresearch\Response\Token
 	 */
 	public function token($obj = false);
 
