@@ -65,6 +65,8 @@ jobs:
           - 5308:9308
       manticoresearch-manticore-auth:
         image: manticoresearch/manticore:dev
+        # GHA auto-names are not the service key; pin a name for docker exec.
+        options: --name manticoresearch-manticore-auth
         env:
           EXTRA: 1
           searchd_auth: '1'
@@ -93,7 +95,6 @@ jobs:
       - name: Bootstrap auth Manticore
         run: |
           set -euo pipefail
-          CONTAINER="$(docker ps -q --filter "name=manticoresearch-manticore-auth" | head -n1)"
           # searchd_* env overrides live in manticore.conf.sh; static manticore.conf has auth disabled.
           # Run as manticore so auth.json is owned by the daemon user.
           bootstrap_cmd=$(cat <<EOF
@@ -105,7 +106,7 @@ jobs:
           printf '%s\\n%s\\n%s\\n' '${MS_AUTH_USERNAME}' '${MS_AUTH_PASSWORD}' '${MS_AUTH_PASSWORD}' | searchd --config "\$CONFIG" --auth-non-interactive
           EOF
           )
-          docker exec -u manticore "$CONTAINER" bash -lc "$bootstrap_cmd"
+          docker exec -u manticore manticoresearch-manticore-auth bash -lc "$bootstrap_cmd"
 
       - name: Test
         run: vendor/bin/phpunit -d memory_limit=4G ${{ matrix.deprecation }} --stop-on-failure --testsuite "Manticore PHP Client"
@@ -128,7 +129,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
+          # CurlHandle (used in Connection::$curl) exists only on PHP 8.0+
+          php-version: 8.0
+          extensions: curl
       - run: |
           composer install --prefer-dist
           composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle
