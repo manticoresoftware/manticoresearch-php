@@ -125,7 +125,7 @@ class PhpHttp extends Transport implements TransportInterface
 			'time' => $time,
 			]
 		);
-		$this->logger->debug('Response body:', $response->getResponse());
+		$this->logger->debug('Response body:', [$response->getResponse()]);
 
 		if ($response->hasError()) {
 			$this->logger->error(
