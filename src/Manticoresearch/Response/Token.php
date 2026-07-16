@@ -26,7 +26,8 @@ class Token extends Response
 			return $decoded;
 		}
 
-		if (is_array($decoded) && isset($decoded['token']) && is_string($decoded['token']) && $decoded['token'] !== '') {
+		if (is_array($decoded) && isset($decoded['token']) && is_string($decoded['token'])
+			&& $decoded['token'] !== '') {
 			return $decoded['token'];
 		}
 
