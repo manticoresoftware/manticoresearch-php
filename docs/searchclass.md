@@ -27,7 +27,7 @@ All methods of the `Search` class can be chained.
 
 When all the search conditions and options are set, `get()` is called to process and query the search engine.
 
-The `get()` method returns the results as a [ResultSet](searchresults.md#resultset-object) object.
+The `get()` method normally returns a [ResultSet](searchresults.md#resultset-object). Conversational searches return a [ChatResult](searchresults.md#chatresult-object).
 
 ### search()
 
@@ -94,30 +94,140 @@ It expects 2 parameters:
 
 ### knn()
 
-Performs a [knn search](https://manual.manticoresearch.com/Searching/KNN) query
+Performs a [KNN search](https://manual.manticoresearch.com/Searching/KNN).
 
 ```php
 $search->knn('some_float_vector_field', [0.567, 0.322], 100);
 ```
 
-or
+The target can be a vector, document ID, or text query:
 
 ```php
 $search->knn('some_float_vector_field', 5, 100);
-```
-
-or 
-
-```php
 $search->knn('some_float_vector_field', 'some_query', 100);
 ```
 
-It expects 3 parameters:
-- a name of the `float_vector` type field
-- a float vector or a document id or a text query to execute knn search by 
-- a number of most similar documents to return
+The optional fourth argument adds properties to the KNN object, such as a name used by weighted RRF fusion:
 
-Note that performing KNN search with text queries requires the float vector field be configured accordingly, as shown [here](https://manual.manticoresearch.com/KNN#Creating-a-table-with-auto-embeddings) 
+```php
+$search->knn(
+    'some_float_vector_field',
+    [0.567, 0.322],
+    100,
+    ['name' => 'dense']
+);
+```
+
+Multiple KNN searches can be passed as associative array:
+
+```php
+$search
+    ->search('machine learning')
+    ->knn([
+        [
+            'field' => 'title_vector',
+            'target' => [0.1, 0.2],
+            'k' => 100,
+            'options' => ['name' => 'title_dense'],
+        ],
+        [
+            'field' => 'description_vector',
+            'target' => [0.3, 0.4],
+            'k' => 100,
+            'options' => ['name' => 'description_dense'],
+        ],
+    ])
+    ->rrf();
+```
+
+Each definition requires `field`, `target`, and `k`; `options` is optional. Calling `knn()` with multiple KNN items without `rrf()` raises an exception.
+
+Text targets require an auto-embedding float-vector field, as described in [Creating a table with auto-embeddings](https://manual.manticoresearch.com/Searching/KNN#Creating-a-table-with-auto-embeddings).
+
+### rrf()
+
+Enables [Reciprocal Rank Fusion](https://manual.manticoresearch.com/Searching/Hybrid_search) for a full-text query combined with one or more KNN queries:
+
+```php
+$search
+    ->search('machine learning')
+    ->knn('embedding', [0.1, 0.2], 100)
+    ->rrf([
+        'rank_constant' => 10,
+        'window_size' => 200,
+    ]);
+```
+
+The options array can contain `rank_constant`, `window_size`, and `fusion_weights`. Named KNN entries are required when assigning KNN weights:
+
+```php
+$search
+    ->search('machine learning')
+    ->knn('embedding', [0.1, 0.2], 100, ['name' => 'dense'])
+    ->rrf(['fusion_weights' => ['query' => 0.7, 'dense' => 0.3]]);
+```
+
+### hybrid()
+
+Provides Manticore's simplified hybrid-search syntax for tables with auto-embeddings:
+
+```php
+$search->hybrid('machine learning');
+$search->hybrid('machine learning', 'embedding');
+```
+
+The vector field is optional when Manticore can detect a single auto-embedding field. The `hybrid` shorthand cannot be combined with `knn()`.
+
+### chat()
+
+Performs [conversational search](https://manual.manticoresearch.com/Searching/Hybrid_search#Conversational-search) through the `/search` endpoint. The query, table, and chat model name are required:
+
+```php
+$result = $search
+    ->chat('What is vector search?', 'docs', 'assistant')
+    ->get();
+
+$conversationUuid = $result->getConversationUuid();
+echo $result->getAnswer();
+```
+
+The fourth argument continues an existing conversation. The fifth argument selects a specific float-vector field:
+
+```php
+$result = $search
+    ->chat(
+        'How does it compare embeddings?',
+        'docs',
+        'assistant',
+        $conversationUuid,
+        'embedding'
+    )
+    ->get();
+```
+
+The table is part of the `chat` object, so `setTable()` is not required. If no conversation UUID is supplied, Manticore creates one. If no vector field is supplied, Manticore detects the first suitable float-vector field.
+
+Conversational search cannot be combined with `search()`, `match()`, other query builders, `knn()`, or `hybrid()`.
+
+
+### expression() and expressions()
+
+`expression()` adds a computed field to the request:
+
+```php
+$search->expression('discounted_price', 'price * 0.9');
+```
+
+`expressions()` sets the complete shorthand expression map:
+
+```php
+$search->expressions([
+    'discounted_price' => 'price * 0.9',
+    'title_hash' => 'crc32(title)',
+]);
+```
+
+Note that expression names must be lowercase. 
 
 ### filter(), orFilter() and notFilter()
 
@@ -267,6 +377,51 @@ By default, all document fields are returned. This method can set which fields s
     'excludes' => ['desc*']
   ]) - field `attr1` and fields like `attri*` are included, while any field like `desc*` is excluded. If an attribute is found in both lists, the excluding wins.
 
+
+### aggregation() and aggregations()
+
+`aggregation()` adds or replaces one named aggregation:
+
+```php
+$search->aggregation('average_price', 'avg', ['field' => 'price']);
+```
+
+It supports any aggregation type accepted by Manticore, including `date_histogram`, `range`, `date_range`, `percentiles`, `percentile_ranks`, `median_absolute_deviation`, `min`, `max`, `sum`, and `avg`.
+
+`aggregations()` replaces the complete raw `aggs` tree:
+
+```php
+$search->aggregations([
+    'price_ranges' => [
+        'range' => [
+            'field' => 'price',
+            'ranges' => [
+                ['to' => 100],
+                ['from' => 100, 'to' => 500],
+                ['from' => 500],
+            ],
+        ],
+    ],
+]);
+```
+
+Pass `null` to `aggregations()` to remove all aggregations. Results are available through [ResultSet:getAggregations()](searchresults.md#resultset-object). The existing `facet()` and `multiFacet()` methods remain convenience builders for `terms` and `composite` aggregations.
+
+### facetFilterMode()
+
+Controls how all facets inherit filters from the main query. Supported modes are available as constants:
+
+```php
+$search->facetFilterMode(Search::FACET_FILTER_MODE_STRICT);
+$search->facetFilterMode(Search::FACET_FILTER_MODE_AUTO);
+$search->facetFilterMode(Search::FACET_FILTER_MODE_MAX);
+```
+
+- `strict` applies every main-query filter.
+- `auto` excludes filters on the facet's own field and adds bucket statuses.
+- `max` uses the broad base-query bucket set and adds bucket statuses.
+
+See [Facet filter modes](https://manual.manticoresearch.com/Searching/Faceted_search#Facet-filter-modes) for behavior and performance considerations.
 
 ### facet()
 The `facet()` method allows you to add a facet (aggregation) to your search query.

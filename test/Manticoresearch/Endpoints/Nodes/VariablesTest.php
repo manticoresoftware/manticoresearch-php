@@ -28,6 +28,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
 				'cluster_user',
 				'collation_connection',
 				'distinct_precision_threshold',
+				'embeddings_threads',
 				'grouping_in_utc',
 				'interactive_timeout',
 				'knn_parallel_build',

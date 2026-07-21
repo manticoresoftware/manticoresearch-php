@@ -151,10 +151,18 @@ Constructor of the knn node:
 ```php
 $knn1 = new \Manticoresearch\Query\KnnQuery('some_float_vector_field', [0.1, 0.45, 0.3], 5);
 $knn2 = new \Manticoresearch\Query\KnnQuery('some_float_vector_field', 2, 5);
+$knn3 = new \Manticoresearch\Query\KnnQuery(
+    'some_float_vector_field',
+    [0.1, 0.45, 0.3],
+    5,
+    ['name' => 'dense']
+);
 ```
 It accepts:
 - a name of the `float_vector` type field
-- a float vector or a document id to execute knn search by 
+- a float vector, document ID, or text query to execute KNN search by
 - a number of most similar documents to return
+- an optional array of additional KNN properties, such as the `name` used by RRF `fusion_weights`
 
+Multiple KNN queries should normally be built through the [Search:knn()](searchclass.md#knn) method. 
 <!-- proofread -->

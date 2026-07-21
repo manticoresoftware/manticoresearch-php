@@ -26,7 +26,7 @@ class Connection
 	protected $alive = true;
 
 	/**
-	 * @var resource
+	 * @var resource|\CurlHandle|false|null
 	 */
 	protected $curl = null;
 
@@ -40,6 +40,7 @@ class Connection
  * $params['proxy']       = proxy host:port string
  * $params['username']  = username for http auth
  * $params['password']  = password for http auth
+ * $params['bearer_token'] = bearer token for http auth
  * $params['headers']   = array of custom headers
  * $params['curl']      = array of pairs of curl option=>value
  * $params['persistent'] = bool if connection is persistent
@@ -65,6 +66,7 @@ class Connection
 			'persistent' => true,
 		];
 		$this->config = array_merge($this->config, $params);
+		$this->validateAuthentication($this->config);
 		$this->alive = true;
 		if (!$this->config['persistent']) {
 			return;
@@ -199,10 +201,18 @@ class Connection
 	 * @return $this
 	 */
 	public function setConfig($config): self {
-		foreach ($config as $ckey => $cvalue) {
-			$this->config[$ckey] = $cvalue;
-		}
+		$newConfig = array_merge($this->config, $config);
+		$this->validateAuthentication($newConfig);
+		$this->config = $newConfig;
 		return $this;
+	}
+
+	private function validateAuthentication($config) {
+		$hasBearerToken = ($config['bearer_token'] ?? null) !== null;
+		$hasBasicCredentials = ($config['username'] ?? null) !== null || ($config['password'] ?? null) !== null;
+		if ($hasBearerToken && $hasBasicCredentials) {
+			throw new RuntimeException('Basic and bearer authentication cannot be configured together');
+		}
 	}
 
 	/**
@@ -215,6 +225,107 @@ class Connection
 			return $this->config;
 		}
 		return $this->config[$key] ?? null;
+	}
+
+	/**
+	 * Connection config safe for logs
+	 *
+	 * @return array
+	 */
+	public function getConfigForLogging(): array {
+		return self::redactConfig($this->config);
+	}
+
+	/**
+	 * @param array $config
+	 * @return array
+	 */
+	public static function redactConfig(array $config): array {
+		$redacted = $config;
+		if (($redacted['password'] ?? null) !== null) {
+			$redacted['password'] = '***';
+		}
+		if (($redacted['bearer_token'] ?? null) !== null) {
+			$redacted['bearer_token'] = '***';
+		}
+		if (!empty($redacted['headers']) && is_array($redacted['headers'])) {
+			$redacted['headers'] = self::redactAuthHeaders($redacted['headers']);
+		}
+		if (!empty($redacted['proxy']) && is_string($redacted['proxy'])) {
+			$redacted['proxy'] = self::redactProxy($redacted['proxy']);
+		}
+		if (!empty($redacted['curl']) && is_array($redacted['curl'])) {
+			$redacted['curl'] = self::redactCurlOptions($redacted['curl']);
+		}
+		return $redacted;
+	}
+
+	/**
+	 *
+	 * @param array $headers
+	 * @return array
+	 */
+	public static function redactAuthHeaders(array $headers): array {
+		$redacted = [];
+		foreach ($headers as $key => $value) {
+			if (is_int($key)) {
+				$line = (string)$value;
+				if (stripos($line, 'Authorization:') === 0) {
+					$parts = explode(':', $line, 2);
+					$authValue = isset($parts[1]) ? trim($parts[1]) : '';
+					$redacted[$key] = 'Authorization: ' . self::redactAuthValue($authValue);
+				} else {
+					$redacted[$key] = $value;
+				}
+				continue;
+			}
+
+			if (strcasecmp((string)$key, 'Authorization') === 0) {
+				$redacted[$key] = self::redactAuthValue((string)$value);
+			} else {
+				$redacted[$key] = $value;
+			}
+		}
+		return $redacted;
+	}
+
+	/**
+	 * @param string $value
+	 * @return string
+	 */
+	public static function redactAuthValue(string $value): string {
+		if (stripos($value, 'Bearer ') === 0) {
+			return 'Bearer ***';
+		}
+		if (stripos($value, 'Basic ') === 0) {
+			return 'Basic ***';
+		}
+		return '***';
+	}
+
+	/**
+	 * @param string $proxy
+	 * @return string
+	 */
+	private static function redactProxy(string $proxy): string {
+		if (preg_match('#^([^:@/]+):([^@/]+)@(.+)$#', $proxy, $matches)) {
+			return '***:***@' . $matches[3];
+		}
+		return $proxy;
+	}
+
+	/**
+	 * @param array $curl
+	 * @return array
+	 */
+	private static function redactCurlOptions(array $curl): array {
+		if (defined('CURLOPT_USERPWD') && array_key_exists(CURLOPT_USERPWD, $curl)) {
+			$curl[CURLOPT_USERPWD] = '***';
+		}
+		if (defined('CURLOPT_PROXYUSERPWD') && array_key_exists(CURLOPT_PROXYUSERPWD, $curl)) {
+			$curl[CURLOPT_PROXYUSERPWD] = '***';
+		}
+		return $curl;
 	}
 
 	/**

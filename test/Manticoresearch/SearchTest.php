@@ -127,6 +127,14 @@ class SearchTest extends TestCase
 							"hnsw_similarity='l2'",
 						],
 					],
+					'kind2' => [
+						'type' => 'float_vector',
+						'options' => [
+							"knn_type='hnsw'",
+							"knn_dims='2'",
+							"hnsw_similarity='l2'",
+						],
+					],
 				],
 			],
 		];
@@ -143,6 +151,7 @@ class SearchTest extends TestCase
 					'lat' => 51.2, 'lon' => 47.5,
 					'advise' => 'PG-13',
 					'kind' => [0.2,0.3],
+					'kind2' => [0.9,0.9],
 				],
 			]],
 			['insert' => ['table' => 'movies', 'id' => 3, 'doc' =>
@@ -154,6 +163,7 @@ class SearchTest extends TestCase
 					'lat' => 51.9, 'lon' => 48.5,
 					'advise' => 'PG-13',
 					'kind' => [0.2,0.7],
+					'kind2' => [0.7,0.7],
 				],
 			]],
 			['insert' => ['table' => 'movies', 'id' => 4, 'doc' =>
@@ -165,6 +175,7 @@ class SearchTest extends TestCase
 					'lat' => 51.1, 'lon' => 48.1,
 					'advise' => 'PG-13',
 					'kind' => [0.3,0.5],
+					'kind2' => [0.6,0.6],
 				],
 			]],
 			['insert' => ['table' => 'movies', 'id' => 5, 'doc' =>
@@ -176,6 +187,7 @@ class SearchTest extends TestCase
 					'lat' => 52.2, 'lon' => 48.9,
 					'advise' => 'R',
 					'kind' => [0.5,0.5],
+					'kind2' => [0.5,0.5],
 				],
 			]],
 			['insert' => ['table' => 'movies', 'id' => 6, 'doc' =>
@@ -189,6 +201,7 @@ class SearchTest extends TestCase
 					'lat' => 51.6, 'lon' => 48.0,
 					'advise' => 'R',
 					'kind' => [0.7,0.2],
+					'kind2' => [0.3,0.3],
 				],
 			]],
 			['insert' => ['table' => 'movies', 'id' => 10, 'doc' =>
@@ -201,6 +214,7 @@ class SearchTest extends TestCase
 					'lat' => 51.8, 'lon' => 48.2,
 					'advise' => 'R',
 					'kind' => [0.9,0.9],
+					'kind2' => [0.1,0.1],
 				],
 			]],
 		];
@@ -630,6 +644,25 @@ class SearchTest extends TestCase
 		$this->assertCount(2, $result);
 	}
 
+	public function testExpressions() {
+		$expressions = [
+			'year_x10' => '_year * 10',
+			'title_len' => 'crc32(title)',
+		];
+		$body = static::$search->expressions($expressions)->compile();
+		$this->assertSame($expressions, $body['expressions']);
+
+		$body = static::$search->expressions(null)->compile();
+		$this->assertArrayNotHasKey('expressions', $body);
+
+		$results = static::$search
+			->expressions(['year_x10' => '_year * 10'])
+			->filter('id', 'equals', 2)
+			->get();
+		$this->assertCount(1, $results);
+		$this->assertEquals(20140, $results->current()->get('year_x10'));
+	}
+
 	public function testMatchBoolQueryMust() {
 		$q = new BoolQuery();
 		$q->must(new MatchQuery(['query' => 'team of explorers', 'operator' => 'and'], '*'));
@@ -855,13 +888,14 @@ class SearchTest extends TestCase
 			0 => '_year',
 			1 => 'advise',
 			2 => 'kind',
-			3 => 'language',
-			4 => 'lat',
-			5 => 'lon',
-			6 => 'meta',
-			7 => 'plot',
-			8 => 'rating',
-			9 => 'title',
+			3 => 'kind2',
+			4 => 'language',
+			5 => 'lat',
+			6 => 'lon',
+			7 => 'meta',
+			8 => 'plot',
+			9 => 'rating',
+			10 => 'title',
 			], $keys
 		);
 	}
@@ -907,12 +941,86 @@ class SearchTest extends TestCase
 		$this->assertInstanceOf(Client::class, $client);
 	}
 
+	public function testFacetFilterModes() {
+		$modes = [
+			Search::FACET_FILTER_MODE_STRICT,
+			Search::FACET_FILTER_MODE_AUTO,
+			Search::FACET_FILTER_MODE_MAX,
+		];
+
+		foreach ($modes as $mode) {
+			$body = static::$search->facetFilterMode($mode)->compile();
+			$this->assertSame($mode, $body['facet_filter_mode']);
+		}
+
+		$body = static::$search->facetFilterMode(null)->compile();
+		$this->assertArrayNotHasKey('facet_filter_mode', $body);
+
+		foreach ($modes as $mode) {
+			static::$search->reset();
+			static::$search->setTable('movies');
+			$buckets = static::$search
+				->filter('_year', 'equals', 1992)
+				->facet('_year')
+				->facetFilterMode($mode)
+				->get()
+				->getAggregations()['_year']['buckets'];
+
+			if ($mode === Search::FACET_FILTER_MODE_STRICT) {
+				$this->assertCount(1, $buckets);
+				$this->assertSame(1992, $buckets[0]['key']);
+				$this->assertArrayNotHasKey('status', $buckets[0]);
+				continue;
+			}
+
+			$this->assertCount(6, $buckets);
+			$statuses = array_column($buckets, 'status', 'key');
+			$this->assertSame('selected', $statuses[1992]);
+			$this->assertContains('available', $statuses);
+		}
+	}
+
+	public function testAggregations() {
+		$aggregations = [
+			'prices' => [
+				'range' => [
+					'field' => 'rating',
+					'ranges' => [
+						['to' => 5],
+						['from' => 5],
+					],
+				],
+			],
+		];
+		$body = static::$search->aggregations($aggregations)->compile();
+		$this->assertSame($aggregations, $body['aggs']);
+
+		$body = static::$search
+			->aggregation('average_rating', 'avg', ['field' => 'rating'])
+			->compile();
+		$this->assertSame(['avg' => ['field' => 'rating']], $body['aggs']['average_rating']);
+		$this->assertSame($aggregations['prices'], $body['aggs']['prices']);
+
+		$body = static::$search->aggregations(null)->compile();
+		$this->assertArrayNotHasKey('aggs', $body);
+
+		$results = static::$search
+			->aggregation('average_rating', 'avg', ['field' => 'rating'])
+			->get();
+		$this->assertEqualsWithDelta(
+			8.15,
+			$results->getAggregations()['average_rating']['value'],
+			0.001
+		);
+	}
+
 	public function testFacets() {
 		$results = static::$search->filter('_year', 'range', [1960,1992])->facet('_year')->get();
 		$facets = $results->getFacets();
 		$this->assertCount(1, $facets);
 		$this->assertArrayHasKey('_year', $facets);
 		$this->assertCount(3, $facets['_year']['buckets']);
+		$this->assertSame($facets, $results->getAggregations());
 	}
 
 	public function multiFacets() {
@@ -924,6 +1032,154 @@ class SearchTest extends TestCase
 		$this->assertCount(1, $facets);
 		$this->assertArrayHasKey('_year', $facets);
 		$this->assertCount(3, $facets['_year']['buckets']);
+	}
+
+	public function testRrfHybridCompiles() {
+		$body = static::$search
+			->search('machine learning')
+			->knn('kind', [0.1,0.2], 10)
+			->rrf(['rank_constant' => 10, 'window_size' => 50])
+			->compile();
+
+		$this->assertSame(Search::FUSION_METHOD_RRF, $body['options']['fusion_method']);
+		$this->assertSame(10, $body['options']['rank_constant']);
+		$this->assertSame(50, $body['options']['window_size']);
+		$this->assertArrayHasKey('query', $body);
+		$this->assertArrayHasKey('knn', $body);
+		$this->assertArrayNotHasKey('filter', $body['knn']);
+
+		static::$search->reset();
+		static::$search->setTable('movies');
+		$results = static::$search
+			->search('Interstellar')
+			->knn('kind', [0.9,0.9], 1)
+			->limit(10)
+			->rrf()
+			->get();
+		$titles = $this->titlesFromResults($results);
+		$this->assertContains('Interstellar', $titles);
+		$this->assertContains('Alien 3', $titles);
+	}
+
+	public function testRrfHybridWithFusionWeightCompiles() {
+		$body = static::$search
+			->search('machine learning')
+			->knn('kind', [0.1,0.2], 10, ['name' => 'dense1'])
+			->rrf(['fusion_weights' => ['query' => 0.7, 'dense1' => 0.3]])
+			->compile();
+
+		$this->assertSame(10, $body['knn']['k']);
+		$this->assertSame('dense1', $body['knn']['name']);
+		$this->assertSame(
+			['query' => 0.7, 'dense1' => 0.3],
+			$body['options']['fusion_weights']
+		);
+
+		static::$search->reset();
+		static::$search->setTable('movies');
+		$results = static::$search
+			->search('Interstellar')
+			->knn('kind', [0.9,0.9], 1, ['name' => 'dense1'])
+			->limit(10)
+			->rrf(['fusion_weights' => ['query' => 0.9, 'dense1' => 0.1]])
+			->get();
+		$titles = $this->titlesFromResults($results);
+		$this->assertContains('Interstellar', $titles);
+		$this->assertContains('Alien 3', $titles);
+		$this->assertSame('Interstellar', $titles[0]);
+	}
+
+	public function testMultipleKnnSearches() {
+		$knnQueries = [
+			[
+				'field' => 'kind',
+				'target' => [0.9,0.9],
+				'k' => 1,
+				'options' => ['name' => 'dense1'],
+			],
+			[
+				'field' => 'kind2',
+				'target' => [0.9,0.9],
+				'k' => 1,
+				'options' => ['name' => 'dense2'],
+			],
+		];
+		$body = static::$search
+			->search('Interstellar')
+			->knn($knnQueries)
+			->rrf(['fusion_weights' => ['query' => 0.6, 'dense1' => 0.2, 'dense2' => 0.2]])
+			->compile();
+
+		$this->assertCount(2, $body['knn']);
+		$this->assertSame('kind', $body['knn'][0]['field']);
+		$this->assertSame('dense1', $body['knn'][0]['name']);
+		$this->assertSame('kind2', $body['knn'][1]['field']);
+		$this->assertSame('dense2', $body['knn'][1]['name']);
+		$this->assertArrayHasKey('query', $body);
+
+		$results = static::$search->limit(10)->get();
+		$titles = $this->titlesFromResults($results);
+		$this->assertContains('Interstellar', $titles);
+		$this->assertContains('Alien 3', $titles);
+	}
+
+	public function testMultipleKnnSearchesRequireRrf() {
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage('Multiple KNN searches require RRF fusion');
+		static::$search->knn(
+			[
+				['field' => 'kind', 'target' => [0.1,0.2], 'k' => 1],
+				['field' => 'kind2', 'target' => [0.3,0.4], 'k' => 1],
+			]
+		)->compile();
+	}
+
+	public function testMultipleKnnSearchesValidateDefinitions() {
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage("Missing 'target' in KNN query definition");
+		static::$search->knn(
+			[
+				['field' => 'kind', 'k' => 1],
+				['field' => 'kind2', 'target' => [0.3,0.4], 'k' => 1],
+			]
+		);
+	}
+
+	public function testKnnSearchRemainsPreHybridWithoutRrf() {
+		$body = static::$search
+			->search('machine learning')
+			->knn('kind', [0.1,0.2], 10)
+			->compile();
+
+		$this->assertArrayNotHasKey('query', $body);
+		$this->assertArrayHasKey('filter', $body['knn']);
+	}
+
+	public function testHybridShorthandCompiles() {
+		$body = static::$search->hybrid('machine learning', 'kind')->compile();
+		$this->assertSame(
+			['query' => 'machine learning', 'field' => 'kind'],
+			$body['hybrid']
+		);
+
+		$body = static::$search->hybrid(null)->compile();
+		$this->assertArrayNotHasKey('hybrid', $body);
+	}
+
+	public function testHybridCannotBeCombinedWithKnn() {
+		static::$search->hybrid('machine learning')->knn('kind', [0.1, 0.2], 10);
+
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage('Hybrid search cannot be combined with KNN search');
+		static::$search->compile();
+	}
+
+	public function testKnnCannotBeCombinedWithHybrid() {
+		static::$search->knn('kind', [0.1, 0.2], 10)->hybrid('machine learning');
+
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage('Hybrid search cannot be combined with KNN search');
+		static::$search->compile();
 	}
 
 	public function testKnnSearchByDocId() {

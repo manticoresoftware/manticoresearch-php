@@ -9,8 +9,10 @@ namespace Manticoresearch\Test;
 
 use Http\Discovery\Psr17FactoryDiscovery;
 use Manticoresearch\Connection;
+use Manticoresearch\Request;
 use Manticoresearch\Transport;
 use Manticoresearch\Transport\Http;
+use Manticoresearch\Transport\PhpHttp;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -60,5 +62,173 @@ class TransportTest extends TestCase
 		$this->assertEquals($uriPath, $message->getUri()->getPath());
 		$this->assertEquals($headers, $message->getHeaders());
 		$this->assertEquals($content, $message->getBody()->getContents());
+	}
+
+	public function testHttpTransportAuthenticationHeaders() {
+		$request = new Request(['body' => []]);
+		$basicConnection = new Connection(
+			[
+			'persistent' => false,
+			'username' => 'admin',
+			'password' => 'secret',
+			'headers' => ['Authorization: Custom'],
+			]
+		);
+		$bearerConnection = new Connection(
+			[
+			'persistent' => false,
+			'bearer_token' => 'raw-token',
+			]
+		);
+
+		$basicHeaders = $this->invokeProtected(
+			new Http($basicConnection),
+			'getRequestHeadersAsList',
+			[$request, $basicConnection]
+		);
+		$bearerHeaders = $this->invokeProtected(
+			new Http($bearerConnection),
+			'getRequestHeadersAsList',
+			[$request, $bearerConnection]
+		);
+
+		$this->assertSame(
+			[
+				'Content-Type: application/json',
+				'Authorization: Basic ' . base64_encode('admin:secret'),
+			],
+			$basicHeaders
+		);
+		$this->assertSame(
+			[
+				'Content-Type: application/json',
+				'Authorization: Bearer raw-token',
+			],
+			$bearerHeaders
+		);
+		$this->assertSame(
+			[
+				'Content-Type: application/json',
+				'Authorization: Basic ***',
+			],
+			Connection::redactAuthHeaders($basicHeaders)
+		);
+		$this->assertSame(
+			[
+				'Content-Type: application/json',
+				'Authorization: Bearer ***',
+			],
+			Connection::redactAuthHeaders($bearerHeaders)
+		);
+	}
+
+	public function testPhpHttpTransportAuthenticationHeaders() {
+		$request = new Request(['body' => []]);
+		$basicConnection = new Connection(
+			[
+			'persistent' => false,
+			'username' => 'admin',
+			'password' => 'secret',
+			'headers' => ['authorization' => 'Custom'],
+			]
+		);
+		$bearerConnection = new Connection(
+			[
+			'persistent' => false,
+			'bearer_token' => 'raw-token',
+			]
+		);
+
+		$basicHeaders = $this->invokeProtected(
+			new PhpHttp($basicConnection),
+			'getRequestHeadersAsMap',
+			[$request, $basicConnection]
+		);
+		$bearerHeaders = $this->invokeProtected(
+			new PhpHttp($bearerConnection),
+			'getRequestHeadersAsMap',
+			[$request, $bearerConnection]
+		);
+
+		$this->assertSame(
+			[
+				'Content-Type' => 'application/json',
+				'Authorization' => 'Basic ' . base64_encode('admin:secret'),
+			],
+			$basicHeaders
+		);
+		$this->assertSame(
+			[
+				'Content-Type' => 'application/json',
+				'Authorization' => 'Bearer raw-token',
+			],
+			$bearerHeaders
+		);
+		$this->assertSame(
+			[
+				'Content-Type' => 'application/json',
+				'Authorization' => 'Basic ***',
+			],
+			Connection::redactAuthHeaders($basicHeaders)
+		);
+		$this->assertSame(
+			[
+				'Content-Type' => 'application/json',
+				'Authorization' => 'Bearer ***',
+			],
+			Connection::redactAuthHeaders($bearerHeaders)
+		);
+	}
+
+	public function testIncompleteBasicCredentialsProduceNoAuthorizationHeader() {
+		$request = new Request(['body' => []]);
+		$connection = new Connection(
+			[
+			'persistent' => false,
+			'username' => 'admin',
+			]
+		);
+
+		$headers = $this->invokeProtected(
+			new Http($connection),
+			'getRequestHeadersAsList',
+			[$request, $connection]
+		);
+
+		$this->assertSame(['Content-Type: application/json'], $headers);
+		$this->assertNull(
+			$this->invokeProtected(new Http($connection), 'buildAuthorizationHeader', [$connection])
+		);
+	}
+
+	public function testTokenResponseBodyIsRedactedForLogging() {
+		$transport = new Http(new Connection(['persistent' => false]));
+		$request = new Request(['body' => []]);
+		$request->setPath('/token');
+		$tokenResponse = new \Manticoresearch\Response\Token('"issued-token"', 200);
+
+		$redacted = $this->invokeProtected(
+			$transport,
+			'getResponseBodyForLogging',
+			['issued-token', $request, $tokenResponse]
+		);
+		$this->assertSame('[redacted]', $redacted);
+
+		$searchRequest = new Request(['body' => []]);
+		$searchRequest->setPath('/search');
+		$searchResponse = new \Manticoresearch\Response('{"hits":[]}', 200);
+		$kept = $this->invokeProtected(
+			$transport,
+			'getResponseBodyForLogging',
+			[['hits' => []], $searchRequest, $searchResponse]
+		);
+		$this->assertSame(['hits' => []], $kept);
+	}
+
+	private function invokeProtected($object, string $method, array $args = []) {
+		$class = new \ReflectionClass($object);
+		$refMethod = $class->getMethod($method);
+		$refMethod->setAccessible(true);
+		return $refMethod->invokeArgs($object, $args);
 	}
 }

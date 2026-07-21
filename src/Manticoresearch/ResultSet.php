@@ -118,4 +118,8 @@ class ResultSet implements \Iterator, \Countable
 	public function getFacets() {
 		return $this->facets;
 	}
+
+	public function getAggregations() {
+		return $this->getFacets();
+	}
 }
