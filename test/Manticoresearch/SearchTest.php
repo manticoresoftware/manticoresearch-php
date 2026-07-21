@@ -1166,6 +1166,22 @@ class SearchTest extends TestCase
 		$this->assertArrayNotHasKey('hybrid', $body);
 	}
 
+	public function testHybridCannotBeCombinedWithKnn() {
+		static::$search->hybrid('machine learning')->knn('kind', [0.1, 0.2], 10);
+
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage('Hybrid search cannot be combined with KNN search');
+		static::$search->compile();
+	}
+
+	public function testKnnCannotBeCombinedWithHybrid() {
+		static::$search->knn('kind', [0.1, 0.2], 10)->hybrid('machine learning');
+
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage('Hybrid search cannot be combined with KNN search');
+		static::$search->compile();
+	}
+
 	public function testKnnSearchByDocId() {
 		$results = static::$search->knn('kind', 3, 5)->get();
 		$resultIds = [4,5,2,6,10];

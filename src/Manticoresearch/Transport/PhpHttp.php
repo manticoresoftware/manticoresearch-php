@@ -54,7 +54,7 @@ class PhpHttp extends Transport implements TransportInterface
 		$url = $this->setupURI($url, $request->getQuery());
 		$method = $request->getMethod();
 
-		$headers = $this->getRequestHeaders($request, $connection);
+		$headers = $this->getRequestHeadersAsMap($request, $connection);
 		$data = $request->getBody();
 		if (!empty($data)) {
 			if (is_array($data)) {
@@ -108,13 +108,13 @@ class PhpHttp extends Transport implements TransportInterface
 		$response->setTransportInfo(
 			[
 			'url' => $url,
-			'headers' => $headers,
+			'headers' => Connection::redactAuthHeaders($headers),
 			'body' => $request->getBody(),
 			]
 		);
 		$this->logger->debug(
 			'Request body:', [
-			'connection' => $connection->getConfig(),
+			'connection' => $connection->getConfigForLogging(),
 			'payload' => $request->getBody(),
 			]
 		);
@@ -125,7 +125,10 @@ class PhpHttp extends Transport implements TransportInterface
 			'time' => $time,
 			]
 		);
-		$this->logger->debug('Response body:', [$response->getResponse()]);
+		$this->logger->debug(
+			'Response body:',
+			[$this->getResponseBodyForLogging($response->getResponse(), $request, $response)]
+		);
 
 		if ($response->hasError()) {
 			$this->logger->error(
@@ -138,24 +141,5 @@ class PhpHttp extends Transport implements TransportInterface
 			throw new ResponseException($request, $response);
 		}
 		return $response;
-	}
-
-	private function getRequestHeaders(Request $request, Connection $connection) {
-		$headers = $connection->getHeaders();
-		$headers['Content-Type'] = $request->getContentType();
-		$authorization = $connection->getAuthorizationHeader();
-		if ($authorization === null) {
-			return $headers;
-		}
-
-		foreach (array_keys($headers) as $header) {
-			if (strcasecmp((string)$header, 'Authorization') !== 0) {
-				continue;
-			}
-
-			unset($headers[$header]);
-		}
-		$headers['Authorization'] = $authorization;
-		return $headers;
 	}
 }

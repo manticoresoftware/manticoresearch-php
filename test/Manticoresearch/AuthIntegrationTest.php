@@ -100,6 +100,48 @@ class AuthIntegrationTest extends TestCase
 		$this->assertArrayHasKey('uptime', $response);
 	}
 
+	public function testTransportInfoRedactsBasicAuthorization() {
+		$client = $this->createBasicClient();
+		$client->nodes()->status();
+
+		$headers = $client->getLastResponse()->getTransportInfo()['headers'];
+		$encoded = json_encode($headers);
+
+		$this->assertStringNotContainsString($this->password, $encoded);
+		$this->assertStringNotContainsString(base64_encode($this->username . ':' . $this->password), $encoded);
+		$this->assertStringContainsString('Basic ***', $encoded);
+	}
+
+	public function testDebugLogsRedactSecretsAndTokenResponse() {
+		$logger = new class extends \Psr\Log\AbstractLogger {
+			/** @var array<int, array{level:mixed,message:string,context:array}> */
+			public $records = [];
+
+			public function log($level, $message, array $context = []): void {
+				$this->records[] = [
+					'level' => $level,
+					'message' => (string)$message,
+					'context' => $context,
+				];
+			}
+		};
+		$client = new Client(
+			$this->baseConnectionParams() + [
+				'username' => $this->username,
+				'password' => $this->password,
+			],
+			$logger
+		);
+
+		$client->nodes()->status();
+		$token = $client->token();
+
+		$logged = json_encode($logger->records);
+		$this->assertStringNotContainsString($this->password, $logged);
+		$this->assertStringNotContainsString($token, $logged);
+		$this->assertStringContainsString('[redacted]', $logged);
+	}
+
 	public function testInvalidBasicCredentialsAreRejected() {
 		$client = new Client(
 			$this->baseConnectionParams() + [

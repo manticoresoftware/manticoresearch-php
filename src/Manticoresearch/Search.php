@@ -529,6 +529,9 @@ class Search
 			unset($body['table'], $body['index']);
 			return $body;
 		}
+		if (isset($body['hybrid']) && $this->isKnnQuery()) {
+			throw new \RuntimeException('Hybrid search cannot be combined with KNN search');
+		}
 		if ($query === null) {
 			return $body;
 		}

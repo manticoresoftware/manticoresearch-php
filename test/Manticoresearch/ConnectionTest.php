@@ -114,13 +114,13 @@ class ConnectionTest extends TestCase
 			]
 		);
 
-		$this->assertSame(
-			'Basic ' . base64_encode('admin:secret'),
-			$connection->getAuthorizationHeader()
-		);
+		$this->assertSame('secret', $connection->getConfig('password'));
+		$loggingConfig = $connection->getConfigForLogging();
+		$this->assertSame('***', $loggingConfig['password']);
+		$this->assertSame('admin', $loggingConfig['username']);
 	}
 
-	public function testBearerAuthorizationHeader() {
+	public function testBearerTokenRedactedInLoggingConfig() {
 		$connection = new Connection(
 			[
 			'persistent' => false,
@@ -128,7 +128,8 @@ class ConnectionTest extends TestCase
 			]
 		);
 
-		$this->assertSame('Bearer raw-token', $connection->getAuthorizationHeader());
+		$this->assertSame('raw-token', $connection->getConfig('bearer_token'));
+		$this->assertSame('***', $connection->getConfigForLogging()['bearer_token']);
 	}
 
 	public function testIncompleteBasicCredentials() {
@@ -139,7 +140,8 @@ class ConnectionTest extends TestCase
 			]
 		);
 
-		$this->assertNull($connection->getAuthorizationHeader());
+		$this->assertNull($connection->getConfig('password'));
+		$this->assertArrayNotHasKey('bearer_token', $connection->getConfigForLogging());
 	}
 
 	public function testBasicAndBearerAuthenticationCombineFail() {
@@ -176,10 +178,63 @@ class ConnectionTest extends TestCase
 		}
 
 		$this->assertNull($connection->getConfig('bearer_token'));
-		$this->assertSame(
-			'Basic ' . base64_encode('admin:secret'),
-			$connection->getAuthorizationHeader()
+		$this->assertSame('secret', $connection->getConfig('password'));
+		$this->assertSame('***', $connection->getConfigForLogging()['password']);
+	}
+
+	public function testRedactAuthorizationHeadersListAndMap() {
+		$list = Connection::redactAuthHeaders(
+			[
+				'Content-Type: application/json',
+				'Authorization: Basic ' . base64_encode('admin:secret'),
+			]
 		);
+		$this->assertSame(
+			[
+				'Content-Type: application/json',
+				'Authorization: Basic ***',
+			],
+			$list
+		);
+
+		$map = Connection::redactAuthHeaders(
+			[
+				'Content-Type' => 'application/json',
+				'Authorization' => 'Bearer raw-token',
+			]
+		);
+		$this->assertSame(
+			[
+				'Content-Type' => 'application/json',
+				'Authorization' => 'Bearer ***',
+			],
+			$map
+		);
+
+		$custom = Connection::redactAuthHeaders(
+			[
+				'authorization' => 'CustomSecret',
+			]
+		);
+		$this->assertSame(['authorization' => '***'], $custom);
+	}
+
+	public function testRedactSensitiveConfigProxyAndHeaders() {
+		$redacted = Connection::redactConfig(
+			[
+				'password' => 'secret',
+				'bearer_token' => 'tok',
+				'username' => 'admin',
+				'proxy' => 'user:pass@proxy.example:8080',
+				'headers' => ['Authorization: Bearer tok'],
+			]
+		);
+
+		$this->assertSame('***', $redacted['password']);
+		$this->assertSame('***', $redacted['bearer_token']);
+		$this->assertSame('admin', $redacted['username']);
+		$this->assertSame('***:***@proxy.example:8080', $redacted['proxy']);
+		$this->assertSame(['Authorization: Bearer ***'], $redacted['headers']);
 	}
 
 	public function testStaticCreateSelf() {
