@@ -137,6 +137,46 @@ Returns an array response with:
 - errors - stating whether an error occurred
 - items - response status for each document.
 
+### addDocumentsFast()
+
+High-throughput append-only insert using Manticore's experimental indexer-assisted bulk mode (`/bulk?indexer_rt_bulk=1`).
+
+Each request is streamed as NDJSON with HTTP chunked transfer encoding (documents are encoded on demand into a small buffer, not concatenated into one giant body), so batches can exceed the server `max_packet_size` / `max_allowed_packet` limit. Concurrent uploads are optional.
+
+Requirements and limits (server-side):
+
+- Local real-time table only (not distributed, sharded, replicated, percolate, or plain)
+- Insert only; replace/update/delete are rejected
+- Every document must have an explicit non-zero numeric `id`
+- Clustered tables are not supported by this helper
+- Requires the curl-based `Http`/`Https` transport
+
+Options:
+
+- `workers` - fixed concurrency; when omitted, the client probes `1,2,4,...` until throughput stops improving
+- `max_workers` - upper bound (also capped by `SHOW STATUS` `workers_total`)
+- `batch_size` / `batch_bytes` - per-request limits (defaults: 1000 docs / 8 MiB)
+- `gain_threshold` - minimum relative throughput gain to keep doubling workers (default `0.05`)
+- `timeout` - per-request timeout override
+- `fallback` - if true, fall back to regular `/bulk` when assisted mode is unavailable
+
+Example:
+
+```php
+$result = $table->addDocumentsFast([
+    ['id' => 1, 'title' => 'Crossbody Bag', 'gid' => 10],
+    ['id' => 2, 'title' => 'Sheet Set', 'gid' => 11],
+], [
+    // 'workers' => 4, // set explicitly to skip auto-tuning
+    'max_workers' => 8,
+    'batch_size' => 5000,
+]);
+
+// Persist $result['selected_workers'] for later runs if auto-tuning was used.
+```
+
+The result includes `docs`, `requests`, `selected_workers`, `throughput`, `tuning`, `warnings`, and `mode` (`indexer_rt_bulk` or `bulk_fallback`). Parallel requests are not one atomic transaction: each request commits as its own disk chunk.
+
 ### getDocumentById()
 
 Get an existing document by its ID.

@@ -125,6 +125,30 @@ class Table
 		return $this->client->bulk(['body' => $toinsert]);
 	}
 
+	/**
+	 * Fast append-only bulk insert using indexer-assisted mode when available.
+	 *
+	 * Requires explicit non-zero numeric ids. Clustered tables are not supported.
+	 *
+	 * @param iterable $documents
+	 * @param array $options See Client::indexerBulk()
+	 * @return array
+	 */
+	public function addDocumentsFast($documents, array $options = []): array {
+		if ($this->cluster !== null) {
+			throw new RuntimeException(
+				'addDocumentsFast does not support clustered/replicated tables'
+			);
+		}
+		if ($this->table === null || $this->table === '') {
+			throw new RuntimeException('Table name is required for addDocumentsFast');
+		}
+
+		$normalizer = new Bulk\OperationNormalizer($this->table, true);
+		$options['normalizer'] = $normalizer;
+		return $this->client->indexerBulk($documents, $options);
+	}
+
 	public function deleteDocument($id) {
 		static::checkDocumentId($id);
 		$params = [

@@ -402,4 +402,28 @@ $doc = [
 $response = $client->bulk($doc);
 ```
 
+### Indexer-assisted bulk (`indexerBulk`)
+
+Experimental high-speed append path that posts to `/bulk?indexer_rt_bulk=1`. Prefer the Table helper `addDocumentsFast()` for document lists; use `indexerBulk()` for raw insert operations.
+
+```php
+$result = $client->indexerBulk([
+    ['insert' => ['table' => 'products', 'id' => 101, 'doc' => ['title' => 'Bag', 'price' => 9.99]]],
+    ['insert' => ['table' => 'products', 'id' => 102, 'doc' => ['title' => 'Baz', 'price' => 4.5]]],
+], [
+    'workers' => 2,
+    'batch_size' => 1000,
+    'batch_bytes' => 8 * 1024 * 1024,
+]);
+```
+
+Notes:
+
+- Requires curl `Http`/`Https` transport. `PhpHttp` is not supported for this path.
+- Uploads use chunked transfer encoding and encode NDJSON on demand (no full-body concatenation), so a request can exceed server `max_packet_size` (shown as `max_allowed_packet` in `SHOW VARIABLES`). Request size is still bounded by `batch_size` / `batch_bytes` so concurrent workers each commit a discrete disk chunk.
+- PHP `post_max_size` / `upload_max_filesize` do not apply to outgoing client requests; `memory_limit`, proxies, and timeouts still do.
+- When `workers` is omitted, concurrency is probed as 1, 2, 4, … up to `workers_total` from `SHOW STATUS` (or `max_workers`).
+- Do not retry an ambiguous network failure after a request may have been accepted: each assisted request is atomic, but a lost response does not tell you whether the disk chunk was attached.
+- Server support depends on a Manticore build that includes indexer-assisted RT bulk; see upstream documentation for the released version that ships the feature.
+
 <!-- proofread -->

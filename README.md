@@ -117,6 +117,20 @@ $table->addDocuments([
     ]); 
 ```
 
+### Fast bulk insert (indexer-assisted):
+
+Requires a Manticore build that supports `/bulk?indexer_rt_bulk=1`. Documents must include explicit non-zero numeric ids.
+
+```php
+$result = $table->addDocumentsFast([
+        ['id'=>2,'title'=>'Interstellar','plot'=>'A team of explorers travel through a wormhole in space in an attempt to ensure humanity\'s survival.','_year'=>2014,'rating'=>8.5],
+        ['id'=>3,'title'=>'Inception','plot'=>'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.','_year'=>2010,'rating'=>8.8],
+    ], [
+        // omit workers to auto-tune 1,2,4,... up to server workers_total
+        'max_workers' => 8,
+    ]);
+```
+
 ### Perform a search:
 
 ```php

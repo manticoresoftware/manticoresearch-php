@@ -357,6 +357,28 @@ class Client implements ClientInterface
 	}
 
 	/**
+	 * Indexer-assisted bulk insert via /bulk?indexer_rt_bulk=1.
+	 *
+	 * Experimental server feature: streams insert-only NDJSON, optionally with
+	 * concurrent requests. When `workers` is omitted, concurrency is probed as
+	 * 1,2,4,... up to the server workers_total (or max_workers).
+	 *
+	 * @param iterable $operations Insert operations or documents
+	 * @param array $options workers, max_workers, batch_size, batch_bytes,
+	 *                       gain_threshold, timeout, fallback, probe_docs
+	 * @return array
+	 */
+	public function indexerBulk(iterable $operations, array $options = []): array {
+		$normalizer = null;
+		if (isset($options['normalizer']) && $options['normalizer'] instanceof Bulk\OperationNormalizer) {
+			$normalizer = $options['normalizer'];
+			unset($options['normalizer']);
+		}
+		$runner = new Bulk\IndexerBulk($this, $this->logger, $normalizer);
+		return $runner->run($operations, $options);
+	}
+
+	/**
 	 * Endpoint: suggest
 	 * @param array $params
 	 * @return array

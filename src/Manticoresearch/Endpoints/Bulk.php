@@ -49,4 +49,24 @@ class Bulk extends Request
 			$this->body = $body;
 		}
 	}
+
+	/**
+	 * Enable indexer-assisted RT bulk mode via /bulk?indexer_rt_bulk=1.
+	 *
+	 * @param bool $enabled
+	 * @return $this
+	 */
+	public function setIndexerRtBulk(bool $enabled = true) {
+		$query = $this->getQuery();
+		if (!is_array($query)) {
+			$query = [];
+		}
+		if ($enabled) {
+			$query['indexer_rt_bulk'] = 1;
+		} else {
+			unset($query['indexer_rt_bulk']);
+		}
+		$this->setQuery($query);
+		return $this;
+	}
 }

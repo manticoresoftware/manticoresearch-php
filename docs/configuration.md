@@ -48,6 +48,14 @@ Connection and transport options:
 * timeout - query timeout
 * connection_timeout - connection timeout
 * proxy - proxy definition as host:port
+
+`Client::indexerBulk()` / `Table::addDocumentsFast()` require the curl-based `Http` or `Https` transport. They open additional curl handles for concurrent chunked uploads and do not use the persistent connection handle for those requests.
+
+For large assisted bulk loads:
+
+* Prefer raising the connection `timeout` (default 300s) if indexer builds are slow
+* Server `max_packet_size` is bypassed by chunked `/bulk` uploads, but reverse proxies may still impose their own body limits
+* Cap client concurrency with `max_workers`; the client also reads `workers_total` from `SHOW STATUS`
 * username - username for HTTP Basic authentication
 * password - password for HTTP Basic authentication
 * bearer_token - bearer token used in the `Authorization` header
