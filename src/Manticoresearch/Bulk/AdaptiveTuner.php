@@ -28,13 +28,6 @@ class AdaptiveTuner
 	}
 
 	/**
-	 * @return int
-	 */
-	public function getMaxWorkers(): int {
-		return $this->maxWorkers;
-	}
-
-	/**
 	 * Yield candidate worker counts: 1, 2, 4, ... up to max.
 	 *
 	 * @return int[]
@@ -96,7 +89,7 @@ class AdaptiveTuner
 	 * Stops early when improvement falls below the gain threshold.
 	 *
 	 * @param callable $probe
-	 * @return array{selected_workers:int,stages:array,throughput_by_workers:array}
+	 * @return array{selected_workers:int,stages:array}
 	 */
 	public function tune(callable $probe): array {
 		$stages = [];
@@ -125,7 +118,6 @@ class AdaptiveTuner
 		return [
 			'selected_workers' => $this->selectBest($rates),
 			'stages' => $stages,
-			'throughput_by_workers' => $rates,
 		];
 	}
 }

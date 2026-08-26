@@ -10,7 +10,7 @@ namespace Manticoresearch\Bulk;
 use Manticoresearch\Client;
 
 /**
- * Resolves a concurrency ceiling from Manticore SHOW STATUS workers_* counters.
+ * Resolves a concurrency ceiling from Manticore SHOW STATUS workers_total.
  */
 class WorkerCap
 {
@@ -25,48 +25,31 @@ class WorkerCap
 	}
 
 	/**
-	 * @return array{workers_total:?int,workers_active:?int,work_queue_length:?int}
+	 * @return int|null
 	 */
-	public function status(): array {
-		$result = [
-			'workers_total' => null,
-			'workers_active' => null,
-			'work_queue_length' => null,
-		];
+	public function workersTotal() {
 		try {
-			$rows = $this->client->nodes()->status(['body' => ['pattern' => 'workers_%']]);
+			$rows = $this->client->nodes()->status(['body' => ['pattern' => 'workers_total']]);
 		} catch (\Throwable $e) {
-			return $result;
+			return null;
 		}
 		if (!is_array($rows)) {
-			return $result;
+			return null;
 		}
-
-		foreach (array_keys($result) as $key) {
-			if (!array_key_exists($key, $rows)) {
-				continue;
-			}
-			$result[$key] = self::toInt($rows[$key]);
+		if (array_key_exists('workers_total', $rows)) {
+			return self::toInt($rows['workers_total']);
 		}
-
-		// Also accept raw row lists if customMapping was not applied.
 		foreach ($rows as $row) {
 			if (!is_array($row)) {
 				continue;
 			}
 			$name = $row['Variable_name'] ?? $row['Counter'] ?? $row['Key'] ?? null;
-			if ($name === null || !array_key_exists((string)$name, $result)) {
+			if ((string)$name !== 'workers_total') {
 				continue;
 			}
-			$value = $row['Value'] ?? null;
-			if ($value === null) {
-				continue;
-			}
-
-			$result[(string)$name] = self::toInt($value);
+			return self::toInt($row['Value'] ?? null);
 		}
-
-		return $result;
+		return null;
 	}
 
 	/**
@@ -76,8 +59,7 @@ class WorkerCap
 	 * @return int
 	 */
 	public function resolveMax(?int $configuredMax = null): int {
-		$status = $this->status();
-		$serverMax = $status['workers_total'];
+		$serverMax = $this->workersTotal();
 		if ($serverMax === null || $serverMax < 1) {
 			$serverMax = 1;
 		}

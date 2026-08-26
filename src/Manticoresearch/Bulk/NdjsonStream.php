@@ -14,17 +14,17 @@ use Manticoresearch\Exceptions\RuntimeException;
  *
  * Encodes documents on demand into a small leftover buffer — never builds the
  * full request body as a single string.
+ *
+ * When $maxDocs is 0, the stream keeps pulling from the shared source until EOF
+ * (or a table change).
  */
 class NdjsonStream
 {
 	/** @var OperationIterator */
 	private $source;
 
-	/** @var int */
+	/** @var int 0 = unlimited */
 	private $maxDocs;
-
-	/** @var int */
-	private $maxBytes;
 
 	/** @var string */
 	private $buffer = '';
@@ -49,13 +49,11 @@ class NdjsonStream
 
 	/**
 	 * @param OperationIterator $source
-	 * @param int $maxDocs
-	 * @param int $maxBytes
+	 * @param int $maxDocs 0 = pull until source EOF
 	 */
-	public function __construct(OperationIterator $source, int $maxDocs, int $maxBytes) {
+	public function __construct(OperationIterator $source, int $maxDocs = 0) {
 		$this->source = $source;
-		$this->maxDocs = $maxDocs;
-		$this->maxBytes = $maxBytes;
+		$this->maxDocs = max(0, $maxDocs);
 		$this->prime();
 	}
 
@@ -64,11 +62,10 @@ class NdjsonStream
 	 *
 	 * @param OperationIterator $source
 	 * @param int $maxDocs
-	 * @param int $maxBytes
 	 * @return self|null
 	 */
-	public static function tryCreate(OperationIterator $source, int $maxDocs, int $maxBytes) {
-		$stream = new self($source, $maxDocs, $maxBytes);
+	public static function tryCreate(OperationIterator $source, int $maxDocs = 0) {
+		$stream = new self($source, $maxDocs);
 		if ($stream->isEmpty()) {
 			return null;
 		}
@@ -142,7 +139,7 @@ class NdjsonStream
 	 * @return bool true when a line was appended
 	 */
 	private function appendNextLine(): bool {
-		if ($this->docs >= $this->maxDocs) {
+		if ($this->maxDocs > 0 && $this->docs >= $this->maxDocs) {
 			return false;
 		}
 		$payload = $this->source->next();
@@ -162,21 +159,10 @@ class NdjsonStream
 		}
 
 		$line = $this->source->getNormalizer()->encodeLine($payload) . "\n";
-		$lineBytes = strlen($line);
-		if ($lineBytes > $this->maxBytes) {
-			throw new RuntimeException(
-				'Single document exceeds batch_bytes limit (' . $this->maxBytes . ')'
-			);
-		}
-		if ($this->docs > 0 && ($this->bytes + $lineBytes) > $this->maxBytes) {
-			$this->source->unget($payload);
-			return false;
-		}
-
 		$this->table = $payload['table'];
 		$this->ids[$payload['id']] = true;
 		$this->buffer .= $line;
-		$this->bytes += $lineBytes;
+		$this->bytes += strlen($line);
 		$this->docs++;
 		return true;
 	}

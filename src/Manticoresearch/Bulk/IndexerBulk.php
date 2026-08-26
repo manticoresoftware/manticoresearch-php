@@ -48,6 +48,11 @@ class IndexerBulk
 	 * @return array
 	 */
 	public function run(iterable $operations, array $options = []): array {
+		$phases = null;
+		if (array_key_exists('phases', $options)) {
+			$phases = &$options['phases'];
+			unset($options['phases']);
+		}
 		$opts = Options::fromArray($options);
 		if ($opts->fallback && !is_array($operations)) {
 			$operations = iterator_to_array($operations, false);
@@ -68,7 +73,6 @@ class IndexerBulk
 
 		$warnings = [];
 		$cap = new WorkerCap($this->client);
-		$status = $cap->status();
 		$maxWorkers = $cap->resolveMax($opts->maxWorkers);
 
 		$uploaded = [
@@ -80,7 +84,6 @@ class IndexerBulk
 		];
 		$tuning = [
 			'stages' => [],
-			'throughput_by_workers' => [],
 		];
 
 		if ($opts->workers !== null) {
@@ -92,7 +95,7 @@ class IndexerBulk
 		} else {
 			try {
 				$tuner = new AdaptiveTuner($opts->gainThreshold, $maxWorkers);
-				$tuned = $this->autoTune($source, $uploader, $tuner, $opts, $warnings);
+				$tuned = $this->autoTune($source, $uploader, $tuner, $opts, $warnings, $phases);
 			} catch (ResponseException $e) {
 				if ($opts->fallback && $this->isCapabilityError($e)) {
 					return $this->fallbackBulk($operations, $e->getMessage());
@@ -107,7 +110,6 @@ class IndexerBulk
 			$selectedWorkers = $tuned['selected_workers'];
 			$tuning = [
 				'stages' => $tuned['stages'],
-				'throughput_by_workers' => $tuned['throughput_by_workers'],
 			];
 			$uploaded['responses'] = $tuned['probe_responses'];
 			$uploaded['docs'] = $tuned['probe_docs'];
@@ -117,7 +119,7 @@ class IndexerBulk
 		}
 
 		try {
-			$rest = $this->uploadAll($source, $uploader, $selectedWorkers, $opts);
+			$rest = $this->uploadAll($source, $uploader, $selectedWorkers, $phases);
 		} catch (ResponseException $e) {
 			if ($opts->fallback && $uploaded['docs'] === 0 && $this->isCapabilityError($e)) {
 				return $this->fallbackBulk($operations, $e->getMessage());
@@ -144,7 +146,6 @@ class IndexerBulk
 			'throughput' => $throughput,
 			'selected_workers' => $selectedWorkers,
 			'max_workers' => $maxWorkers,
-			'workers_status' => $status,
 			'tuning' => $tuning,
 			'warnings' => $warnings,
 			'mode' => 'indexer_rt_bulk',
@@ -164,7 +165,8 @@ class IndexerBulk
 		CurlUploader $uploader,
 		AdaptiveTuner $tuner,
 		Options $opts,
-		array &$warnings
+		array &$warnings,
+		&$phases = null
 	): array {
 		$probeResponses = [];
 		$probeDocs = 0;
@@ -181,14 +183,15 @@ class IndexerBulk
 			&$probeBytes,
 			&$probeRequests,
 			&$probeElapsed,
-			&$warnings
+			&$warnings,
+			&$phases
 		) {
-			$streams = $this->takeStreams($source, $workers, $opts);
+			$streams = $this->takeStreams($source, $workers, $opts->probeDocs);
 			if ($streams === []) {
 				return 0.0;
 			}
 			try {
-				$result = $uploader->uploadStreams($streams, sizeof($streams));
+				$result = $uploader->uploadStreams($streams, sizeof($streams), $phases);
 			} catch (ResponseException $e) {
 				if ($this->isCapabilityError($e)) {
 					$warnings[] = $e->getMessage();
@@ -213,40 +216,31 @@ class IndexerBulk
 	}
 
 	/**
-	 * Drain the remaining source using waves of concurrent streams.
+	 * Open `workers` streams that share the source and pull until it is empty.
 	 *
 	 * @param OperationIterator $source
 	 * @param CurlUploader $uploader
 	 * @param int $workers
-	 * @param Options $opts
 	 * @return array
 	 */
 	private function uploadAll(
 		OperationIterator $source,
 		CurlUploader $uploader,
 		int $workers,
-		Options $opts
+		&$phases = null
 	): array {
-		$aggregate = [
-			'responses' => [],
-			'docs' => 0,
-			'bytes' => 0,
-			'requests' => 0,
-			'elapsed' => 0.0,
-		];
-		while (true) {
-			$streams = $this->takeStreams($source, $workers, $opts);
-			if ($streams === []) {
-				break;
-			}
-			$result = $uploader->uploadStreams($streams, sizeof($streams));
-			$aggregate['responses'] = array_merge($aggregate['responses'], $result['responses']);
-			$aggregate['docs'] += $result['docs'];
-			$aggregate['bytes'] += $result['bytes'];
-			$aggregate['requests'] += $result['requests'];
-			$aggregate['elapsed'] += $result['elapsed'];
+		// maxDocs = 0 → each worker drains until the shared iterator is empty.
+		$streams = $this->takeStreams($source, $workers, 0);
+		if ($streams === []) {
+			return [
+				'responses' => [],
+				'docs' => 0,
+				'bytes' => 0,
+				'requests' => 0,
+				'elapsed' => 0.0,
+			];
 		}
-		return $aggregate;
+		return $uploader->uploadStreams($streams, sizeof($streams), $phases);
 	}
 
 	/**
@@ -254,13 +248,17 @@ class IndexerBulk
 	 *
 	 * @param OperationIterator $source
 	 * @param int $count
-	 * @param Options $opts
+	 * @param int $maxDocs 0 = unlimited
 	 * @return NdjsonStream[]
 	 */
-	private function takeStreams(OperationIterator $source, int $count, Options $opts): array {
+	private function takeStreams(
+		OperationIterator $source,
+		int $count,
+		int $maxDocs
+	): array {
 		$streams = [];
 		for ($i = 0; $i < $count; $i++) {
-			$stream = NdjsonStream::tryCreate($source, $opts->batchSize, $opts->batchBytes);
+			$stream = NdjsonStream::tryCreate($source, $maxDocs);
 			if ($stream === null) {
 				break;
 			}
@@ -300,8 +298,7 @@ class IndexerBulk
 			'throughput' => null,
 			'selected_workers' => 1,
 			'max_workers' => 1,
-			'workers_status' => [],
-			'tuning' => ['stages' => [], 'throughput_by_workers' => []],
+			'tuning' => ['stages' => []],
 			'warnings' => ['Fell back to regular /bulk: ' . $reason],
 			'mode' => 'bulk_fallback',
 		];

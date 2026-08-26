@@ -20,12 +20,6 @@ class Options
 	/** @var int|null */
 	public $maxWorkers;
 
-	/** @var int */
-	public $batchSize;
-
-	/** @var int */
-	public $batchBytes;
-
 	/** @var float Minimum relative throughput gain to keep doubling workers */
 	public $gainThreshold;
 
@@ -35,7 +29,7 @@ class Options
 	/** @var bool Fall back to regular Client::bulk() when assisted mode is unavailable */
 	public $fallback;
 
-	/** @var int Documents per probe stage when auto-tuning */
+	/** @var int Documents per worker during each auto-tune probe */
 	public $probeDocs;
 
 	/**
@@ -46,17 +40,15 @@ class Options
 		$parsed = new self();
 		$parsed->workers = self::optionalPositiveInt($options, 'workers');
 		$parsed->maxWorkers = self::optionalPositiveInt($options, 'max_workers');
-		$parsed->batchSize = self::positiveInt($options, 'batch_size', 1000);
-		$parsed->batchBytes = self::positiveInt($options, 'batch_bytes', 8 * 1024 * 1024);
 		$parsed->gainThreshold = isset($options['gain_threshold'])
 			? (float)$options['gain_threshold']
-			: 0.05;
+			: 0.0;
 		if ($parsed->gainThreshold < 0) {
 			throw new RuntimeException('gain_threshold must be >= 0');
 		}
 		$parsed->timeout = self::optionalPositiveInt($options, 'timeout');
 		$parsed->fallback = !empty($options['fallback']);
-		$parsed->probeDocs = self::positiveInt($options, 'probe_docs', $parsed->batchSize);
+		$parsed->probeDocs = self::positiveInt($options, 'probe_docs', 1000);
 		return $parsed;
 	}
 

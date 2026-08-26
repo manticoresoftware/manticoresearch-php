@@ -49,11 +49,10 @@ class IndexerBulkIntegrationTest extends TestCase
 		}
 
 		try {
-			$result = $table->addDocumentsFast(
+			$result = $table->addDocumentsStreaming(
 				$docs,
 				[
-					'workers' => 1,
-					'batch_size' => 20,
+					'workers' => 2,
 				]
 			);
 		} catch (RuntimeException $e) {
@@ -87,7 +86,7 @@ class IndexerBulkIntegrationTest extends TestCase
 	public function testRejectsMissingIds() {
 		$table = static::$client->table('indexer_bulk_php_invalid');
 		$this->expectException(RuntimeException::class);
-		$table->addDocumentsFast(
+		$table->addDocumentsStreaming(
 			[
 				['title' => 'no id'],
 			],

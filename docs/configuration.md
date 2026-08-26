@@ -49,7 +49,7 @@ Connection and transport options:
 * connection_timeout - connection timeout
 * proxy - proxy definition as host:port
 
-`Client::indexerBulk()` / `Table::addDocumentsFast()` require the curl-based `Http` or `Https` transport. They open additional curl handles for concurrent chunked uploads and do not use the persistent connection handle for those requests.
+`Client::indexerBulk()` / `Table::addDocumentsStreaming()` require the curl-based `Http` or `Https` transport. They open additional curl handles for concurrent chunked uploads that share one document iterator and drain it until empty (no batching on the main path).
 
 For large assisted bulk loads:
 

@@ -134,14 +134,14 @@ class Table
 	 * @param array $options See Client::indexerBulk()
 	 * @return array
 	 */
-	public function addDocumentsFast($documents, array $options = []): array {
+	public function addDocumentsStreaming($documents, array $options = []): array {
 		if ($this->cluster !== null) {
 			throw new RuntimeException(
-				'addDocumentsFast does not support clustered/replicated tables'
+				'addDocumentsStreaming does not support clustered/replicated tables'
 			);
 		}
 		if ($this->table === null || $this->table === '') {
-			throw new RuntimeException('Table name is required for addDocumentsFast');
+			throw new RuntimeException('Table name is required for addDocumentsStreaming');
 		}
 
 		$normalizer = new Bulk\OperationNormalizer($this->table, true);

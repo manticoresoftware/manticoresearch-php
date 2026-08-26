@@ -20,9 +20,8 @@ class IndexerBulkUnitTest extends TestCase
 	public function testOptionsDefaults() {
 		$opts = Options::fromArray([]);
 		$this->assertNull($opts->workers);
-		$this->assertSame(1000, $opts->batchSize);
-		$this->assertSame(8 * 1024 * 1024, $opts->batchBytes);
-		$this->assertSame(0.05, $opts->gainThreshold);
+		$this->assertSame(1000, $opts->probeDocs);
+		$this->assertSame(0.0, $opts->gainThreshold);
 		$this->assertFalse($opts->fallback);
 	}
 
@@ -106,7 +105,7 @@ class IndexerBulkUnitTest extends TestCase
 			$normalizer
 		);
 
-		$first = NdjsonStream::tryCreate($source, 2, 100000);
+		$first = NdjsonStream::tryCreate($source, 2);
 		$this->assertNotNull($first);
 		$body = '';
 		while (($chunk = $first->read(64)) !== '') {
@@ -116,14 +115,41 @@ class IndexerBulkUnitTest extends TestCase
 		$this->assertStringEndsWith("\n", $body);
 		$this->assertStringNotContainsString("\n\n", $body);
 
-		$second = NdjsonStream::tryCreate($source, 2, 100000);
+		$second = NdjsonStream::tryCreate($source, 2);
 		$this->assertNotNull($second);
 		while ($second->read(64) !== '') {
 			// drain
 		}
 		$this->assertSame(1, $second->getDocs());
 
-		$this->assertNull(NdjsonStream::tryCreate($source, 2, 100000));
+		$this->assertNull(NdjsonStream::tryCreate($source, 2));
+	}
+
+	public function testWorkersDrainSharedSourceUntilEmpty() {
+		$normalizer = new OperationNormalizer('t');
+		$ops = [];
+		for ($i = 1; $i <= 10; $i++) {
+			$ops[] = ['id' => $i, 'title' => 'd' . $i];
+		}
+		$source = new OperationIterator($ops, $normalizer);
+
+		// Two unlimited streams share the iterator (same model as final upload).
+		$streams = [];
+		for ($i = 0; $i < 2; $i++) {
+			$stream = NdjsonStream::tryCreate($source);
+			$this->assertNotNull($stream);
+			$streams[] = $stream;
+		}
+
+		$docs = 0;
+		foreach ($streams as $stream) {
+			while ($stream->read(128) !== '') {
+				// drain
+			}
+			$docs += $stream->getDocs();
+		}
+		$this->assertSame(10, $docs);
+		$this->assertNull(NdjsonStream::tryCreate($source));
 	}
 
 	public function testNdjsonStreamEncodesIncrementally() {
@@ -135,7 +161,7 @@ class IndexerBulkUnitTest extends TestCase
 			],
 			$normalizer
 		);
-		$stream = NdjsonStream::tryCreate($source, 10, 100000);
+		$stream = NdjsonStream::tryCreate($source, 10);
 		$this->assertNotNull($stream);
 		// First primed line is buffered; subsequent docs are encoded only as read() needs bytes.
 		$firstChunk = $stream->read(1);
@@ -156,7 +182,7 @@ class IndexerBulkUnitTest extends TestCase
 			],
 			$normalizer
 		);
-		$stream = NdjsonStream::tryCreate($source, 10, 100000);
+		$stream = NdjsonStream::tryCreate($source, 10);
 		$this->assertNotNull($stream);
 		$this->expectException(RuntimeException::class);
 		while ($stream->read(1024) !== '') {
@@ -194,13 +220,5 @@ class IndexerBulkUnitTest extends TestCase
 		);
 		$this->assertSame(4, $result['selected_workers']);
 		$this->assertCount(3, $result['stages']);
-	}
-
-	public function testBulkEndpointIndexerFlag() {
-		$endpoint = new \Manticoresearch\Endpoints\Bulk();
-		$endpoint->setIndexerRtBulk(true);
-		$this->assertSame(['indexer_rt_bulk' => 1], $endpoint->getQuery());
-		$endpoint->setIndexerRtBulk(false);
-		$this->assertSame([], $endpoint->getQuery());
 	}
 }

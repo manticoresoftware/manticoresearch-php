@@ -60,11 +60,16 @@ class CurlUploader
 	/**
 	 * Upload NDJSON streams concurrently (up to $workers in flight).
 	 *
+	 * When $phases is provided, accumulates:
+	 * - http: curl_multi wait time excluding read-callback work
+	 * - decode: response parse time in finalizeHandle
+	 *
 	 * @param NdjsonStream[] $streams
 	 * @param int $workers
+	 * @param array<string,float>|null $phases
 	 * @return array{responses:array,docs:int,bytes:int,requests:int,elapsed:float}
 	 */
-	public function uploadStreams(array $streams, int $workers): array {
+	public function uploadStreams(array $streams, int $workers, &$phases = null): array {
 		$this->assertSupportedTransport();
 		$workers = max(1, $workers);
 		$queue = [];
@@ -97,23 +102,30 @@ class CurlUploader
 		$totalBytes = 0;
 		$requestCount = 0;
 		$nextId = 0;
+		$trackPhases = is_array($phases);
+		$readCallbackTime = 0.0;
 
 		try {
 			while ($queue !== [] || $active !== []) {
 				while (sizeof($active) < $workers && $queue !== []) {
 					$stream = array_shift($queue);
 					$handleId = $nextId++;
-					$state = $this->createHandle($stream, $handleId);
+					$state = $this->createHandle($stream, $handleId, $readCallbackTime);
 					$active[$handleId] = $state;
 					curl_multi_add_handle($multi, $state['ch']);
 				}
 
+				$readBefore = $readCallbackTime;
+				$httpStart = microtime(true);
 				do {
 					$status = curl_multi_exec($multi, $running);
 				} while ($status === CURLM_CALL_MULTI_PERFORM);
 
 				if ($status !== CURLM_OK) {
 					throw new RuntimeException('curl_multi_exec failed with status ' . $status);
+				}
+				if ($trackPhases) {
+					$phases['http'] += microtime(true) - $httpStart - ($readCallbackTime - $readBefore);
 				}
 
 				while ($info = curl_multi_info_read($multi)) {
@@ -125,7 +137,11 @@ class CurlUploader
 						continue;
 					}
 					$state = $active[$handleId];
+					$decodeStart = $trackPhases ? microtime(true) : 0.0;
 					$response = $this->finalizeHandle($state, $info['result']);
+					if ($trackPhases) {
+						$phases['decode'] += microtime(true) - $decodeStart;
+					}
 					$responses[] = $response;
 					$totalDocs += $response['docs'];
 					$totalBytes += $response['bytes'];
@@ -139,7 +155,11 @@ class CurlUploader
 					continue;
 				}
 
+				$httpStart = microtime(true);
 				curl_multi_select($multi, 1.0);
+				if ($trackPhases) {
+					$phases['http'] += microtime(true) - $httpStart;
+				}
 			}
 		} finally {
 			foreach ($active as $state) {
@@ -161,9 +181,10 @@ class CurlUploader
 	/**
 	 * @param NdjsonStream $stream
 	 * @param int $handleId
+	 * @param float $readCallbackTime
 	 * @return array
 	 */
-	private function createHandle(NdjsonStream $stream, int $handleId): array {
+	private function createHandle(NdjsonStream $stream, int $handleId, float &$readCallbackTime): array {
 		$connection = $this->connection;
 		$scheme = $connection->getConfig('scheme') ?: 'http';
 		$transport = $connection->getTransport();
@@ -206,8 +227,11 @@ class CurlUploader
 			$ch,
 			CURLOPT_READFUNCTION,
 			// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter,SlevomatCodingStandard.Functions.UnusedParameter
-			static function ($ch, $fd, $size) use ($stream) {
-				return $stream->read($size);
+			static function ($ch, $fd, $size) use ($stream, &$readCallbackTime) {
+				$t = microtime(true);
+				$data = $stream->read($size);
+				$readCallbackTime += microtime(true) - $t;
+				return $data;
 			}
 		);
 
