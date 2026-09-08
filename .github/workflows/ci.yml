@@ -98,7 +98,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
           extensions: curl
       - run: |
           composer install --prefer-dist
@@ -112,7 +112,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
       - run: |
           composer install --prefer-dist
           composer check-cs

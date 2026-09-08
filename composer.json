@@ -42,7 +42,7 @@
 	"config" : {
 		"sort-packages" : true,
 		"allow-plugins" : {
-			"dealerdirect/phpcodesniffer-composer-installer" : false
+			"dealerdirect/phpcodesniffer-composer-installer": false,
 		}
 	},
 	"authors" : [{

@@ -15,7 +15,7 @@ class SqlToArray extends Response
 		if (is_numeric($id)) {
 			$id = $id + 1;
 		} elseif (\PHP_VERSION_ID >= 80300) {
-			$id = str_increment((string) $id);
+			$id = str_increment((string)$id);
 		} else {
 			$id++;
 		}
