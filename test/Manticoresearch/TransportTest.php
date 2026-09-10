@@ -35,7 +35,6 @@ class TransportTest extends TestCase
 		$transport = new Transport();
 		$class = new \ReflectionClass(Transport::class);
 		$method = $class->getMethod('setupURI');
-		$method->setAccessible(true);
 
 		$url = $method->invokeArgs($transport, ['/search', ['a' => 1, 'b' => false]]);
 		$this->assertEquals('/search?a=1&b=false', $url);
@@ -228,7 +227,6 @@ class TransportTest extends TestCase
 	private function invokeProtected($object, string $method, array $args = []) {
 		$class = new \ReflectionClass($object);
 		$refMethod = $class->getMethod($method);
-		$refMethod->setAccessible(true);
 		return $refMethod->invokeArgs($object, $args);
 	}
 }
