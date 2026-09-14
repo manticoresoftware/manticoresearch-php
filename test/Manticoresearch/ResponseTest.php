@@ -7,6 +7,7 @@
 
 namespace Manticoresearch\Test;
 
+use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Response;
 use PHPUnit\Framework\TestCase;
@@ -38,6 +39,34 @@ class ResponseTest extends TestCase
 		$response = new Response($payload);
 
 		$this->expectException(RuntimeException::class);
+		$response->getResponse();
+	}
+
+	public function test5xxInvalidJsonResponseException() {
+		$payload = '{invalid: json]';
+		$response = new Response($payload, 503);
+
+		$this->expectException(ResponseException::class);
+		$this->expectExceptionMessage('Syntax error');
+		$response->getResponse();
+	}
+
+	public function testBigintConversion() {
+		$payload = '{"id":18446744073709551615}';
+		$response = new Response($payload);
+		$response->enableBigintConversion();
+
+		$this->assertSame(['id' => '18446744073709551615'], $response->getResponse());
+		$this->assertSame(['id' => '18446744073709551615'], $response->getResponse());
+		$this->assertIsFloat((new Response($payload))->getResponse()['id']);
+	}
+
+	public function test504InvalidJsonWithBigintConversion() {
+		$response = new Response('{invalid: json]', 504);
+		$response->enableBigintConversion();
+
+		$this->expectException(ResponseException::class);
+		$this->expectExceptionMessage('Syntax error');
 		$response->getResponse();
 	}
 }

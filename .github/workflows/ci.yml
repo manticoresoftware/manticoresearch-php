@@ -59,7 +59,7 @@ jobs:
 
       - run: composer install --prefer-dist
       
-      - run: composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message php-http/message-factory http-interop/http-factory-guzzle
+      - run: composer require php-http/discovery php-http/curl-client 'guzzlehttp/psr7:^2.0' php-http/message php-http/message-factory http-interop/http-factory-guzzle
 
       - name: Bootstrap auth Manticore
         run: |
@@ -102,7 +102,7 @@ jobs:
           extensions: curl
       - run: |
           composer install --prefer-dist
-          composer require php-http/discovery php-http/curl-client guzzlehttp/psr7 php-http/message http-interop/http-factory-guzzle
+          composer require php-http/discovery php-http/curl-client 'guzzlehttp/psr7:^2.0' php-http/message http-interop/http-factory-guzzle
           composer phpstan
 
   codestyle:

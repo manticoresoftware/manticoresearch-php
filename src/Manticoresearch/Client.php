@@ -16,6 +16,7 @@ use Manticoresearch\Connection\Strategy\StaticRoundRobin;
 use Manticoresearch\Endpoints\Pq;
 use Manticoresearch\Exceptions\ConnectionException;
 use Manticoresearch\Exceptions\NoMoreNodesException;
+use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Response\SqlToArray;
 use Manticoresearch\Response\Token;
@@ -441,16 +442,27 @@ class Client implements ClientInterface
 
 			$this->initConnections();
 			throw $e;
-		} catch (ConnectionException $e) {
+		} catch (ConnectionException | ResponseException $e) {
 			if (!$this->connectionPool->retries) {
 				throw new NoMoreNodesException($e);
+			}
+
+			if ($e instanceof ResponseException) {
+				// We apply retrying to 502-600 responses only
+				if (!$e->getResponse()->is5xxRetriedStatus()) {
+					throw $e;
+				}
+				$e->setRequest($request);
+				$failContext = 'bad response';
+			} else {
+				$failContext = 'attempt';
 			}
 			$exMsg = $e->getMessage();
 			// We rely on the common error message format from Manticore here
 			$exReasonPos = strrpos($exMsg, ':');
 			$exceptionReason = substr($exMsg, ($exReasonPos === false) ? 0 : $exReasonPos + 1);
 			$this->logger->warning(
-				'Manticore Search Request failed on attempt ' . $this->connectionPool->retriesAttempts . ':',
+				"Manticore Search Request failed on $failContext " . $this->connectionPool->retriesAttempts . ':',
 				[
 					'exception' => $exMsg,
 					'request' => $e->getRequest()->toArray(),
