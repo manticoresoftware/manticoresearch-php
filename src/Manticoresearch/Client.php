@@ -19,6 +19,7 @@ use Manticoresearch\Exceptions\NoMoreNodesException;
 use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Exceptions\RuntimeException;
 use Manticoresearch\Response\SqlToArray;
+use Manticoresearch\Response\Token;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -189,6 +190,24 @@ class Client implements ClientInterface
 	public function search(array $params = [], $obj = false) {
 		$endpoint = new Endpoints\Search($params);
 		$response = $this->request($endpoint);
+		if ($obj === true) {
+			return $response;
+		}
+
+		return $response->getResponse();
+	}
+
+	/**
+	 * Endpoint: token
+	 * @param bool $obj
+	 * @return string|Token
+	 */
+	public function token($obj = false) {
+		$endpoint = new Endpoints\Token(['body' => '{}']);
+		$response = $this->request($endpoint, ['responseClass' => Token::class]);
+		if (!$response instanceof Token) {
+			throw new \LogicException('Token endpoint returned an unexpected response type');
+		}
 		if ($obj === true) {
 			return $response;
 		}

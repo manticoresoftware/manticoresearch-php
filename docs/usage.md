@@ -55,7 +55,7 @@ Responses are returned as arrays reflecting the response object received from th
 ### Search
 For a complete reference of payload and response, see Manticore's [Search API](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON).
 
-`body` requires the presence of the `table` and `query` parameters.
+Regular searches use the `table` and `query` parameters. Conversational searches instead use a top-level `chat` object; see the [low-level client search documentation](lowlevelclient.md#search).
 
 A simple search example:
 ```

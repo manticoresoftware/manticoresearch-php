@@ -86,9 +86,9 @@ class Response
 			return $this->response;
 		}
 
-		//$this->response = $this->bigIntToString
-		//	? json_decode($this->string, true, 512, JSON_BIGINT_AS_STRING)
-		$this->response = json_decode($this->string, true);
+		$this->response = $this->bigIntToString
+			? json_decode($this->string, true, 512, JSON_BIGINT_AS_STRING)
+			: json_decode($this->string, true);
 
 		if (json_last_error() !== JSON_ERROR_NONE) {
 			// If server returns 5xx error, we suppose it to be temporary and attempt retries

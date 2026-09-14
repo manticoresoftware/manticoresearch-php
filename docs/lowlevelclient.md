@@ -14,6 +14,8 @@ Table of Contents
 
 * [General notes on requests](#requests) 
 
+* [Create or rotate a bearer token](#token)
+
 * [Search](#search)
 
 * [Insert documents](#insert)
@@ -55,16 +57,53 @@ There is no check regarding the validity of the body payload's structure before 
 
 ### Responses 
 
-Responses are returned as arrays, reflecting the response object received from the API endpoint.
+Responses are returned as arrays, reflecting the response object received from the API endpoint. The `token()` method is an exception and returns the raw token string.
+
+### Token
+
+`token()` creates or rotates the bearer token for the authenticated HTTP user through `POST /token`. Configure the client with Basic credentials:
+
+```php
+$client = new \Manticoresearch\Client([
+    'host' => '127.0.0.1',
+    'port' => 9308,
+    'username' => 'admin',
+    'password' => 'StrongPass#2026',
+]);
+
+$token = $client->token();
+```
+
+The endpoint receives an empty JSON object and returns the raw token string. Pass `true` to return a `Response\Token` object:
+
+```php
+$response = $client->token(true);
+$token = $response->getResponse();
+```
+
+Use the token in another client's `bearer_token` connection option:
+
+```php
+$client = new \Manticoresearch\Client([
+    'host' => '127.0.0.1',
+    'port' => 9308,
+    'bearer_token' => $token,
+]);
+```
 
 ### Search
 For a complete reference of payload and response, see Manticore's [Search API](https://manual.manticoresearch.com/Searching/Full_text_matching/Basic_usage#HTTP-JSON).
 
 `body` properties:
-- table name (mandatory)
-- query tree expression (mandatory)
+- table name (mandatory for regular searches)
+- query tree expression
+- `knn` object or array for vector and RRF hybrid searches
+- `hybrid` shorthand for tables with auto-embeddings
+- `chat` object for conversational search; this is used instead of the regular table/query fields
 - sort array
-- script fields with expressions
+- `script_fields` or shorthand `expressions`
+- `aggs` aggregation tree
+- `facet_filter_mode` for faceted filter inheritance
 - highlight parameters
 - limit of result set
 - offset of result set
@@ -94,12 +133,39 @@ $params = [
 $response = $client->search($params);
 ```
 
+Conversational search uses a top-level `chat` object. Its required properties are `query`, `table`, and `model_name`; `conversation_uuid` and `vector_field` are optional:
+
+```php
+$params = [
+    'body' => [
+        'chat' => [
+            'query' => 'What is vector search?',
+            'table' => 'docs',
+            'model_name' => 'assistant',
+            'conversation_uuid' => 'docs-chat-001',
+            'vector_field' => 'embedding',
+        ],
+    ],
+];
+
+$response = $client->search($params);
+```
+
 The response will be a JSON object containing:
 
 - `took` - query time
 - `timed_out` - boolean, true if the query timed out
 - `hits` - array with matches
+- `aggregations` - optional, aggregation and facet results
 - `profile` - optional, if profiling is set
+
+Chat responses instead contain:
+
+- `conversation_uuid` - the existing or generated conversation UUID
+- `user_query` - the original user message
+- `search_query` - the query generated for retrieval
+- `response` - the generated answer
+- `sources` - a JSON string containing retrieved source rows
 
 
 ### Insert

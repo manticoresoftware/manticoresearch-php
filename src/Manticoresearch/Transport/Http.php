@@ -55,8 +55,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 		curl_setopt($conn, CURLOPT_RETURNTRANSFER, true);
 		$data = $request->getBody();
 		$method = $request->getMethod();
-		$headers = $connection->getHeaders();
-		$headers[] = sprintf('Content-Type: %s', $request->getContentType());
+		$headers = $this->getRequestHeadersAsList($request, $connection);
 		if (!empty($data)) {
 			if (is_array($data)) {
 				$content = json_encode(
@@ -76,13 +75,6 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 			curl_setopt($conn, CURLOPT_CONNECTTIMEOUT, $connection->getConnectTimeout());
 		}
 
-		if ($connection->getConfig('username') !== null && $connection->getConfig('password') !== null) {
-			curl_setopt(
-				$conn,
-				CURLOPT_USERPWD,
-				$connection->getConfig('username').':'.$connection->getConfig('password')
-			);
-		}
 		if ($connection->getConfig('proxy') !== null) {
 			curl_setopt($conn, CURLOPT_PROXY, $connection->getConfig('proxy'));
 		}
@@ -113,7 +105,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 		$response->setTransportInfo(
 			[
 				'url' => $url,
-				'headers' => $headers,
+				'headers' => Connection::redactAuthHeaders($headers),
 				'body' => $request->getBody(),
 			]
 		);
@@ -126,7 +118,7 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 
 		$this->logger->debug(
 			'Request body:', [
-			'connection' => $connection->getConfig(),
+			'connection' => $connection->getConfigForLogging(),
 			'payload' => $request->getBody(),
 			]
 		);
@@ -137,7 +129,10 @@ class Http extends \Manticoresearch\Transport implements TransportInterface
 			'time' => $time,
 			]
 		);
-		$this->logger->debug('Response body:', [json_decode($responseString, true)]);
+		$this->logger->debug(
+			'Response body:',
+			[$this->getResponseBodyForLogging(json_decode($responseString, true), $request, $response)]
+		);
 		//soft error
 		if ($response->hasError()) {
 			$this->logger->error(

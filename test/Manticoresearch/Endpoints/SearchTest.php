@@ -18,8 +18,8 @@ class SearchTest extends \PHPUnit\Framework\TestCase
 			'transport' => empty($_SERVER['TRANSPORT']) ? 'Http' : $_SERVER['TRANSPORT'],
 		];
 		$client = new Client($params);
-		$result = $client->search(['body' => '']);
-		$this->assertEquals([['total' => 0, 'error' => '', 'warning' => '']], $result);
+		$this->expectException(\Manticoresearch\Exceptions\ResponseException::class);
+		$client->search(['body' => '']);
 	}
 
 	public function testNoArrayParams() {

@@ -43,17 +43,68 @@ Implemented transports:
 * [Https](https://manticoresoftware.github.io/manticoresearch-php/class-Manticoresearch.Transport.Https.html) - uses the CURL extension for HTTPS hosts
 * [PhpHttp](https://manticoresoftware.github.io/manticoresearch-php/class-Manticoresearch.Transport.PhpHttp.html) - adapter for HTTPlug 1.0. A client and a message factory must be present in the environment.
 
-Http/Https adapter options:
+Connection and transport options:
 
 * timeout - query timeout
 * connection_timeout - connection timeout
 * proxy - proxy definition as host:port
-* username - username for HTTP Auth
-* password - password for HTTP Auth
+* username - username for HTTP Basic authentication
+* password - password for HTTP Basic authentication
+* bearer_token - bearer token used in the `Authorization` header
 * headers - array of custom headers
 * curl - array of CURL settings as option=>value
 * persistent - define whether the connection is persistent or not
 * bigint_to_string - define whether big integers in response are converted to strings or not
+
+#### Authentication
+
+All HTTP transports support Basic and bearer-token authentication.
+
+For HTTP Basic authentication, provide both `username` and `password`:
+
+```php
+$client = new \Manticoresearch\Client([
+    'host' => '127.0.0.1',
+    'port' => 9308,
+    'username' => 'admin',
+    'password' => 'StrongPass#2026',
+]);
+```
+
+For bearer authentication, provide `bearer_token`:
+
+```php
+$client = new \Manticoresearch\Client([
+    'host' => '127.0.0.1',
+    'port' => 9308,
+    'bearer_token' => '0123456789abcdef...',
+]);
+```
+
+Basic credentials and `bearer_token` are mutually exclusive on the same connection. Configuring both raises a `RuntimeException`. When authentication is configured, its generated `Authorization` header replaces a custom header with the same name.
+
+To create or rotate a bearer token for the authenticated user, first connect with Basic authentication and call `token()`:
+
+```php
+$basicClient = new \Manticoresearch\Client([
+    'host' => '127.0.0.1',
+    'port' => 9308,
+    'username' => 'admin',
+    'password' => 'StrongPass#2026',
+]);
+
+$token = $basicClient->token();
+
+$client = new \Manticoresearch\Client([
+    'host' => '127.0.0.1',
+    'port' => 9308,
+    'bearer_token' => $token,
+]);
+```
+
+`token()` sends `POST /token` with an empty JSON object and returns the raw token string. Manticore returns the raw token only once, so store it securely.
+
+See Manticore's [authentication and authorization documentation](https://manual.manticoresearch.com/Security/Authentication_and_authorization) for server setup, users, and permissions.
 
 A simple example of multiple hosts:
 ```

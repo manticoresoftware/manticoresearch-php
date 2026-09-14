@@ -12,6 +12,9 @@ use Manticoresearch\Cluster;
 use Manticoresearch\Connection;
 use Manticoresearch\Connection\Strategy\Random;
 use Manticoresearch\Exceptions\ConnectionException;
+use Manticoresearch\Request;
+use Manticoresearch\Response;
+use Manticoresearch\Response\Token;
 use Manticoresearch\Table;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
 use PHPUnit\Framework\TestCase;
@@ -189,5 +192,49 @@ class ClientTest extends TestCase
 
 		$lastResponse = $client->getLastResponse()->getResponse();
 		$this->assertEquals([], $lastResponse);
+	}
+
+	public function testTokenEndpointReturnsRawToken() {
+		$client = $this->createTokenClient();
+
+		$this->assertSame('raw-token', $client->token());
+		$this->assertSame('/token', $client->getTokenRequest()->getPath());
+		$this->assertSame('POST', $client->getTokenRequest()->getMethod());
+		$this->assertSame('{}', $client->getTokenRequest()->getBody());
+		$this->assertSame(
+			Token::class,
+			$client->getTokenRequestParams()['responseClass']
+		);
+	}
+
+	public function testTokenEndpointCanReturnResponseObject() {
+		$client = $this->createTokenClient();
+
+		$this->assertInstanceOf(Token::class, $client->token(true));
+	}
+
+	private function createTokenClient() {
+		return new class extends Client {
+			private $tokenRequest;
+			private $tokenRequestParams;
+
+			public function __construct() {
+			}
+
+			public function request(Request $request, array $params = [], string $retryReason = ''): Response {
+				unset($retryReason);
+				$this->tokenRequest = $request;
+				$this->tokenRequestParams = $params;
+				return new Token("raw-token\n", 200);
+			}
+
+			public function getTokenRequest() {
+				return $this->tokenRequest;
+			}
+
+			public function getTokenRequestParams() {
+				return $this->tokenRequestParams;
+			}
+		};
 	}
 }

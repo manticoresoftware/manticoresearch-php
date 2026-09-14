@@ -105,6 +105,138 @@ class ConnectionTest extends TestCase
 		$this->assertEquals(2, $this->connection->getConfig('b'));
 	}
 
+	public function testBasicAuthorizationHeader() {
+		$connection = new Connection(
+			[
+			'persistent' => false,
+			'username' => 'admin',
+			'password' => 'secret',
+			]
+		);
+
+		$this->assertSame('secret', $connection->getConfig('password'));
+		$loggingConfig = $connection->getConfigForLogging();
+		$this->assertSame('***', $loggingConfig['password']);
+		$this->assertSame('admin', $loggingConfig['username']);
+	}
+
+	public function testBearerTokenRedactedInLoggingConfig() {
+		$connection = new Connection(
+			[
+			'persistent' => false,
+			'bearer_token' => 'raw-token',
+			]
+		);
+
+		$this->assertSame('raw-token', $connection->getConfig('bearer_token'));
+		$this->assertSame('***', $connection->getConfigForLogging()['bearer_token']);
+	}
+
+	public function testIncompleteBasicCredentials() {
+		$connection = new Connection(
+			[
+			'persistent' => false,
+			'username' => 'admin',
+			]
+		);
+
+		$this->assertNull($connection->getConfig('password'));
+		$this->assertArrayNotHasKey('bearer_token', $connection->getConfigForLogging());
+	}
+
+	public function testBasicAndBearerAuthenticationCombineFail() {
+		$this->expectException(RuntimeException::class);
+		$this->expectExceptionMessage('Basic and bearer authentication cannot be configured together');
+
+		new Connection(
+			[
+			'persistent' => false,
+			'username' => 'admin',
+			'password' => 'secret',
+			'bearer_token' => 'raw-token',
+			]
+		);
+	}
+
+	public function testSetConfigRejectsConflictingAuthentication() {
+		$connection = new Connection(
+			[
+			'persistent' => false,
+			'username' => 'admin',
+			'password' => 'secret',
+			]
+		);
+
+		try {
+			$connection->setConfig(['bearer_token' => 'raw-token']);
+			$this->fail('Conflicting authentication was accepted');
+		} catch (RuntimeException $exception) {
+			$this->assertSame(
+				'Basic and bearer authentication cannot be configured together',
+				$exception->getMessage()
+			);
+		}
+
+		$this->assertNull($connection->getConfig('bearer_token'));
+		$this->assertSame('secret', $connection->getConfig('password'));
+		$this->assertSame('***', $connection->getConfigForLogging()['password']);
+	}
+
+	public function testRedactAuthorizationHeadersListAndMap() {
+		$list = Connection::redactAuthHeaders(
+			[
+				'Content-Type: application/json',
+				'Authorization: Basic ' . base64_encode('admin:secret'),
+			]
+		);
+		$this->assertSame(
+			[
+				'Content-Type: application/json',
+				'Authorization: Basic ***',
+			],
+			$list
+		);
+
+		$map = Connection::redactAuthHeaders(
+			[
+				'Content-Type' => 'application/json',
+				'Authorization' => 'Bearer raw-token',
+			]
+		);
+		$this->assertSame(
+			[
+				'Content-Type' => 'application/json',
+				'Authorization' => 'Bearer ***',
+			],
+			$map
+		);
+
+		$custom = Connection::redactAuthHeaders(
+			[
+				'authorization' => 'CustomSecret',
+			]
+		);
+		$this->assertSame(['authorization' => '***'], $custom);
+	}
+
+	public function testRedactSensitiveConfigProxyAndHeaders() {
+		$redacted = Connection::redactConfig(
+			[
+				'password' => 'secret',
+				'bearer_token' => 'tok',
+				'username' => 'admin',
+				'proxy' => 'user:pass@proxy.example:8080',
+				'headers' => ['Authorization: Bearer tok'],
+			]
+		);
+
+		$this->assertSame('***', $redacted['password']);
+		$this->assertSame('***', $redacted['bearer_token']);
+		$this->assertSame('admin', $redacted['username']);
+		$this->assertSame('***:***@proxy.example:8080', $redacted['proxy']);
+		$this->assertSame(['Authorization: Bearer ***'], $redacted['headers']);
+	}
+
 	public function testStaticCreateSelf() {
 		$newConnection = Connection::create($this->connection);
 		$this->assertEquals($this->connection, $newConnection);

@@ -50,4 +50,23 @@ class ResponseTest extends TestCase
 		$this->expectExceptionMessage('Syntax error');
 		$response->getResponse();
 	}
+
+	public function testBigintConversion() {
+		$payload = '{"id":18446744073709551615}';
+		$response = new Response($payload);
+		$response->enableBigintConversion();
+
+		$this->assertSame(['id' => '18446744073709551615'], $response->getResponse());
+		$this->assertSame(['id' => '18446744073709551615'], $response->getResponse());
+		$this->assertIsFloat((new Response($payload))->getResponse()['id']);
+	}
+
+	public function test504InvalidJsonWithBigintConversion() {
+		$response = new Response('{invalid: json]', 504);
+		$response->enableBigintConversion();
+
+		$this->expectException(ResponseException::class);
+		$this->expectExceptionMessage('Syntax error');
+		$response->getResponse();
+	}
 }

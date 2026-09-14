@@ -13,12 +13,14 @@ class KnnQuery extends BoolQuery
 	protected $knnTargetKey;
 	protected $knnTarget;
 	protected $docCount;
+	protected $options;
 
-	public function __construct($knnField, $knnTarget, $docCount) {
+	public function __construct($knnField, $knnTarget, $docCount, $options = []) {
 		$this->knnField = $knnField;
 		$this->checkKnnTarget($knnTarget);
 		$this->knnTarget = $knnTarget;
 		$this->docCount = $docCount;
+		$this->options = $options;
 	}
 
 	protected function checkKnnTarget($knnTarget) {
@@ -43,14 +45,36 @@ class KnnQuery extends BoolQuery
 	}
 
 	public function toArray() {
-		$paramArr = [
-			'field' => $this->knnField,
-			$this->knnTargetKey => $this->knnTarget,
-			'k' => $this->docCount,
-		];
+		$paramArr = array_merge(
+			$this->options, [
+				'field' => $this->knnField,
+				$this->knnTargetKey => $this->knnTarget,
+				'k' => $this->docCount,
+			]
+		);
 		if ($this->params) {
 			$paramArr['filter'] = ['bool' => $this->params];
 		}
 		return $this->convertArray($paramArr);
+	}
+
+	public function toRrfArray() {
+		return $this->convertArray(
+			array_merge(
+				$this->options, [
+					'field' => $this->knnField,
+					$this->knnTargetKey => $this->knnTarget,
+					'k' => $this->docCount,
+				]
+			)
+		);
+	}
+
+	public function getFilterQuery() {
+		if (!$this->params) {
+			return null;
+		}
+
+		return $this->convertArray(['bool' => $this->params]);
 	}
 }
