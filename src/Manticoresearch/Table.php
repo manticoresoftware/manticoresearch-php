@@ -329,7 +329,7 @@ class Table
 		$this->client->tables()->flushramchunk($params);
 	}
 
-	public function alter($operation, $name, ?string $type = null) {
+	public function alter($operation, $name, ?string $type = null, $options = null) {
 		if ($operation === 'add') {
 			$params = [
 				'table' => $this->table,
@@ -338,6 +338,10 @@ class Table
 					'column' => ['name' => $name, 'type' => $type],
 				],
 			];
+
+			if ($options !== null) {
+				$params['body']['column']['options'] = $options;
+			}
 		} elseif ($operation === 'drop') {
 			$params = [
 				'table' => $this->table,

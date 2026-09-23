@@ -121,6 +121,51 @@ class AlterTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals(array_keys($expectedResponse), array_keys($response));
 	}
 
+	public function testTableAddColumnWithSingleOption() {
+		$params = [
+			'table' => 'products',
+			'body' => [
+				'operation' => 'add',
+				'column' => [
+					'name' => 'content_single',
+					'type' => 'text',
+					'options' => 'indexed',
+				],
+			],
+		];
+		$response = static::$client->tables()->alter($params);
+		$this->assertEquals(['total' => 0, 'error' => '', 'warning' => ''], $response);
+
+		$response = static::$client->tables()->describe(['table' => 'products']);
+		$this->assertTrue(isset($response['content_single']), 'Column content_single is missing');
+
+		$properties = (string)$response['content_single']['Properties'];
+		$this->assertStringContainsString('indexed', $properties);
+	}
+
+	public function testTableAddColumnWithMultipleOptions() {
+		$params = [
+			'table' => 'products',
+			'body' => [
+				'operation' => 'add',
+				'column' => [
+					'name' => 'content_multiple',
+					'type' => 'text',
+					'options' => ['indexed', 'stored'],
+				],
+			],
+		];
+		$response = static::$client->tables()->alter($params);
+		$this->assertEquals(['total' => 0, 'error' => '', 'warning' => ''], $response);
+
+		$response = static::$client->tables()->describe(['table' => 'products']);
+		$this->assertTrue(isset($response['content_multiple']), 'Column content_multiple is missing');
+
+		$properties = (string)$response['content_multiple']['Properties'];
+		$this->assertStringContainsString('indexed', $properties);
+		$this->assertStringContainsString('stored', $properties);
+	}
+
 	public function testSetGetTable() {
 		$alter = new Alter();
 		$alter->setTable('testName');

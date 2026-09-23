@@ -452,10 +452,11 @@ Parameters:
 - operation type - `add` or `drop`
 - name of the attribute
 - type of the attribute (only for `add`)
+- options - optional column options (only for `add`), can be a string or an array of strings
 
 
 ```php
-$table->alter($operation,$name,$type);
+$table->alter($operation,$name,$type,$options);
 ```
 
 
@@ -474,7 +475,7 @@ $table->keywords($query, $options);
 ```
 
 ```php
-$table->alter($operation,$name,$type);
+$table->alter($operation,$name,$type,$options);
 ```
 
 

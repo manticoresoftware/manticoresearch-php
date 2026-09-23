@@ -23,10 +23,20 @@ class Alter extends EmulateBySql
 		if (isset($this->table)) {
 			if (isset($params['operation'])) {
 				if ($params['operation'] === 'add' && isset($params['column'])) {
-						return parent::setBody(
-							['query' => 'ALTER TABLE ' . $this->table . ' ADD COLUMN ' .
-							$params['column']['name'] . ' ' . strtoupper($params['column']['type'])]
-						);
+					$columnDef = $params['column']['name'] . ' ' . strtoupper($params['column']['type']);
+
+					if (isset($params['column']['options'])) {
+						$options = $params['column']['options'];
+						if (is_string($options)) {
+							$columnDef .= ' ' . $options;
+						} elseif (is_array($options)) {
+							$columnDef .= ' ' . implode(' ', $options);
+						}
+					}
+
+					return parent::setBody(
+						['query' => 'ALTER TABLE ' . $this->table . ' ADD COLUMN ' . $columnDef]
+					);
 				}
 				if ($params['operation'] === 'drop') {
 					return parent::setBody(
