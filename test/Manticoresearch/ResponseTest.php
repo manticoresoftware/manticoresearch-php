@@ -47,7 +47,8 @@ class ResponseTest extends TestCase
 		$response = new Response($payload, 503);
 
 		$this->expectException(ResponseException::class);
-		$this->expectExceptionMessage('Syntax error');
+		$this->expectExceptionMessage('HTTP 503: Syntax error');
+		$this->expectExceptionCode(503);
 		$response->getResponse();
 	}
 
@@ -66,7 +67,19 @@ class ResponseTest extends TestCase
 		$response->enableBigintConversion();
 
 		$this->expectException(ResponseException::class);
-		$this->expectExceptionMessage('Syntax error');
+		$this->expectExceptionMessage('HTTP 504: Syntax error');
+		$this->expectExceptionCode(504);
 		$response->getResponse();
+	}
+
+	public function testRetryableStatusWithValidJson() {
+		foreach ([503, 504] as $status) {
+			foreach (['{}', '{"message":"upstream timeout"}', 'null', '"timeout"'] as $body) {
+				$response = new Response($body, $status);
+				$this->assertTrue($response->hasError());
+				$this->assertSame($status, $response->getStatusCode());
+			}
+		}
+		$this->assertFalse((new Response('{"message":"ok"}', 200))->hasError());
 	}
 }

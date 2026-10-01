@@ -194,6 +194,8 @@ $params = [
 
 ### Retries
 
+HTTP 503 and 504 responses are retried within the configured attempt limit, including empty bodies, HTML, and JSON without an `error` field. Their exception messages include the HTTP status. When attempts are exhausted, `NoMoreNodesException::getCode()` contains the last failure's HTTP status (or `0` for a connection failure), and `getPrevious()` provides the original exception. For a `ResponseException`, the status is also available through `getResponse()->getStatusCode()`.
+
 By default, the number of retries is equal to the number of defined hosts.
 
 If the number of hosts is 10 and retries are set to 5, the query will retry on 5 hosts according to the connection strategy and end with an error after 5 attempts.

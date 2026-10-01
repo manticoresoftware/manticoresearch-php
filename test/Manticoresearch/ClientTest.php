@@ -12,11 +12,14 @@ use Manticoresearch\Cluster;
 use Manticoresearch\Connection;
 use Manticoresearch\Connection\Strategy\Random;
 use Manticoresearch\Exceptions\ConnectionException;
+use Manticoresearch\Exceptions\NoMoreNodesException;
+use Manticoresearch\Exceptions\ResponseException;
 use Manticoresearch\Request;
 use Manticoresearch\Response;
 use Manticoresearch\Response\Token;
 use Manticoresearch\Table;
 use Manticoresearch\Test\Helper\PopulateHelperTest;
+use Manticoresearch\Transport\TransportInterface;
 use PHPUnit\Framework\TestCase;
 
 class ClientTest extends TestCase
@@ -211,6 +214,89 @@ class ClientTest extends TestCase
 		$client = $this->createTokenClient();
 
 		$this->assertInstanceOf(Token::class, $client->token(true));
+	}
+
+	public function testRetryableResponsesRecover() {
+		foreach ([503, 504] as $status) {
+			foreach (['<html>timeout</html>', '', '{}', '{"message":"timeout"}', '{"error":"timeout"}'] as $body) {
+				$client = $this->createRetryClient(
+					[new Response($body, $status), new Response('{"ok":true}', 200)],
+					2
+				);
+				$this->assertSame(['ok' => true], $client->request($this->createRetryRequest())->getResponse());
+				$this->assertSame(0, $client->getConnectionPool()->retriesAttempts);
+			}
+		}
+	}
+
+	public function testExhaustedRetriesPreserveStatusesAndLastException() {
+		$client = $this->createRetryClient(
+			[
+				new Response('<html>unavailable</html>', 503),
+				new Response('{"error":"proxy: upstream timeout"}', 504),
+			],
+			2
+		);
+		$request = $this->createRetryRequest();
+		try {
+			$client->request($request);
+			$this->fail('Expected exhausted retries');
+		} catch (NoMoreNodesException $e) {
+			$this->assertStringContainsString('HTTP 503: Syntax error', $e->getMessage());
+			$this->assertStringContainsString('HTTP 504: "proxy: upstream timeout"', $e->getMessage());
+			$this->assertSame(504, $e->getCode());
+			$this->assertSame($request, $e->getRequest());
+			$this->assertInstanceOf(ResponseException::class, $e->getPrevious());
+			$this->assertSame(504, $e->getPrevious()->getResponse()->getStatusCode());
+			$this->assertSame($request, $e->getPrevious()->getRequest());
+		}
+	}
+
+	public function testDisabledRetriesPreserveHttpStatus() {
+		foreach ([503, 504] as $status) {
+			$client = $this->createRetryClient([new Response('{}', $status)], 0);
+			try {
+				$client->request($this->createRetryRequest());
+				$this->fail('Expected HTTP failure');
+			} catch (NoMoreNodesException $e) {
+				$this->assertSame('HTTP ' . $status, $e->getMessage());
+				$this->assertSame($status, $e->getCode());
+				$this->assertInstanceOf(ResponseException::class, $e->getPrevious());
+			}
+		}
+	}
+
+	public function testOtherHttpErrorsAreNotRetried() {
+		$client = $this->createRetryClient([new Response('{"error":"invalid query"}', 400)], 2);
+		$this->expectException(ResponseException::class);
+		$this->expectExceptionMessage('"invalid query"');
+		$client->request($this->createRetryRequest());
+	}
+
+	private function createRetryClient(array $responses, int $retries): Client {
+		$transport = $this->createMock(TransportInterface::class);
+		$transport->expects($this->exactly(sizeof($responses)))->method('execute')->willReturnCallback(
+			static function (Request $request) use (&$responses) {
+				$response = array_shift($responses);
+				if ($response->hasError()) {
+					throw new ResponseException($request, $response);
+				}
+				return $response;
+			}
+		);
+		$connection = $this->getMockBuilder(Connection::class)
+			->setConstructorArgs([['persistent' => false]])
+			->onlyMethods(['getTransportHandler'])
+			->getMock();
+		$connection->expects($this->exactly(sizeof($responses)))->method('getTransportHandler')->willReturn($transport);
+		return new Client(['connections' => [$connection], 'retries' => $retries]);
+	}
+
+	private function createRetryRequest(): Request {
+		$request = new Request(['body' => []]);
+		$request->setPath('/search');
+		$request->setMethod('GET');
+		return $request;
 	}
 
 	private function createTokenClient() {

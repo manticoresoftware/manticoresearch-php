@@ -129,6 +129,9 @@ class Response
 	 */
 	public function hasError() {
 		$response = $this->getResponse();
+		if ($this->is5xxRetriedStatus()) {
+			return true;
+		}
 		if (is_array($response)) {
 			foreach ($response as $r) {
 				if (isset($r['error']) && $r['error'] !== '') {
@@ -195,6 +198,10 @@ class Response
 	 */
 	public function is5xxRetriedStatus() {
 		return $this->status >= 503 && $this->status < 505;
+	}
+
+	public function getStatusCode(): ?int {
+		return $this->status;
 	}
 
 	/**

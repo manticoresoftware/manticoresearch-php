@@ -443,16 +443,16 @@ class Client implements ClientInterface
 			$this->initConnections();
 			throw $e;
 		} catch (ConnectionException | ResponseException $e) {
+			$e->setRequest($request);
 			if (!$this->connectionPool->retries) {
-				throw new NoMoreNodesException($e);
+				throw new NoMoreNodesException($e->getMessage(), $request, $e->getCode(), $e);
 			}
 
 			if ($e instanceof ResponseException) {
-				// We apply retrying to 502-600 responses only
+				// Retry HTTP 503 and 504 responses only.
 				if (!$e->getResponse()->is5xxRetriedStatus()) {
 					throw $e;
 				}
-				$e->setRequest($request);
 				$failContext = 'bad response';
 			} else {
 				$failContext = 'attempt';
@@ -460,7 +460,9 @@ class Client implements ClientInterface
 			$exMsg = $e->getMessage();
 			// We rely on the common error message format from Manticore here
 			$exReasonPos = strrpos($exMsg, ':');
-			$exceptionReason = substr($exMsg, ($exReasonPos === false) ? 0 : $exReasonPos + 1);
+			$exceptionReason = $e instanceof ResponseException
+				? $exMsg
+				: substr($exMsg, ($exReasonPos === false) ? 0 : $exReasonPos + 1);
 			$this->logger->warning(
 				"Manticore Search Request failed on $failContext " . $this->connectionPool->retriesAttempts . ':',
 				[
@@ -473,7 +475,14 @@ class Client implements ClientInterface
 				$connection->mark(false);
 			}
 
-			return $this->request($request, $params, $exceptionReason);
+			try {
+				return $this->request($request, $params, $exceptionReason);
+			} catch (NoMoreNodesException $ex) {
+				if ($ex->getPrevious() !== null) {
+					throw $ex;
+				}
+				throw new NoMoreNodesException($ex->getMessage(), $request, $e->getCode(), $e);
+			}
 		}
 
 		return $this->lastResponse;
