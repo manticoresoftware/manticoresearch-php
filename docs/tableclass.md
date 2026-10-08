@@ -137,6 +137,44 @@ Returns an array response with:
 - errors - stating whether an error occurred
 - items - response status for each document.
 
+### addDocumentsStreaming()
+
+High-throughput append-only insert using Manticore's indexer-assisted bulk mode (`/bulk?indexer_rt_bulk=1`).
+
+Each request is streamed as NDJSON with HTTP chunked transfer encoding (documents are encoded on demand into a small buffer).
+
+With `workers = N`, the client opens up to N concurrent streams that share one document iterator and pull until every document is inserted. Each finished stream commits as one disk chunk. 
+
+Requirements and limits (server-side):
+
+- Local real-time table only (not distributed, sharded, replicated, percolate, or plain)
+- Insert only; replace/update/delete are rejected
+- Clustered tables are not supported
+- Every document must have an explicit non-zero numeric `id`
+
+Options:
+
+- `workers` - fixed concurrency; when omitted, the client probes `1,2,4,...` until throughput stops improving
+- `max_workers` - upper bound (also capped by Manticore's `workers_total` setting)
+- `probe_docs` - documents per worker during each auto-tune probe (default 1000)
+- `gain_threshold` - minimum relative throughput gain to keep doubling workers (default `0`; stop when the next step is not better)
+- `timeout` - per-request timeout override
+- `fallback` - if true, fall back to regular `/bulk` when assisted mode is unavailable
+
+Example:
+
+```php
+$result = $table->addDocumentsStreaming([
+    ['id' => 1, 'title' => 'Crossbody Bag', 'gid' => 10],
+    ['id' => 2, 'title' => 'Sheet Set', 'gid' => 11],
+], [
+    // 'workers' => 4, // set explicitly to skip auto-tuning
+    'max_workers' => 8,
+]);
+
+// Persist $result['selected_workers'] for later runs if auto-tuning was used.
+```
+
 ### getDocumentById()
 
 Get an existing document by its ID.

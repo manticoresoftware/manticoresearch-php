@@ -156,6 +156,14 @@ interface ClientInterface
 	public function bulk(array $params = []);
 
 	/**
+	 * Indexer-assisted bulk insert via /bulk?indexer_rt_bulk=1
+	 * @param iterable $operations
+	 * @param array $options
+	 * @return array
+	 */
+	public function indexerBulk(iterable $operations, array $options = []): array;
+
+	/**
 	 * Endpoint: suggest
 	 * @param array $params
 	 * @return mixed

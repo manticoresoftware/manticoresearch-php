@@ -128,7 +128,7 @@ class Transport
 	 * @param Connection $connection
 	 * @return array
 	 */
-	protected function getRequestHeadersAsList(Request $request, Connection $connection): array {
+	public function getRequestHeadersAsList(Request $request, Connection $connection): array {
 		$headers = $connection->getHeaders();
 		$headers[] = sprintf('Content-Type: %s', $request->getContentType());
 		$authorization = $this->buildAuthorizationHeader($connection);

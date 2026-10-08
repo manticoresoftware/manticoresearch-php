@@ -402,4 +402,27 @@ $doc = [
 $response = $client->bulk($doc);
 ```
 
+### Indexer-assisted bulk (`indexerBulk`)
+
+Experimental high-speed append path that posts to `/bulk?indexer_rt_bulk=1`. Prefer the Table helper `addDocumentsStreaming()` for document lists; use `indexerBulk()` for raw insert operations.
+
+```php
+$result = $client->indexerBulk([
+    ['insert' => ['table' => 'products', 'id' => 101, 'doc' => ['title' => 'Bag', 'price' => 9.99]]],
+    ['insert' => ['table' => 'products', 'id' => 102, 'doc' => ['title' => 'Baz', 'price' => 4.5]]],
+], [
+    'workers' => 2,
+]);
+```
+
+Notes:
+
+- Requires curl `Http`/`Https` transport. `PhpHttp` is not supported for this path.
+- Opens up to `workers` concurrent chunked streams that share one iterator and pull until every document is inserted (no batching on the main path).
+- `probe_docs` applies only to auto-tune probe uploads when `workers` is omitted (default 1000 docs per worker).
+- PHP `post_max_size` / `upload_max_filesize` do not apply to outgoing client requests; `memory_limit`, proxies, and timeouts still do.
+- When `workers` is omitted, concurrency is probed as 1, 2, 4, … up to `workers_total` from `SHOW STATUS` (or `max_workers`).
+- Do not retry an ambiguous network failure after a request may have been accepted: each assisted request is atomic, but a lost response does not tell you whether the disk chunk was attached.
+- Server support depends on a Manticore build that includes indexer-assisted RT bulk; see upstream documentation for the released version that ships the feature.
+
 <!-- proofread -->
