@@ -69,12 +69,13 @@ class IndexerBulkIntegrationTest extends TestCase
 		$this->assertSame(50, $result['docs']);
 		$this->assertGreaterThanOrEqual(1, $result['requests']);
 
+		// With limit=0, recent Manticore returns total=0 (total_relation=gte).
 		$search = $client->search(
 			[
 				'body' => [
 					'table' => $tableName,
 					'query' => ['match_all' => ''],
-					'limit' => 0,
+					'limit' => 100,
 				],
 			]
 		);

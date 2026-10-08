@@ -157,9 +157,10 @@ class CurlUploader
 
 				$httpStart = microtime(true);
 				curl_multi_select($multi, 1.0);
-				if ($trackPhases) {
-					$phases['http'] += microtime(true) - $httpStart;
+				if (!$trackPhases) {
+					continue;
 				}
+				$phases['http'] += microtime(true) - $httpStart;
 			}
 		} finally {
 			foreach ($active as $state) {
