@@ -87,7 +87,10 @@ The `body` parameters:
 * `column` - for add, drop operations, the column is an array of
     * `name` - column name
     * `type` - data type
+    * `options` - optional, additional column options (only for `add`). Can be a string or an array of strings
  
+
+Example of adding a column without options:
 
         $params = [
             'table' => 'testrt',
@@ -97,11 +100,45 @@ The `body` parameters:
                     'name' => 'tag',
                     'type'=> 'string'
                 ]
-                   
+
             ]
         ];
         $response = $client->tables()->alter($params);
-        
+
+Example of adding a column with a single option:
+
+        $params = [
+            'table' => 'testrt',
+            'body' => [
+                'operation' => 'add',
+                'column' => [
+                    'name' => 'tag',
+                    'type'=> 'string',
+                    'options' => 'indexed'
+                ]
+
+            ]
+        ];
+        $response = $client->tables()->alter($params);
+
+Example of adding a column with multiple options:
+
+        $params = [
+            'table' => 'testrt',
+            'body' => [
+                'operation' => 'add',
+                'column' => [
+                    'name' => 'content',
+                    'type'=> 'text',
+                    'options' => ['indexed', 'stored']
+                ]
+
+            ]
+        ];
+        $response = $client->tables()->alter($params);
+
+Example of dropping a column:
+
         $params = [
             'table' => 'testrt',
             'body' => [

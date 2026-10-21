@@ -24,10 +24,12 @@ class ConnectionException extends \RuntimeException implements ExceptionInterfac
 	 * ConnectionException constructor.
 	 * @param string $message
 	 * @param Request|null $request
+	 * @param int $code
+	 * @param \Throwable|null $previous
 	 */
-	public function __construct($message = '', ?Request $request = null) {
+	public function __construct($message = '', ?Request $request = null, int $code = 0, ?\Throwable $previous = null) {
 		$this->request = $request;
-		parent::__construct($message);
+		parent::__construct($message, $code, $previous);
 	}
 
 	/**

@@ -11,6 +11,16 @@ use Manticoresearch\Response;
 
 class SqlToArray extends Response
 {
+	private function incrementId(&$id) {
+		if (is_numeric($id)) {
+			$id = $id + 1;
+		} elseif (\PHP_VERSION_ID >= 80300) {
+			$id = str_increment((string)$id);
+		} else {
+			$id++;
+		}
+	}
+
 	public function getResponse() {
 		$response = parent::getResponse();
 		// workaround for the change in Manticore Search made in 4.2.1, after
@@ -80,10 +90,10 @@ class SqlToArray extends Response
 							unset($property['Variable']);
 						}
 					} else {
-						$id++;
+						$this->incrementId($id);
 					}
 				} else {
-					$id++;
+					$this->incrementId($id);
 				}
 				$data[$id] = (sizeof($property) === 1) ? array_shift($property) : $property;
 			}

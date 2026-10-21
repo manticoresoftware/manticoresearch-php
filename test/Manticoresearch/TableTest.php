@@ -270,6 +270,46 @@ class TableTest extends TestCase
 		$this->assertEquals(['Type' => 'string', 'Properties' => ''], $description['example']);
 	}
 
+	public function testAlterAddWithSingleOption() {
+		$table = $this->getTable();
+		$response = $table->alter('add', 'content_single', 'text', 'indexed');
+		$this->assertEquals(['total' => 0, 'error' => '', 'warning' => ''], $response);
+
+		$description = $table->describe();
+		$keys = array_keys($description);
+		sort($keys);
+		$this->assertEquals(
+			[
+				'content_single',
+				'gid',
+				'id',
+				'label',
+				'props',
+				'tags',
+				'title',
+			], $keys
+		);
+
+		$properties = (string)$description['content_single']['Properties'];
+		$this->assertStringContainsString('indexed', $properties);
+	}
+
+	public function testAlterAddWithMultipleOptions() {
+		$table = $this->getTable();
+		$response = $table->alter('add', 'content_multiple', 'text', ['indexed', 'stored']);
+		$this->assertEquals(['total' => 0, 'error' => '', 'warning' => ''], $response);
+
+		$description = $table->describe();
+		$this->assertTrue(
+			isset($description['content_multiple']),
+			'Column content_multiple is missing'
+		);
+
+		$properties = (string)$description['content_multiple']['Properties'];
+		$this->assertStringContainsString('indexed', $properties);
+		$this->assertStringContainsString('stored', $properties);
+	}
+
 	public function testAlterInvalidOperation() {
 		$table = $this->getTable();
 		$this->expectException(RuntimeException::class);

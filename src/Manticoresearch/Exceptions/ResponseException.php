@@ -34,7 +34,13 @@ class ResponseException extends \RuntimeException implements ExceptionInterface
 		$this->request = $request;
 		$this->response = $response;
 
-		parent::__construct($response->getError());
+		$message = $response->getError();
+		$code = 0;
+		if ($response->is5xxRetriedStatus()) {
+			$code = $response->getStatusCode();
+			$message = 'HTTP ' . $code . ($message !== '' ? ': ' . $message : '');
+		}
+		parent::__construct($message, $code);
 	}
 
 	/**
@@ -42,6 +48,14 @@ class ResponseException extends \RuntimeException implements ExceptionInterface
 	 */
 	public function getRequest() :Request {
 		return $this->request;
+	}
+
+	/**
+	 *
+	 * @param Request $request
+	 */
+	public function setRequest(Request $request): void {
+		$this->request = $request;
 	}
 
 	/**
