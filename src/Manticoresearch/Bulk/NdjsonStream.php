@@ -35,7 +35,7 @@ class NdjsonStream
 	/** @var int */
 	private $bytes = 0;
 
-	/** @var array<int,bool> */
+	/** @var array<int|string,bool> */
 	private $ids = [];
 
 	/** @var string|null */

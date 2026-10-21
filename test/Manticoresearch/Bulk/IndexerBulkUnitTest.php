@@ -8,10 +8,12 @@
 namespace Manticoresearch\Test\Bulk;
 
 use Manticoresearch\Bulk\AdaptiveTuner;
+use Manticoresearch\Bulk\IndexerBulk;
 use Manticoresearch\Bulk\NdjsonStream;
 use Manticoresearch\Bulk\OperationIterator;
 use Manticoresearch\Bulk\OperationNormalizer;
 use Manticoresearch\Bulk\Options;
+use Manticoresearch\Client;
 use Manticoresearch\Exceptions\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
@@ -61,6 +63,66 @@ class IndexerBulkUnitTest extends TestCase
 		$normalizer->normalize(['id' => 0, 'title' => 'x']);
 	}
 
+	/** @dataProvider validDocumentIds */
+	#[\PHPUnit\Framework\Attributes\DataProvider('validDocumentIds')]
+	public function testNormalizeDocumentIdWithoutPrecisionLoss($id, $expected) {
+		$normalizer = new OperationNormalizer('products');
+		$payload = $normalizer->normalize(['id' => $id, 'title' => 'x']);
+		$this->assertSame($expected, $payload['id']);
+	}
+
+	public static function validDocumentIds(): array {
+		return [
+			'native integer' => [42, 42],
+			'leading zeros' => ['00042', 42],
+			'native maximum integer' => [PHP_INT_MAX, PHP_INT_MAX],
+			'native maximum string' => [(string)PHP_INT_MAX, PHP_INT_MAX],
+			'above signed 64-bit range' => ['9223372036854775808', '9223372036854775808'],
+			'unsigned maximum' => ['18446744073709551615', '18446744073709551615'],
+			'unsigned maximum with leading zeros' => ['0018446744073709551615', '18446744073709551615'],
+		];
+	}
+
+	/** @dataProvider invalidDocumentIds */
+	#[\PHPUnit\Framework\Attributes\DataProvider('invalidDocumentIds')]
+	public function testRejectInvalidDocumentId($id) {
+		$normalizer = new OperationNormalizer('products');
+		$this->expectException(RuntimeException::class);
+		$normalizer->normalize(['id' => $id, 'title' => 'x']);
+	}
+
+	public static function invalidDocumentIds(): array {
+		return [
+			'zero string' => ['000'],
+			'overflow' => ['18446744073709551616'],
+			'long overflow' => ['100000000000000000000'],
+			'negative integer' => [-1],
+			'integral float' => [1.0],
+			'fractional float' => [1.5],
+			'decimal string' => ['1.5'],
+			'exponent string' => ['1e3'],
+			'negative string' => ['-42'],
+			'positive sign' => ['+42'],
+			'leading whitespace' => [' 42'],
+			'trailing whitespace' => ['42 '],
+			'trailing newline' => ["42\n"],
+			'empty string' => [''],
+			'non-ASCII digits' => ['１２'],
+			'boolean' => [true],
+			'null' => [null],
+			'array' => [[1]],
+			'object' => [(object)['id' => 1]],
+		];
+	}
+
+	public function testNormalizeJsonPreservesUnsignedDocumentId() {
+		$normalizer = new OperationNormalizer();
+		$payload = $normalizer->normalize(
+			'{"insert":{"table":"products","id":18446744073709551615,"doc":{"title":"x"}}}'
+		);
+		$this->assertSame('18446744073709551615', $payload['id']);
+	}
+
 	public function testRejectNonInsertAction() {
 		$normalizer = new OperationNormalizer();
 		$this->expectException(RuntimeException::class);
@@ -92,6 +154,60 @@ class IndexerBulkUnitTest extends TestCase
 			$line
 		);
 		$this->assertStringNotContainsString("\n", $line);
+	}
+
+	public function testEncodeLinePreservesUnsignedIdAndDocumentTypes() {
+		$normalizer = new OperationNormalizer();
+		$payload = [
+			'table' => "products\"\\\n",
+			'id' => '18446744073709551615',
+			'doc' => [
+				'id' => '18446744073709551615',
+				'nested' => ['id' => '9223372036854775808'],
+				'code' => '00123',
+				'price' => 1.0,
+				'title' => "Bag\n雪/",
+			],
+		];
+		$line = $normalizer->encodeLine($payload);
+		$this->assertStringContainsString('"id":18446744073709551615,', $line);
+		$this->assertStringContainsString('"price":1.0', $line);
+		$this->assertStringNotContainsString("\n", $line);
+		$this->assertSame(['insert' => $payload], json_decode($line, true, 512, JSON_BIGINT_AS_STRING));
+	}
+
+	public function testEncodeLineRejectsInvalidIdBeforeRawEmission() {
+		$normalizer = new OperationNormalizer();
+		$this->expectException(RuntimeException::class);
+		$normalizer->encodeLine(['table' => 'products', 'id' => '1,"extra":true', 'doc' => []]);
+	}
+
+	public function testEncodeLineReportsJsonEncodingFailureForUnsignedId() {
+		$normalizer = new OperationNormalizer();
+		$this->expectException(RuntimeException::class);
+		$this->expectExceptionMessage('Failed to JSON-encode bulk insert:');
+		$normalizer->encodeLine(
+			['table' => 'products', 'id' => '18446744073709551615', 'doc' => ['title' => "\xB1\x31"]]
+		);
+	}
+
+	public function testFallbackBulkPreservesUnsignedIdAsJsonNumber() {
+		$client = $this->createMock(Client::class);
+		$client->expects($this->once())->method('getConnectionPool')
+			->willThrowException(new RuntimeException('Unsupported transport'));
+		$body = '{"insert":{"table":"t","id":1,"doc":{"title":"a"}}}' . "\n"
+			. '{"insert":{"table":"t","id":18446744073709551615,"doc":{"title":"b"}}}' . "\n";
+		$client->expects($this->once())->method('bulk')->with(['body' => $body])->willReturn(['items' => []]);
+		$indexer = new IndexerBulk($client);
+		$result = $indexer->run(
+			[
+				['insert' => ['table' => 't', 'id' => 1, 'doc' => ['title' => 'a']]],
+				['table' => 't', 'id' => '18446744073709551615', 'doc' => ['title' => 'b']],
+			],
+			['fallback' => true]
+		);
+		$this->assertSame(2, $result['docs']);
+		$this->assertSame('bulk_fallback', $result['mode']);
 	}
 
 	public function testNdjsonStreamSplitsByDocLimit() {
@@ -188,6 +304,56 @@ class IndexerBulkUnitTest extends TestCase
 		while ($stream->read(1024) !== '') {
 			// drain until duplicate is pulled
 		}
+	}
+
+	public function testNdjsonStreamPreservesDistinctUnsignedIds() {
+		$normalizer = new OperationNormalizer('t');
+		$source = new OperationIterator(
+			[
+				['id' => '9223372036854775808', 'title' => 'a'],
+				['id' => '18446744073709551615', 'title' => 'b'],
+			],
+			$normalizer
+		);
+		$stream = NdjsonStream::tryCreate($source);
+		$this->assertNotNull($stream);
+		$body = '';
+		while (($chunk = $stream->read(64)) !== '') {
+			$body .= $chunk;
+		}
+		$this->assertSame(2, $stream->getDocs());
+		$this->assertSame(
+			'{"insert":{"table":"t","id":9223372036854775808,"doc":{"title":"a"}}}' . "\n"
+			. '{"insert":{"table":"t","id":18446744073709551615,"doc":{"title":"b"}}}' . "\n",
+			$body
+		);
+	}
+
+	/** @dataProvider duplicateDocumentIds */
+	#[\PHPUnit\Framework\Attributes\DataProvider('duplicateDocumentIds')]
+	public function testNdjsonStreamRejectsCanonicalDuplicateIds($firstId, $secondId) {
+		$normalizer = new OperationNormalizer('t');
+		$source = new OperationIterator(
+			[
+				['id' => $firstId, 'title' => 'a'],
+				['id' => $secondId, 'title' => 'b'],
+			],
+			$normalizer
+		);
+		$stream = NdjsonStream::tryCreate($source);
+		$this->assertNotNull($stream);
+		$this->expectException(RuntimeException::class);
+		$this->expectExceptionMessage('Duplicate document id');
+		while ($stream->read(1024) !== '') {
+			// drain until duplicate is pulled
+		}
+	}
+
+	public static function duplicateDocumentIds(): array {
+		return [
+			'native integer and padded string' => [42, '00042'],
+			'unsigned integer and padded string' => ['18446744073709551615', '0018446744073709551615'],
+		];
 	}
 
 	public function testAdaptiveTunerCandidates() {

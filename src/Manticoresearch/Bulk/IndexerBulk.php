@@ -274,24 +274,28 @@ class IndexerBulk
 	 */
 	private function fallbackBulk(iterable $operations, string $reason): array {
 		$this->logger->warning('Falling back to regular bulk: ' . $reason);
-		$body = [];
+		// Keep pre-encoded uint64 IDs numeric when passing through the regular bulk endpoint.
+		$body = '';
+		$docs = 0;
 		$normalizer = $this->normalizer ?? new OperationNormalizer(null, false);
 		foreach ($operations as $operation) {
 			try {
 				$payload = $normalizer->normalize($operation);
 			} catch (RuntimeException $e) {
 				if (is_array($operation) && isset($operation['insert'])) {
-					$body[] = $operation;
+					$body .= json_encode($operation, JSON_HEX_TAG | JSON_THROW_ON_ERROR) . "\n";
+					$docs++;
 					continue;
 				}
 				throw $e;
 			}
-			$body[] = ['insert' => $payload];
+			$body .= $normalizer->encodeLine($payload) . "\n";
+			$docs++;
 		}
 		$response = $this->client->bulk(['body' => $body]);
 		return [
 			'items' => isset($response['items']) ? $response['items'] : $response,
-			'docs' => sizeof($body),
+			'docs' => $docs,
 			'bytes' => null,
 			'requests' => 1,
 			'elapsed' => null,

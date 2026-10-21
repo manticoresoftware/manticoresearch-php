@@ -38,13 +38,13 @@ class OperationNormalizer
 	 * - document arrays with an id key (when expectedTable is set)
 	 *
 	 * @param mixed $operation
-	 * @return array{table:string,id:int,doc:array}
+	 * @return array{table:string,id:int|string,doc:array}
 	 */
 	public function normalize($operation): array {
 		if (is_object($operation)) {
 			$operation = (array)$operation;
 		} elseif (is_string($operation)) {
-			$decoded = json_decode($operation, true);
+			$decoded = json_decode($operation, true, 512, JSON_BIGINT_AS_STRING);
 			if (!is_array($decoded)) {
 				throw new RuntimeException('Invalid JSON bulk operation');
 			}
@@ -78,19 +78,24 @@ class OperationNormalizer
 	 * @return string
 	 */
 	public function encodeLine(array $payload): string {
-		$line = json_encode(
-			['insert' => $payload],
-			JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION
-		);
-		if ($line === false) {
-			throw new RuntimeException('Failed to JSON-encode bulk insert: ' . json_last_error_msg());
+		$payload['id'] = self::normalizeDocumentId($payload['id']);
+		$flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION | JSON_THROW_ON_ERROR;
+		try {
+			if (is_string($payload['id'])) {
+				// Emit validated uint64 digits directly: converting through int or float loses precision.
+				return '{"insert":{"table":' . json_encode($payload['table'], $flags)
+					. ',"id":' . $payload['id']
+					. ',"doc":' . json_encode($payload['doc'], $flags) . '}}';
+			}
+			return json_encode(['insert' => $payload], $flags);
+		} catch (\JsonException $e) {
+			throw new RuntimeException('Failed to JSON-encode bulk insert: ' . $e->getMessage(), 0, $e);
 		}
-		return $line;
 	}
 
 	/**
 	 * @param array $payload
-	 * @return array{table:string,id:int,doc:array}
+	 * @return array{table:string,id:int|string,doc:array}
 	 */
 	private function normalizePayload(array $payload): array {
 		if ($this->rejectCluster && isset($payload['cluster'])) {
@@ -116,11 +121,7 @@ class OperationNormalizer
 				'indexer-assisted bulk requires an explicit non-zero numeric document id'
 			);
 		}
-		$id = $payload['id'];
-		if (is_string($id) && !is_numeric($id)) {
-			throw new RuntimeException('Incorrect document id passed');
-		}
-		$id = (int)$id;
+		$id = self::normalizeDocumentId($payload['id']);
 		if ($id === 0) {
 			throw new RuntimeException(
 				'indexer-assisted bulk requires an explicit non-zero numeric document id'
@@ -143,6 +144,39 @@ class OperationNormalizer
 			'id' => $id,
 			'doc' => $doc,
 		];
+	}
+
+	/**
+	 * Preserve IDs above PHP_INT_MAX as canonical decimal strings.
+	 *
+	 * @param mixed $id
+	 * @return int|string
+	 */
+	private static function normalizeDocumentId($id) {
+		if (is_int($id) && $id >= 0) {
+			return $id;
+		}
+		if (!is_string($id) || preg_match('/\A[0-9]+\z/', $id) !== 1) {
+			throw new RuntimeException('Incorrect document id passed');
+		}
+
+		$id = ltrim($id, '0');
+		if ($id === '') {
+			return 0;
+		}
+
+		$uint64Max = '18446744073709551615';
+		if (strlen($id) > 20
+			|| (strlen($id) === 20 && strcmp($id, $uint64Max) > 0)) {
+			throw new RuntimeException('Document id exceeds uint64 range');
+		}
+
+		$nativeMax = (string)PHP_INT_MAX;
+		if (strlen($id) < strlen($nativeMax)
+			|| (strlen($id) === strlen($nativeMax) && strcmp($id, $nativeMax) <= 0)) {
+			return (int)$id;
+		}
+		return $id;
 	}
 
 	/**

@@ -152,6 +152,8 @@ Requirements and limits (server-side):
 - Clustered tables are not supported
 - Every document must have an explicit non-zero numeric `id`
 
+IDs can be PHP integers or decimal digit strings up to `18446744073709551615`. Pass IDs above `PHP_INT_MAX` as strings to preserve their exact value; floats are rejected. Leading zeros are removed before duplicate detection.
+
 Options:
 
 - `workers` - fixed concurrency; when omitted, the client probes `1,2,4,...` until throughput stops improving

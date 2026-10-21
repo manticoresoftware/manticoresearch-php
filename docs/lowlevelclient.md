@@ -418,6 +418,7 @@ $result = $client->indexerBulk([
 Notes:
 
 - Requires curl `Http`/`Https` transport. `PhpHttp` is not supported for this path.
+- IDs must be non-zero PHP integers or decimal digit strings in the uint64 range. Pass IDs above `PHP_INT_MAX` as strings, for example `'18446744073709551615'`; floats are rejected.
 - Opens up to `workers` concurrent chunked streams that share one iterator and pull until every document is inserted (no batching on the main path).
 - `probe_docs` applies only to auto-tune probe uploads when `workers` is omitted (default 1000 docs per worker).
 - PHP `post_max_size` / `upload_max_filesize` do not apply to outgoing client requests; `memory_limit`, proxies, and timeouts still do.

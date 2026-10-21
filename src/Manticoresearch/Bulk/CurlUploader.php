@@ -298,7 +298,7 @@ class CurlUploader
 				'body' => '[indexer_rt_bulk ' . $stream->getDocs() . ' docs streamed]',
 			]
 		);
-		if ($response->hasError()) {
+		if ($status < 200 || $status >= 300 || $response->hasError()) {
 			throw new ResponseException($state['request'], $response);
 		}
 
